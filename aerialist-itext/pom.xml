@@ -1,0 +1,36 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>aerialist-itext</artifactId>
+
+	<parent>
+		<groupId>org.glasspath.aerialist</groupId>
+		<artifactId>aerialist</artifactId>
+		<version>0.0.1</version>
+	</parent>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>org.glasspath.aerialist</groupId>
+			<artifactId>aerialist-core</artifactId>
+			<version>${revision}</version>
+		</dependency>
+
+		<dependency>
+		    <groupId>com.itextpdf</groupId>
+		    <artifactId>itextpdf</artifactId>
+		    <version>5.5.13.3</version>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+
+		<finalName>${artifactId}</finalName>
+
+	</build>
+
+</project>

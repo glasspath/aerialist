@@ -1,0 +1,73 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.glasspath.aerialist</groupId>
+	<artifactId>aerialist</artifactId>
+	<version>0.0.1</version>
+	<packaging>pom</packaging>
+
+	<properties>
+
+		<release-version>v2022.01</release-version>
+		<revision>0.0.1</revision> <!-- Also change this in ???/Options.java -->
+
+		<common.version>0.0.1</common.version>
+
+		<!-- Libraries and headless applications should be able to run on 1.8 -->
+		<jdk.source.version>1.8</jdk.source.version>
+		<jdk.target.version>1.8</jdk.target.version>
+
+		<!-- Desktop applications should use 1.9+ for hidpi support -->
+		<jdk.desktop.source.version>10</jdk.desktop.source.version> 
+		<jdk.desktop.target.version>1.10</jdk.desktop.target.version> 
+		<jdk.desktop.exe.version>10</jdk.desktop.exe.version> 
+
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+	</properties>
+
+	<modules>
+		<module>aerialist-core</module>
+		<module>aerialist-itext</module>
+		<module>aerialist-openpdf</module>
+		<module>aerialist-pdfbox</module>
+		<module>aerialist-swing</module>
+		<module>aerialist-main</module>
+	</modules>
+
+	<!--
+	<repositories>
+		<repository>
+			<id>jcenter</id>
+			<name>jcenter</name>
+			<url>https://jcenter.bintray.com/</url>
+		</repository>
+	</repositories>
+	-->
+
+	<build>
+
+		<finalName>${artifactId}</finalName>
+
+		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
+				<configuration>
+					<source>${jdk.source.version}</source>
+					<target>${jdk.target.version}</target>
+					<!--
+					<release>10</release>
+					-->
+				</configuration>
+			</plugin>
+
+		</plugins>
+
+	</build>
+	
+</project>

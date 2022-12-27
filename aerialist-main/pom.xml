@@ -1,0 +1,67 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>aerialist-main</artifactId>
+
+	<parent>
+		<groupId>org.glasspath.aerialist</groupId>
+		<artifactId>aerialist</artifactId>
+		<version>0.0.1</version>
+	</parent>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>org.glasspath.aerialist</groupId>
+			<artifactId>aerialist-openpdf</artifactId>
+			<version>${revision}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.glasspath.aerialist</groupId>
+			<artifactId>aerialist-pdfbox</artifactId>
+			<version>${revision}</version>
+		</dependency>
+
+		<!--
+		<dependency>
+			<groupId>org.glasspath.aerialist</groupId>
+			<artifactId>aerialist-itext</artifactId>
+			<version>${revision}</version>
+		</dependency>
+		-->
+
+		<dependency>
+			<groupId>org.glasspath.aerialist</groupId>
+			<artifactId>aerialist-swing</artifactId>
+			<version>${revision}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.glasspath.common</groupId>
+			<artifactId>common-swing-core</artifactId>
+			<version>${common.version}</version>
+		</dependency>
+
+		<dependency>
+		    <groupId>com.fifesoft</groupId>
+		    <artifactId>rsyntaxtextarea</artifactId>
+		    <version>3.3.0</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.fifesoft</groupId>
+		    <artifactId>autocomplete</artifactId>
+		    <version>3.3.0</version>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+
+		<finalName>${artifactId}</finalName>
+
+	</build>
+
+</project>

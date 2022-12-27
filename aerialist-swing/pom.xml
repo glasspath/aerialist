@@ -1,0 +1,42 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>aerialist-swing</artifactId>
+
+	<parent>
+		<groupId>org.glasspath.aerialist</groupId>
+		<artifactId>aerialist</artifactId>
+		<version>0.0.1</version>
+	</parent>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>org.glasspath.aerialist</groupId>
+			<artifactId>aerialist-core</artifactId>
+			<version>${revision}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>info.clearthought</groupId>
+			<artifactId>table-layout</artifactId>
+			<version>4.3.0</version>
+		</dependency>
+
+		<dependency>
+		    <groupId>io.nayuki</groupId>
+		    <artifactId>qrcodegen</artifactId>
+		    <version>1.4.0</version>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+
+		<finalName>${artifactId}</finalName>
+
+	</build>
+
+</project>
