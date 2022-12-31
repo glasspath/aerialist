@@ -24,9 +24,7 @@ package org.glasspath.aerialist.tools;
 
 import java.awt.Dimension;
 import java.awt.Frame;
-import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -34,8 +32,6 @@ import javax.swing.JMenu;
 import javax.swing.JToolBar;
 import javax.swing.text.StyleConstants;
 
-import org.glasspath.aerialist.AerialistUtils;
-import org.glasspath.aerialist.TextStyle;
 import org.glasspath.aerialist.editor.EditorPanel;
 import org.glasspath.aerialist.editor.actions.BoldAction;
 import org.glasspath.aerialist.editor.actions.FontFamilyAction;
@@ -51,9 +47,6 @@ import org.glasspath.aerialist.icons.Icons;
 import org.glasspath.common.swing.button.SplitButton;
 import org.glasspath.common.swing.color.ColorButton;
 import org.glasspath.common.swing.color.ColorUtils;
-
-import com.lowagie.text.pdf.DefaultFontMapper;
-import com.lowagie.text.pdf.DefaultFontMapper.BaseFontParameters;
 
 public class TextFormatTools {
 
