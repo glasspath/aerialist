@@ -276,6 +276,10 @@ public class Aerialist implements FrameContext {
 		fileTools.loadDocument(documentPath, templateFieldContext);
 	}
 
+	public void export(String filePath) {
+		fileTools.exportToPdf(filePath, false);
+	}
+
 	/*
 	private void tempTestSetEditorContext() {
 	

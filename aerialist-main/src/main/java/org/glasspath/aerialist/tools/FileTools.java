@@ -385,13 +385,13 @@ public class FileTools {
 
 						/*
 						OpenPdfMediaCache openPdfmediaCache = new OpenPdfMediaCache();
-
+						
 						for (Entry<String, ImageResource> entry : mediaCache.getImageResources().entrySet()) {
 							openPdfmediaCache.putImage(entry.getKey(), entry.getValue().getBytes());
 						}
-
+						
 						documentLoader.setDocumentWriter(new OpenPdfDocumentWriter(new File("export.pdf"), openPdfFontCache, openPdfmediaCache));
-
+						
 						PdfBoxFontCache pdfBoxFontCache = new PdfBoxFontCache();
 						PdfBoxMediaCache pdfBoxmediaCache = new PdfBoxMediaCache();
 						
@@ -543,12 +543,12 @@ public class FileTools {
 		// TODO
 		String filePath = FileChooser.browseForFile("pdf", Icons.image, true, context.getFrame(), Aerialist.PREFERENCES, "generateInvoiceDestinationPath", suggestedFileName + ".pdf"); //$NON-NLS-1$
 		if (filePath != null) {
-			exportToPdf(filePath);
+			exportToPdf(filePath, true);
 		}
 
 	}
 
-	public void exportToPdf(String filePath) {
+	public void exportToPdf(String filePath, boolean open) {
 
 		DocumentEditorPanel documentEditor = context.getMainPanel().getDocumentEditor();
 
@@ -577,7 +577,9 @@ public class FileTools {
 
 					documentEditor.getPageContainer().setExportPhase(ExportPhase.IDLE);
 
-					DesktopUtils.open(filePath);
+					if (open) {
+						DesktopUtils.open(filePath);
+					}
 
 				} catch (DocumentException e) {
 					e.printStackTrace();
