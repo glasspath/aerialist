@@ -46,10 +46,7 @@ public abstract class EmailContainer extends JPanel implements ISwingViewContext
 			setBackground(background);
 		}
 		setLayout(new BorderLayout());
-		
-		// TODO
-		setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-		
+
 	}
 
 	public void init(Email email) {

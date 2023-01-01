@@ -67,6 +67,7 @@ import org.glasspath.common.swing.color.ColorChooserPanel;
 import org.glasspath.common.swing.file.chooser.FileChooser;
 import org.glasspath.common.swing.padding.PaddingDialog;
 import org.glasspath.common.swing.padding.PaddingPanel;
+import org.glasspath.common.swing.selection.SelectionListener;
 
 public class ActionUtils {
 
@@ -367,35 +368,76 @@ public class ActionUtils {
 		});
 
 		menu.add(createInsertFieldMenu(context));
+		menu.add(createInsertImageMenuItem(context, textView));
+
+	}
+
+	public static JMenuItem createInsertImageMenuItem(EditorPanel<? extends EditorPanel<?>> context, TextView textView) {
 
 		JMenuItem insertImageMenuItem = new JMenuItem("Insert image");
-		menu.add(insertImageMenuItem);
 		insertImageMenuItem.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				String filePath = FileChooser.browseForImageFile(Icons.image, false, context.getFrame(), Aerialist.PREFERENCES, "lastImageFilePath");
-				if (filePath != null) {
+				TextView selectedTextView = textView;
+				if (selectedTextView == null) {
+					for (Component component : context.getSelection()) {
+						if (component instanceof TextView) {
+							selectedTextView = (TextView) component;
+							break;
+						}
+					}
+				}
 
-					try {
+				if (selectedTextView != null) {
 
-						File file = new File(filePath);
-						String key = file.getName();
+					String filePath = FileChooser.browseForImageFile(Icons.image, false, context.getFrame(), Aerialist.PREFERENCES, "lastImageFilePath");
+					if (filePath != null) {
 
-						BufferedImage image = context.getMediaCache().putImage(key, Files.readAllBytes(file.toPath()));
-						if (image != null) {
-							textView.insertImage(key, image);
+						try {
+
+							File file = new File(filePath);
+							String key = file.getName();
+
+							BufferedImage image = context.getMediaCache().putImage(key, Files.readAllBytes(file.toPath()));
+							if (image != null) {
+								selectedTextView.insertImage(key, image);
+							}
+
+						} catch (Exception ex) {
+							ex.printStackTrace();
 						}
 
-					} catch (Exception ex) {
-						ex.printStackTrace();
 					}
 
 				}
 
 			}
 		});
+
+		if (textView == null) {
+
+			insertImageMenuItem.setEnabled(false);
+			context.getSelection().addSelectionListener(new SelectionListener() {
+
+				@Override
+				public void selectionChanged() {
+
+					insertImageMenuItem.setEnabled(false);
+					for (Component component : context.getSelection()) {
+						if (component instanceof TextView) {
+							insertImageMenuItem.setEnabled(true);
+							break;
+						}
+					}
+
+				}
+			});
+
+		}
+
+		return insertImageMenuItem;
 
 	}
 
