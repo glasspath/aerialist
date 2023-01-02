@@ -27,7 +27,17 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 @JsonInclude(Include.NON_DEFAULT)
+@SuppressWarnings("nls")
 public class Email extends ContentRoot {
+
+	@JacksonXmlProperty(isAttribute = true)
+	private String to = "";
+
+	@JacksonXmlProperty(isAttribute = true)
+	private String cc = "";
+
+	@JacksonXmlProperty(isAttribute = true)
+	private String bcc = "";
 
 	@JacksonXmlProperty(isAttribute = false)
 	private TextBox subjectTextBox = null;
@@ -37,6 +47,30 @@ public class Email extends ContentRoot {
 
 	public Email() {
 
+	}
+
+	public String getTo() {
+		return to;
+	}
+
+	public void setTo(String to) {
+		this.to = to;
+	}
+
+	public String getCc() {
+		return cc;
+	}
+
+	public void setCc(String cc) {
+		this.cc = cc;
+	}
+
+	public String getBcc() {
+		return bcc;
+	}
+
+	public void setBcc(String bcc) {
+		this.bcc = bcc;
 	}
 
 	public TextBox getSubjectTextBox() {
