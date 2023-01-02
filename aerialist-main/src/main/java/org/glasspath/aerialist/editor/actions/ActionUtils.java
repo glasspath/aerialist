@@ -375,6 +375,7 @@ public class ActionUtils {
 	public static JMenuItem createInsertImageMenuItem(EditorPanel<? extends EditorPanel<?>> context, TextView textView) {
 
 		JMenuItem insertImageMenuItem = new JMenuItem("Insert image");
+		insertImageMenuItem.setIcon(Icons.image);
 		insertImageMenuItem.addActionListener(new ActionListener() {
 
 			@Override
