@@ -22,30 +22,92 @@
  */
 package org.glasspath.aerialist.pdfbox;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDTrueTypeFont;
+import org.apache.pdfbox.pdmodel.font.encoding.StandardEncoding;
 import org.glasspath.aerialist.text.TextUtils.SpanInfo;
 import org.glasspath.aerialist.text.font.FontCache;
 import org.glasspath.aerialist.text.font.FontWeight;
 
 public class PdfBoxFontCache extends FontCache<PDFont> {
 
+	private PDDocument document = null;
+
 	public PdfBoxFontCache() {
 
 	}
 
+	public PDDocument getDocument() {
+		return document;
+	}
+
+	public void setDocument(PDDocument document) {
+		this.document = document;
+	}
+
 	@Override
 	protected PDFont createDefaultFont(FontWeight weight, boolean italic) {
-		return null;
+		return null; // TODO
 	}
 
 	@Override
 	protected void loadFontFile(FontFile fontFile) {
 
+		if (document != null) {
+
+			try {
+
+				PDFont font = PDTrueTypeFont.load(document, fontFile.file, StandardEncoding.INSTANCE);
+				fontFile.font = font;
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+		}
+
 	}
 
 	@Override
 	public SpanInfo getSpanInfo(String text, String fontName, float fontSize, FontWeight weight, boolean italic) {
-		return null;
+
+		SpanInfo spanInfo = new SpanInfo();
+
+		PDFont font = null;
+
+		spanInfo.fontIndex = getFontIndex(fontName, weight, italic);
+		if (spanInfo.fontIndex >= 0) {
+
+			FontCache<PDFont>.CachedFont cachedFont = getFont(spanInfo.fontIndex);
+			if (cachedFont != null && cachedFont.fontFile != null) {
+				font = cachedFont.fontFile.font;
+			}
+
+		}
+
+		if (font == null) {
+			font = createDefaultFont(weight, italic);
+		}
+
+		if (font != null) {
+
+			// TODO: \n is not supported, this should be removed before calling getSpanInfo
+			text = text.replace("\n", ""); //$NON-NLS-1$ //$NON-NLS-2$
+
+			try {
+				spanInfo.width = (font.getStringWidth(text) / 1000.0F) * fontSize;
+			} catch (Exception e) {
+				e.printStackTrace(); // TODO
+			}
+
+			spanInfo.ascent = (font.getFontDescriptor().getAscent() / 1000.0F) * fontSize;
+			spanInfo.descent = -(font.getFontDescriptor().getDescent() / 1000.0F) * fontSize;
+
+		}
+
+		return spanInfo;
+
 	}
 
 }

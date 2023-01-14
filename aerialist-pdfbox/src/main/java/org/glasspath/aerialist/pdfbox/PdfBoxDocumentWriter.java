@@ -58,6 +58,7 @@ public class PdfBoxDocumentWriter extends DocumentWriter {
 	protected void openDocument(int width, int height) throws Exception {
 
 		document = new PDDocument();
+		fontCache.setDocument(document);
 		mediaCache.setDocument(document);
 
 		documentOpen = true;

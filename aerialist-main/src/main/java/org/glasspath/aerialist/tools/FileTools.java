@@ -52,7 +52,7 @@ import org.glasspath.aerialist.layout.IElementLayoutMetrics;
 import org.glasspath.aerialist.layout.ILayoutContext.ExportPhase;
 import org.glasspath.aerialist.layout.ILayoutContext.LayoutPhase;
 import org.glasspath.aerialist.layout.LayoutListener;
-import org.glasspath.aerialist.openpdf.OpenPdfDocumentLoader;
+import org.glasspath.aerialist.pdfbox.PdfBoxDocumentLoader;
 import org.glasspath.aerialist.reader.XDocReader;
 import org.glasspath.aerialist.swing.BufferedImageMediaCache;
 import org.glasspath.aerialist.swing.SwingLayoutMetrics;
@@ -439,9 +439,10 @@ public class FileTools {
 									@Override
 									public void run() {
 
-										OpenPdfDocumentLoader openPdfDocumentLoader = new OpenPdfDocumentLoader();
-										openPdfDocumentLoader.setLayoutListener(listener);
-										openPdfDocumentLoader.loadDocument(new File(documentPath), templateFieldContext, OsUtils.getBundledFile(Aerialist.APPLICATION_CLASS, "fonts"), new File("export.pdf"));
+										// OpenPdfDocumentLoader documentLoader = new OpenPdfDocumentLoader();
+										PdfBoxDocumentLoader documentLoader = new PdfBoxDocumentLoader();
+										documentLoader.setLayoutListener(listener);
+										documentLoader.loadDocument(new File(documentPath), templateFieldContext, OsUtils.getBundledFile(Aerialist.APPLICATION_CLASS, "fonts"), new File("export.pdf"));
 
 										DesktopUtils.open("export.pdf");
 
