@@ -27,6 +27,7 @@ import org.glasspath.aerialist.text.font.FontCache;
 import org.glasspath.aerialist.text.font.FontWeight;
 
 import com.itextpdf.text.Font;
+import com.itextpdf.text.pdf.BaseFont;
 
 public class ITextFontCache extends FontCache<Font> {
 
@@ -36,17 +37,54 @@ public class ITextFontCache extends FontCache<Font> {
 
 	@Override
 	protected Font createDefaultFont(FontWeight weight, boolean italic) {
-		return null;
+		return null; // TODO
 	}
 
 	@Override
 	protected void loadFontFile(FontFile fontFile) {
 
+		try {
+
+			BaseFont baseFont = BaseFont.createFont(fontFile.file.getAbsolutePath(), BaseFont.CP1252, BaseFont.EMBEDDED, BaseFont.CACHED, null, null);
+			fontFile.font = new Font(baseFont);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	@Override
 	public SpanInfo getSpanInfo(String text, String fontName, float fontSize, FontWeight weight, boolean italic) {
-		return null;
+
+		SpanInfo spanInfo = new SpanInfo();
+
+		Font font = null;
+
+		spanInfo.fontIndex = getFontIndex(fontName, weight, italic);
+		if (spanInfo.fontIndex >= 0) {
+
+			FontCache<Font>.CachedFont cachedFont = getFont(spanInfo.fontIndex);
+			if (cachedFont != null && cachedFont.fontFile != null) {
+				font = cachedFont.fontFile.font;
+			}
+
+		}
+
+		if (font == null) {
+			font = createDefaultFont(weight, italic);
+		}
+
+		if (font != null) {
+
+			spanInfo.width = font.getBaseFont().getWidthPointKerned(text, fontSize);
+			spanInfo.ascent = font.getBaseFont().getFontDescriptor(BaseFont.AWT_ASCENT, fontSize);
+			spanInfo.descent = -font.getBaseFont().getFontDescriptor(BaseFont.AWT_DESCENT, fontSize);
+
+		}
+
+		return spanInfo;
+
 	}
 
 }

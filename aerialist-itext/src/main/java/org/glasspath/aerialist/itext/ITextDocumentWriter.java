@@ -25,12 +25,16 @@ package org.glasspath.aerialist.itext;
 import java.io.File;
 import java.io.FileOutputStream;
 
+import org.glasspath.aerialist.text.font.FontCache;
+import org.glasspath.aerialist.text.font.FontWeight;
 import org.glasspath.aerialist.writer.DocumentWriter;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
+import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -198,17 +202,59 @@ public class ITextDocumentWriter extends DocumentWriter {
 
 	@Override
 	protected void beginText() throws Exception {
-
+		cb.beginText();
 	}
 
 	@Override
 	protected void drawString(String s, float x, float y, int fontIndex, float fontSize, boolean bold, boolean italic) throws Exception {
 
+		if (fontIndex >= 0) {
+
+			Font font = null;
+			float fontAngle = 0.0F;
+
+			FontCache<Font>.CachedFont cachedFont = fontCache.getFont(fontIndex);
+			if (cachedFont != null && cachedFont.fontFile != null && cachedFont.fontFile.font != null) {
+
+				font = cachedFont.fontFile.font;
+
+				// Check if italic needs to be simulated (the FontFile class tells us if the loaded font is italic or not)
+				if (italic && !cachedFont.fontFile.italic) {
+
+					// TODO: The FontFile check above is based on the font-name containing the text 'italic'
+					// After loading the font we have more detailed information available, here we check the angle from the font
+					float angle = font.getBaseFont().getFontDescriptor(BaseFont.ITALICANGLE, 1000);
+					if (angle == 0) {
+						fontAngle = 15.0F / 100.0F;
+					}
+
+				}
+
+			}
+
+			if (font == null) {
+				font = fontCache.createDefaultFont(bold ? FontWeight.BOLD : FontWeight.REGULAR, italic);
+			}
+
+			if (font != null) {
+
+				y = pageHeight - y;
+
+				cb.setFontAndSize(font.getBaseFont(), fontSize);
+
+				cb.setTextMatrix(1.0F, 0.0F, fontAngle, 1.0F, x, y);
+
+				cb.showText(s);
+
+			}
+
+		}
+
 	}
 
 	@Override
 	protected void endText() throws Exception {
-
+		cb.endText();
 	}
 
 	@Override
