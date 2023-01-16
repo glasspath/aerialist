@@ -28,6 +28,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.glasspath.aerialist.HeightPolicy;
 import org.glasspath.aerialist.YPolicy;
@@ -47,8 +48,14 @@ public abstract class VerticalLayout<C, E> extends Layout<C, E> {
 
 	@Override
 	public void setContainer(C container) {
+		setContainer(container, true);
+	}
+
+	public void setContainer(C container, boolean clearAnchorLists) {
 		super.setContainer(container);
-		anchorLists.clear();
+		if (clearAnchorLists) {
+			anchorLists.clear();
+		}
 	}
 
 	public abstract YPolicy getYPolicy(E element);
@@ -123,6 +130,33 @@ public abstract class VerticalLayout<C, E> extends Layout<C, E> {
 
 		for (int i = 0; i < getElementCount(); i++) {
 			updateAnchors(getElement(i));
+		}
+
+	}
+
+	public void replaceAnchors(Map<E, E> elementMap) {
+
+		for (Entry<E, AnchorList> entry : anchorLists.entrySet()) {
+
+			AnchorList anchorList = entry.getValue();
+
+			if (anchorList.anchors != null) {
+				
+				List<E> anchors = new ArrayList<>();
+				
+				for (E element : anchorList.anchors) {
+					
+					E newElement = elementMap.get(element);
+					if (newElement != null) {
+						anchors.add(newElement);
+					}
+					
+				}
+				
+				anchorList.anchors = anchors;
+				
+			}
+
 		}
 
 	}

@@ -51,6 +51,24 @@ public class TextBox extends Element implements IText {
 
 	}
 
+	public TextBox(TextBox textBox) {
+		fromTextBox(textBox);
+	}
+
+	public void fromTextBox(TextBox textBox) {
+
+		fromElement(textBox);
+
+		text = textBox.text;
+		alignment = textBox.alignment;
+		padding = textBox.padding;
+
+		for (TextStyle style : textBox.styles) {
+			styles.add(new TextStyle(style));
+		}
+
+	}
+
 	@Override
 	public String getText() {
 		return text;

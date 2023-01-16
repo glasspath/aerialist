@@ -27,9 +27,13 @@ import org.glasspath.aerialist.layout.DocumentLayoutInfo.Rect;
 
 public class TextLayout {
 
-	public final Line[] lines;
-	public final float preferredWidth;
-	public final float preferredHeight;
+	public Line[] lines = null;
+	public float preferredWidth = 0.0F;
+	public float preferredHeight = 0.0F;
+
+	public TextLayout() {
+
+	}
 
 	public TextLayout(Line[] lines, float preferredWidth, float preferredHeight) {
 		this.lines = lines;
@@ -39,10 +43,14 @@ public class TextLayout {
 
 	public static class Line {
 
-		public final int start;
-		public final Span[] spans;
-		public final float baseline;
-		public final Rect lineBounds;
+		public int start = 0;
+		public Span[] spans = null;
+		public float baseline = 0.0F;
+		public Rect lineBounds = null;
+
+		public Line() {
+
+		}
 
 		public Line(int start, Span[] spans, float baseline, Rect lineBounds) {
 			this.start = start;
@@ -55,11 +63,15 @@ public class TextLayout {
 
 	public static class Span {
 
-		public final TextStyle style;
+		public TextStyle style = null;
 		public float x = 0;
 		public int fontIndex = 0;
 		public int start = 0;
 		public int end = 0;
+
+		public Span() {
+
+		}
 
 		public Span(TextStyle style) {
 			this.style = style;

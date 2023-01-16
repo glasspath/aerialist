@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.glasspath.aerialist.Element;
 import org.glasspath.aerialist.Image;
 import org.glasspath.aerialist.Page;
 import org.glasspath.aerialist.Table;
@@ -68,6 +69,27 @@ public class DocumentLayoutInfo {
 			textBoxes.clear();
 			tables.clear();
 			images.clear();
+		}
+
+		public void move(Element element, LayoutInfo toLayoutInfo) {
+
+			if (element instanceof TextBox) {
+				TextBoxLayoutInfo layoutInfo = textBoxes.remove(element);
+				if (layoutInfo != null) {
+					toLayoutInfo.textBoxes.put((TextBox) element, layoutInfo);
+				}
+			} else if (element instanceof Table) {
+				TableLayoutInfo layoutInfo = tables.remove(element);
+				if (layoutInfo != null) {
+					toLayoutInfo.tables.put((Table) element, layoutInfo);
+				}
+			} else if (element instanceof Image) {
+				ImageLayoutInfo layoutInfo = images.remove(element);
+				if (layoutInfo != null) {
+					toLayoutInfo.images.put((Image) element, layoutInfo);
+				}
+			}
+
 		}
 
 	}
