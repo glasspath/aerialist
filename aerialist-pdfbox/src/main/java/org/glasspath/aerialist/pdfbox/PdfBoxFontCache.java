@@ -24,8 +24,7 @@ package org.glasspath.aerialist.pdfbox;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.font.PDTrueTypeFont;
-import org.apache.pdfbox.pdmodel.font.encoding.StandardEncoding;
+import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.glasspath.aerialist.text.TextUtils.SpanInfo;
 import org.glasspath.aerialist.text.font.FontCache;
 import org.glasspath.aerialist.text.font.FontWeight;
@@ -58,7 +57,8 @@ public class PdfBoxFontCache extends FontCache<PDFont> {
 
 			try {
 
-				PDFont font = PDTrueTypeFont.load(document, fontFile.file, StandardEncoding.INSTANCE);
+				// PDFont font = PDTrueTypeFont.load(document, fontFile.file, StandardEncoding.INSTANCE);
+				PDFont font = PDType0Font.load(document, fontFile.file);
 				fontFile.font = font;
 
 			} catch (Exception e) {
