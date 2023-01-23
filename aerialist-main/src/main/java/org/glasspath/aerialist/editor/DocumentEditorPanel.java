@@ -229,7 +229,7 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 	}
 
 	@Override
-	public void refresh(Component component) {
+	public void refresh(Component component, boolean resetYPolicy) {
 
 		if (component != null) {
 
@@ -252,13 +252,17 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 
 		}
 
-		SwingUtilities.invokeLater(new Runnable() {
+		if (resetYPolicy) {
 
-			@Override
-			public void run() {
-				pageContainer.setYPolicyEnabled(!layoutLocked);
-			}
-		});
+			SwingUtilities.invokeLater(new Runnable() {
+
+				@Override
+				public void run() {
+					pageContainer.setYPolicyEnabled(!layoutLocked);
+				}
+			});
+
+		}
 
 	}
 

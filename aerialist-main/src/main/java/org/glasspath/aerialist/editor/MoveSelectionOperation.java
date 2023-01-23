@@ -43,6 +43,13 @@ public class MoveSelectionOperation extends Operation {
 
 	public MoveSelectionOperation(DocumentEditorPanel context) {
 		this.context = context;
+
+		// TODO: For now layout Y-policy is always disabled because of following issues:
+		// - Inserting element causes other elements to shift position
+		// - Moving element above other element causes anchor to be created after which element also moves
+		// - Undo/redo causes elements to shift due to newly created anchors
+		context.getPageContainer().setYPolicyEnabled(false);
+
 	}
 
 	@Override
@@ -88,7 +95,7 @@ public class MoveSelectionOperation extends Operation {
 			pageView.elementMoved(component, oldBounds, true);
 
 			context.getSelection().fireSelectionChanged();
-			context.refresh(pageView);
+			context.refresh(pageView, false);
 
 		}
 

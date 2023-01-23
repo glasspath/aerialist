@@ -54,6 +54,12 @@ public class InsertElementOperation extends Operation {
 		this.context = context;
 		this.component = component;
 
+		// TODO: For now layout Y-policy is always disabled because of following issues:
+		// - Inserting element causes other elements to shift position
+		// - Moving element above other element causes anchor to be created after which element also moves
+		// - Undo/redo causes elements to shift due to newly created anchors
+		context.getPageContainer().setYPolicyEnabled(false);
+
 		if (context.getSelection().size() > 0) {
 
 			pageView = AerialistUtils.getPageView(context.getSelection().get(0));
@@ -106,7 +112,7 @@ public class InsertElementOperation extends Operation {
 			pageView.updateVerticalAnchors();
 
 			context.getSelection().fireSelectionChanged();
-			context.refresh(null);
+			context.refresh(null, false);
 
 		}
 

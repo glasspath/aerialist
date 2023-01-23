@@ -92,6 +92,10 @@ public abstract class EditorPanel<T extends EditorPanel<T>> extends JPanel imple
 	}
 
 	public void refresh(Component component) {
+		refresh(component, true);
+	}
+
+	public void refresh(Component component, boolean resetYPolicy) {
 
 	}
 
