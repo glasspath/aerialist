@@ -134,6 +134,11 @@ public abstract class VerticalLayout<C, E> extends Layout<C, E> {
 
 	}
 
+	/**
+	 * Replaces anchor element (key) by new element (value), all other anchors are removed.
+	 * 
+	 * @param elementMap map of elements to be replaced
+	 */
 	public void replaceAnchors(Map<E, E> elementMap) {
 
 		for (Entry<E, AnchorList> entry : anchorLists.entrySet()) {
@@ -141,20 +146,20 @@ public abstract class VerticalLayout<C, E> extends Layout<C, E> {
 			AnchorList anchorList = entry.getValue();
 
 			if (anchorList.anchors != null) {
-				
+
 				List<E> anchors = new ArrayList<>();
-				
+
 				for (E element : anchorList.anchors) {
-					
+
 					E newElement = elementMap.get(element);
 					if (newElement != null) {
 						anchors.add(newElement);
 					}
-					
+
 				}
-				
+
 				anchorList.anchors = anchors;
-				
+
 			}
 
 		}

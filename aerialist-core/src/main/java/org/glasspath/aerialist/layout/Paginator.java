@@ -76,6 +76,8 @@ public class Paginator {
 
 				if (element.getY() > yMax) {
 					moveElements.add(element);
+				} else if (element.getY() > yMin && element.getY() + element.getHeight() > yMax && !isSplittable(element)) {
+					moveElements.add(element);
 				}
 
 			}
@@ -133,16 +135,49 @@ public class Paginator {
 
 			if (newPageLayoutInfo != null) {
 
+				boolean layoutUpdated = false;
+
 				if (splitElements.size() > 0) {
 
-					layout.replaceAnchors(splitElements);
+					Map<Element, Element> updatedAnchors = new HashMap<>();
+					for (Element element : moveElements) {
+						updatedAnchors.put(element, element);
+					}
+					updatedAnchors.putAll(splitElements);
+					layout.replaceAnchors(updatedAnchors);
 
 					for (Element element : splitElements.values()) {
 						layout.updateLayout(element);
 					}
 
-					newPages.addAll(paginate(newPageLayoutInfo, yMin, yMax));
+					layoutUpdated = true;
 
+				} else if (moveElements.size() > 0) {
+
+					int yElementMin = Integer.MAX_VALUE;
+
+					for (Element element : moveElements) {
+						if (element.getY() < yElementMin) {
+							yElementMin = element.getY();
+						}
+					}
+
+					if (yElementMin < Integer.MAX_VALUE && yElementMin > yMin) {
+
+						int yOffset = yElementMin - yMin;
+
+						for (Element element : moveElements) {
+							element.setY(element.getY() - yOffset);
+						}
+
+					}
+
+					layoutUpdated = true;
+
+				}
+
+				if (layoutUpdated) {
+					newPages.addAll(paginate(newPageLayoutInfo, yMin, yMax));
 				} else {
 					System.err.println("TODO: Paginator, invalid attempt to paginate");
 				}
@@ -162,6 +197,20 @@ public class Paginator {
 		pageLayoutInfo.page.getElements().remove(element);
 
 		newPageLayoutInfo.page.getElements().add(element);
+
+	}
+
+	protected boolean isSplittable(Element element) {
+
+		if (HeightPolicy.get(element.getHeightPolicy()) == HeightPolicy.AUTO) {
+			if (element instanceof TextBox) {
+				return true;
+			} else if (element instanceof Table) {
+				return true;
+			}
+		}
+
+		return false;
 
 	}
 
