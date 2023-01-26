@@ -68,7 +68,7 @@ public abstract class MediaCache<T> {
 	public T getImage(String key) {
 		return images.get(key);
 	}
-	
+
 	public abstract ImageSize getImageSize(String key);
 
 	public static class ImageResource {

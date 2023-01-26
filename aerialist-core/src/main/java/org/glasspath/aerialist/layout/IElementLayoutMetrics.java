@@ -23,6 +23,9 @@
 package org.glasspath.aerialist.layout;
 
 import org.glasspath.aerialist.Element;
+import org.glasspath.aerialist.FitPolicy;
+import org.glasspath.aerialist.HeightPolicy;
+import org.glasspath.aerialist.Image;
 import org.glasspath.aerialist.layout.DocumentLayoutInfo.ElementLayoutInfo;
 import org.glasspath.aerialist.layout.DocumentLayoutInfo.LayoutInfo;
 
@@ -33,5 +36,19 @@ public interface IElementLayoutMetrics extends ILayoutMetrics<Element> {
 	public void setLayoutInfo(LayoutInfo layoutInfo);
 
 	public ElementLayoutInfo getElementLayoutInfo(Element element);
+
+	public static int getPreferredImageHeight(Image image, int width, int height) {
+
+		if (HeightPolicy.get(image.getHeightPolicy()) == HeightPolicy.AUTO) {
+			if (FitPolicy.get(image.getFit()) == FitPolicy.WIDTH) {
+				return (int) (height * ((double) image.getWidth() / (double) width));
+			} else {
+				return height;
+			}
+		}
+
+		return image.getHeight();
+
+	}
 
 }

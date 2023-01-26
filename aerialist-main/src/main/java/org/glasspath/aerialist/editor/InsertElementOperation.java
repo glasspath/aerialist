@@ -125,21 +125,26 @@ public class InsertElementOperation extends Operation {
 
 			if (component instanceof ImageView) {
 
-				String filePath = FileChooser.browseForImageFile(Icons.image, false, context.getFrame(), Aerialist.PREFERENCES, "lastImageFilePath");
-				if (filePath != null) {
+				ImageView imageView = (ImageView) component;
+				if (imageView.getSrc() == null || imageView.getSrc().length() == 0) {
 
-					try {
+					String filePath = FileChooser.browseForImageFile(Icons.image, false, context.getFrame(), Aerialist.PREFERENCES, "lastImageFilePath");
+					if (filePath != null) {
 
-						File file = new File(filePath);
-						String key = file.getName();
+						try {
 
-						BufferedImage image = context.getMediaCache().putImage(key, Files.readAllBytes(file.toPath()));
-						if (image != null) {
-							((ImageView) component).setImage(key, image);
+							File file = new File(filePath);
+							String key = file.getName();
+
+							BufferedImage image = context.getMediaCache().putImage(key, Files.readAllBytes(file.toPath()));
+							if (image != null) {
+								((ImageView) component).setImage(key, image);
+							}
+
+						} catch (Exception ex) {
+							ex.printStackTrace();
 						}
 
-					} catch (Exception ex) {
-						ex.printStackTrace();
 					}
 
 				}

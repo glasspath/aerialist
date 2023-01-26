@@ -422,7 +422,7 @@ public class FileTools {
 
 					}
 
-					documentLoader.loadDocument(templateDocument, templateFieldContext);
+					documentLoader.loadDocument(templateDocument, templateFieldContext, mediaCache);
 
 					SwingUtilities.invokeLater(new Runnable() {
 

@@ -99,7 +99,7 @@ public class PdfBoxDocumentLoader {
 				Document document = (Document) xDoc.getContent().getRoot();
 
 				if (templateFieldContext != null) {
-					documentLoader.loadDocument(document, templateFieldContext);
+					documentLoader.loadDocument(document, templateFieldContext, mediaCache);
 				}
 
 				return document;

@@ -105,4 +105,9 @@ public class DynamicFieldContext implements IFieldContext {
 		return null;
 	}
 
+	@Override
+	public Object getObject(String key) {
+		return getString(key); // TODO?
+	}
+
 }

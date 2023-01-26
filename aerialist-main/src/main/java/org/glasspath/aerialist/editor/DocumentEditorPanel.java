@@ -109,15 +109,6 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 
 		pageContainer = new EditorPageContainer();
 
-		/*
-		JLayer<JPanel> pageContainerLayer = new JLayer<JPanel>(pageContainer, view);
-		
-		JPanel pageContainerWrapper = new JPanel();
-		pageContainerWrapper.setLayout(new BorderLayout());
-		pageContainerWrapper.add(pageContainerLayer, BorderLayout.CENTER);
-		
-		mainScrollPane = new JScrollPane(pageContainerWrapper);
-		*/
 		mainScrollPane = new JScrollPane(pageContainer);
 		mainScrollPane.setBorder(BorderFactory.createEmptyBorder());
 		mainScrollPane.getVerticalScrollBar().setUnitIncrement(25);

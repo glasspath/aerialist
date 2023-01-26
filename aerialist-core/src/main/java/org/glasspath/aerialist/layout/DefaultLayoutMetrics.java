@@ -168,12 +168,12 @@ public class DefaultLayoutMetrics implements IElementLayoutMetrics {
 						}
 
 					}
-					
+
 					// Set x values for column-bounds
 					for (int i = 1; i < info.columnBounds.length; i++) {
 						info.columnBounds[i].x = info.columnBounds[i - 1].x + info.columnBounds[i - 1].width;
 					}
-					
+
 					// Check if the last column width was set
 					int availableWidth = table.getWidth() - info.columnBounds[info.columnBounds.length - 1].x;
 					if (availableWidth > info.columnBounds[info.columnBounds.length - 1].width) {
@@ -259,10 +259,7 @@ public class DefaultLayoutMetrics implements IElementLayoutMetrics {
 
 				info.imageWidth = imageSize.width;
 				info.imageHeight = imageSize.height;
-
-				if (HeightPolicy.get(image.getHeightPolicy()) == HeightPolicy.AUTO) {
-					info.preferredHeight = info.imageHeight;
-				}
+				info.preferredHeight = IElementLayoutMetrics.getPreferredImageHeight(image, imageSize.width, imageSize.height);
 
 			}
 

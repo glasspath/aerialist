@@ -166,10 +166,7 @@ public class SwingLayoutMetrics implements IElementLayoutMetrics {
 
 				info.imageWidth = imageSize.width;
 				info.imageHeight = imageSize.height;
-
-				if (HeightPolicy.get(image.getHeightPolicy()) == HeightPolicy.AUTO) {
-					info.preferredHeight = info.imageHeight;
-				}
+				info.preferredHeight = IElementLayoutMetrics.getPreferredImageHeight(image, imageSize.width, imageSize.height); 
 
 			}
 

@@ -237,13 +237,17 @@ public class Aerialist implements FrameContext {
 						}
 					});
 
-					SwingUtilities.invokeLater(new Runnable() {
+					if (openFile != null) {
 
-						@Override
-						public void run() {
-							open(openFile, templateFieldContext);
-						}
-					});
+						SwingUtilities.invokeLater(new Runnable() {
+
+							@Override
+							public void run() {
+								open(openFile, templateFieldContext);
+							}
+						});
+
+					}
 
 					frame.toFront();
 
@@ -426,13 +430,6 @@ public class Aerialist implements FrameContext {
 
 			toolBarPanel.bottom.add(objectFormatTools.getToolBar());
 			toolBarPanel.bottom.add(Box.createHorizontalGlue());
-
-			/*
-			toolBarPanel.add(filter.getToolBar());
-			if (dateFilterTools != null) {
-				toolBarPanel.add(dateFilterTools.getToolBar());
-			}
-			 */
 
 		}
 

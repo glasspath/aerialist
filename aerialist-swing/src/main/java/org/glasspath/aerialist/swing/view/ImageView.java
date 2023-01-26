@@ -176,8 +176,18 @@ public class ImageView extends JComponent implements ISwingElementView<Image> {
 
 		Dimension size = super.getPreferredSize();
 
-		if (heightPolicy == HeightPolicy.AUTO && image != null) {
-			size.height = image.getHeight(); // TODO: scale?
+		if (image != null) {
+
+			if (heightPolicy == HeightPolicy.AUTO) {
+
+				if (fitPolicy == FitPolicy.WIDTH) {
+					size.height = (int) (image.getHeight() * ((double) getWidth() / (double) image.getWidth()));
+				} else {
+					size.height = image.getHeight();
+				}
+
+			}
+
 		}
 
 		return size;

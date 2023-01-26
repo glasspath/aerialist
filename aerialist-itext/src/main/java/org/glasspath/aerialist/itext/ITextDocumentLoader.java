@@ -93,7 +93,7 @@ public class ITextDocumentLoader {
 						documentLoader.setDocumentWriter(new ITextDocumentWriter(outputFile, fontCache, mediaCache));
 					}
 
-					documentLoader.loadDocument(document, templateFieldContext);
+					documentLoader.loadDocument(document, templateFieldContext, mediaCache);
 
 				}
 

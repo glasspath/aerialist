@@ -34,4 +34,6 @@ public interface IFieldContext {
 
 	public List<String> getList(String key);
 
+	public Object getObject(String key);
+
 }

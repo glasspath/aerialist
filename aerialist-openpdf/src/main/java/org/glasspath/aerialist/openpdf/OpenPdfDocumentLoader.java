@@ -93,7 +93,7 @@ public class OpenPdfDocumentLoader {
 						documentLoader.setDocumentWriter(new OpenPdfDocumentWriter(outputFile, fontCache, mediaCache));
 					}
 
-					documentLoader.loadDocument(document, templateFieldContext);
+					documentLoader.loadDocument(document, templateFieldContext, mediaCache);
 
 				}
 

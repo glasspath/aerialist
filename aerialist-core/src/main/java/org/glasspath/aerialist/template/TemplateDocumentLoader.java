@@ -23,7 +23,10 @@
 package org.glasspath.aerialist.template;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -33,6 +36,7 @@ import org.glasspath.aerialist.Document;
 import org.glasspath.aerialist.Element;
 import org.glasspath.aerialist.IFieldContext;
 import org.glasspath.aerialist.Page;
+import org.glasspath.aerialist.Field.FieldType;
 import org.glasspath.aerialist.Page.PageSize;
 import org.glasspath.aerialist.layout.DefaultVerticalLayout;
 import org.glasspath.aerialist.layout.DocumentLayoutInfo;
@@ -42,6 +46,8 @@ import org.glasspath.aerialist.layout.ILayoutContext;
 import org.glasspath.aerialist.layout.ILayoutContext.LayoutPhase;
 import org.glasspath.aerialist.layout.LayoutListener;
 import org.glasspath.aerialist.layout.Paginator;
+import org.glasspath.aerialist.media.MediaCache;
+import org.glasspath.aerialist.media.MediaCache.ImageResource;
 import org.glasspath.aerialist.writer.DocumentWriter;
 
 public abstract class TemplateDocumentLoader {
@@ -87,12 +93,12 @@ public abstract class TemplateDocumentLoader {
 		return Executors.newFixedThreadPool(4);
 	}
 
-	public void loadDocument(Document document, IFieldContext templateFieldContext) {
+	public void loadDocument(Document document, IFieldContext templateFieldContext, MediaCache<?> mediaCache) {
 
 		start = System.currentTimeMillis();
 
 		if (templateFieldContext != null) {
-			parseTemplate(document, templateFieldContext);
+			parseTemplate(document, templateFieldContext, mediaCache);
 		}
 
 		layoutContext.setLayoutPhase(LayoutPhase.LAYOUT_CONTENT);
@@ -106,7 +112,11 @@ public abstract class TemplateDocumentLoader {
 
 	}
 
-	protected void parseTemplate(Document document, IFieldContext templateFieldContext) {
+	protected void parseTemplate(Document document, IFieldContext templateFieldContext, MediaCache<?> mediaCache) {
+
+		if (mediaCache != null) {
+			replaceImages(mediaCache, templateFieldContext);
+		}
 
 		TemplateParser templateParser = new TemplateParser() {
 
@@ -119,6 +129,29 @@ public abstract class TemplateDocumentLoader {
 		templateParser.parseTemplate(document, templateFieldContext);
 
 		fireStatusChanged("Template parsed after " + (System.currentTimeMillis() - start) + " milliseconds");
+
+	}
+
+	protected void replaceImages(MediaCache<?> mediaCache, IFieldContext templateFieldContext) {
+
+		Map<String, byte[]> images = new HashMap<>();
+
+		for (Entry<String, ImageResource> entry : mediaCache.getImageResources().entrySet()) {
+
+			if (entry.getKey().startsWith(FieldType.TEMPLATE.getIdentifier())) {
+
+				Object object = templateFieldContext.getObject(entry.getKey());
+				if (object instanceof byte[]) {
+					images.put(entry.getKey(), (byte[]) object);
+				}
+
+			}
+
+		}
+
+		for (Entry<String, byte[]> entry : images.entrySet()) {
+			mediaCache.putImage(entry.getKey(), entry.getValue());
+		}
 
 	}
 
