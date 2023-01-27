@@ -128,10 +128,6 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 
 	}
 
-	public void setScrollLock(boolean scrollLock) {
-		this.scrollLock = scrollLock;
-	}
-
 	public Aerialist getContext() {
 		return context;
 	}
@@ -200,6 +196,10 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 	public void setLayoutLocked(boolean layoutLocked) {
 		this.layoutLocked = layoutLocked;
 		pageContainer.setYPolicyEnabled(!layoutLocked);
+	}
+
+	public void setScrollLock(boolean scrollLock) {
+		this.scrollLock = scrollLock;
 	}
 
 	@Override
