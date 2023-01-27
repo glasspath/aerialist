@@ -28,10 +28,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,21 +59,7 @@ public class ImageView extends JComponent implements ISwingElementView<Image> {
 
 		this.viewContext = viewContext;
 
-		setFocusable(true);
-		addFocusListener(new FocusAdapter() {
-
-			@Override
-			public void focusGained(FocusEvent e) {
-				viewContext.focusGained(ImageView.this);
-			}
-		});
-		addMouseListener(new MouseAdapter() {
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				requestFocusInWindow();
-			}
-		});
+		ISwingViewContext.installSelectionHandler(this, viewContext);
 
 	}
 

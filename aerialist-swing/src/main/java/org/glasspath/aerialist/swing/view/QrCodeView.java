@@ -27,8 +27,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,14 +50,6 @@ public class QrCodeView extends TextView implements ISwingElementView<QrCode> {
 
 	public QrCodeView(ISwingViewContext viewContext) {
 		super(viewContext);
-
-		addFocusListener(new FocusAdapter() {
-
-			@Override
-			public void focusGained(FocusEvent e) {
-				viewContext.focusGained(QrCodeView.this);
-			}
-		});
 
 		// TODO: Implement padding for QrCode?
 		setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));

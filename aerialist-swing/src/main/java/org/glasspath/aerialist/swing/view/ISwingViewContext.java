@@ -24,14 +24,21 @@ package org.glasspath.aerialist.swing.view;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JComponent;
+import javax.swing.SwingUtilities;
 import javax.swing.undo.UndoableEdit;
 
 import org.glasspath.aerialist.layout.ILayoutContext;
 
 public interface ISwingViewContext extends ILayoutContext<BufferedImage> {
+
+	public boolean isRightMouseSelectionAllowed();
 
 	public void focusGained(JComponent component);
 
@@ -40,5 +47,29 @@ public interface ISwingViewContext extends ILayoutContext<BufferedImage> {
 	public void refresh(Component component);
 
 	public Color getDefaultForeground();
+
+	public static void installSelectionHandler(JComponent component, ISwingViewContext viewContext) {
+
+		component.setFocusable(true);
+
+		component.addFocusListener(new FocusAdapter() {
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				viewContext.focusGained(component);
+			}
+		});
+
+		component.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				if (SwingUtilities.isLeftMouseButton(e) || (SwingUtilities.isRightMouseButton(e) && viewContext.isRightMouseSelectionAllowed())) {
+					component.requestFocusInWindow();
+				}
+			}
+		});
+
+	}
 
 }

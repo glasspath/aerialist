@@ -71,6 +71,8 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 	private boolean guidesVisible = true;
 	private boolean layoutLocked = false;
 
+	private boolean scrollLock = false;
+
 	public DocumentEditorPanel(Aerialist context, DocumentEditorContext editorContext) {
 
 		super(editorContext);
@@ -124,6 +126,10 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 
 		createSearchHandler(pageContainer);
 
+	}
+
+	public void setScrollLock(boolean scrollLock) {
+		this.scrollLock = scrollLock;
 	}
 
 	public Aerialist getContext() {
@@ -199,12 +205,19 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 	@Override
 	public void handleMouseEvent(MouseEvent e) {
 
+		mouseOperationHandler.processMouseEvent(e);
+
 		Component component = e.getComponent();
 		if (e.getID() == MouseEvent.MOUSE_PRESSED && SwingUtilities.isRightMouseButton(e) && e.getComponent() != null) {
-			showMenu(component, e.getX(), e.getY());
-			e.consume();
-		} else {
-			mouseOperationHandler.processMouseEvent(e);
+
+			SwingUtilities.invokeLater(new Runnable() {
+
+				@Override
+				public void run() {
+					showMenu(component, e.getX(), e.getY());
+				}
+			});
+
 		}
 
 	}
@@ -369,6 +382,14 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 		}
 
 		@Override
+		public void setLocation(int x, int y) {
+			// TODO: Is there a better way to lock a JScrollPane?
+			if (!scrollLock) {
+				super.setLocation(x, y);
+			}
+		}
+
+		@Override
 		public FontCache<Font> getFontCache() {
 			return null;
 		}
@@ -399,6 +420,11 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 				}
 			});
 
+		}
+
+		@Override
+		public boolean isRightMouseSelectionAllowed() {
+			return selection.size() <= 1;
 		}
 
 		@Override

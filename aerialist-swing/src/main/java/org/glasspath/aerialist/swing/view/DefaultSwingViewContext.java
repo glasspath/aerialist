@@ -68,6 +68,11 @@ public class DefaultSwingViewContext implements ISwingViewContext {
 	}
 
 	@Override
+	public boolean isRightMouseSelectionAllowed() {
+		return false;
+	}
+
+	@Override
 	public void focusGained(JComponent component) {
 
 	}

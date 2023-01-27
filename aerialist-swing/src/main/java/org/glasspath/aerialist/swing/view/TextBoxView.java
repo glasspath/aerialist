@@ -27,8 +27,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,14 +59,6 @@ public class TextBoxView extends TextView implements ISwingElementView<TextBox> 
 		super(viewContext);
 
 		setOpaque(false);
-
-		addFocusListener(new FocusAdapter() {
-
-			@Override
-			public void focusGained(FocusEvent e) {
-				viewContext.focusGained(TextBoxView.this);
-			}
-		});
 
 	}
 

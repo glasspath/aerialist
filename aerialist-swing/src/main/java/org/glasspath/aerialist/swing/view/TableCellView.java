@@ -22,9 +22,6 @@
  */
 package org.glasspath.aerialist.swing.view;
 
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-
 import javax.swing.BorderFactory;
 
 import org.glasspath.aerialist.Padding;
@@ -39,15 +36,6 @@ public class TableCellView extends TextView {
 
 	public TableCellView(ISwingViewContext viewContext) {
 		super(viewContext);
-
-		addFocusListener(new FocusAdapter() {
-
-			@Override
-			public void focusGained(FocusEvent e) {
-				viewContext.focusGained(TableCellView.this);
-			}
-		});
-
 	}
 
 	public void init(TableCell tableCell) {

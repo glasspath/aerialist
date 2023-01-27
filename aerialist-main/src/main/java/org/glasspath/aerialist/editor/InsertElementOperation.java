@@ -128,7 +128,7 @@ public class InsertElementOperation extends Operation {
 				ImageView imageView = (ImageView) component;
 				if (imageView.getSrc() == null || imageView.getSrc().length() == 0) {
 
-					String filePath = FileChooser.browseForImageFile(Icons.image, false, context.getFrame(), Aerialist.PREFERENCES, "lastImageFilePath");
+					String filePath = FileChooser.browseForImageFile(Icons.image, false, context.getFrame(), Aerialist.PREFERENCES, "lastImageFilePath"); //$NON-NLS-1$
 					if (filePath != null) {
 
 						try {

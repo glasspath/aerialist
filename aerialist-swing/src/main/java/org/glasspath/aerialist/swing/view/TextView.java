@@ -99,26 +99,6 @@ public class TextView extends JTextPane {
 		// getDocument().putProperty("i18n", Boolean.TRUE); // Hack to force GlyphPainter2 to be used, looks good in editor but not in PDF (text is painted as glyph vectors)
 		setEditorKit(new FractionalStyledEditorKit());
 
-		/*
-		setEditable(false);
-		addFocusListener(new FocusAdapter() {
-		
-			@Override
-			public void focusLost(FocusEvent e) {
-				setEditable(false);
-			}
-		});
-		addMouseListener(new MouseAdapter() {
-		
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if (e.getClickCount() >= 2) {
-					setEditable(true);
-				}
-			}
-		});
-		*/
-
 		StyledDocument document = getStyledDocument();
 
 		document.addUndoableEditListener(new UndoableEditListener() {
@@ -176,6 +156,8 @@ public class TextView extends JTextPane {
 		}
 
 		getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, KeyEvent.SHIFT_DOWN_MASK), "insert-break");
+
+		ISwingViewContext.installSelectionHandler(this, viewContext);
 
 	}
 

@@ -28,6 +28,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JComponent;
+import javax.swing.SwingUtilities;
 
 import org.glasspath.aerialist.Element;
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
@@ -53,12 +54,22 @@ public class InsertElementAction extends AbstractAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
+		context.setScrollLock(true);
+
 		JComponent component = ISwingElementView.createElementView(element, context.getPageContainer());
 		component.setBounds(element.getX(), element.getY(), element.getWidth(), element.getHeight());
 
 		context.getMouseOperationHandler().startOperation(new InsertElementOperation(context, component));
 		context.getMouseOperationHandler().generateMouseMovedEvent(context);
-		
+
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				context.setScrollLock(false);
+			}
+		});
+
 	}
 
 }

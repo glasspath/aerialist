@@ -24,10 +24,6 @@ package org.glasspath.aerialist.swing.view;
 
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.JComponent;
 
@@ -39,21 +35,7 @@ public class PageView extends ElementContainer {
 	public PageView(ISwingViewContext viewContext) {
 		super(viewContext);
 
-		setFocusable(true);
-		addFocusListener(new FocusAdapter() {
-
-			@Override
-			public void focusGained(FocusEvent e) {
-				viewContext.focusGained(PageView.this);
-			}
-		});
-		addMouseListener(new MouseAdapter() {
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				requestFocusInWindow();
-			}
-		});
+		ISwingViewContext.installSelectionHandler(this, viewContext);
 
 	}
 

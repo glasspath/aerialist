@@ -29,10 +29,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,21 +50,7 @@ public class GroupView extends ElementContainer implements ISwingElementView<Gro
 	public GroupView(ISwingViewContext viewContext) {
 		super(viewContext);
 
-		setFocusable(true);
-		addFocusListener(new FocusAdapter() {
-
-			@Override
-			public void focusGained(FocusEvent e) {
-				viewContext.focusGained(GroupView.this);
-			}
-		});
-		addMouseListener(new MouseAdapter() {
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				requestFocusInWindow();
-			}
-		});
+		ISwingViewContext.installSelectionHandler(this, viewContext);
 
 	}
 
