@@ -119,7 +119,9 @@ public class ElementContainer extends JPanel {
 
 		super.doLayout();
 
-		layout.validateLayout();
+		if (layoutInited) {
+			layout.validateLayout();
+		}
 
 		/*
 		if (viewContext.isHeightPolicyEnabled()) {
