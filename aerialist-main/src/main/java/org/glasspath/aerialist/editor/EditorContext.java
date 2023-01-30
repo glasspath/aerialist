@@ -22,12 +22,15 @@
  */
 package org.glasspath.aerialist.editor;
 
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import org.glasspath.aerialist.Field.FieldType;
+import org.glasspath.aerialist.IVisible;
 import org.glasspath.aerialist.editor.actions.InsertFieldAction;
+import org.glasspath.aerialist.editor.actions.SetVisibilityAction;
 import org.glasspath.aerialist.icons.Icons;
 import org.glasspath.aerialist.swing.view.TextView;
 import org.glasspath.aerialist.template.TemplateMetadata;
@@ -85,7 +88,7 @@ public abstract class EditorContext<T extends EditorPanel<T>> {
 
 		if (templateMetadata != null) {
 
-			AbstractMetadata root = templateMetadata.getRoot();
+			AbstractMetadata root = templateMetadata.getTemplateFields();
 			if (root != null) {
 
 				if (root.getName() == null || root.getName().length() == 0) {
@@ -98,7 +101,7 @@ public abstract class EditorContext<T extends EditorPanel<T>> {
 
 				}
 
-				JMenuItem menuItem = createAbstractMetadataMenuItem(context, textView, root);
+				JMenuItem menuItem = createTemplateFieldMenuItem(context, textView, root);
 				if (menuItem != null) {
 					menu.add(menuItem);
 				}
@@ -109,7 +112,7 @@ public abstract class EditorContext<T extends EditorPanel<T>> {
 
 	}
 
-	public static JMenu createMetadataListMenu(EditorPanel<? extends EditorPanel<?>> context, TextView textView, MetadataList metadataList) {
+	public static JMenu createTemplateFieldListMenu(EditorPanel<? extends EditorPanel<?>> context, TextView textView, MetadataList metadataList) {
 
 		JMenu menu = new JMenu(metadataList.getName());
 
@@ -120,7 +123,7 @@ public abstract class EditorContext<T extends EditorPanel<T>> {
 		JMenuItem menuItem;
 		for (AbstractMetadata abstractMetadata : metadataList.getChildren()) {
 
-			menuItem = createAbstractMetadataMenuItem(context, textView, abstractMetadata);
+			menuItem = createTemplateFieldMenuItem(context, textView, abstractMetadata);
 			if (menuItem != null) {
 				menu.add(menuItem);
 			}
@@ -131,14 +134,88 @@ public abstract class EditorContext<T extends EditorPanel<T>> {
 
 	}
 
-	public static JMenuItem createAbstractMetadataMenuItem(EditorPanel<? extends EditorPanel<?>> context, TextView textView, AbstractMetadata abstractMetadata) {
+	public static JMenuItem createTemplateFieldMenuItem(EditorPanel<? extends EditorPanel<?>> context, TextView textView, AbstractMetadata abstractMetadata) {
 
 		JMenuItem menuItem = null;
 
 		if (abstractMetadata instanceof MetadataList) {
-			menuItem = createMetadataListMenu(context, textView, (MetadataList) abstractMetadata);
+			menuItem = createTemplateFieldListMenu(context, textView, (MetadataList) abstractMetadata);
 		} else if (abstractMetadata instanceof FieldMetadata) {
 			menuItem = new JMenuItem(new InsertFieldAction(context, textView, FieldType.TEMPLATE.getIdentifier() + ((FieldMetadata) abstractMetadata).getKey(), abstractMetadata.getName()));
+		}
+
+		return menuItem;
+
+	}
+
+	public boolean isVisibilityMenuEnabled() {
+		return templateMetadata != null && templateMetadata.getVisibilityFields() != null;
+	}
+
+	public void populateVisibilityFieldsMenu(EditorPanel<? extends EditorPanel<?>> context, IVisible view, JMenu menu) {
+
+		JMenuItem alwaysMenuItem = new JCheckBoxMenuItem(new SetVisibilityAction(context, view, null, "Always"));
+		menu.add(alwaysMenuItem);
+
+		if (templateMetadata != null) {
+
+			AbstractMetadata root = templateMetadata.getVisibilityFields();
+			if (root != null) {
+
+				menu.addSeparator();
+
+				if ((root.getName() == null || root.getName().length() == 0) && root instanceof MetadataList) {
+
+					for (AbstractMetadata abstractMetadata : ((MetadataList) root).getChildren()) {
+
+						JMenuItem menuItem = createVisibilityFieldMenuItem(context, view, abstractMetadata);
+						if (menuItem != null) {
+							menu.add(menuItem);
+						}
+
+					}
+
+				} else {
+
+					JMenuItem menuItem = createVisibilityFieldMenuItem(context, view, root);
+					if (menuItem != null) {
+						menu.add(menuItem);
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
+	public static JMenu createVisibilityFieldListMenu(EditorPanel<? extends EditorPanel<?>> context, IVisible view, MetadataList metadataList) {
+
+		JMenu menu = new JMenu(metadataList.getName());
+
+		JMenuItem menuItem;
+		for (AbstractMetadata abstractMetadata : metadataList.getChildren()) {
+
+			menuItem = createVisibilityFieldMenuItem(context, view, abstractMetadata);
+			if (menuItem != null) {
+				menu.add(menuItem);
+			}
+
+		}
+
+		return menu;
+
+	}
+
+	public static JMenuItem createVisibilityFieldMenuItem(EditorPanel<? extends EditorPanel<?>> context, IVisible view, AbstractMetadata abstractMetadata) {
+
+		JMenuItem menuItem = null;
+
+		if (abstractMetadata instanceof MetadataList) {
+			menuItem = createVisibilityFieldListMenu(context, view, (MetadataList) abstractMetadata);
+		} else if (abstractMetadata instanceof FieldMetadata) {
+			menuItem = new JCheckBoxMenuItem(new SetVisibilityAction(context, view, FieldType.TEMPLATE.getIdentifier() + ((FieldMetadata) abstractMetadata).getKey(), abstractMetadata.getName()));
 		}
 
 		return menuItem;

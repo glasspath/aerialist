@@ -32,7 +32,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 @JsonInclude(Include.NON_DEFAULT)
 @SuppressWarnings("nls")
-public class Page implements IElementContainer {
+public class Page implements IElementContainer, IVisible {
 
 	public enum PageSize {
 
@@ -68,6 +68,9 @@ public class Page implements IElementContainer {
 	@JacksonXmlProperty(isAttribute = true)
 	private int height = 0;
 
+	@JacksonXmlProperty(isAttribute = true)
+	private String visible = null;
+
 	@JacksonXmlElementWrapper(localName = "elements")
 	@JacksonXmlProperty(localName = "element")
 	private List<Element> elements = new ArrayList<>();
@@ -100,6 +103,16 @@ public class Page implements IElementContainer {
 
 	public void setHeight(int height) {
 		this.height = height;
+	}
+
+	@Override
+	public String getVisible() {
+		return visible;
+	}
+
+	@Override
+	public void setVisible(String visible) {
+		this.visible = visible;
 	}
 
 	@Override

@@ -28,9 +28,12 @@ import java.awt.Dimension;
 import javax.swing.JComponent;
 
 import org.glasspath.aerialist.Element;
+import org.glasspath.aerialist.IVisible;
 import org.glasspath.aerialist.Page;
 
-public class PageView extends ElementContainer {
+public class PageView extends ElementContainer implements IVisible {
+
+	private String visible = null;
 
 	public PageView(ISwingViewContext viewContext) {
 		super(viewContext);
@@ -47,6 +50,16 @@ public class PageView extends ElementContainer {
 
 	}
 
+	@Override
+	public String getVisible() {
+		return visible;
+	}
+
+	@Override
+	public void setVisible(String visible) {
+		this.visible = visible;
+	}
+
 	public void init(Page page) {
 
 		if (page.getWidth() > 0 && page.getHeight() > 0) {
@@ -59,6 +72,8 @@ public class PageView extends ElementContainer {
 			setMaximumSize(size);
 
 		}
+
+		visible = page.getVisible();
 
 		JComponent elementView;
 		for (Element element : page.getElements()) {
@@ -78,6 +93,7 @@ public class PageView extends ElementContainer {
 		Page page = new Page();
 		page.setWidth(getWidth());
 		page.setHeight(getHeight());
+		page.setVisible(visible);
 
 		Component elementView;
 		for (int i = 0; i < getComponentCount(); i++) {

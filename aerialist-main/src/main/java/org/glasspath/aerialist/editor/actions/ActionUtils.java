@@ -47,6 +47,7 @@ import org.glasspath.aerialist.Field.DynamicFieldKey;
 import org.glasspath.aerialist.Field.FieldType;
 import org.glasspath.aerialist.FitPolicy;
 import org.glasspath.aerialist.HeightPolicy;
+import org.glasspath.aerialist.IVisible;
 import org.glasspath.aerialist.Padding;
 import org.glasspath.aerialist.YPolicy;
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
@@ -269,6 +270,12 @@ public class ActionUtils {
 			}
 		});
 
+		JMenu visibilityMenu = createVisibilityMenu(context, pageView);
+		if (visibilityMenu != null) {
+			menu.addSeparator();
+			menu.add(visibilityMenu);
+		}
+
 		menu.addSeparator();
 
 		menu.add(new DeletePageAction(context, pageView));
@@ -352,6 +359,21 @@ public class ActionUtils {
 		}
 
 		return menu;
+
+	}
+
+	public static JMenu createVisibilityMenu(EditorPanel<? extends EditorPanel<?>> context, IVisible view) {
+
+		if (context.getEditorContext() != null && context.getEditorContext().isVisibilityMenuEnabled()) {
+
+			JMenu menu = new JMenu("Visibility");
+			context.getEditorContext().populateVisibilityFieldsMenu(context, view, menu);
+
+			return menu;
+
+		} else {
+			return null;
+		}
 
 	}
 

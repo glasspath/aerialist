@@ -30,10 +30,16 @@ public class ContentParser {
 
 	public void parseRoot(ContentRoot root) {
 		if (root instanceof Document) {
+			prepareDocument((Document) root);
 			parseDocument((Document) root);
 		} else if (root instanceof Email) {
+			prepareEmail((Email) root);
 			parseEmail((Email) root);
 		}
+	}
+
+	public void prepareDocument(Document document) {
+
 	}
 
 	public void parseDocument(Document document) {
@@ -49,6 +55,10 @@ public class ContentParser {
 		for (Page page : document.getPages()) {
 			parsePage(page);
 		}
+
+	}
+
+	public void prepareEmail(Email email) {
 
 	}
 

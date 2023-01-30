@@ -33,7 +33,7 @@ public class TemplateFieldContext implements IFieldContext {
 
 	private final Map<String, String> stringMap = new HashMap<>();
 	private final Map<String, List<String>> listMap = new HashMap<>();
-	private final Map<String, Object> objectMap = new HashMap<>();
+	// private final Map<String, Object> objectMap = new HashMap<>(); // TODO!
 
 	private String defaultValue = "";
 
@@ -76,10 +76,10 @@ public class TemplateFieldContext implements IFieldContext {
 
 	@Override
 	public Object getObject(String key) {
-		return getString(key); // TODO?
+		return getString(key); // TODO!
 	}
 
-	/* TODO
+	/* TODO!
 	public void put(String key, Object value) {
 		objectMap.put(key, value);
 	}

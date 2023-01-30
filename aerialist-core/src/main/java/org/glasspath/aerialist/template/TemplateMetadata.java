@@ -27,22 +27,31 @@ import java.util.List;
 
 public class TemplateMetadata {
 
-	private AbstractMetadata root = null;
+	private AbstractMetadata templateFields = null;
+	private AbstractMetadata visibilityFields = null;
 
 	public TemplateMetadata() {
 
 	}
 
-	public TemplateMetadata(AbstractMetadata root) {
-		this.root = root;
+	public TemplateMetadata(AbstractMetadata templateFields) {
+		this.templateFields = templateFields;
 	}
 
-	public AbstractMetadata getRoot() {
-		return root;
+	public AbstractMetadata getTemplateFields() {
+		return templateFields;
 	}
 
-	public void setRoot(AbstractMetadata root) {
-		this.root = root;
+	public void setTemplateFields(AbstractMetadata templateFields) {
+		this.templateFields = templateFields;
+	}
+
+	public AbstractMetadata getVisibilityFields() {
+		return visibilityFields;
+	}
+
+	public void setVisibilityFields(AbstractMetadata visibilityFields) {
+		this.visibilityFields = visibilityFields;
 	}
 
 	public static class CategoryMetadata extends MetadataList {

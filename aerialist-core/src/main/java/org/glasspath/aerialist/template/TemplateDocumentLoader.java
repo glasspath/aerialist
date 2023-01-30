@@ -34,9 +34,10 @@ import java.util.concurrent.Future;
 
 import org.glasspath.aerialist.Document;
 import org.glasspath.aerialist.Element;
+import org.glasspath.aerialist.Field;
+import org.glasspath.aerialist.Field.FieldType;
 import org.glasspath.aerialist.IFieldContext;
 import org.glasspath.aerialist.Page;
-import org.glasspath.aerialist.Field.FieldType;
 import org.glasspath.aerialist.Page.PageSize;
 import org.glasspath.aerialist.layout.DefaultVerticalLayout;
 import org.glasspath.aerialist.layout.DocumentLayoutInfo;
@@ -138,9 +139,10 @@ public abstract class TemplateDocumentLoader {
 
 		for (Entry<String, ImageResource> entry : mediaCache.getImageResources().entrySet()) {
 
-			if (entry.getKey().startsWith(FieldType.TEMPLATE.getIdentifier())) {
+			Field field = new Field(entry.getKey());
+			if (field.isTemplateField()) {
 
-				Object object = templateFieldContext.getObject(entry.getKey());
+				Object object = templateFieldContext.getObject(field.key);
 				if (object instanceof byte[]) {
 					images.put(entry.getKey(), (byte[]) object);
 				}

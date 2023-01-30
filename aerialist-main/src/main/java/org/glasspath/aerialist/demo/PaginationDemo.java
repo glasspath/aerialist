@@ -44,13 +44,13 @@ public class PaginationDemo {
 
 		TemplateMetadata templateMetadata = new TemplateMetadata();
 
-		CategoryMetadata root = new CategoryMetadata("Pagination demo");
-		templateMetadata.setRoot(root);
+		CategoryMetadata templateFields = new CategoryMetadata("Pagination demo");
+		templateMetadata.setTemplateFields(templateFields);
 
 		TableMetadata tableMetadata = new TableMetadata("table");
 		tableMetadata.getChildren().add(new FieldMetadata("Field 1", "table.field1"));
 		tableMetadata.getChildren().add(new FieldMetadata("Field 2", "table.field2"));
-		root.getChildren().add(tableMetadata);
+		templateFields.getChildren().add(tableMetadata);
 
 		DocumentEditorContext editorContext = new DocumentEditorContext() {
 

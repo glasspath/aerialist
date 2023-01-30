@@ -27,10 +27,12 @@ import java.util.List;
 
 import org.glasspath.aerialist.ContentParser;
 import org.glasspath.aerialist.ContentRoot;
+import org.glasspath.aerialist.Document;
 import org.glasspath.aerialist.Field;
 import org.glasspath.aerialist.IFieldContext;
 import org.glasspath.aerialist.IText;
 import org.glasspath.aerialist.Image;
+import org.glasspath.aerialist.Page;
 import org.glasspath.aerialist.Table;
 import org.glasspath.aerialist.TableCell;
 import org.glasspath.aerialist.TextStyle;
@@ -55,6 +57,25 @@ public class TemplateParser extends ContentParser {
 
 		this.fieldContext = null;
 
+	}
+
+	@Override
+	public void prepareDocument(Document document) {
+
+		List<Page> removePages = new ArrayList<>();
+
+		for (Page page : document.getPages()) {
+			if (!isPageVisisble(page)) {
+				removePages.add(page);
+			}
+		}
+
+		document.getPages().removeAll(removePages);
+
+	}
+
+	public boolean isPageVisisble(Page page) {
+		return page.getVisible() == null || !isFieldValueFalse(page.getVisible());
 	}
 
 	@Override
@@ -178,7 +199,33 @@ public class TemplateParser extends ContentParser {
 	@Override
 	public void parseImage(Image image) {
 
-		// TODO!
+		// TODO?
+
+	}
+
+	private boolean isFieldValueFalse(String source) {
+
+		Field field = new Field(source);
+		if (field.isTemplateField()) {
+
+			Object value = fieldContext.getObject(field.key);
+			if (value == null) {
+				value = fieldContext.getString(field.key);
+			}
+
+			if (value == null) {
+				return false;
+			} else if (value instanceof Boolean) {
+				return ((Boolean) value) == false;
+			} else if (value instanceof Number) {
+				return ((Number) value).intValue() == 0;
+			} else if (value instanceof String) {
+				return "false".equals(((String) value).toLowerCase());
+			}
+
+		}
+
+		return false;
 
 	}
 
