@@ -91,19 +91,38 @@ public abstract class EditorContext<T extends EditorPanel<T>> {
 			AbstractMetadata root = templateMetadata.getTemplateFields();
 			if (root != null) {
 
-				if (root.getName() == null || root.getName().length() == 0) {
+				if ((root.getName() == null || root.getName().length() == 0) && root instanceof MetadataList) {
 
-					if (root instanceof MetadataList && ((MetadataList) root).getChildren().size() == 1) {
+					if (((MetadataList) root).getChildren().size() == 1) {
+
 						root = ((MetadataList) root).getChildren().get(0);
+
+						JMenuItem menuItem = createTemplateFieldMenuItem(context, textView, root);
+						if (menuItem != null) {
+							menu.add(menuItem);
+						}
+
 					} else {
-						// TODO?
+
+						JMenuItem menuItem;
+						for (AbstractMetadata abstractMetadata : ((MetadataList) root).getChildren()) {
+
+							menuItem = createTemplateFieldMenuItem(context, textView, abstractMetadata);
+							if (menuItem != null) {
+								menu.add(menuItem);
+							}
+
+						}
+
 					}
 
-				}
+				} else {
 
-				JMenuItem menuItem = createTemplateFieldMenuItem(context, textView, root);
-				if (menuItem != null) {
-					menu.add(menuItem);
+					JMenuItem menuItem = createTemplateFieldMenuItem(context, textView, root);
+					if (menuItem != null) {
+						menu.add(menuItem);
+					}
+
 				}
 
 			}
