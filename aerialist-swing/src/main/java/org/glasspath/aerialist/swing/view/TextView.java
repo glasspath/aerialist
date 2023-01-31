@@ -28,6 +28,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.event.KeyEvent;
@@ -744,7 +745,6 @@ public class TextView extends JTextPane {
 
 		@Override
 		public void paint(Graphics g, Shape a) {
-			super.paint(g, a);
 
 			Graphics2D g2d = (Graphics2D) g;
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -761,7 +761,14 @@ public class TextView extends JTextPane {
 						if (source != null && source.length() > 0) {
 
 							g2d.setColor(SOURCE_RECT_COLOR);
-							g2d.draw(a);
+
+							Rectangle rect = new Rectangle(a.getBounds());
+							rect.y += 1;
+							rect.height -= 3;
+							if (rect.height < 3) {
+								rect.height = 3;
+							}
+							g2d.draw(rect);
 
 						}
 
@@ -770,6 +777,8 @@ public class TextView extends JTextPane {
 				}
 
 			}
+
+			super.paint(g, a);
 
 		}
 
