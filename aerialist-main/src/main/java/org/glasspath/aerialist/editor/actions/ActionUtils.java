@@ -293,16 +293,16 @@ public class ActionUtils {
 			menu.add(new InsertPageAction(context, AerialistUtils.createDefaultPage(), InsertPageAction.INSERT));
 		}
 
+		if (context.getEditorContext() != null) {
+			context.getEditorContext().populateInsertElementMenu(context, menu);
+		}
+
 		menu.addSeparator();
 
 		menu.add(new InsertElementAction(context, AerialistUtils.createDefaultTextBox(), "Insert text box", Icons.textBoxPlus));
 		menu.add(new InsertElementAction(context, AerialistUtils.createDefaultTable(), "Insert table", Icons.tableLargePlus));
 		menu.add(new InsertElementAction(context, AerialistUtils.createDefaultImage(), "Insert image", Icons.imagePlus));
 		menu.add(new InsertElementAction(context, AerialistUtils.createDefaultQrCode(), "Insert QR code", Icons.qrcodePlus));
-
-		if (context.getEditorContext() != null) {
-			context.getEditorContext().populateInsertElementMenu(context, menu);
-		}
 
 		return menu;
 
