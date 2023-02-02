@@ -446,6 +446,36 @@ public class AerialistUtils {
 
 	}
 
+	public static TextStyle createTextStyle(int start) {
+		return createTextStyle(start, start + 1);
+	}
+
+	public static TextStyle createTextStyle(int start, float spaceAbove) {
+		return createTextStyle(start, start + 1, null, spaceAbove);
+	}
+
+	public static TextStyle createTextStyle(int start, int end) {
+		return createTextStyle(start, end, null);
+	}
+
+	public static TextStyle createTextStyle(int start, int end, String source) {
+		return createTextStyle(start, end, source, 0.0F);
+	}
+
+	public static TextStyle createTextStyle(int start, int end, String source, float spaceAbove) {
+
+		TextStyle textStyle = new TextStyle();
+		textStyle.start = start;
+		textStyle.end = end;
+		textStyle.spaceAbove = spaceAbove;
+		if (source != null) {
+			textStyle.source = source;
+		}
+
+		return textStyle;
+
+	}
+
 	public static TableCell createTableCell(String text, int row, int col, String alignment, int fontSize, boolean bold, String source) {
 
 		TableCell tableCell = new TableCell();
