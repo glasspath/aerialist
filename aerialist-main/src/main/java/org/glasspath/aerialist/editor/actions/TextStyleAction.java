@@ -41,14 +41,20 @@ public abstract class TextStyleAction extends AbstractAction {
 
 	protected final EditorPanel<? extends EditorPanel<?>> context;
 	protected final TextView textView;
+	protected final boolean reload;
 
 	public TextStyleAction(EditorPanel<? extends EditorPanel<?>> context) {
 		this(context, null);
 	}
 
 	public TextStyleAction(EditorPanel<? extends EditorPanel<?>> context, TextView textView) {
+		this(context, textView, false);
+	}
+
+	public TextStyleAction(EditorPanel<? extends EditorPanel<?>> context, TextView textView, boolean reload) {
 		this.context = context;
 		this.textView = textView;
+		this.reload = reload;
 	}
 
 	@Override
@@ -63,7 +69,7 @@ public abstract class TextStyleAction extends AbstractAction {
 			}
 		}
 	}
-	
+
 	/*
 	protected void performAction(String actionName) {
 		for (Component component : context.getSelection()) {
@@ -91,6 +97,10 @@ public abstract class TextStyleAction extends AbstractAction {
 			updateAttributeSet(attr, sas);
 
 			setCharacterAttributes(textView, sas, false);
+
+			if (reload) {
+				textView.reload();
+			}
 
 		}
 

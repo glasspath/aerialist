@@ -358,12 +358,14 @@ public class TextView extends JTextPane {
 
 	}
 
+	/*
 	// TODO: When setting font size using the default action the caret before the first char of the first line still has the old size
 	public void setFontSize(int fontSize) {
 		MutableAttributeSet attributeSet = getAttributes();
 		StyleConstants.setFontSize(attributeSet, fontSize);
 		applyAttributeSet(attributeSet, null, false);
 	}
+	*/
 
 	public void setSpaceAbove(float spaceAbove) {
 		MutableAttributeSet attributeSet = getAttributes();
@@ -455,6 +457,7 @@ public class TextView extends JTextPane {
 
 				if (replaceText != null) {
 					document.insertString(start, replaceText, attributeSet);
+					length = replaceText.length();
 				} else {
 					document.insertString(start, text, attributeSet);
 				}
@@ -473,6 +476,26 @@ public class TextView extends JTextPane {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+
+		updatingComponent = false;
+
+	}
+
+	// TODO? This method was introduced because some styles are not applied
+	// correctly right away, initializing the JTextPane with the same data
+	// fixes this (font size for example painted the text at wrong height)
+	public void reload() {
+
+		updatingComponent = true;
+
+		int selectionStart = getSelectionStart();
+		int selectionEnd = getSelectionEnd();
+
+		initTextAndStyles(currentTextData);
+
+		if (selectionStart >= 0 && selectionEnd >= selectionStart) {
+			select(selectionStart, selectionEnd);
 		}
 
 		updatingComponent = false;

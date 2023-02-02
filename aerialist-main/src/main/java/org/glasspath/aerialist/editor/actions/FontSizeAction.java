@@ -24,6 +24,9 @@ package org.glasspath.aerialist.editor.actions;
 
 import javax.swing.Action;
 import javax.swing.JComboBox;
+import javax.swing.text.MutableAttributeSet;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 
 import org.glasspath.aerialist.editor.EditorPanel;
 import org.glasspath.aerialist.swing.view.TextView;
@@ -33,7 +36,7 @@ public class FontSizeAction extends TextStyleAction {
 	private final JComboBox<String> fontSizeComboBox;
 
 	public FontSizeAction(EditorPanel<? extends EditorPanel<?>> context, JComboBox<String> fontSizeComboBox) {
-		super(context);
+		super(context, null, true);
 
 		this.fontSizeComboBox = fontSizeComboBox;
 
@@ -42,19 +45,34 @@ public class FontSizeAction extends TextStyleAction {
 
 	}
 
+	/*
 	@Override
 	protected void updateTextView(TextView textView) {
+	
+		String fontSize = (String) fontSizeComboBox.getSelectedItem();
+	
+		try {
+	
+			textView.setFontSize(Integer.parseInt(fontSize));
+	
+			// MutableAttributeSet attr = new SimpleAttributeSet();
+			// StyleConstants.setFontSize(attr, Integer.parseInt(fontSize));
+			// setCharacterAttributes(textView, attr, false);
+	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	
+	}
+	*/
+
+	@Override
+	protected void updateAttributeSet(MutableAttributeSet inputAttributes, SimpleAttributeSet attributeSet) {
 
 		String fontSize = (String) fontSizeComboBox.getSelectedItem();
 
 		try {
-
-			textView.setFontSize(Integer.parseInt(fontSize));
-
-			// MutableAttributeSet attr = new SimpleAttributeSet();
-			// StyleConstants.setFontSize(attr, Integer.parseInt(fontSize));
-			// setCharacterAttributes(textView, attr, false);
-
+			StyleConstants.setFontSize(attributeSet, Integer.parseInt(fontSize));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
