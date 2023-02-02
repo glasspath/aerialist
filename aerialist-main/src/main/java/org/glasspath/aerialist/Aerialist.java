@@ -111,7 +111,7 @@ public class Aerialist implements FrameContext {
 	private final JLabel statusLabel;
 
 	private boolean sourceEditorEnabled = true;
-	private boolean somethingChanged = false;
+	private boolean contentChanged = false;
 
 	public Aerialist() {
 		this(null, null, null);
@@ -312,13 +312,13 @@ public class Aerialist implements FrameContext {
 	}
 
 	@Override
-	public void setSomethingChanged(boolean somethingChanged) {
-		this.somethingChanged = somethingChanged;
+	public void setContentChanged(boolean changed) {
+		this.contentChanged = changed;
 		updateTitle();
 	}
 
-	public boolean isSomethingChanged() {
-		return somethingChanged;
+	public boolean isContentChanged() {
+		return contentChanged;
 	}
 
 	private void updateTitle() {
@@ -339,7 +339,7 @@ public class Aerialist implements FrameContext {
 			title += " - " + fileName;
 		}
 
-		if (somethingChanged) {
+		if (contentChanged) {
 			title += "*";
 		}
 

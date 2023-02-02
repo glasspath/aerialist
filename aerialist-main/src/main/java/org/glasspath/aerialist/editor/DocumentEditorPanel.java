@@ -150,7 +150,7 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 	@Override
 	public void undoableEditHappened(UndoableEdit edit) {
 		super.undoableEditHappened(edit);
-		context.setSomethingChanged(true);
+		context.setContentChanged(true);
 	}
 
 	public EditorPageContainer getPageContainer() {
