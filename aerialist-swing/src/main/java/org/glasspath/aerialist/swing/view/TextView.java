@@ -365,13 +365,13 @@ public class TextView extends JTextPane {
 		StyleConstants.setFontSize(attributeSet, fontSize);
 		applyAttributeSet(attributeSet, null, false);
 	}
-	*/
 
 	public void setSpaceAbove(float spaceAbove) {
 		MutableAttributeSet attributeSet = getAttributes();
 		StyleConstants.setSpaceAbove(attributeSet, spaceAbove);
 		applyAttributeSet(attributeSet, null, true);
 	}
+	*/
 
 	public void insertField(String key, String text) {
 
@@ -447,7 +447,7 @@ public class TextView extends JTextPane {
 
 			}
 
-			if (end >= start) {
+			if (end > start) {
 
 				int length = end - start;
 

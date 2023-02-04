@@ -27,12 +27,15 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.JTextPane;
+import javax.swing.text.AbstractDocument.LeafElement;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.EditorKit;
+import javax.swing.text.Element;
 import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyledDocument;
 import javax.swing.text.StyledEditorKit;
+import javax.swing.text.Utilities;
 
 import org.glasspath.aerialist.editor.EditorPanel;
 import org.glasspath.aerialist.swing.view.TextView;
@@ -41,6 +44,7 @@ public abstract class TextStyleAction extends AbstractAction {
 
 	protected final EditorPanel<? extends EditorPanel<?>> context;
 	protected final TextView textView;
+	protected final boolean applyToParagraph;
 	protected final boolean reload;
 
 	public TextStyleAction(EditorPanel<? extends EditorPanel<?>> context) {
@@ -51,9 +55,14 @@ public abstract class TextStyleAction extends AbstractAction {
 		this(context, textView, false);
 	}
 
-	public TextStyleAction(EditorPanel<? extends EditorPanel<?>> context, TextView textView, boolean reload) {
+	public TextStyleAction(EditorPanel<? extends EditorPanel<?>> context, TextView textView, boolean applyToParagraph) {
+		this(context, textView, applyToParagraph, false);
+	}
+
+	public TextStyleAction(EditorPanel<? extends EditorPanel<?>> context, TextView textView, boolean applyToParagraph, boolean reload) {
 		this.context = context;
 		this.textView = textView;
+		this.applyToParagraph = applyToParagraph;
 		this.reload = reload;
 	}
 
@@ -92,11 +101,64 @@ public abstract class TextStyleAction extends AbstractAction {
 
 			StyledEditorKit kit = (StyledEditorKit) editorKit;
 
-			MutableAttributeSet attr = kit.getInputAttributes();
-			SimpleAttributeSet sas = new SimpleAttributeSet();
-			updateAttributeSet(attr, sas);
+			MutableAttributeSet inputAttributes = kit.getInputAttributes();
+			SimpleAttributeSet attributeSet = new SimpleAttributeSet();
+			updateAttributeSet(inputAttributes, attributeSet);
 
-			setCharacterAttributes(textView, sas, false);
+			int start = textView.getSelectionStart();
+			int end = textView.getSelectionEnd();
+
+			if (applyToParagraph) {
+
+				StyledDocument document = textView.getStyledDocument();
+
+				Element paragraph = Utilities.getParagraphElement(textView, start);
+				if (paragraph != null) {
+					start = paragraph.getStartOffset();
+				}
+
+				paragraph = Utilities.getParagraphElement(textView, end);
+				if (paragraph != null) {
+					end = paragraph.getEndOffset();
+					if (end > document.getLength()) {
+						end = document.getLength();
+					}
+				}
+
+				if (end > start) {
+
+					Element element;
+					AttributeSet style;
+
+					int i = start;
+					while (i < end) {
+
+						element = document.getCharacterElement(i);
+						style = element.getAttributes();
+
+						if (style instanceof LeafElement) {
+
+							LeafElement leafElement = (LeafElement) style;
+
+							setCharacterAttributes(textView, attributeSet, leafElement.getStartOffset(), leafElement.getEndOffset(), false);
+
+							if (leafElement.getEndOffset() > i) {
+								i = leafElement.getEndOffset();
+							} else {
+								i++;
+							}
+
+						} else {
+							// System.out.println(i + ": " + style + ", " + style.getClass());
+						}
+
+					}
+
+				}
+
+			} else {
+				setCharacterAttributes(textView, attributeSet, start, end, false);
+			}
 
 			if (reload) {
 				textView.reload();
@@ -110,55 +172,58 @@ public abstract class TextStyleAction extends AbstractAction {
 
 	}
 
-	protected final void setCharacterAttributes(JTextPane textPane, AttributeSet attr, boolean replace) {
+	protected final void setCharacterAttributes(JTextPane textPane, AttributeSet attributeSet, boolean replace) {
+		setCharacterAttributes(textPane, attributeSet, textPane.getSelectionStart(), textPane.getSelectionEnd(), replace);
+	}
 
-		EditorKit editorKit = textPane.getEditorKit();
-		if (editorKit instanceof StyledEditorKit) {
+	protected final void setCharacterAttributes(JTextPane textPane, AttributeSet attributeSet, int start, int end, boolean replace) {
 
-			StyledEditorKit kit = (StyledEditorKit) editorKit;
+		if (end > start) {
+			textPane.getStyledDocument().setCharacterAttributes(start, end - start, attributeSet, replace);
+		}
 
-			int p0 = textPane.getSelectionStart();
-			int p1 = textPane.getSelectionEnd();
-			if (p0 != p1) {
-				StyledDocument doc = textPane.getStyledDocument();
-				doc.setCharacterAttributes(p0, p1 - p0, attr, replace);
-			}
+		if (replace) {
 
-			MutableAttributeSet inputAttributes = kit.getInputAttributes();
-			if (replace) {
+			EditorKit editorKit = textPane.getEditorKit();
+			if (editorKit instanceof StyledEditorKit) {
+
+				MutableAttributeSet inputAttributes = ((StyledEditorKit) editorKit).getInputAttributes();
 				inputAttributes.removeAttributes(inputAttributes);
+				inputAttributes.addAttributes(attributeSet);
+
 			}
-			inputAttributes.addAttributes(attr);
 
 		}
 
 	}
 
+	/*
 	protected final void setParagraphAttributes(JTextPane textPane, AttributeSet attr, boolean replace) {
-
+	
 		int p0 = textPane.getSelectionStart();
 		int p1 = textPane.getSelectionEnd();
 		if (p0 != p1) {
-
+	
 			int length = p1 - p0;
-
+	
 			StyledDocument doc = textPane.getStyledDocument();
-
+	
 			try {
-
+	
 				String text = doc.getText(p0, length);
-
+	
 				doc.remove(p0, length);
 				doc.insertString(p0, text, attr);
-
+	
 				doc.setParagraphAttributes(p0, length, attr, false);
-
+	
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
+	
 		}
-
+	
 	}
+	*/
 
 }

@@ -25,9 +25,11 @@ package org.glasspath.aerialist.editor.actions;
 import java.text.DecimalFormat;
 
 import javax.swing.Action;
+import javax.swing.text.MutableAttributeSet;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 
 import org.glasspath.aerialist.editor.EditorPanel;
-import org.glasspath.aerialist.swing.view.TextView;
 
 public class SpaceAboveAction extends TextStyleAction {
 
@@ -36,7 +38,7 @@ public class SpaceAboveAction extends TextStyleAction {
 	private final float spaceAbove;
 
 	public SpaceAboveAction(EditorPanel<? extends EditorPanel<?>> context, float spaceAbove) {
-		super(context);
+		super(context, null, true, true);
 
 		this.spaceAbove = spaceAbove;
 
@@ -45,9 +47,16 @@ public class SpaceAboveAction extends TextStyleAction {
 
 	}
 
+	/*
 	@Override
 	protected void updateTextView(TextView textView) {
 		textView.setSpaceAbove(spaceAbove);
+	}
+	*/
+
+	@Override
+	protected void updateAttributeSet(MutableAttributeSet inputAttributes, SimpleAttributeSet attributeSet) {
+		StyleConstants.setSpaceAbove(attributeSet, spaceAbove);
 	}
 
 }
