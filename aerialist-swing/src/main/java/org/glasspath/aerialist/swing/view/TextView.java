@@ -447,7 +447,8 @@ public class TextView extends JTextPane {
 
 			}
 
-			if (end > start) {
+			// When inserting field end can be equal to start
+			if (end >= start) {
 
 				int length = end - start;
 
@@ -607,9 +608,6 @@ public class TextView extends JTextPane {
 			StyledDocument document = getStyledDocument();
 			int length = document.getLength();
 
-			Element element;
-			AttributeSet style;
-
 			if (length == 0) {
 
 				EditorKit editorKit = getEditorKit();
@@ -631,8 +629,8 @@ public class TextView extends JTextPane {
 				int i = 0;
 				while (i < length) {
 
-					element = document.getCharacterElement(i);
-					style = element.getAttributes();
+					Element element = document.getCharacterElement(i);
+					AttributeSet style = element.getAttributes();
 
 					if (style instanceof LeafElement) {
 

@@ -127,14 +127,11 @@ public abstract class TextStyleAction extends AbstractAction {
 
 				if (end > start) {
 
-					Element element;
-					AttributeSet style;
-
 					int i = start;
 					while (i < end) {
 
-						element = document.getCharacterElement(i);
-						style = element.getAttributes();
+						Element element = document.getCharacterElement(i);
+						AttributeSet style = element.getAttributes();
 
 						if (style instanceof LeafElement) {
 
@@ -157,7 +154,22 @@ public abstract class TextStyleAction extends AbstractAction {
 				}
 
 			} else {
+
+				// Extend selection to start/end of fields to make sure the style is applied
+				// to the whole field (otherwise field will be split into two fields)
+
+				int fieldStartOffset = getFieldOffset(textView, start, false);
+				if (fieldStartOffset >= 0 && fieldStartOffset < start) {
+					start = fieldStartOffset;
+				}
+
+				int fieldEndOffset = getFieldOffset(textView, end, true);
+				if (fieldEndOffset >= 0 && fieldEndOffset > end) {
+					end = fieldEndOffset;
+				}
+
 				setCharacterAttributes(textView, attributeSet, start, end, false);
+
 			}
 
 			if (reload) {
@@ -194,6 +206,28 @@ public abstract class TextStyleAction extends AbstractAction {
 			}
 
 		}
+
+	}
+
+	public static int getFieldOffset(TextView textView, int pos, boolean endOffset) {
+
+		StyledDocument document = textView.getStyledDocument();
+		Element element = document.getCharacterElement(pos);
+		AttributeSet style = element.getAttributes();
+
+		String source = (String) style.getAttribute(TextView.SOURCE_ATTRIBUTE);
+		if (source != null && source.length() > 0 && style instanceof LeafElement) {
+
+			LeafElement leafElement = (LeafElement) style;
+			if (endOffset) {
+				return leafElement.getEndOffset();
+			} else {
+				return leafElement.getStartOffset();
+			}
+
+		}
+
+		return -1;
 
 	}
 
