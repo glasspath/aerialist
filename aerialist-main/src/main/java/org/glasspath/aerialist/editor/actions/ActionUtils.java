@@ -350,9 +350,16 @@ public class ActionUtils {
 		JMenu generalMenu = new JMenu("General");
 		menu.add(generalMenu);
 
-		for (DynamicFieldKey documentFieldKey : DynamicFieldKey.values()) {
-			generalMenu.add(new InsertFieldAction(context, textView, FieldType.DYNAMIC.getIdentifier() + documentFieldKey.getKey(), documentFieldKey.getDescription()));
-		}
+		JMenu documentMenu = new JMenu("Document");
+		generalMenu.add(documentMenu);
+
+		documentMenu.add(new InsertFieldAction(context, textView, FieldType.DYNAMIC.getIdentifier() + DynamicFieldKey.PAGE, DynamicFieldKey.PAGE.getDescription()));
+		documentMenu.add(new InsertFieldAction(context, textView, FieldType.DYNAMIC.getIdentifier() + DynamicFieldKey.PAGES, DynamicFieldKey.PAGES.getDescription()));
+
+		JMenu dateAndTimeMenu = new JMenu("Date & time");
+		generalMenu.add(dateAndTimeMenu);
+
+		dateAndTimeMenu.add(new InsertFieldAction(context, textView, FieldType.DYNAMIC.getIdentifier() + DynamicFieldKey.MILLIS, DynamicFieldKey.MILLIS.getDescription()));
 
 		if (context.getEditorContext() != null) {
 			context.getEditorContext().populateTemplateFieldsMenu(context, textView, menu);

@@ -22,23 +22,30 @@
  */
 package org.glasspath.aerialist.editor.actions;
 
+import java.awt.event.ActionEvent;
+import java.util.function.Supplier;
+
 import javax.swing.Action;
 import javax.swing.JComboBox;
 import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
+import org.glasspath.aerialist.TextStyle;
 import org.glasspath.aerialist.editor.EditorPanel;
-import org.glasspath.aerialist.swing.view.TextView;
 
 public class FontFamilyAction extends TextStyleAction {
 
-	private final JComboBox<String> fontComboBox;
+	public static final String DEFAULT_FONT_DISPLAY_NAME = "Default";
 
-	public FontFamilyAction(EditorPanel<? extends EditorPanel<?>> context, JComboBox<String> fontComboBox) {
-		super(context);
+	private final JComboBox<String> fontComboBox;
+	private final Supplier<Boolean> updatingSupplier;
+
+	public FontFamilyAction(EditorPanel<? extends EditorPanel<?>> context, JComboBox<String> fontComboBox, Supplier<Boolean> updatingSupplier) {
+		super(context, null, false, true);
 
 		this.fontComboBox = fontComboBox;
+		this.updatingSupplier = updatingSupplier;
 
 		putValue(Action.NAME, "Font");
 		putValue(Action.SHORT_DESCRIPTION, "Font");
@@ -46,13 +53,39 @@ public class FontFamilyAction extends TextStyleAction {
 	}
 
 	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (!updatingSupplier.get()) {
+			super.actionPerformed(e);
+		}
+	}
+
+	/*
+	@Override
 	protected void updateTextView(TextView textView) {
-
+	
 		String fontFamily = (String) fontComboBox.getSelectedItem();
-
+	
 		MutableAttributeSet attr = new SimpleAttributeSet();
 		StyleConstants.setFontFamily(attr, fontFamily);
 		setCharacterAttributes(textView, attr, false);
+	
+	}
+	*/
+
+	@Override
+	protected void updateAttributeSet(MutableAttributeSet inputAttributes, SimpleAttributeSet attributeSet) {
+
+		String fontFamily = (String) fontComboBox.getSelectedItem();
+
+		try {
+			if (DEFAULT_FONT_DISPLAY_NAME.equals(fontFamily)) {
+				StyleConstants.setFontFamily(attributeSet, TextStyle.DEFAULT_FONT);
+			} else {
+				StyleConstants.setFontFamily(attributeSet, fontFamily);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 	}
 

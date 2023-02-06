@@ -153,7 +153,7 @@ public class Aerialist implements FrameContext {
 			}
 		});
 
-		textFormatTools.setFontFamilyNames(registeredFonts, TextStyle.DEFAULT_FONT);
+		textFormatTools.setFontFamilyNames(registeredFonts);
 		fileTools.setExportActionsEnabled(true);
 
 		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -272,7 +272,6 @@ public class Aerialist implements FrameContext {
 		showTools(null); // TODO?
 
 		frame.setVisible(true);
-		// mainPanel.getDocumentEditor().tempTest();
 
 	}
 
@@ -283,28 +282,6 @@ public class Aerialist implements FrameContext {
 	public void export(String filePath) {
 		fileTools.exportToPdf(filePath, false);
 	}
-
-	/*
-	private void tempTestSetEditorContext() {
-	
-		TemplateMetadata templateMetadata = new TemplateMetadata();
-	
-		CategoryMetadata root = new CategoryMetadata("");
-		root.getChildren().add(InvoiceTemplateUtils.createInvoiceTemplateMetadata());
-		templateMetadata.setRoot(root);
-	
-		setEditorContext(new EditorContext(templateMetadata) {
-	
-			@Override
-			public void populateInsertElementMenu(EditorPanel context, JMenu menu) {
-				if (context instanceof DocumentEditorPanel) {
-					InvoiceTemplateUtils.populateInsertElementMenu((DocumentEditorPanel) context, menu);
-				}
-			}
-		});
-	
-	}
-	 */
 
 	@Override
 	public JFrame getFrame() {

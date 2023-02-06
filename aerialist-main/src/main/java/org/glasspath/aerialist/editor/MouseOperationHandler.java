@@ -61,6 +61,10 @@ public abstract class MouseOperationHandler<T extends EditorPanel<T>> {
 		}
 	}
 
+	public boolean isOperationActive() {
+		return operation != null;
+	}
+
 	public void generateMouseMovedEvent(Component component) {
 
 		if (component != null) {

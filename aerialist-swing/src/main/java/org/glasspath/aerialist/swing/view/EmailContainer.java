@@ -24,11 +24,8 @@ package org.glasspath.aerialist.swing.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 
-import javax.swing.JComponent;
 import javax.swing.JPanel;
-import javax.swing.undo.UndoableEdit;
 
 import org.glasspath.aerialist.Email;
 
@@ -107,21 +104,6 @@ public abstract class EmailContainer extends JPanel implements ISwingViewContext
 	@Override
 	public void setExportPhase(ExportPhase exportPhase) {
 		this.exportPhase = exportPhase;
-	}
-
-	@Override
-	public void focusGained(JComponent component) {
-
-	}
-
-	@Override
-	public void undoableEditHappened(UndoableEdit edit) {
-
-	}
-
-	@Override
-	public void refresh(Component component) {
-
 	}
 
 	public TableView getTableView() {

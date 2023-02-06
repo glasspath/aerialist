@@ -22,16 +22,13 @@
  */
 package org.glasspath.aerialist.swing.view;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JComponent;
 import javax.swing.JPanel;
-import javax.swing.undo.UndoableEdit;
 
 import org.glasspath.aerialist.Document;
 import org.glasspath.aerialist.HeightPolicy;
@@ -135,21 +132,6 @@ public abstract class PageContainer extends JPanel implements ISwingViewContext 
 	@Override
 	public void setExportPhase(ExportPhase exportPhase) {
 		this.exportPhase = exportPhase;
-	}
-
-	@Override
-	public void focusGained(JComponent component) {
-
-	}
-
-	@Override
-	public void undoableEditHappened(UndoableEdit edit) {
-
-	}
-
-	@Override
-	public void refresh(Component component) {
-
 	}
 
 	public int getHeaderHeight() {

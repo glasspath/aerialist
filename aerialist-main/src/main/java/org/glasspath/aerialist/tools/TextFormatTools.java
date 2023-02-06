@@ -22,6 +22,7 @@
  */
 package org.glasspath.aerialist.tools;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.util.List;
@@ -30,8 +31,12 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JMenu;
 import javax.swing.JToolBar;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.Element;
 import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 
+import org.glasspath.aerialist.TextStyle;
 import org.glasspath.aerialist.editor.EditorPanel;
 import org.glasspath.aerialist.editor.actions.BoldAction;
 import org.glasspath.aerialist.editor.actions.FontFamilyAction;
@@ -44,17 +49,25 @@ import org.glasspath.aerialist.editor.actions.StrikeThroughAction;
 import org.glasspath.aerialist.editor.actions.TextColorAction;
 import org.glasspath.aerialist.editor.actions.UnderlineAction;
 import org.glasspath.aerialist.icons.Icons;
+import org.glasspath.aerialist.swing.view.TextView;
 import org.glasspath.common.swing.button.SplitButton;
 import org.glasspath.common.swing.color.ColorButton;
 import org.glasspath.common.swing.color.ColorUtils;
 
 public class TextFormatTools {
 
+	private final EditorPanel<? extends EditorPanel<?>> editor;
 	private final JMenu menu;
 	private final JToolBar toolBar;
 	private final JComboBox<String> fontComboBox;
+	private final JComboBox<String> fontSizeComboBox;
+
+	private boolean defaultFontAvailable = false;
+	private boolean updating = false;
 
 	public TextFormatTools(EditorPanel<? extends EditorPanel<?>> editor) {
+
+		this.editor = editor;
 
 		this.menu = new JMenu("Format");
 		this.toolBar = new JToolBar("Format");
@@ -65,7 +78,7 @@ public class TextFormatTools {
 		fontComboBox.setFocusable(false);
 		fontComboBox.addItem("Loading fonts..");
 		toolBar.add(fontComboBox);
-		fontComboBox.setAction(new FontFamilyAction(editor, fontComboBox));
+		fontComboBox.setAction(new FontFamilyAction(editor, fontComboBox, this::isUpdating));
 		fontComboBox.setFont(fontComboBox.getFont().deriveFont(10.0F));
 		fontComboBox.setMaximumSize(new Dimension(85, 50));
 
@@ -76,7 +89,7 @@ public class TextFormatTools {
 		}
 		*/
 
-		JComboBox<String> fontSizeComboBox = new JComboBox<>();
+		fontSizeComboBox = new JComboBox<>();
 		fontSizeComboBox.setFocusable(false);
 		fontSizeComboBox.setEditable(true);
 		fontSizeComboBox.addItem("8");
@@ -97,7 +110,7 @@ public class TextFormatTools {
 		fontSizeComboBox.addItem("72");
 		fontSizeComboBox.setSelectedIndex(4);
 		toolBar.add(fontSizeComboBox);
-		fontSizeComboBox.setAction(new FontSizeAction(editor, fontSizeComboBox));
+		fontSizeComboBox.setAction(new FontSizeAction(editor, fontSizeComboBox, this::isUpdating));
 		fontSizeComboBox.setFont(fontSizeComboBox.getFont().deriveFont(10.0F));
 		fontSizeComboBox.setMaximumSize(new Dimension(55, 50));
 
@@ -165,28 +178,22 @@ public class TextFormatTools {
 
 	}
 
-	public void setFontFamilyNames(List<String> fontFamilyNames, String selectedFontFamily) {
-
-		/*
-		DefaultFontMapper fontMapper = AerialistUtils.getFontMapper();
-		HashMap<String, BaseFontParameters> mapping = fontMapper.getMapper();
-		
-		List<String> sortedFonts = mapping.keySet().stream().sorted().collect(Collectors.toList());
-		
-		fontComboBox.removeAllItems();
-		
-		for (String fontName : sortedFonts) {
-			fontComboBox.addItem(fontName);
-		}
-		*/
+	public void setFontFamilyNames(List<String> fontFamilyNames) {
 
 		fontComboBox.removeAllItems();
+
+		defaultFontAvailable = false;
+		
+		fontComboBox.addItem(FontFamilyAction.DEFAULT_FONT_DISPLAY_NAME);
 
 		for (String fontFamilyName : fontFamilyNames) {
 			fontComboBox.addItem(fontFamilyName);
+			if (TextStyle.DEFAULT_FONT.equals(fontFamilyName)) {
+				defaultFontAvailable = true;
+			}
 		}
 
-		fontComboBox.setSelectedItem(selectedFontFamily);
+		fontComboBox.setSelectedItem(FontFamilyAction.DEFAULT_FONT_DISPLAY_NAME);
 
 		fontComboBox.setMinimumSize(new Dimension(85, 1));
 		fontComboBox.setMaximumSize(new Dimension(85, 50));
@@ -199,6 +206,53 @@ public class TextFormatTools {
 
 	public JToolBar getToolBar() {
 		return toolBar;
+	}
+
+	public boolean isUpdating() {
+		return updating;
+	}
+
+	public void textSelectionChanged() {
+		updateComponents(); // TODO: Add short delay to allow multiple events before updating?
+	}
+
+	protected void updateComponents() {
+
+		updating = true;
+
+		if (editor.getSelection().size() == 1) {
+
+			Component component = editor.getSelection().get(0);
+			if (component instanceof TextView) {
+
+				TextView textView = (TextView) component;
+
+				int start = textView.getSelectionStart();
+				if (start < 0) {
+					start = 0;
+				}
+
+				StyledDocument document = textView.getStyledDocument();
+				Element element = document.getCharacterElement(start);
+				AttributeSet style = element.getAttributes();
+
+				String fontFamily = StyleConstants.getFontFamily(style);
+				if (fontFamily == null) {
+					fontComboBox.setSelectedItem(FontFamilyAction.DEFAULT_FONT_DISPLAY_NAME);
+				} else if (!defaultFontAvailable && TextStyle.DEFAULT_FONT.equals(fontFamily)) {
+					fontComboBox.setSelectedItem(FontFamilyAction.DEFAULT_FONT_DISPLAY_NAME);
+				} else {
+					fontComboBox.setSelectedItem(fontFamily);
+				}
+
+				fontSizeComboBox.setSelectedItem("" + StyleConstants.getFontSize(style)); //$NON-NLS-1$
+
+			}
+
+		}
+
+		updating = false;
+
 	}
 
 }

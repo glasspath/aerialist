@@ -38,11 +38,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
-import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
+import javax.swing.event.CaretEvent;
 import javax.swing.undo.UndoableEdit;
 
 import org.glasspath.aerialist.Aerialist;
@@ -121,6 +121,7 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 			@Override
 			public void selectionChanged() {
 				context.getMainPanel().updateEditMenu();
+				context.getTextFormatTools().textSelectionChanged();
 			}
 		});
 
@@ -368,7 +369,9 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 
 				@Override
 				public void focusGained(FocusEvent e) {
-					EditorPageContainer.this.focusGained(pageContainer);
+					if (!getMouseOperationHandler().isOperationActive()) {
+						selection.deselectAll();
+					}
 				}
 			});
 			addMouseListener(new MouseAdapter() {
@@ -428,8 +431,9 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 		}
 
 		@Override
-		public void focusGained(JComponent component) {
+		public void focusGained(FocusEvent e) {
 
+			Component component = e.getComponent();
 			PageView pageView = AerialistUtils.getPageView(component);
 			if (pageView != null) {
 
@@ -472,6 +476,16 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 
 			}
 
+		}
+
+		@Override
+		public void focusLost(FocusEvent e) {
+
+		}
+
+		@Override
+		public void caretUpdate(CaretEvent e) {
+			context.getTextFormatTools().textSelectionChanged();
 		}
 
 		@Override

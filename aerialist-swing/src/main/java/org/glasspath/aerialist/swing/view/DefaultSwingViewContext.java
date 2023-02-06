@@ -2,9 +2,10 @@ package org.glasspath.aerialist.swing.view;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.event.FocusEvent;
 import java.awt.image.BufferedImage;
 
-import javax.swing.JComponent;
+import javax.swing.event.CaretEvent;
 import javax.swing.undo.UndoableEdit;
 
 import org.glasspath.aerialist.media.MediaCache;
@@ -73,7 +74,17 @@ public class DefaultSwingViewContext implements ISwingViewContext {
 	}
 
 	@Override
-	public void focusGained(JComponent component) {
+	public void focusGained(FocusEvent e) {
+
+	}
+	
+	@Override
+	public void focusLost(FocusEvent e) {
+		
+	}
+
+	@Override
+	public void caretUpdate(CaretEvent e) {
 
 	}
 

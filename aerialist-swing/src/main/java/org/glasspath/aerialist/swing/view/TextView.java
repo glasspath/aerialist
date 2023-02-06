@@ -160,6 +160,8 @@ public class TextView extends JTextPane {
 
 		ISwingViewContext.installSelectionHandler(this, viewContext);
 
+		addCaretListener(viewContext);
+
 	}
 
 	public boolean isSingleLine() {
@@ -365,7 +367,7 @@ public class TextView extends JTextPane {
 		StyleConstants.setFontSize(attributeSet, fontSize);
 		applyAttributeSet(attributeSet, null, false);
 	}
-
+	
 	public void setSpaceAbove(float spaceAbove) {
 		MutableAttributeSet attributeSet = getAttributes();
 		StyleConstants.setSpaceAbove(attributeSet, spaceAbove);

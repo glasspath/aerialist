@@ -22,6 +22,9 @@
  */
 package org.glasspath.aerialist.editor.actions;
 
+import java.awt.event.ActionEvent;
+import java.util.function.Supplier;
+
 import javax.swing.Action;
 import javax.swing.JComboBox;
 import javax.swing.text.MutableAttributeSet;
@@ -33,17 +36,26 @@ import org.glasspath.aerialist.editor.EditorPanel;
 public class FontSizeAction extends TextStyleAction {
 
 	private final JComboBox<String> fontSizeComboBox;
+	private final Supplier<Boolean> updatingSupplier;
 
-	public FontSizeAction(EditorPanel<? extends EditorPanel<?>> context, JComboBox<String> fontSizeComboBox) {
+	public FontSizeAction(EditorPanel<? extends EditorPanel<?>> context, JComboBox<String> fontSizeComboBox, Supplier<Boolean> updatingSupplier) {
 		super(context, null, false, true);
 
 		this.fontSizeComboBox = fontSizeComboBox;
+		this.updatingSupplier = updatingSupplier;
 
 		putValue(Action.NAME, "Font size");
 		putValue(Action.SHORT_DESCRIPTION, "Font size");
 
 	}
 
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (!updatingSupplier.get()) {
+			super.actionPerformed(e);
+		}
+	}
+	
 	/*
 	@Override
 	protected void updateTextView(TextView textView) {
