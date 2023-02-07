@@ -24,6 +24,7 @@ package org.glasspath.aerialist;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -32,6 +33,7 @@ import java.util.HashMap;
 
 import org.glasspath.aerialist.Page.PageSize;
 import org.glasspath.aerialist.swing.view.EmailContainer;
+import org.glasspath.aerialist.swing.view.FooterPageView;
 import org.glasspath.aerialist.swing.view.GroupView;
 import org.glasspath.aerialist.swing.view.ISwingElementView;
 import org.glasspath.aerialist.swing.view.LayeredPageView;
@@ -161,78 +163,78 @@ public class AerialistUtils {
 		}
 	}
 
-	public static void writeToPDF(int width, int height, PageContainer pageContainer, File file) throws IOException, DocumentException {
+	public static void writeToPDF(PageContainer pageContainer, File file) throws IOException, DocumentException {
 
-		com.lowagie.text.Document document = new com.lowagie.text.Document(new Rectangle(width, height));
-		PdfWriter writer = null;
+		if (pageContainer.getPageViews().size() > 0) {
 
-		try {
+			PageView firstPageView = pageContainer.getPageViews().get(0);
 
-			/*
-			BaseFont fontRegular = BaseFont.createFont("C:\\Windows\\Fonts\\BRADHITC.TTF", "Cp1251", BaseFont.EMBEDDED);
-			BaseFont fontBold = BaseFont.createFont("C:\\Windows\\Fonts\\BRITANIC.TTF", "Cp1251", BaseFont.EMBEDDED);
-			FontMapper fontMapper = new FontMapper() {
-			
-				@Override
-				public java.awt.Font pdfToAwt(BaseFont arg0, int arg1) {
-					return null;
-				}
-			
-				@Override
-				public BaseFont awtToPdf(java.awt.Font font) {
-					if (font.isBold()) {
-						return fontBold;
+			com.lowagie.text.Document document = new com.lowagie.text.Document(new Rectangle(firstPageView.getWidth(), firstPageView.getHeight()));
+
+			try {
+
+				FontMapper fontMapper = getFontMapper();
+
+				PdfWriter pdfWriter = PdfWriter.getInstance(document, new FileOutputStream(file));
+
+				document.open();
+
+				PdfContentByte contentByte = pdfWriter.getDirectContent();
+
+				boolean firstPage = true;
+				for (PageView pageView : pageContainer.getPageViews()) {
+
+					if (firstPage) {
+						firstPage = false;
 					} else {
-						return fontRegular;
+						document.setPageSize(new Rectangle(pageView.getWidth(), pageView.getHeight()));
+						document.newPage();
 					}
-				}
-			};
-			*/
-			// FontMapper fontMapper = new DefaultFontMapper();
-			FontMapper fontMapper = getFontMapper();
 
-			writer = PdfWriter.getInstance(document, new FileOutputStream(file));
-			document.open();
+					PdfTemplate template = contentByte.createTemplate(pageView.getWidth(), pageView.getHeight());
 
-			PdfContentByte contentByte = writer.getDirectContent();
+					PdfGraphics2D pdfG2d = new PdfGraphics2D(contentByte, pageView.getWidth(), pageView.getHeight(), fontMapper, false, false, 0.0F);
 
-			boolean firstPage = true;
-			for (PageView pageView : pageContainer.getPageViews()) {
+					if (pageView instanceof LayeredPageView) {
+						for (PageView layerView : ((LayeredPageView) pageView).getLayers()) {
 
-				if (firstPage) {
-					firstPage = false;
-				} else {
-					document.newPage();
-				}
+							Dimension size = layerView.getPreferredSize();
+							layerView.setBounds(0, 0, size.width, size.height);
 
-				PdfTemplate template = contentByte.createTemplate(width, height);
+							int x = (pageView.getWidth() - size.width) / 2;
+							int y = 0;
 
-				PdfGraphics2D pdfG2d = new PdfGraphics2D(contentByte, width, height, fontMapper, false, false, 0.0F);
+							// Align footer to bottom
+							if (layerView instanceof FooterPageView) {
+								y += pageView.getHeight() - size.height;
+							}
 
-				if (pageView instanceof LayeredPageView) {
-					for (PageView layerView : ((LayeredPageView) pageView).getLayers()) {
-						layerView.setBounds(0, 0, pageView.getWidth(), pageView.getHeight());
-						layerView.print(pdfG2d);
+							pdfG2d.translate(x, y);
+							layerView.print(pdfG2d);
+							pdfG2d.translate(-x, -y);
+
+						}
 					}
+
+					pageView.print(pdfG2d);
+
+					pdfG2d.dispose();
+
+					contentByte.addTemplate(template, 0, 0);
+
 				}
 
-				pageView.print(pdfG2d);
-
-				pdfG2d.dispose();
-
-				contentByte.addTemplate(template, 0, 0);
-
-			}
-
-			document.close();
-			writer.close();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (document.isOpen()) {
 				document.close();
+				pdfWriter.close();
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				if (document.isOpen()) {
+					document.close();
+				}
 			}
+
 		}
 
 	}
@@ -331,10 +333,11 @@ public class AerialistUtils {
 	}
 
 	public static Page createDefaultPage() {
-
-		// TODO
 		return new Page(PageSize.A4.getWidth(), PageSize.A4.getHeight());
+	}
 
+	public static Page createDefaultPage(int width, int height) {
+		return new Page(width, height);
 	}
 
 	public static Email createDefaultEmail() {

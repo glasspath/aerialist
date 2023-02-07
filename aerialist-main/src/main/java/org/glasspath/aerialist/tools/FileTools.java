@@ -563,18 +563,11 @@ public class FileTools {
 
 				try {
 
-					// TODO
-					int width = (int) PageSize.A4.getWidth();
-					int height = (int) PageSize.A4.getHeight();
-
-					// documentEditor.getPageContainer().setExportPhase(ExportPhase.LAYOUT_OUTPUT);
-					// AerialistUtils.writeToPDF(width, height, pages, new File("export.pdf"));
-
 					documentEditor.getPageContainer().setExportPhase(ExportPhase.EXPORT);
 
 					File outputFile = new File(filePath);
 
-					AerialistUtils.writeToPDF(width, height, documentEditor.getPageContainer(), outputFile);
+					AerialistUtils.writeToPDF(documentEditor.getPageContainer(), outputFile);
 
 					documentEditor.getPageContainer().setExportPhase(ExportPhase.IDLE);
 

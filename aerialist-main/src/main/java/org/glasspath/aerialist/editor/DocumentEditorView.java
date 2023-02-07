@@ -24,13 +24,16 @@ package org.glasspath.aerialist.editor;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.Shape;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import org.glasspath.aerialist.swing.view.FooterPageView;
 import org.glasspath.aerialist.swing.view.LayeredPageView;
 import org.glasspath.aerialist.swing.view.PageView;
 import org.glasspath.common.swing.graphics.NinePatch;
@@ -158,7 +161,24 @@ public class DocumentEditorView extends EditorView<DocumentEditorPanel> {
 
 	@Override
 	public void drawLayerView(Graphics2D g2d, PageView pageView, PageView layerView) {
-		SwingUtilities.paintComponent(g2d, layerView, context.getPageContainer(), pageView.getX(), pageView.getY(), pageView.getWidth(), pageView.getHeight());
+
+		Dimension size = layerView.getPreferredSize();
+
+		int x = pageView.getX() + ((pageView.getWidth() - size.width) / 2);
+		int y = pageView.getY();
+
+		// Align footer to bottom
+		if (layerView instanceof FooterPageView) {
+			y += pageView.getHeight() - size.height;
+		}
+
+		Shape oldClip = g2d.getClip();
+		g2d.setClip(pageView.getX(), pageView.getY(), pageView.getWidth(), pageView.getHeight());
+
+		SwingUtilities.paintComponent(g2d, layerView, context.getPageContainer(), x, y, size.width, size.height);
+
+		g2d.setClip(oldClip);
+
 	}
 
 	protected void drawGrid(Graphics2D g2d, PageView pageView) {

@@ -232,11 +232,11 @@ public abstract class PageContainer extends JPanel implements ISwingViewContext 
 		pageView.getLayers().clear();
 
 		if (headerView != null) {
-			pageView.getLayers().add(new PageView(headerView, this));
+			pageView.getLayers().add(new HeaderPageView(headerView, this));
 		}
 
 		if (footerView != null) {
-			pageView.getLayers().add(new PageView(footerView, this));
+			pageView.getLayers().add(new FooterPageView(footerView, this));
 		}
 
 	}
