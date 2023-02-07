@@ -79,98 +79,30 @@ public abstract class TextStyleAction extends AbstractAction {
 		}
 	}
 
-	/*
-	protected void performAction(String actionName) {
-		for (Component component : context.getSelection()) {
-			if (component instanceof TextView) {
-				for (Action action : ((TextView) component).getActions()) {
-					if (actionName.equals(action.getValue(Action.NAME))) {
-						action.actionPerformed(null);
-						break;
-					}
-				}
-			}
-		}
-	}
-	*/
-
 	protected void updateTextView(TextView textView) {
 
 		EditorKit editorKit = textView.getEditorKit();
 		if (editorKit instanceof StyledEditorKit) {
 
+			textView.setUpdatingComponent(true);
+
 			StyledEditorKit kit = (StyledEditorKit) editorKit;
 
 			MutableAttributeSet inputAttributes = kit.getInputAttributes();
-			SimpleAttributeSet attributeSet = new SimpleAttributeSet();
-			updateAttributeSet(inputAttributes, attributeSet);
+			SimpleAttributeSet newAttributes = new SimpleAttributeSet();
+			updateAttributeSet(inputAttributes, newAttributes);
 
-			int start = textView.getSelectionStart();
-			int end = textView.getSelectionEnd();
+			processAttributes(textView, new AttributeProcessor() {
 
-			if (applyToParagraph) {
-
-				StyledDocument document = textView.getStyledDocument();
-
-				Element paragraph = Utilities.getParagraphElement(textView, start);
-				if (paragraph != null) {
-					start = paragraph.getStartOffset();
+				@Override
+				public boolean processAttributes(JTextPane textPane, AttributeSet attributeSet, int start, int end) {
+					setCharacterAttributes(textView, newAttributes, start, end, false);
+					return false;
 				}
+			});
 
-				paragraph = Utilities.getParagraphElement(textView, end);
-				if (paragraph != null) {
-					end = paragraph.getEndOffset();
-					if (end > document.getLength()) {
-						end = document.getLength();
-					}
-				}
-
-				if (end > start) {
-
-					int i = start;
-					while (i < end) {
-
-						Element element = document.getCharacterElement(i);
-						AttributeSet style = element.getAttributes();
-
-						if (style instanceof LeafElement) {
-
-							LeafElement leafElement = (LeafElement) style;
-
-							setCharacterAttributes(textView, attributeSet, leafElement.getStartOffset(), leafElement.getEndOffset(), false);
-
-							if (leafElement.getEndOffset() > i) {
-								i = leafElement.getEndOffset();
-							} else {
-								i++;
-							}
-
-						} else {
-							// System.out.println(i + ": " + style + ", " + style.getClass());
-						}
-
-					}
-
-				}
-
-			} else {
-
-				// Extend selection to start/end of fields to make sure the style is applied
-				// to the whole field (otherwise field will be split into two fields)
-
-				int fieldStartOffset = getFieldOffset(textView, start, false);
-				if (fieldStartOffset >= 0 && fieldStartOffset < start) {
-					start = fieldStartOffset;
-				}
-
-				int fieldEndOffset = getFieldOffset(textView, end, true);
-				if (fieldEndOffset >= 0 && fieldEndOffset > end) {
-					end = fieldEndOffset;
-				}
-
-				setCharacterAttributes(textView, attributeSet, start, end, false);
-
-			}
+			textView.createUndoableEdit();
+			textView.setUpdatingComponent(false);
 
 			if (reload) {
 				textView.reload();
@@ -180,9 +112,78 @@ public abstract class TextStyleAction extends AbstractAction {
 
 	}
 
-	protected void updateAttributeSet(MutableAttributeSet inputAttributes, SimpleAttributeSet attributeSet) {
+	protected void processAttributes(TextView textView, AttributeProcessor attributeProcessor) {
+
+		StyledDocument document = textView.getStyledDocument();
+
+		int start = textView.getSelectionStart();
+		int end = textView.getSelectionEnd();
+
+		if (applyToParagraph) {
+
+			Element paragraph = Utilities.getParagraphElement(textView, start);
+			if (paragraph != null) {
+				start = paragraph.getStartOffset();
+			}
+
+			paragraph = Utilities.getParagraphElement(textView, end);
+			if (paragraph != null) {
+				end = paragraph.getEndOffset();
+				if (end > document.getLength()) {
+					end = document.getLength();
+				}
+			}
+
+		} else {
+
+			// Extend selection to start/end of fields to make sure the style is applied
+			// to the whole field (otherwise field will be split into two fields)
+
+			int fieldStartOffset = getFieldOffset(textView, start, false);
+			if (fieldStartOffset >= 0 && fieldStartOffset < start) {
+				start = fieldStartOffset;
+			}
+
+			int fieldEndOffset = getFieldOffset(textView, end, true);
+			if (fieldEndOffset >= 0 && fieldEndOffset > end) {
+				end = fieldEndOffset;
+			}
+
+		}
+
+		if (end > start) {
+
+			int i = start;
+			while (i < end) {
+
+				Element element = document.getCharacterElement(i);
+				AttributeSet style = element.getAttributes();
+
+				if (style instanceof LeafElement) {
+
+					LeafElement leafElement = (LeafElement) style;
+
+					if (attributeProcessor.processAttributes(textView, leafElement, start, end)) {
+						break;
+					}
+
+					if (leafElement.getEndOffset() > i) {
+						i = leafElement.getEndOffset();
+					} else {
+						i++;
+					}
+
+				} else {
+					// System.out.println(i + ": " + style + ", " + style.getClass());
+				}
+
+			}
+
+		}
 
 	}
+
+	protected abstract void updateAttributeSet(MutableAttributeSet inputAttributes, SimpleAttributeSet attributeSet);
 
 	protected final void setCharacterAttributes(JTextPane textPane, AttributeSet attributeSet, boolean replace) {
 		setCharacterAttributes(textPane, attributeSet, textPane.getSelectionStart(), textPane.getSelectionEnd(), replace);
@@ -231,33 +232,10 @@ public abstract class TextStyleAction extends AbstractAction {
 
 	}
 
-	/*
-	protected final void setParagraphAttributes(JTextPane textPane, AttributeSet attr, boolean replace) {
-	
-		int p0 = textPane.getSelectionStart();
-		int p1 = textPane.getSelectionEnd();
-		if (p0 != p1) {
-	
-			int length = p1 - p0;
-	
-			StyledDocument doc = textPane.getStyledDocument();
-	
-			try {
-	
-				String text = doc.getText(p0, length);
-	
-				doc.remove(p0, length);
-				doc.insertString(p0, text, attr);
-	
-				doc.setParagraphAttributes(p0, length, attr, false);
-	
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-	
-		}
-	
+	public static interface AttributeProcessor {
+
+		public boolean processAttributes(JTextPane textPane, AttributeSet attributeSet, int start, int end);
+
 	}
-	*/
 
 }

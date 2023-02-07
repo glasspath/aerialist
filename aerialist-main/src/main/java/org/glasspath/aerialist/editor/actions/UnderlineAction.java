@@ -23,14 +23,14 @@
 package org.glasspath.aerialist.editor.actions;
 
 import javax.swing.Action;
-import javax.swing.text.MutableAttributeSet;
+import javax.swing.text.AttributeSet;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
 import org.glasspath.aerialist.editor.EditorPanel;
 import org.glasspath.aerialist.icons.Icons;
 
-public class UnderlineAction extends TextStyleAction {
+public class UnderlineAction extends ToggleTextStyleAction {
 
 	public UnderlineAction(EditorPanel<? extends EditorPanel<?>> context) {
 		super(context);
@@ -42,8 +42,13 @@ public class UnderlineAction extends TextStyleAction {
 	}
 
 	@Override
-	protected void updateAttributeSet(MutableAttributeSet inputAttributes, SimpleAttributeSet attributeSet) {
-		StyleConstants.setUnderline(attributeSet, !StyleConstants.isUnderline(inputAttributes));
+	protected boolean getStyle(AttributeSet attributeSet) {
+		return StyleConstants.isUnderline(attributeSet);
+	}
+
+	@Override
+	protected void setStyle(SimpleAttributeSet attributeSet, boolean value) {
+		StyleConstants.setUnderline(attributeSet, value);
 	}
 
 }

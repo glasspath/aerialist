@@ -23,6 +23,8 @@
 package org.glasspath.aerialist.editor.actions;
 
 import javax.swing.Action;
+import javax.swing.text.MutableAttributeSet;
+import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
 import org.glasspath.aerialist.editor.EditorPanel;
@@ -57,6 +59,11 @@ public class SetTextAlignmentAction extends TextStyleAction {
 	@Override
 	protected void updateTextView(TextView textView) {
 		textView.setTextAlignment(alignment);
+	}
+
+	@Override
+	protected void updateAttributeSet(MutableAttributeSet inputAttributes, SimpleAttributeSet attributeSet) {
+
 	}
 
 }

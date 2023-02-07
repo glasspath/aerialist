@@ -23,6 +23,8 @@
 package org.glasspath.aerialist.editor.actions;
 
 import javax.swing.Action;
+import javax.swing.text.MutableAttributeSet;
+import javax.swing.text.SimpleAttributeSet;
 
 import org.glasspath.aerialist.editor.EditorPanel;
 import org.glasspath.aerialist.swing.view.TextView;
@@ -39,12 +41,12 @@ public class ListBulletedAction extends TextStyleAction {
 	*/
 
 	private final String prefix;
-	
+
 	public ListBulletedAction(EditorPanel<? extends EditorPanel<?>> context, String prefix, String name) {
 		super(context);
 
 		this.prefix = prefix;
-		
+
 		putValue(Action.NAME, prefix + name);
 		putValue(Action.SHORT_DESCRIPTION, "Bulleted List");
 
@@ -53,6 +55,11 @@ public class ListBulletedAction extends TextStyleAction {
 	@Override
 	protected void updateTextView(TextView textView) {
 		textView.toggleLinePrefix(prefix);
+	}
+
+	@Override
+	protected void updateAttributeSet(MutableAttributeSet inputAttributes, SimpleAttributeSet attributeSet) {
+
 	}
 
 }

@@ -22,33 +22,51 @@
  */
 package org.glasspath.aerialist.editor.actions;
 
-import javax.swing.Action;
+import javax.swing.JTextPane;
 import javax.swing.text.AttributeSet;
+import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
 
 import org.glasspath.aerialist.editor.EditorPanel;
-import org.glasspath.aerialist.icons.Icons;
+import org.glasspath.aerialist.swing.view.TextView;
 
-public class BoldAction extends ToggleTextStyleAction {
+public abstract class ToggleTextStyleAction extends TextStyleAction {
 
-	public BoldAction(EditorPanel<? extends EditorPanel<?>> context) {
+	private boolean resetValue = false;
+
+	public ToggleTextStyleAction(EditorPanel<? extends EditorPanel<?>> context) {
 		super(context);
+	}
 
-		putValue(Action.NAME, "Bold");
-		putValue(Action.SHORT_DESCRIPTION, "Bold");
-		putValue(Action.SMALL_ICON, Icons.formatBold);
+	@Override
+	protected void updateTextView(TextView textView) {
+
+		resetValue = false;
+
+		processAttributes(textView, new AttributeProcessor() {
+
+			@Override
+			public boolean processAttributes(JTextPane textPane, AttributeSet attributeSet, int start, int end) {
+				if (getStyle(attributeSet)) {
+					resetValue = true;
+					return true;
+				} else {
+					return false;
+				}
+			}
+		});
+
+		super.updateTextView(textView);
 
 	}
 
 	@Override
-	protected boolean getStyle(AttributeSet attributeSet) {
-		return StyleConstants.isBold(attributeSet);
+	protected void updateAttributeSet(MutableAttributeSet inputAttributes, SimpleAttributeSet attributeSet) {
+		setStyle(attributeSet, !resetValue);
 	}
 
-	@Override
-	protected void setStyle(SimpleAttributeSet attributeSet, boolean value) {
-		StyleConstants.setBold(attributeSet, value);
-	}
+	protected abstract boolean getStyle(AttributeSet attributeSet);
+
+	protected abstract void setStyle(SimpleAttributeSet attributeSet, boolean value);
 
 }

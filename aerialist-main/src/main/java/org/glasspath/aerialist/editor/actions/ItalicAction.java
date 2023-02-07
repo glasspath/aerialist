@@ -23,14 +23,14 @@
 package org.glasspath.aerialist.editor.actions;
 
 import javax.swing.Action;
-import javax.swing.text.MutableAttributeSet;
+import javax.swing.text.AttributeSet;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
 import org.glasspath.aerialist.editor.EditorPanel;
 import org.glasspath.aerialist.icons.Icons;
 
-public class ItalicAction extends TextStyleAction {
+public class ItalicAction extends ToggleTextStyleAction {
 
 	public ItalicAction(EditorPanel<? extends EditorPanel<?>> context) {
 		super(context);
@@ -42,8 +42,13 @@ public class ItalicAction extends TextStyleAction {
 	}
 
 	@Override
-	protected void updateAttributeSet(MutableAttributeSet inputAttributes, SimpleAttributeSet attributeSet) {
-		StyleConstants.setItalic(attributeSet, !StyleConstants.isItalic(inputAttributes));
+	protected boolean getStyle(AttributeSet attributeSet) {
+		return StyleConstants.isItalic(attributeSet);
+	}
+
+	@Override
+	protected void setStyle(SimpleAttributeSet attributeSet, boolean value) {
+		StyleConstants.setItalic(attributeSet, value);
 	}
 
 }
