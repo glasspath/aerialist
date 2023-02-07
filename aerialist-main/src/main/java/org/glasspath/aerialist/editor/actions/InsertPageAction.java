@@ -101,7 +101,7 @@ public class InsertPageAction extends AbstractAction {
 
 		}
 
-		PageView pageView = PageContainer.createLayeredPageView(AerialistUtils.createDefaultPage(), context.getPageContainer());
+		PageView pageView = PageContainer.createLayeredPageView(page, context.getPageContainer());
 
 		context.getPageContainer().insertPageView(pageView, index);
 

@@ -37,9 +37,6 @@ public class PageView extends ElementContainer implements IVisible {
 
 	public PageView(ISwingViewContext viewContext) {
 		super(viewContext);
-
-		ISwingViewContext.installSelectionHandler(this, viewContext);
-
 	}
 
 	public PageView(PageView pageView, ISwingViewContext viewContext) {
@@ -62,16 +59,7 @@ public class PageView extends ElementContainer implements IVisible {
 
 	public void init(Page page) {
 
-		if (page.getWidth() > 0 && page.getHeight() > 0) {
-
-			Dimension size = new Dimension(page.getWidth(), page.getHeight());
-
-			setSize(size);
-			setPreferredSize(size);
-			setMinimumSize(size);
-			setMaximumSize(size);
-
-		}
+		setPageSize(page.getWidth(), page.getHeight());
 
 		visible = page.getVisible();
 
@@ -83,6 +71,21 @@ public class PageView extends ElementContainer implements IVisible {
 				elementView.setBounds(element.getX(), element.getY(), element.getWidth(), element.getHeight());
 				add(elementView);
 			}
+
+		}
+
+	}
+
+	public void setPageSize(int width, int height) {
+
+		if (width > 0 && height > 0) {
+
+			Dimension size = new Dimension(width, height);
+
+			setSize(size);
+			setPreferredSize(size);
+			setMinimumSize(size);
+			setMaximumSize(size);
 
 		}
 

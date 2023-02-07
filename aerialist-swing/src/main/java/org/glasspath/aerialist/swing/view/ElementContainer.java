@@ -100,6 +100,8 @@ public class ElementContainer extends JPanel {
 
 		setLayout(null);
 
+		ISwingViewContext.installSelectionHandler(this, viewContext);
+
 	}
 
 	public int getElementViewCount() {
@@ -125,46 +127,46 @@ public class ElementContainer extends JPanel {
 
 		/*
 		if (viewContext.isHeightPolicyEnabled()) {
-
+		
 			for (int i = 0; i < getElementViewCount(); i++) {
-
+		
 				ISwingElementView<?> elementView = getElementView(i);
 				if (elementView.getHeightPolicy() == HeightPolicy.AUTO) {
-
+		
 					if (elementView instanceof Component) {
-
+		
 						Component component = (Component) elementView;
 						Rectangle oldBounds = component.getBounds();
-
+		
 						int height = component.getPreferredSize().height;
-
+		
 						// TODO?
 						if (height < 10) {
 							height = 10;
 						}
-
+		
 						if (height != oldBounds.height) {
-
+		
 							Rectangle bounds = new Rectangle(oldBounds);
 							bounds.height = height;
-
+		
 							component.setBounds(bounds);
-
+		
 							elementResized(component, oldBounds);
-
+		
 							if (getParent() instanceof ElementContainer) {
 								getParent().invalidate();
 								getParent().validate();
 							}
-
+		
 						}
-
+		
 					}
-
+		
 				}
-
+		
 			}
-
+		
 		}
 		*/
 
@@ -178,7 +180,7 @@ public class ElementContainer extends JPanel {
 
 					updateVerticalAnchors();
 					layout.validateLayout();
-					
+
 					layoutInited = true;
 
 				}
@@ -189,7 +191,7 @@ public class ElementContainer extends JPanel {
 		});
 
 	}
-	
+
 	public void invalidate(HeightPolicy heightPolicy) {
 
 		ISwingElementView<?> elementView;
@@ -243,7 +245,7 @@ public class ElementContainer extends JPanel {
 	public boolean isUpdatingVerticalLayout() {
 		return layout.isUpdatingLayout();
 	}
-	
+
 	public void updateVerticalAnchors() {
 		layout.updateVerticalAnchors();
 	}

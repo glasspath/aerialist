@@ -228,7 +228,15 @@ public class TextView extends JTextPane {
 
 	}
 
-	private void createUndoableEdit() {
+	public boolean isUpdatingComponent() {
+		return updatingComponent;
+	}
+
+	public void setUpdatingComponent(boolean updatingComponent) {
+		this.updatingComponent = updatingComponent;
+	}
+
+	public void createUndoableEdit() {
 
 		TextData newTextData = new TextData();
 		toText(newTextData);

@@ -49,6 +49,7 @@ import org.glasspath.aerialist.FitPolicy;
 import org.glasspath.aerialist.HeightPolicy;
 import org.glasspath.aerialist.IVisible;
 import org.glasspath.aerialist.Padding;
+import org.glasspath.aerialist.Page.PageSize;
 import org.glasspath.aerialist.YPolicy;
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
 import org.glasspath.aerialist.editor.EditorPanel;
@@ -205,6 +206,7 @@ public class ActionUtils {
 	private static void populatePageViewMenu(DocumentEditorPanel context, PageView pageView, JMenu menu) {
 
 		menu.add(createInsertElementMenu(context));
+		menu.add(createPageSizeMenu(context, (PageView) pageView));
 
 		menu.addSeparator();
 
@@ -282,13 +284,28 @@ public class ActionUtils {
 
 	}
 
+	public static JMenu createPageSizeMenu(DocumentEditorPanel context, PageView pageView) {
+
+		JMenu menu = new JMenu("Page size");
+
+		menu.add(new SetPageSizeAction(context, pageView, PageSize.A4.getWidth(), PageSize.A4.getHeight(), "A4 Portrait"));
+		menu.add(new SetPageSizeAction(context, pageView, PageSize.A4.getHeight(), PageSize.A4.getWidth(), "A4 Landscape"));
+
+		return menu;
+
+	}
+
 	public static JMenu createInsertElementMenu(DocumentEditorPanel context) {
 
 		JMenu menu = new JMenu("Insert");
 
 		if (context.getSelection().size() == 1 && context.getSelection().get(0) instanceof PageView) {
-			menu.add(new InsertPageAction(context, AerialistUtils.createDefaultPage(), InsertPageAction.ABOVE));
-			menu.add(new InsertPageAction(context, AerialistUtils.createDefaultPage(), InsertPageAction.BELOW));
+
+			PageView pageView = (PageView) context.getSelection().get(0);
+
+			menu.add(new InsertPageAction(context, AerialistUtils.createDefaultPage(pageView.getWidth(), pageView.getHeight()), InsertPageAction.ABOVE));
+			menu.add(new InsertPageAction(context, AerialistUtils.createDefaultPage(pageView.getWidth(), pageView.getHeight()), InsertPageAction.BELOW));
+
 		} else {
 			menu.add(new InsertPageAction(context, AerialistUtils.createDefaultPage(), InsertPageAction.INSERT));
 		}
