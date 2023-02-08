@@ -65,9 +65,9 @@ public class Field {
 
 	public static enum DynamicFieldKey {
 
-		MILLIS("millis", "Milliseconds"),
-		PAGE("page", "Page"),
-		PAGES("pages", "Pages");
+		MILLIS("Millis", "Milliseconds"),
+		PAGE("Page", "Page"),
+		PAGES("Pages", "Pages");
 
 		private final String key;
 		private final String description; // TODO: Change to descriptionKey for i18n
