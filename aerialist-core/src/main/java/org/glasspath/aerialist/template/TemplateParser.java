@@ -62,6 +62,14 @@ public class TemplateParser extends ContentParser {
 	@Override
 	public void prepareDocument(Document document) {
 
+		if (document.getHeader() != null && !isPageVisisble(document.getHeader())) {
+			document.setHeader(null);
+		}
+
+		if (document.getFooter() != null && !isPageVisisble(document.getFooter())) {
+			document.setFooter(null);
+		}
+
 		List<Page> removePages = new ArrayList<>();
 
 		for (Page page : document.getPages()) {
