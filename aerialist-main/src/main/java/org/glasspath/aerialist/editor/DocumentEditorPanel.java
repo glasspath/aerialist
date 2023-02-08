@@ -50,6 +50,8 @@ import org.glasspath.aerialist.AerialistUtils;
 import org.glasspath.aerialist.Page;
 import org.glasspath.aerialist.editor.actions.ActionUtils;
 import org.glasspath.aerialist.media.MediaCache;
+import org.glasspath.aerialist.swing.view.FooterPageView;
+import org.glasspath.aerialist.swing.view.HeaderPageView;
 import org.glasspath.aerialist.swing.view.PageContainer;
 import org.glasspath.aerialist.swing.view.PageView;
 import org.glasspath.aerialist.swing.view.TableCellView;
@@ -209,7 +211,7 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 		mouseOperationHandler.processMouseEvent(e);
 
 		Component component = e.getComponent();
-		if (e.getID() == MouseEvent.MOUSE_PRESSED && SwingUtilities.isRightMouseButton(e) && e.getComponent() != null) {
+		if (e.getID() == MouseEvent.MOUSE_CLICKED && SwingUtilities.isRightMouseButton(e) && e.getComponent() != null) {
 
 			SwingUtilities.invokeLater(new Runnable() {
 
@@ -242,7 +244,7 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 			component.validate();
 			component.repaint();
 
-			if (component == pageContainer.getHeaderView() || component == pageContainer.getFooterView()) {
+			if (component == pageContainer.getHeaderPageView() || component == pageContainer.getFooterPageView()) {
 				pageContainer.repaint();
 			}
 
@@ -517,7 +519,7 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 
 		}
 
-		public void editHeaderView(PageView replacePageView) {
+		public void editHeaderPageView(PageView replacePageView) {
 
 			if (!editingHeader && !editingFooter && replacedPageView == null) {
 
@@ -532,13 +534,13 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 
 						remove(i);
 
-						PageView headerView = getHeaderView();
-						if (headerView == null) {
-							headerView = createPageView(new Page(replacePageView.getWidth(), replacePageView.getHeight()), pageContainer);
-							setHeaderView(headerView);
+						HeaderPageView headerPageView = getHeaderPageView();
+						if (headerPageView == null) {
+							headerPageView = createHeaderPageView(new Page(replacePageView.getWidth(), replacePageView.getHeight()), pageContainer);
+							setHeaderPageView(headerPageView);
 						}
 
-						add(headerView, i);
+						add(headerPageView, i);
 
 						validate();
 						repaint();
@@ -559,7 +561,7 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 
 		}
 
-		public void editFooterView(PageView replacePageView) {
+		public void editFooterPageView(PageView replacePageView) {
 
 			if (!editingHeader && !editingFooter && replacedPageView == null) {
 
@@ -574,13 +576,13 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 
 						remove(i);
 
-						PageView footerView = getFooterView();
-						if (footerView == null) {
-							footerView = createPageView(new Page(replacePageView.getWidth(), replacePageView.getHeight()), pageContainer);
-							setFooterView(footerView);
+						FooterPageView footerPageView = getFooterPageView();
+						if (footerPageView == null) {
+							footerPageView = createFooterPageView(new Page(replacePageView.getWidth(), replacePageView.getHeight()), pageContainer);
+							setFooterPageView(footerPageView);
 						}
 
-						add(footerView, i);
+						add(footerPageView, i);
 
 						validate();
 						repaint();

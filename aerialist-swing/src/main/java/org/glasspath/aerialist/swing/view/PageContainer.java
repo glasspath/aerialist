@@ -42,8 +42,8 @@ public abstract class PageContainer extends JPanel implements ISwingViewContext 
 
 	private int headerHeight = 0;
 	private int footerHeight = 0;
-	private PageView headerView = null;
-	private PageView footerView = null;
+	private HeaderPageView headerPageView = null;
+	private FooterPageView footerPageView = null;
 	private List<PageView> pageViews = new ArrayList<>();
 
 	public PageContainer() {
@@ -59,15 +59,15 @@ public abstract class PageContainer extends JPanel implements ISwingViewContext 
 		footerHeight = document.getFooterHeight();
 
 		if (document.getHeader() != null) {
-			headerView = createPageView(document.getHeader(), this);
+			headerPageView = createHeaderPageView(document.getHeader(), this);
 		} else {
-			headerView = null;
+			headerPageView = null;
 		}
 
 		if (document.getFooter() != null) {
-			footerView = createPageView(document.getFooter(), this);
+			footerPageView = createFooterPageView(document.getFooter(), this);
 		} else {
-			footerView = null;
+			footerPageView = null;
 		}
 
 		pageViews = createLayeredPageViews(document.getPages(), this);
@@ -83,12 +83,12 @@ public abstract class PageContainer extends JPanel implements ISwingViewContext 
 		document.setHeaderHeight(headerHeight);
 		document.setFooterHeight(footerHeight);
 
-		if (headerView != null) {
-			document.setHeader(headerView.toPage());
+		if (headerPageView != null) {
+			document.setHeader(headerPageView.toPage());
 		}
 
-		if (footerView != null) {
-			document.setFooter(footerView.toPage());
+		if (footerPageView != null) {
+			document.setFooter(footerPageView.toPage());
 		}
 
 		for (PageView pageView : pageViews) {
@@ -150,20 +150,20 @@ public abstract class PageContainer extends JPanel implements ISwingViewContext 
 		this.footerHeight = footerHeight;
 	}
 
-	public PageView getHeaderView() {
-		return headerView;
+	public HeaderPageView getHeaderPageView() {
+		return headerPageView;
 	}
 
-	public void setHeaderView(PageView headerView) {
-		this.headerView = headerView;
+	public void setHeaderPageView(HeaderPageView headerPageView) {
+		this.headerPageView = headerPageView;
 	}
 
-	public PageView getFooterView() {
-		return footerView;
+	public FooterPageView getFooterPageView() {
+		return footerPageView;
 	}
 
-	public void setFooterView(PageView footerView) {
-		this.footerView = footerView;
+	public void setFooterPageView(FooterPageView footerPageView) {
+		this.footerPageView = footerPageView;
 	}
 
 	public List<PageView> getPageViews() {
@@ -231,12 +231,12 @@ public abstract class PageContainer extends JPanel implements ISwingViewContext 
 
 		pageView.getLayers().clear();
 
-		if (headerView != null) {
-			pageView.getLayers().add(new HeaderPageView(headerView, this));
+		if (headerPageView != null) {
+			pageView.getLayers().add(new HeaderPageView(this, headerPageView.toPage()));
 		}
 
-		if (footerView != null) {
-			pageView.getLayers().add(new FooterPageView(footerView, this));
+		if (footerPageView != null) {
+			pageView.getLayers().add(new FooterPageView(this, footerPageView.toPage()));
 		}
 
 	}
@@ -270,12 +270,21 @@ public abstract class PageContainer extends JPanel implements ISwingViewContext 
 
 	}
 
-	public static PageView createPageView(Page page, PageContainer pageContainer) {
+	public static HeaderPageView createHeaderPageView(Page page, PageContainer pageContainer) {
 
-		PageView pageLayerView = new PageView(pageContainer);
-		pageLayerView.init(page);
+		HeaderPageView pageView = new HeaderPageView(pageContainer);
+		pageView.init(page);
 
-		return pageLayerView;
+		return pageView;
+
+	}
+
+	public static FooterPageView createFooterPageView(Page page, PageContainer pageContainer) {
+
+		FooterPageView pageView = new FooterPageView(pageContainer);
+		pageView.init(page);
+
+		return pageView;
 
 	}
 

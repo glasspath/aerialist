@@ -80,7 +80,7 @@ public class DocumentEditorView extends EditorView<DocumentEditorPanel> {
 
 				if (context.getPageContainer().isEditingHeader()) {
 
-					if (pageView == context.getPageContainer().getHeaderView()) {
+					if (pageView == context.getPageContainer().getHeaderPageView()) {
 
 						Rectangle bolowHeaderBounds = new Rectangle(bounds);
 						bolowHeaderBounds.y += context.getPageContainer().getHeaderHeight();
@@ -93,7 +93,7 @@ public class DocumentEditorView extends EditorView<DocumentEditorPanel> {
 
 				} else if (context.getPageContainer().isEditingFooter()) {
 
-					if (pageView == context.getPageContainer().getFooterView()) {
+					if (pageView == context.getPageContainer().getFooterPageView()) {
 
 						Rectangle aboveFooterBounds = new Rectangle(bounds);
 						aboveFooterBounds.height -= context.getPageContainer().getFooterHeight();

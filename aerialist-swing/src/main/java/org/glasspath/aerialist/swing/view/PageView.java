@@ -39,10 +39,9 @@ public class PageView extends ElementContainer implements IVisible {
 		super(viewContext);
 	}
 
-	public PageView(PageView pageView, ISwingViewContext viewContext) {
+	public PageView(ISwingViewContext viewContext, Page page) {
 		super(viewContext);
 
-		Page page = pageView.toPage();
 		init(page);
 
 	}

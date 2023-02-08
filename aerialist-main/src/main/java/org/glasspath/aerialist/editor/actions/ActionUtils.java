@@ -243,7 +243,7 @@ public class ActionUtils {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					context.getPageContainer().editHeaderView(pageView);
+					context.getPageContainer().editHeaderPageView(pageView);
 				}
 			});
 
@@ -254,7 +254,7 @@ public class ActionUtils {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					context.getPageContainer().editFooterView(pageView);
+					context.getPageContainer().editFooterPageView(pageView);
 				}
 			});
 

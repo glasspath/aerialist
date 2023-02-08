@@ -22,10 +22,16 @@
  */
 package org.glasspath.aerialist.swing.view;
 
+import org.glasspath.aerialist.Page;
+
 public class FooterPageView extends PageView {
 
-	public FooterPageView(PageView pageView, ISwingViewContext viewContext) {
-		super(pageView, viewContext);
+	public FooterPageView(ISwingViewContext viewContext) {
+		super(viewContext);
+	}
+
+	public FooterPageView(ISwingViewContext viewContext, Page page) {
+		super(viewContext, page);
 	}
 
 }
