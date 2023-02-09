@@ -77,10 +77,10 @@ public class DefaultSwingViewContext implements ISwingViewContext {
 	public void focusGained(FocusEvent e) {
 
 	}
-	
+
 	@Override
 	public void focusLost(FocusEvent e) {
-		
+
 	}
 
 	@Override
@@ -101,6 +101,15 @@ public class DefaultSwingViewContext implements ISwingViewContext {
 	@Override
 	public Color getDefaultForeground() {
 		return Color.black;
+	}
+
+	@Override
+	public int getContainerPaintFlags() {
+		return 0;
+	}
+
+	public int getViewPaintFlags(Component view) {
+		return 0;
 	}
 
 }

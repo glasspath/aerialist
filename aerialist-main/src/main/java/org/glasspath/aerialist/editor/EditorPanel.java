@@ -99,6 +99,10 @@ public abstract class EditorPanel<T extends EditorPanel<T>> extends JPanel imple
 
 	}
 
+	protected boolean isEditable() {
+		return editorContext == null || editorContext.isEditable();
+	}
+
 	protected void setEditable(boolean editable) {
 		if (editorContext != null) {
 			editorContext.setEditable(editable);

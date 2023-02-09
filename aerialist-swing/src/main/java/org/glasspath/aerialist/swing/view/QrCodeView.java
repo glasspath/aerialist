@@ -121,7 +121,7 @@ public class QrCodeView extends TextView implements ISwingElementView<QrCode> {
 	@Override
 	public void paint(Graphics g) {
 
-		boolean editMode = hasFocus();
+		boolean editMode = ISwingViewContext.getViewPaintFlag(viewContext, this, ISwingViewContext.VIEW_PAINT_FLAG_SELECTED_PRIMARY);
 
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);

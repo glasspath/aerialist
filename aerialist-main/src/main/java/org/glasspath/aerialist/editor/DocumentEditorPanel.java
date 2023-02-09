@@ -52,6 +52,7 @@ import org.glasspath.aerialist.editor.actions.ActionUtils;
 import org.glasspath.aerialist.media.MediaCache;
 import org.glasspath.aerialist.swing.view.FooterPageView;
 import org.glasspath.aerialist.swing.view.HeaderPageView;
+import org.glasspath.aerialist.swing.view.ISwingViewContext;
 import org.glasspath.aerialist.swing.view.PageContainer;
 import org.glasspath.aerialist.swing.view.PageView;
 import org.glasspath.aerialist.swing.view.TableCellView;
@@ -211,7 +212,7 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 		mouseOperationHandler.processMouseEvent(e);
 
 		Component component = e.getComponent();
-		if (e.getID() == MouseEvent.MOUSE_CLICKED && SwingUtilities.isRightMouseButton(e) && e.getComponent() != null) {
+		if (e.getID() == MouseEvent.MOUSE_RELEASED && SwingUtilities.isRightMouseButton(e) && e.getComponent() != null) {
 
 			SwingUtilities.invokeLater(new Runnable() {
 
@@ -371,9 +372,13 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 
 				@Override
 				public void focusGained(FocusEvent e) {
-					if (!getMouseOperationHandler().isOperationActive()) {
+
+					// TODO: Page container is focused when selecting multiple components, so we don't
+					// want to clear the selection here, for now we simply check if control key is down..
+					if (!getMouseOperationHandler().isOperationActive() && !KeyboardUtils.controlDown) {
 						selection.deselectAll();
 					}
+
 				}
 			});
 			addMouseListener(new MouseAdapter() {
@@ -503,6 +508,40 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 		@Override
 		public Color getDefaultForeground() {
 			return Color.black;
+		}
+
+		@Override
+		public int getContainerPaintFlags() {
+
+			int paintFlags = 0;
+
+			if (isEditable() && getExportPhase() == ExportPhase.IDLE) {
+
+				paintFlags |= ISwingViewContext.CONTAINER_PAINT_FLAG_EDITABLE;
+
+			}
+
+			return paintFlags;
+
+		}
+
+		@Override
+		public int getViewPaintFlags(Component view) {
+
+			int paintFlags = 0;
+
+			if (isEditable() && getExportPhase() == ExportPhase.IDLE) {
+
+				paintFlags |= ISwingViewContext.VIEW_PAINT_FLAG_DECORATE_FIELDS;
+
+				if (selection.size() == 1 && selection.get(0) == view) {
+					paintFlags |= ISwingViewContext.VIEW_PAINT_FLAG_SELECTED_PRIMARY;
+				}
+
+			}
+
+			return paintFlags;
+
 		}
 
 		@Override

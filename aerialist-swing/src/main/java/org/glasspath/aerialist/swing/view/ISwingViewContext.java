@@ -38,6 +38,12 @@ import org.glasspath.aerialist.layout.ILayoutContext;
 
 public interface ISwingViewContext extends ILayoutContext<BufferedImage>, FocusListener, CaretListener {
 
+	public static int CONTAINER_PAINT_FLAG_EDITABLE = 1;
+
+	public static int VIEW_PAINT_FLAG_SELECTED_PRIMARY = 1;
+	public static int VIEW_PAINT_FLAG_SELECTED_SECONDARY = 2;
+	public static int VIEW_PAINT_FLAG_DECORATE_FIELDS = 4;
+
 	public boolean isRightMouseSelectionAllowed();
 
 	public void undoableEditHappened(UndoableEdit edit);
@@ -46,18 +52,30 @@ public interface ISwingViewContext extends ILayoutContext<BufferedImage>, FocusL
 
 	public Color getDefaultForeground();
 
-	public static void installSelectionHandler(JComponent component, ISwingViewContext viewContext) {
+	public int getContainerPaintFlags();
 
-		component.setFocusable(true);
+	public int getViewPaintFlags(Component view);
 
-		component.addFocusListener(viewContext);
+	public static boolean getContainerPaintFlag(ISwingViewContext viewContext, int flag) {
+		return (viewContext.getContainerPaintFlags() & flag) > 0;
+	}
 
-		component.addMouseListener(new MouseAdapter() {
+	public static boolean getViewPaintFlag(ISwingViewContext viewContext, Component view, int flag) {
+		return (viewContext.getViewPaintFlags(view) & flag) > 0;
+	}
+
+	public static void installSelectionHandler(JComponent view, ISwingViewContext viewContext) {
+
+		view.setFocusable(true);
+
+		view.addFocusListener(viewContext);
+
+		view.addMouseListener(new MouseAdapter() {
 
 			@Override
 			public void mousePressed(MouseEvent e) {
 				if (SwingUtilities.isLeftMouseButton(e) || (SwingUtilities.isRightMouseButton(e) && viewContext.isRightMouseSelectionAllowed())) {
-					component.requestFocusInWindow();
+					view.requestFocusInWindow();
 				}
 			}
 		});

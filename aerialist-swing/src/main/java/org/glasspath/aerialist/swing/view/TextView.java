@@ -72,7 +72,6 @@ import javax.swing.undo.UndoableEdit;
 import org.glasspath.aerialist.Alignment;
 import org.glasspath.aerialist.IText;
 import org.glasspath.aerialist.TextStyle;
-import org.glasspath.aerialist.layout.ILayoutContext.ExportPhase;
 
 @SuppressWarnings("nls")
 public class TextView extends JTextPane {
@@ -783,7 +782,7 @@ public class TextView extends JTextPane {
 
 			if (a != null) {
 
-				if (viewContext.getExportPhase() == ExportPhase.IDLE) {
+				if (ISwingViewContext.getViewPaintFlag(viewContext, TextView.this, ISwingViewContext.VIEW_PAINT_FLAG_DECORATE_FIELDS)) {
 
 					AttributeSet attributeSet = getAttributes();
 					if (attributeSet != null) {

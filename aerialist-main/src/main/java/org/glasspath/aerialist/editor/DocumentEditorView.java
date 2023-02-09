@@ -34,6 +34,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import org.glasspath.aerialist.swing.view.FooterPageView;
+import org.glasspath.aerialist.swing.view.ISwingViewContext;
 import org.glasspath.aerialist.swing.view.LayeredPageView;
 import org.glasspath.aerialist.swing.view.PageView;
 import org.glasspath.common.swing.graphics.NinePatch;
@@ -111,8 +112,10 @@ public class DocumentEditorView extends EditorView<DocumentEditorPanel> {
 						}
 					}
 
-					g2d.setColor(new Color(255, 255, 255, 200));
-					g2d.fill(bounds);
+					if (ISwingViewContext.getContainerPaintFlag(context.pageContainer, ISwingViewContext.CONTAINER_PAINT_FLAG_EDITABLE)) {
+						g2d.setColor(new Color(255, 255, 255, 200));
+						g2d.fill(bounds);
+					}
 
 				}
 

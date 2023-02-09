@@ -35,7 +35,6 @@ import java.util.concurrent.Future;
 import org.glasspath.aerialist.Document;
 import org.glasspath.aerialist.Element;
 import org.glasspath.aerialist.Field;
-import org.glasspath.aerialist.Field.FieldType;
 import org.glasspath.aerialist.IFieldContext;
 import org.glasspath.aerialist.Page;
 import org.glasspath.aerialist.Page.PageSize;
