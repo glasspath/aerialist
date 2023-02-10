@@ -874,7 +874,7 @@ public class TextView extends JTextPane {
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			g2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
 
-			if (a != null) {
+			if (a != null && a.getBounds().width > 0) {
 
 				if (ISwingViewContext.getViewPaintFlag(viewContext, TextView.this, ISwingViewContext.VIEW_PAINT_FLAG_DECORATE_FIELDS)) {
 
