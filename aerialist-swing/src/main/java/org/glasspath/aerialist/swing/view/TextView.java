@@ -44,6 +44,7 @@ import javax.swing.KeyStroke;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 import javax.swing.text.AbstractDocument;
+import javax.swing.text.AbstractDocument.BranchElement;
 import javax.swing.text.AbstractDocument.LeafElement;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -520,7 +521,13 @@ public class TextView extends JTextPane {
 				if (text.startsWith(prefix)) {
 					document.remove(paragraph.getStartOffset(), prefix.length());
 				} else {
-					document.insertString(paragraph.getStartOffset(), prefix, paragraph.getAttributes());
+
+					SimpleAttributeSet attributes = new SimpleAttributeSet();
+					attributes.addAttributes(paragraph.getAttributes());
+					attributes.addAttribute(SOURCE_ATTRIBUTE, "");
+
+					document.insertString(paragraph.getStartOffset(), prefix, attributes);
+
 				}
 
 			}
