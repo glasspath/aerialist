@@ -367,24 +367,9 @@ public class TextView extends JTextPane {
 
 	}
 
-	/*
-	// TODO: When setting font size using the default action the caret before the first char of the first line still has the old size
-	public void setFontSize(int fontSize) {
-		MutableAttributeSet attributeSet = getAttributes();
-		StyleConstants.setFontSize(attributeSet, fontSize);
-		applyAttributeSet(attributeSet, null, false);
-	}
-	
-	public void setSpaceAbove(float spaceAbove) {
-		MutableAttributeSet attributeSet = getAttributes();
-		StyleConstants.setSpaceAbove(attributeSet, spaceAbove);
-		applyAttributeSet(attributeSet, null, true);
-	}
-	*/
-
 	public void insertField(String key, String text) {
 
-		MutableAttributeSet attributeSet = getAttributes();
+		MutableAttributeSet attributeSet = getAttributes(getSelectionStart());
 		attributeSet.addAttribute(SOURCE_ATTRIBUTE, key);
 
 		if (getSelectionEnd() == getSelectionStart()) {
@@ -395,12 +380,12 @@ public class TextView extends JTextPane {
 
 	}
 
-	private MutableAttributeSet getAttributes() {
+	private MutableAttributeSet getAttributes(int pos) {
 
 		MutableAttributeSet attributeSet = new SimpleAttributeSet();
 
 		// TODO: Check everything between start and end, and determine which elements to change
-		Element element = getStyledDocument().getCharacterElement(getSelectionStart());
+		Element element = getStyledDocument().getCharacterElement(pos);
 		if (element != null) {
 
 			AttributeSet attributes = element.getAttributes();
@@ -492,7 +477,7 @@ public class TextView extends JTextPane {
 
 	}
 
-	// TODO? This method was introduced because some styles are not applied
+	// This method was introduced because some styles are not applied
 	// correctly right away, initializing the JTextPane with the same data
 	// fixes this (font size for example painted the text at wrong height)
 	public void reload() {
@@ -635,15 +620,10 @@ public class TextView extends JTextPane {
 
 			} else {
 
-				int i = 0;
-				while (i < length) {
+				processAttributes(0, length, new AttributeProcessor() {
 
-					Element element = document.getCharacterElement(i);
-					AttributeSet style = element.getAttributes();
-
-					if (style instanceof LeafElement) {
-
-						LeafElement leafElement = (LeafElement) style;
+					@Override
+					public boolean processAttributes(JTextPane textPane, LeafElement leafElement, int start, int end) {
 
 						TextStyle textStyle = createTextStyle(leafElement);
 						textStyle.start = leafElement.getStartOffset();
@@ -656,17 +636,10 @@ public class TextView extends JTextPane {
 
 						styles.add(textStyle);
 
-						if (leafElement.getEndOffset() > i) {
-							i = leafElement.getEndOffset();
-						} else {
-							i++;
-						}
+						return false;
 
-					} else {
-						// System.out.println(i + ": " + style + ", " + style.getClass());
 					}
-
-				}
+				});
 
 			}
 
@@ -721,6 +694,127 @@ public class TextView extends JTextPane {
 		}
 
 		return textStyle;
+
+	}
+
+	// TODO
+	protected void validateFields() {
+
+		StyledDocument document = getStyledDocument();
+		int length = document.getLength();
+
+		if (length > 0) {
+
+			try {
+
+				String text = document.getText(0, length);
+
+				processAttributes(0, length, new AttributeProcessor() {
+
+					@Override
+					public boolean processAttributes(JTextPane textPane, LeafElement leafElement, int start, int end) {
+
+						String source = (String) leafElement.getAttribute(TextView.SOURCE_ATTRIBUTE);
+						if (source != null && source.length() > 0) {
+
+							if ("\n".equals(text.substring(leafElement.getStartOffset(), leafElement.getEndOffset()))) {
+								leafElement.removeAttribute(SOURCE_ATTRIBUTE);
+							}
+
+						}
+
+						return false;
+
+					}
+				});
+
+				/* TODO: Often throwing class cast exception..
+				// TODO: Why is there a leaf element beyond the text length?
+				Element element = document.getCharacterElement(length);
+				if (element != null) {
+				
+					AttributeSet style = element.getAttributes();
+					if (style instanceof LeafElement) {
+						((LeafElement) style).addAttribute(TextView.SOURCE_ATTRIBUTE, "");
+					}
+				
+				}
+				*/
+
+			} catch (Exception e) {
+				e.printStackTrace(); // TODO?
+			}
+
+		}
+
+	}
+
+	public void processAttributes(int start, int end, AttributeProcessor attributeProcessor) {
+
+		StyledDocument document = getStyledDocument();
+
+		if (end > start) {
+
+			int i = start;
+			while (i < end) {
+
+				Element element = document.getCharacterElement(i);
+				if (element != null) {
+
+					AttributeSet style = element.getAttributes();
+					if (style instanceof LeafElement) {
+
+						LeafElement leafElement = (LeafElement) style;
+
+						if (attributeProcessor.processAttributes(this, leafElement, start, end)) {
+							break;
+						}
+
+						if (leafElement.getEndOffset() > i) {
+							i = leafElement.getEndOffset();
+						} else {
+							i++;
+						}
+
+					} else {
+						i++;
+					}
+
+				} else {
+					i++;
+				}
+
+			}
+
+		}
+
+	}
+
+	public int getFieldOffset(int pos, boolean endOffset) {
+
+		StyledDocument document = getStyledDocument();
+		Element element = document.getCharacterElement(pos);
+		AttributeSet style = element.getAttributes();
+
+		String source = (String) style.getAttribute(TextView.SOURCE_ATTRIBUTE);
+		if (source != null && source.length() > 0 && style instanceof LeafElement) {
+
+			LeafElement leafElement = (LeafElement) style;
+			if (endOffset) {
+				return leafElement.getEndOffset();
+			} else {
+				return leafElement.getStartOffset();
+			}
+
+		}
+
+		return -1;
+
+	}
+
+	public static interface AttributeProcessor {
+
+		public boolean processAttributes(JTextPane textPane, LeafElement leafElement, int start, int end);
 
 	}
 

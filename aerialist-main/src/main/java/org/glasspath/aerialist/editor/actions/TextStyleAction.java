@@ -27,7 +27,6 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.JTextPane;
-import javax.swing.text.AbstractDocument.LeafElement;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.EditorKit;
 import javax.swing.text.Element;
@@ -36,9 +35,11 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyledDocument;
 import javax.swing.text.StyledEditorKit;
 import javax.swing.text.Utilities;
+import javax.swing.text.AbstractDocument.LeafElement;
 
 import org.glasspath.aerialist.editor.EditorPanel;
 import org.glasspath.aerialist.swing.view.TextView;
+import org.glasspath.aerialist.swing.view.TextView.AttributeProcessor;
 
 public abstract class TextStyleAction extends AbstractAction {
 
@@ -95,7 +96,7 @@ public abstract class TextStyleAction extends AbstractAction {
 			processAttributes(textView, new AttributeProcessor() {
 
 				@Override
-				public boolean processAttributes(JTextPane textPane, AttributeSet attributeSet, int start, int end) {
+				public boolean processAttributes(JTextPane textPane, LeafElement leafElement, int start, int end) {
 					setCharacterAttributes(textView, newAttributes, start, end, false);
 					return false;
 				}
@@ -139,47 +140,19 @@ public abstract class TextStyleAction extends AbstractAction {
 			// Extend selection to start/end of fields to make sure the style is applied
 			// to the whole field (otherwise field will be split into two fields)
 
-			int fieldStartOffset = getFieldOffset(textView, start, false);
+			int fieldStartOffset = textView.getFieldOffset(start, false);
 			if (fieldStartOffset >= 0 && fieldStartOffset < start) {
 				start = fieldStartOffset;
 			}
 
-			int fieldEndOffset = getFieldOffset(textView, end, true);
+			int fieldEndOffset = textView.getFieldOffset(end, true);
 			if (fieldEndOffset >= 0 && fieldEndOffset > end) {
 				end = fieldEndOffset;
 			}
 
 		}
 
-		if (end > start) {
-
-			int i = start;
-			while (i < end) {
-
-				Element element = document.getCharacterElement(i);
-				AttributeSet style = element.getAttributes();
-
-				if (style instanceof LeafElement) {
-
-					LeafElement leafElement = (LeafElement) style;
-
-					if (attributeProcessor.processAttributes(textView, leafElement, start, end)) {
-						break;
-					}
-
-					if (leafElement.getEndOffset() > i) {
-						i = leafElement.getEndOffset();
-					} else {
-						i++;
-					}
-
-				} else {
-					// System.out.println(i + ": " + style + ", " + style.getClass());
-				}
-
-			}
-
-		}
+		textView.processAttributes(start, end, attributeProcessor);
 
 	}
 
@@ -207,34 +180,6 @@ public abstract class TextStyleAction extends AbstractAction {
 			}
 
 		}
-
-	}
-
-	public static int getFieldOffset(TextView textView, int pos, boolean endOffset) {
-
-		StyledDocument document = textView.getStyledDocument();
-		Element element = document.getCharacterElement(pos);
-		AttributeSet style = element.getAttributes();
-
-		String source = (String) style.getAttribute(TextView.SOURCE_ATTRIBUTE);
-		if (source != null && source.length() > 0 && style instanceof LeafElement) {
-
-			LeafElement leafElement = (LeafElement) style;
-			if (endOffset) {
-				return leafElement.getEndOffset();
-			} else {
-				return leafElement.getStartOffset();
-			}
-
-		}
-
-		return -1;
-
-	}
-
-	public static interface AttributeProcessor {
-
-		public boolean processAttributes(JTextPane textPane, AttributeSet attributeSet, int start, int end);
 
 	}
 

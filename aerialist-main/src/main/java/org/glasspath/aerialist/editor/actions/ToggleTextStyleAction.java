@@ -23,12 +23,14 @@
 package org.glasspath.aerialist.editor.actions;
 
 import javax.swing.JTextPane;
+import javax.swing.text.AbstractDocument.LeafElement;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.SimpleAttributeSet;
 
 import org.glasspath.aerialist.editor.EditorPanel;
 import org.glasspath.aerialist.swing.view.TextView;
+import org.glasspath.aerialist.swing.view.TextView.AttributeProcessor;
 
 public abstract class ToggleTextStyleAction extends TextStyleAction {
 
@@ -46,8 +48,8 @@ public abstract class ToggleTextStyleAction extends TextStyleAction {
 		processAttributes(textView, new AttributeProcessor() {
 
 			@Override
-			public boolean processAttributes(JTextPane textPane, AttributeSet attributeSet, int start, int end) {
-				if (getStyle(attributeSet)) {
+			public boolean processAttributes(JTextPane textPane, LeafElement leafElement, int start, int end) {
+				if (getStyle(leafElement)) {
 					resetValue = true;
 					return true;
 				} else {
