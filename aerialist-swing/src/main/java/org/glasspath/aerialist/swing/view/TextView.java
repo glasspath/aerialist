@@ -629,7 +629,7 @@ public class TextView extends JTextPane {
 				processAttributes(0, length, new AttributeProcessor() {
 
 					@Override
-					public boolean processAttributes(JTextPane textPane, LeafElement leafElement, int start, int end) {
+					public boolean processAttributes(JTextPane textPane, LeafElement leafElement, int selectionStart, int selectionEnd) {
 
 						TextStyle textStyle = createTextStyle(leafElement);
 						textStyle.start = leafElement.getStartOffset();
@@ -718,7 +718,7 @@ public class TextView extends JTextPane {
 				processAttributes(0, length, new AttributeProcessor() {
 
 					@Override
-					public boolean processAttributes(JTextPane textPane, LeafElement leafElement, int start, int end) {
+					public boolean processAttributes(JTextPane textPane, LeafElement leafElement, int selectionStart, int selectionEnd) {
 
 						String source = (String) leafElement.getAttribute(TextView.SOURCE_ATTRIBUTE);
 						if (source != null && source.length() > 0) {
@@ -820,7 +820,7 @@ public class TextView extends JTextPane {
 
 	public static interface AttributeProcessor {
 
-		public boolean processAttributes(JTextPane textPane, LeafElement leafElement, int start, int end);
+		public boolean processAttributes(JTextPane textPane, LeafElement leafElement, int selectionStart, int selectionEnd);
 
 	}
 

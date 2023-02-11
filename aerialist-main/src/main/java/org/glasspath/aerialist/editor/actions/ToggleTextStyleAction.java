@@ -48,7 +48,7 @@ public abstract class ToggleTextStyleAction extends TextStyleAction {
 		processAttributes(textView, new AttributeProcessor() {
 
 			@Override
-			public boolean processAttributes(JTextPane textPane, LeafElement leafElement, int start, int end) {
+			public boolean processAttributes(JTextPane textPane, LeafElement leafElement, int selectionStart, int selectionEnd) {
 				if (getStyle(leafElement)) {
 					resetValue = true;
 					return true;

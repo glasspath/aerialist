@@ -96,8 +96,8 @@ public abstract class TextStyleAction extends AbstractAction {
 			processAttributes(textView, new AttributeProcessor() {
 
 				@Override
-				public boolean processAttributes(JTextPane textPane, LeafElement leafElement, int start, int end) {
-					setCharacterAttributes(textView, newAttributes, start, end, false);
+				public boolean processAttributes(JTextPane textPane, LeafElement leafElement, int selectionStart, int selectionEnd) {
+					setCharacterAttributes(textView, newAttributes, selectionStart, selectionEnd, false);
 					return false;
 				}
 			});
