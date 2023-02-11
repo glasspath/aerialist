@@ -369,77 +369,40 @@ public class TextView extends JTextPane {
 
 	public void insertField(String key, String text) {
 
-		MutableAttributeSet attributeSet = getAttributes(getSelectionStart());
+		int start = getSelectionStart();
+		int end = getSelectionEnd();
+
+		MutableAttributeSet attributeSet = getAttributes(start);
 		attributeSet.addAttribute(SOURCE_ATTRIBUTE, key);
 
-		if (getSelectionEnd() == getSelectionStart()) {
-			applyAttributeSet(attributeSet, text, false);
+		if (end == start) {
+			setAttributes(start, end, attributeSet, text);
 		} else {
-			applyAttributeSet(attributeSet, null, false);
+			setAttributes(start, end, attributeSet, null);
 		}
 
 	}
 
-	private MutableAttributeSet getAttributes(int pos) {
+	public MutableAttributeSet getAttributes(int pos) {
 
 		MutableAttributeSet attributeSet = new SimpleAttributeSet();
 
-		// TODO: Check everything between start and end, and determine which elements to change
 		Element element = getStyledDocument().getCharacterElement(pos);
 		if (element != null) {
-
-			AttributeSet attributes = element.getAttributes();
-			if (attributes instanceof LeafElement) {
-
-				// TODO: Copy all styles
-
-				if (StyleConstants.isBold(attributes)) {
-					StyleConstants.setBold(attributeSet, true);
-				}
-
-				String source = (String) attributes.getAttribute(SOURCE_ATTRIBUTE);
-				if (source != null && source.length() > 0) {
-					attributeSet.addAttribute(SOURCE_ATTRIBUTE, source);
-				}
-
-			}
-
+			attributeSet.addAttributes(element.getAttributes());
 		}
 
 		return attributeSet;
 
 	}
 
-	private void applyAttributeSet(MutableAttributeSet attributeSet, String replaceText, boolean applyToParagraph) {
+	public void setAttributes(int start, int end, MutableAttributeSet attributes, String replaceText) {
 
 		updatingComponent = true;
 
 		try {
 
-			int selectionStart = getSelectionStart();
-			int selectionEnd = getSelectionEnd();
-
-			int start = selectionStart;
-			int end = selectionEnd;
-
 			StyledDocument document = getStyledDocument();
-
-			if (applyToParagraph) {
-
-				Element paragraph = Utilities.getParagraphElement(this, start);
-				if (paragraph != null) {
-					start = paragraph.getStartOffset();
-				}
-
-				paragraph = Utilities.getParagraphElement(this, end);
-				if (paragraph != null) {
-					end = paragraph.getEndOffset();
-					if (end > document.getLength()) {
-						end = document.getLength();
-					}
-				}
-
-			}
 
 			// When inserting field end can be equal to start
 			if (end >= start) {
@@ -451,20 +414,23 @@ public class TextView extends JTextPane {
 				document.remove(start, length);
 
 				if (replaceText != null) {
-					document.insertString(start, replaceText, attributeSet);
+					document.insertString(start, replaceText, attributes);
 					length = replaceText.length();
 				} else {
-					document.insertString(start, text, attributeSet);
+					document.insertString(start, text, attributes);
 				}
 
-				if (applyToParagraph) {
-					document.setParagraphAttributes(start, length, attributeSet, false);
-				} else {
-					document.setCharacterAttributes(start, length, attributeSet, false);
-				}
+				document.setCharacterAttributes(start, length, attributes, false);
+
+				int selectionStart = getSelectionStart();
+				int selectionEnd = getSelectionEnd();
 
 				createUndoableEdit();
-				initTextAndStyles(currentTextData); // TODO? This was added because sometimes the JTextPane displays text wrong after a few operations, while applying all the same styles at init looks good
+
+				// TODO? This was added because sometimes the JTextPane displays text wrong
+				// after a few operations, while applying all the same styles at init looks good
+				initTextAndStyles(currentTextData);
+
 				select(selectionStart, selectionEnd);
 
 			}
