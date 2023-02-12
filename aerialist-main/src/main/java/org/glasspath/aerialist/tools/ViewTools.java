@@ -25,11 +25,12 @@ package org.glasspath.aerialist.tools;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 
-import org.glasspath.aerialist.AbstractMainPanel;
+import org.glasspath.aerialist.Aerialist;
 import org.glasspath.aerialist.MainPanel;
 import org.glasspath.common.swing.color.ColorUtils;
 
@@ -41,15 +42,73 @@ public class ViewTools {
 
 	private boolean updatingViewModeButtons = false;
 
-	public ViewTools(AbstractMainPanel<?> context) {
+	public ViewTools(Aerialist context) {
 
 		this.menu = new JMenu("View");
 		this.toolBar = new JToolBar("View");
-		this.viewModeToolBar = new JToolBar("View");
 
 		toolBar.setRollover(true);
 		toolBar.setBackground(ColorUtils.TITLE_BAR_COLOR);
 
+		JMenu toolBarsMenu = new JMenu("Tools");
+		menu.add(toolBarsMenu);
+
+		JCheckBoxMenuItem fileToolsMenuItem = new JCheckBoxMenuItem("File tools");
+		fileToolsMenuItem.setSelected(true);
+		fileToolsMenuItem.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				context.setFileToolsVisible(fileToolsMenuItem.isSelected());
+			}
+		});
+		toolBarsMenu.add(fileToolsMenuItem);
+
+		JCheckBoxMenuItem editToolsMenuItem = new JCheckBoxMenuItem("Edit tools");
+		editToolsMenuItem.setSelected(true);
+		editToolsMenuItem.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				context.setEditToolsVisible(editToolsMenuItem.isSelected());
+			}
+		});
+		toolBarsMenu.add(editToolsMenuItem);
+
+		JCheckBoxMenuItem textFormatToolsMenuItem = new JCheckBoxMenuItem("Text format tools");
+		textFormatToolsMenuItem.setSelected(true);
+		textFormatToolsMenuItem.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				context.setTextFormatToolsVisible(textFormatToolsMenuItem.isSelected());
+			}
+		});
+		toolBarsMenu.add(textFormatToolsMenuItem);
+
+		JCheckBoxMenuItem objectFormatToolsMenuItem = new JCheckBoxMenuItem("Object format tools"); // TODO: Use better name?
+		objectFormatToolsMenuItem.setSelected(true);
+		objectFormatToolsMenuItem.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				context.setObjectFormatToolsVisible(objectFormatToolsMenuItem.isSelected());
+			}
+		});
+		toolBarsMenu.add(objectFormatToolsMenuItem);
+
+		JCheckBoxMenuItem statusBarMenuItem = new JCheckBoxMenuItem("Status bar");
+		statusBarMenuItem.setSelected(context.isStatusBarVisible());
+		statusBarMenuItem.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				context.setStatusBarVisible(statusBarMenuItem.isSelected());
+			}
+		});
+		menu.add(statusBarMenuItem);
+
+		viewModeToolBar = new JToolBar("View");
 		viewModeToolBar.setRollover(true);
 		viewModeToolBar.setBackground(ColorUtils.TITLE_BAR_COLOR);
 
@@ -68,7 +127,7 @@ public class ViewTools {
 				if (!updatingViewModeButtons) {
 					updatingViewModeButtons = true;
 					sourceButton.setSelected(!designButton.isSelected());
-					context.setViewMode(MainPanel.VIEW_MODE_DESIGN);
+					context.getMainPanel().setViewMode(MainPanel.VIEW_MODE_DESIGN);
 					updatingViewModeButtons = false;
 				}
 
@@ -82,7 +141,7 @@ public class ViewTools {
 				if (!updatingViewModeButtons) {
 					updatingViewModeButtons = true;
 					designButton.setSelected(!sourceButton.isSelected());
-					context.setViewMode(MainPanel.VIEW_MODE_SOURCE);
+					context.getMainPanel().setViewMode(MainPanel.VIEW_MODE_SOURCE);
 					updatingViewModeButtons = false;
 				}
 

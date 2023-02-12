@@ -131,7 +131,7 @@ public class Aerialist implements FrameContext {
 		this.statusBar = new StatusBar();
 		this.fileTools = new FileTools(this);
 		this.editTools = new EditTools(undoActions);
-		this.viewTools = new ViewTools(mainPanel);
+		this.viewTools = new ViewTools(this);
 		this.searchTools = new SearchTools(this);
 		this.textFormatTools = new TextFormatTools(mainPanel.getDocumentEditor());
 		this.objectFormatTools = new ObjectFormatTools(mainPanel.getDocumentEditor());
@@ -177,9 +177,8 @@ public class Aerialist implements FrameContext {
 		FrameUtils.applyMenuBarStyle(menuBar);
 		menuBar.add(fileTools.getMenu());
 		menuBar.add(editTools.getMenu());
-		// menuBar.add(viewTools.getMenu()); // TODO
+		menuBar.add(viewTools.getMenu());
 		// menuBar.add(formatTools.getMenu()); // TODO?
-		menuBar.add(new JMenu("View"));
 		menuBar.add(searchTools.getMenu());
 		menuBar.add(new JMenu("Tools"));
 		menuBar.add(new JMenu("Help"));
@@ -364,6 +363,35 @@ public class Aerialist implements FrameContext {
 		return undoActions;
 	}
 
+	public void setFileToolsVisible(boolean visible) {
+		fileTools.getToolBar().setVisible(visible);
+		revalidateFrame();
+	}
+
+	public void setEditToolsVisible(boolean visible) {
+		editTools.getToolBar().setVisible(visible);
+		revalidateFrame();
+	}
+
+	public void setTextFormatToolsVisible(boolean visible) {
+		textFormatTools.getToolBar().setVisible(visible);
+		revalidateFrame();
+	}
+
+	public void setObjectFormatToolsVisible(boolean visible) {
+		objectFormatTools.getToolBar().setVisible(visible);
+		revalidateFrame();
+	}
+
+	public boolean isStatusBarVisible() {
+		return statusBar.isVisible();
+	}
+
+	public void setStatusBarVisible(boolean visible) {
+		statusBar.setVisible(visible);
+		revalidateFrame();
+	}
+
 	public boolean isSourceEditorEnabled() {
 		return sourceEditorEnabled;
 	}
@@ -375,6 +403,16 @@ public class Aerialist implements FrameContext {
 
 	public EditorContext<DocumentEditorPanel> getEditorContext() {
 		return mainPanel.getDocumentEditor().getEditorContext();
+	}
+
+	private void revalidateFrame() {
+
+		frame.invalidate();
+		frame.validate();
+		frame.repaint();
+
+		glassPane.updateLayout(true);
+
 	}
 
 	public void showTools(List<JToolBar> toolBars) {
