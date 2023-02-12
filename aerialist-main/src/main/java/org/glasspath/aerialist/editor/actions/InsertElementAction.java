@@ -60,7 +60,6 @@ public class InsertElementAction extends AbstractAction {
 		component.setBounds(element.getX(), element.getY(), element.getWidth(), element.getHeight());
 
 		context.getMouseOperationHandler().startOperation(new InsertElementOperation(context, component));
-		context.getMouseOperationHandler().generateMouseMovedEvent(context);
 
 		SwingUtilities.invokeLater(new Runnable() {
 

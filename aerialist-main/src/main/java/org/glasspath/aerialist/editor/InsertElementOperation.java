@@ -69,7 +69,14 @@ public class InsertElementOperation extends Operation {
 
 					@Override
 					public void run() {
+
+						// TODO: For now we clear the selection, otherwise the new
+						// component will be painted as part of a multiple selection
 						context.deselectAll();
+
+						// Generate a mouse moved event to update the bounds of the new component
+						context.getMouseOperationHandler().generateMouseMovedEvent(context.getPageContainer());
+
 					}
 				});
 
