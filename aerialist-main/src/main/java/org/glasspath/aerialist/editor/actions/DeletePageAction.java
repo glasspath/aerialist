@@ -29,6 +29,7 @@ import javax.swing.Action;
 
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
 import org.glasspath.aerialist.swing.view.PageView;
+import org.glasspath.common.icons.Icons;
 
 public class DeletePageAction extends AbstractAction {
 
@@ -40,8 +41,9 @@ public class DeletePageAction extends AbstractAction {
 		this.context = context;
 		this.pageView = pageView;
 
-		putValue(Action.NAME, "Delete page");
-		putValue(Action.SHORT_DESCRIPTION, "Delete page");
+		putValue(Action.NAME, "Delete");
+		putValue(Action.SHORT_DESCRIPTION, "Delete");
+		putValue(Action.SMALL_ICON, Icons.closeRed);
 
 	}
 

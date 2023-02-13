@@ -22,30 +22,35 @@
  */
 package org.glasspath.aerialist.editor.actions;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
+import org.glasspath.aerialist.AerialistUtils;
 import org.glasspath.aerialist.FitPolicy;
-import org.glasspath.aerialist.editor.EditorPanel;
-import org.glasspath.aerialist.swing.view.ImageView;
+import org.glasspath.aerialist.editor.DocumentEditorPanel;
+import org.glasspath.aerialist.swing.view.IScalableView;
+import org.glasspath.aerialist.swing.view.PageView;
 
 public class SetFitPolicyAction extends AbstractAction {
 
-	private final EditorPanel<? extends EditorPanel<?>> context;
-	private final ImageView imageView;
+	private final DocumentEditorPanel context;
+	private final IScalableView view;
 	private final FitPolicy fitPolicy;
+	private final PageView pageView;
 
-	public SetFitPolicyAction(EditorPanel<? extends EditorPanel<?>> context, ImageView imageView, FitPolicy fitPolicy) {
-		this(context, imageView, fitPolicy, false);
+	public SetFitPolicyAction(DocumentEditorPanel context, IScalableView view, FitPolicy fitPolicy) {
+		this(context, view, fitPolicy, false);
 	}
 
-	public SetFitPolicyAction(EditorPanel<? extends EditorPanel<?>> context, ImageView imageView, FitPolicy fitPolicy, boolean toolbarButton) {
+	public SetFitPolicyAction(DocumentEditorPanel context, IScalableView view, FitPolicy fitPolicy, boolean toolbarButton) {
 
 		this.context = context;
-		this.imageView = imageView;
+		this.view = view;
 		this.fitPolicy = fitPolicy;
+		this.pageView = AerialistUtils.getPageView((Component) view);
 
 		putValue(Action.SELECTED_KEY, false);
 
@@ -75,12 +80,17 @@ public class SetFitPolicyAction extends AbstractAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		FitPolicy oldFitPolicy = imageView.getFitPolicy();
+		FitPolicy oldFitPolicy = view.getFitPolicy();
 
-		imageView.setFitPolicy(fitPolicy);
-		imageView.repaint();
+		view.setFitPolicy(fitPolicy);
 
-		context.undoableEditHappened(new SetFitPolicyUndoable(context, imageView, oldFitPolicy, fitPolicy));
+		context.undoableEditHappened(new SetFitPolicyUndoable(context, view, pageView, fitPolicy, oldFitPolicy, context.getPageContainer().isYPolicyEnabled()));
+
+		((Component) view).invalidate();
+		((Component) view).validate();
+		((Component) view).repaint();
+
+		context.refresh(pageView);
 
 	}
 

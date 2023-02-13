@@ -24,6 +24,7 @@ package org.glasspath.aerialist.swing.view;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -45,6 +46,8 @@ public interface ISwingViewContext extends ILayoutContext<BufferedImage>, FocusL
 	public static int VIEW_PAINT_FLAG_DECORATE_FIELDS = 4;
 
 	public boolean isRightMouseSelectionAllowed();
+
+	public void viewEventHappened(ViewEvent viewEvent);
 
 	public void undoableEditHappened(UndoableEdit edit);
 
@@ -74,11 +77,37 @@ public interface ISwingViewContext extends ILayoutContext<BufferedImage>, FocusL
 
 			@Override
 			public void mousePressed(MouseEvent e) {
+
 				if (SwingUtilities.isLeftMouseButton(e) || (SwingUtilities.isRightMouseButton(e) && viewContext.isRightMouseSelectionAllowed())) {
-					view.requestFocusInWindow();
+
+					// TODO: Currently we don't remove focus from a component when it is no longer selected,
+					// clicking on a component (page for example) which still has focus leads to problems,
+					// for that reason we generate a focusGained event here to make sure it gets selected..
+					if (view.hasFocus()) {
+						viewContext.focusGained(new FocusEvent(view, FocusEvent.FOCUS_GAINED));
+					} else {
+						view.requestFocusInWindow();
+					}
+
 				}
+
 			}
 		});
+
+	}
+
+	public static class ViewEvent {
+
+		public static final int EVENT_UNKNOWN = 0;
+		public static final int EVENT_NOTHING_COPIED = 1;
+
+		public final JComponent source;
+		public final int id;
+
+		public ViewEvent(JComponent source, int id) {
+			this.source = source;
+			this.id = id;
+		}
 
 	}
 

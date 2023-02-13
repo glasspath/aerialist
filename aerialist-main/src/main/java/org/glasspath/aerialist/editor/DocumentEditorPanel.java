@@ -49,6 +49,8 @@ import org.glasspath.aerialist.Aerialist;
 import org.glasspath.aerialist.AerialistUtils;
 import org.glasspath.aerialist.Page;
 import org.glasspath.aerialist.editor.actions.ActionUtils;
+import org.glasspath.aerialist.editor.actions.CopyAction;
+import org.glasspath.aerialist.editor.actions.PasteAction;
 import org.glasspath.aerialist.media.MediaCache;
 import org.glasspath.aerialist.swing.view.FooterPageView;
 import org.glasspath.aerialist.swing.view.HeaderPageView;
@@ -67,6 +69,8 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 	protected final MouseOperationHandler<DocumentEditorPanel> mouseOperationHandler;
 	protected final EditorPageContainer pageContainer;
 	private final JScrollPane mainScrollPane;
+	private final CopyAction copyAction;
+	private final PasteAction pasteAction;
 
 	private boolean gridEnabled = true;
 	private boolean gridVisible = true;
@@ -119,6 +123,9 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 		mainScrollPane.getVerticalScrollBar().setUnitIncrement(25);
 		add(mainScrollPane, BorderLayout.CENTER);
 
+		copyAction = new CopyAction(this);
+		pasteAction = new PasteAction(this, copyAction);
+
 		selection.addSelectionListener(new SelectionListener() {
 
 			@Override
@@ -159,6 +166,18 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 
 	public EditorPageContainer getPageContainer() {
 		return pageContainer;
+	}
+
+	public JScrollPane getMainScrollPane() {
+		return mainScrollPane;
+	}
+
+	public CopyAction getCopyAction() {
+		return copyAction;
+	}
+
+	public PasteAction getPasteAction() {
+		return pasteAction;
 	}
 
 	public boolean isGridEnabled() {
@@ -493,6 +512,13 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 		@Override
 		public void caretUpdate(CaretEvent e) {
 			context.getTextFormatTools().textSelectionChanged();
+		}
+
+		@Override
+		public void viewEventHappened(ViewEvent viewEvent) {
+			if (viewEvent.id == ViewEvent.EVENT_NOTHING_COPIED) {
+				copyAction.actionPerformed(null);
+			}
 		}
 
 		@Override

@@ -41,7 +41,7 @@ import org.glasspath.aerialist.HeightPolicy;
 import org.glasspath.aerialist.Image;
 import org.glasspath.aerialist.YPolicy;
 
-public class ImageView extends JComponent implements ISwingElementView<Image> {
+public class ImageView extends JComponent implements ISwingElementView<Image>, IScalableView {
 
 	private final ISwingViewContext viewContext;
 	private YPolicy yPolicy = YPolicy.DEFAULT;
@@ -94,26 +94,32 @@ public class ImageView extends JComponent implements ISwingElementView<Image> {
 		return src;
 	}
 
+	@Override
 	public float getScale() {
 		return scale;
 	}
 
+	@Override
 	public void setScale(float scale) {
 		this.scale = scale;
 	}
 
+	@Override
 	public Alignment getAlignment() {
 		return alignment;
 	}
 
+	@Override
 	public void setAlignment(Alignment alignment) {
 		this.alignment = alignment;
 	}
 
+	@Override
 	public FitPolicy getFitPolicy() {
 		return fitPolicy;
 	}
 
+	@Override
 	public void setFitPolicy(FitPolicy fitPolicy) {
 		this.fitPolicy = fitPolicy;
 	}
@@ -203,35 +209,9 @@ public class ImageView extends JComponent implements ISwingElementView<Image> {
 			g2d.fillRect(0, 0, getWidth(), getHeight());
 		}
 
-		if (image != null && image.getWidth() > 0 && image.getHeight() > 0) {
+		PaintUtils.paintImage(g2d, getWidth(), getHeight(), image, scale, alignment, fitPolicy);
 
-			double scale = this.scale;
-			if (fitPolicy == FitPolicy.WIDTH) {
-				scale = (double) getWidth() / (double) image.getWidth();
-			} else if (fitPolicy == FitPolicy.HEIGHT) {
-				scale = (double) getHeight() / (double) image.getHeight();
-			}
-
-			if (scale > 0.0) {
-
-				int x = 0;
-				int width = (int) (getWidth() / scale);
-
-				if (alignment == Alignment.CENTER) {
-					x = (width / 2) - (image.getWidth() / 2);
-				} else if (alignment == Alignment.RIGHT) {
-					x = width - image.getWidth();
-				}
-
-				g2d.scale(scale, scale);
-				g2d.drawImage(image, x, 0, null);
-				g2d.scale(1.0 / scale, 1.0 / scale);
-
-			}
-
-		}
-
-		BorderUtils.paintBorders(g2d, borders, new Rectangle(0, 0, getWidth(), getHeight()));
+		PaintUtils.paintBorders(g2d, borders, new Rectangle(0, 0, getWidth(), getHeight()));
 
 	}
 

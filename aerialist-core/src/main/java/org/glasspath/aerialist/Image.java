@@ -28,7 +28,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 @JsonInclude(Include.NON_DEFAULT)
 @SuppressWarnings("nls")
-public class Image extends Element {
+public class Image extends Element implements IScalable {
 
 	@JacksonXmlProperty(isAttribute = true)
 	private String src = "";
@@ -54,26 +54,32 @@ public class Image extends Element {
 		this.src = src;
 	}
 
+	@Override
 	public float getScale() {
 		return scale;
 	}
 
+	@Override
 	public void setScale(float scale) {
 		this.scale = scale;
 	}
 
+	@Override
 	public String getAlignment() {
 		return alignment;
 	}
 
+	@Override
 	public void setAlignment(String alignment) {
 		this.alignment = alignment;
 	}
 
+	@Override
 	public String getFit() {
 		return fit;
 	}
 
+	@Override
 	public void setFit(String fit) {
 		this.fit = fit;
 	}

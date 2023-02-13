@@ -22,6 +22,7 @@
  */
 package org.glasspath.aerialist.editor.actions;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
@@ -30,18 +31,18 @@ import javax.swing.Action;
 import org.glasspath.aerialist.Alignment;
 import org.glasspath.aerialist.editor.EditorPanel;
 import org.glasspath.aerialist.icons.Icons;
-import org.glasspath.aerialist.swing.view.ImageView;
+import org.glasspath.aerialist.swing.view.IScalableView;
 
 public class SetImageAlignmentAction extends AbstractAction {
 
 	private final EditorPanel<? extends EditorPanel<?>> context;
-	private final ImageView imageView;
+	private final IScalableView view;
 	private final Alignment alignment;
 
-	public SetImageAlignmentAction(EditorPanel<? extends EditorPanel<?>> context, ImageView imageView, Alignment alignment) {
+	public SetImageAlignmentAction(EditorPanel<? extends EditorPanel<?>> context, IScalableView view, Alignment alignment) {
 
 		this.context = context;
-		this.imageView = imageView;
+		this.view = view;
 		this.alignment = alignment;
 
 		putValue(Action.SELECTED_KEY, false);
@@ -65,12 +66,12 @@ public class SetImageAlignmentAction extends AbstractAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		Alignment oldAlignment = imageView.getAlignment();
+		Alignment oldAlignment = view.getAlignment();
 
-		imageView.setAlignment(alignment);
-		imageView.repaint();
+		view.setAlignment(alignment);
+		((Component) view).repaint();
 
-		context.undoableEditHappened(new SetImageAlignmentUndoable(context, imageView, oldAlignment, alignment));
+		context.undoableEditHappened(new SetImageAlignmentUndoable(view, oldAlignment, alignment));
 
 	}
 

@@ -32,13 +32,19 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 @JsonInclude(Include.NON_DEFAULT)
 @SuppressWarnings("nls")
-public class QrCode extends Element implements IText {
+public class QrCode extends Element implements IText, IScalable {
 
 	@JacksonXmlProperty(isAttribute = false)
 	private String text = "";
 
 	@JacksonXmlProperty(isAttribute = true)
+	private float scale = 1.0F;
+
+	@JacksonXmlProperty(isAttribute = true)
 	private String alignment = Alignment.DEFAULT.stringValue;
+
+	@JacksonXmlProperty(isAttribute = true)
+	private String fit = FitPolicy.DEFAULT.stringValue;
 
 	@JacksonXmlElementWrapper(localName = "styles")
 	@JacksonXmlProperty(localName = "style")
@@ -59,6 +65,16 @@ public class QrCode extends Element implements IText {
 	}
 
 	@Override
+	public float getScale() {
+		return scale;
+	}
+
+	@Override
+	public void setScale(float scale) {
+		this.scale = scale;
+	}
+
+	@Override
 	public String getAlignment() {
 		return alignment;
 	}
@@ -66,6 +82,16 @@ public class QrCode extends Element implements IText {
 	@Override
 	public void setAlignment(String alignment) {
 		this.alignment = alignment;
+	}
+
+	@Override
+	public String getFit() {
+		return fit;
+	}
+
+	@Override
+	public void setFit(String fit) {
+		this.fit = fit;
 	}
 
 	@Override

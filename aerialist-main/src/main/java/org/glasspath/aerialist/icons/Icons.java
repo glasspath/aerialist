@@ -95,8 +95,8 @@ public class Icons {
 	public static final SvgIcon redo = new SvgIcon(getSvg("redo.svg"));
 	public static final SvgIcon send = new SvgIcon(getSvg("send.svg"));
 	public static final SvgIcon sendLarge = new SvgIcon(22, 0, getSvg("send.svg"));
-	public static final SvgIcon tableLarge = new SvgIcon(getSvg("table-large.svg"));
-	public static final SvgIcon tableLargePlus = new SvgIcon(getSvg("table-large-plus.svg"));
+	public static final SvgIcon table = new SvgIcon(getSvg("table.svg"));
+	public static final SvgIcon tablePlus = new SvgIcon(getSvg("table-plus.svg"));
 	public static final SvgIcon textBoxPlus = new SvgIcon(getSvg("text-box-plus.svg"));
 	public static final SvgIcon undo = new SvgIcon(getSvg("undo.svg"));
 	public static final SvgIcon viewAgendaOutline = new SvgIcon(16, 1, getSvg("view-agenda-outline.svg"));
@@ -120,7 +120,7 @@ public class Icons {
 		magnet.setColorFilter(SvgIcon.RED);
 		qrcodePlus.setColorFilter(SvgIcon.BLUE);
 		redo.setColorFilter(SvgIcon.BLUE);
-		tableLargePlus.setColorFilter(SvgIcon.BLUE);
+		tablePlus.setColorFilter(SvgIcon.BLUE);
 		textBoxPlus.setColorFilter(SvgIcon.BLUE);
 		undo.setColorFilter(SvgIcon.BLUE);
 		viewAgendaOutline.setColorFilter(SvgIcon.BLUE);

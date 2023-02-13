@@ -62,7 +62,7 @@ public class PaginationDemo {
 				JMenu databaseMenu = new JMenu("Pagination demo");
 				menu.add(databaseMenu);
 
-				databaseMenu.add(new InsertElementAction(context, DemoUtils.createTable("Table", new String[] { "Column 1", "Column 2" }), "Demo table", Icons.tableLargePlus));
+				databaseMenu.add(new InsertElementAction(context, DemoUtils.createTable("Table", new String[] { "Column 1", "Column 2" }), "Demo table", Icons.tablePlus));
 
 			}
 		};

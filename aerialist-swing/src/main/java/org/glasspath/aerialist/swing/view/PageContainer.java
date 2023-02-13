@@ -259,7 +259,7 @@ public abstract class PageContainer extends JPanel implements ISwingViewContext 
 
 	}
 
-	public static PageView createLayeredPageView(Page page, PageContainer pageContainer) {
+	public static LayeredPageView createLayeredPageView(Page page, PageContainer pageContainer) {
 
 		LayeredPageView pageView = new LayeredPageView(pageContainer);
 		pageView.init(page);

@@ -22,51 +22,18 @@
  */
 package org.glasspath.aerialist;
 
-@SuppressWarnings("nls")
-public enum Alignment {
+public interface IScalable {
 
-	// Default and left both have value 0 because left is also default (and we want to use same values as StyleConstants)
-	DEFAULT("", 0),
-	LEFT("left", 0),
-	CENTER("center", 1),
-	RIGHT("right", 2);
+	public float getScale();
 
-	public final String stringValue;
-	public final int intValue;
+	public void setScale(float scale);
 
-	Alignment(String stringValue, int intValue) {
-		this.stringValue = stringValue;
-		this.intValue = intValue;
-	}
+	public String getAlignment();
 
-	public static Alignment get(String value) {
+	public void setAlignment(String alignment);
 
-		if (value != null) {
-			value = value.trim().toLowerCase();
-		} else {
-			return DEFAULT;
-		}
+	public String getFit();
 
-		for (Alignment alignment : values()) {
-			if (alignment.stringValue.equals(value)) {
-				return alignment;
-			}
-		}
-
-		return DEFAULT;
-
-	}
-
-	public static Alignment get(int value) {
-
-		for (Alignment alignment : values()) {
-			if (alignment.intValue == value) {
-				return alignment;
-			}
-		}
-
-		return DEFAULT;
-
-	}
+	public void setFit(String fit);
 
 }

@@ -57,10 +57,12 @@ import org.glasspath.aerialist.editor.ElementData;
 import org.glasspath.aerialist.icons.Icons;
 import org.glasspath.aerialist.swing.view.FieldUtils;
 import org.glasspath.aerialist.swing.view.GroupView;
+import org.glasspath.aerialist.swing.view.IScalableView;
 import org.glasspath.aerialist.swing.view.ISwingElementView;
 import org.glasspath.aerialist.swing.view.ImageView;
 import org.glasspath.aerialist.swing.view.PageContainer;
 import org.glasspath.aerialist.swing.view.PageView;
+import org.glasspath.aerialist.swing.view.QrCodeView;
 import org.glasspath.aerialist.swing.view.TableCellView;
 import org.glasspath.aerialist.swing.view.TableView;
 import org.glasspath.aerialist.swing.view.TextView;
@@ -83,6 +85,11 @@ public class ActionUtils {
 
 		// TODO: Support deleting of selection across pages
 
+		DocumentEditorPanel documentEditor = null;
+		if (context instanceof DocumentEditorPanel) {
+			documentEditor = (DocumentEditorPanel) context;
+		}
+
 		PageView pageView = null;
 		List<Component> elementViews = new ArrayList<>();
 
@@ -100,8 +107,13 @@ public class ActionUtils {
 
 		if (elementViews.size() > 0) {
 
+			if (documentEditor != null) {
+				menu.add(documentEditor.getCopyAction());
+				menu.add(documentEditor.getPasteAction());
+			}
+
 			if (pageView != null) {
-				menu.add(new DeleteElementsAction(context, (PageView) pageView, elementViews));
+				menu.add(new DeleteElementsAction(context, pageView, elementViews));
 			}
 
 			menu.addSeparator();
@@ -109,12 +121,12 @@ public class ActionUtils {
 			menu.add(createArrangeMenu(context));
 			menu.add(createAlignMenu(context));
 
-			if (context instanceof DocumentEditorPanel && TODO_CREATE_GROUP_MENU_ITEMS) {
+			if (documentEditor != null && TODO_CREATE_GROUP_MENU_ITEMS) {
 
 				menu.addSeparator();
 
-				menu.add(new GroupElementsAction((DocumentEditorPanel) context, pageView, elementViews));
-				menu.add(new UngroupElementsAction((DocumentEditorPanel) context, pageView, elementViews));
+				menu.add(new GroupElementsAction(documentEditor, pageView, elementViews));
+				menu.add(new UngroupElementsAction(documentEditor, pageView, elementViews));
 
 			}
 
@@ -125,85 +137,32 @@ public class ActionUtils {
 	public static void populateMenu(JMenu menu, DocumentEditorPanel context, Component component) {
 
 		if (component instanceof PageContainer) {
-
 			populatePageContainerMenu(context, menu);
-
 		} else if (component instanceof PageView) {
-
 			populatePageViewMenu(context, (PageView) component, menu);
-
 		} else {
-
-			Component element = AerialistUtils.getElementViewAsComponent(component);
-			if (element instanceof ISwingElementView<?> && element.getParent() instanceof PageView) {
-
-				ISwingElementView<?> elementView = (ISwingElementView<?>) element;
-				PageView pageView = (PageView) element.getParent();
-
-				if (component instanceof TableCellView) {
-					populateTableCellViewMenu(context, (TableCellView) component, menu);
-					menu.addSeparator();
-				} else if (component instanceof TextView) {
-					populateTextViewMenu(context, (TextView) component, menu);
-					menu.addSeparator();
-				} else if (component instanceof ImageView) {
-					populateImageViewMenu(context, (ImageView) component, menu);
-					menu.addSeparator();
-				}
-
-				menu.add(createLayoutMenu(context, elementView, pageView));
-				menu.add(createArrangeMenu(context));
-
-				menu.addSeparator();
-
-				menu.add(createBackgroundColorMenu(context.getFrame(), elementView.getBackgroundColor(), new SetBackgroundColorAction(context)));
-				if (elementView instanceof TableView) {
-					menu.add(createRowColorsMenu(context));
-				}
-				menu.add(new BorderMenu(new SetBorderTypeAction(context), new SetBorderWidthAction(context), new SetBorderColorAction(context)) {
-
-					@Override
-					protected Frame getFrame() {
-						return context.getFrame();
-					}
-				});
-				if (SetPaddingAction.isPaddingSupported(elementView)) {
-					menu.add(createPaddingMenu(context, elementView));
-				}
-
-				GroupView groupView = AerialistUtils.getGroupView(component);
-				if (groupView != null && TODO_CREATE_GROUP_MENU_ITEMS) {
-
-					List<Component> elementViews = new ArrayList<>();
-					for (int i = 0; i < groupView.getComponentCount(); i++) {
-						elementViews.add(groupView.getComponent(i));
-					}
-
-					menu.addSeparator();
-					menu.add(new UngroupElementsAction((DocumentEditorPanel) context, pageView, elementViews));
-
-				}
-
-				menu.addSeparator();
-
-				// TODO
-				// JMenuItem deleteMenuItem = new JMenuItem(Resources.getString("Delete") + " " + elementView.getElementDesctiption()); //$NON-NLS-1$ //$NON-NLS-2$
-				// menu.add(deleteMenuItem);
-				menu.add(new DeleteElementsAction(context, (PageView) element.getParent(), element));
-
-			}
-
+			populateElementViewMenu(context, component, menu);
 		}
 
 	}
 
 	private static void populatePageContainerMenu(DocumentEditorPanel context, JMenu menu) {
 
+		menu.add(context.getPasteAction());
+
+		menu.addSeparator();
+
 		menu.add(new InsertPageAction(context, AerialistUtils.createDefaultPage(), InsertPageAction.INSERT));
 
 	}
 
 	private static void populatePageViewMenu(DocumentEditorPanel context, PageView pageView, JMenu menu) {
+
+		menu.add(context.getCopyAction());
+		menu.add(context.getPasteAction());
+		menu.add(new DeletePageAction(context, pageView));
+
+		menu.addSeparator();
 
 		menu.add(createInsertElementMenu(context));
 		menu.add(createPageSizeMenu(context, (PageView) pageView));
@@ -269,6 +228,7 @@ public class ActionUtils {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				FieldUtils.updateDynamicFields(context.getPageContainer());
+				context.getPageContainer().refresh(null);
 			}
 		});
 
@@ -278,9 +238,70 @@ public class ActionUtils {
 			menu.add(visibilityMenu);
 		}
 
-		menu.addSeparator();
+	}
 
-		menu.add(new DeletePageAction(context, pageView));
+	private static void populateElementViewMenu(DocumentEditorPanel context, Component component, JMenu menu) {
+
+		Component element = AerialistUtils.getElementViewAsComponent(component);
+		if (element instanceof ISwingElementView<?> && element.getParent() instanceof PageView) {
+
+			ISwingElementView<?> elementView = (ISwingElementView<?>) element;
+			PageView pageView = (PageView) element.getParent();
+
+			menu.add(context.getCopyAction());
+			menu.add(context.getPasteAction());
+			menu.add(new DeleteElementsAction(context, (PageView) element.getParent(), element));
+
+			menu.addSeparator();
+
+			if (component instanceof TableCellView) {
+				populateTableCellViewMenu(context, (TableCellView) component, menu);
+				menu.addSeparator();
+			} else if (component instanceof QrCodeView) {
+				populateQrCodeViewMenu(context, (QrCodeView) component, menu);
+				menu.addSeparator();
+			} else if (component instanceof TextView) {
+				populateTextViewMenu(context, (TextView) component, menu);
+				menu.addSeparator();
+			} else if (component instanceof ImageView) {
+				populateImageViewMenu(context, (ImageView) component, menu);
+				menu.addSeparator();
+			}
+
+			menu.add(createLayoutMenu(context, elementView, pageView));
+			menu.add(createArrangeMenu(context));
+
+			menu.addSeparator();
+
+			menu.add(createBackgroundColorMenu(context.getFrame(), elementView.getBackgroundColor(), new SetBackgroundColorAction(context)));
+			if (elementView instanceof TableView) {
+				menu.add(createRowColorsMenu(context));
+			}
+			menu.add(new BorderMenu(new SetBorderTypeAction(context), new SetBorderWidthAction(context), new SetBorderColorAction(context)) {
+
+				@Override
+				protected Frame getFrame() {
+					return context.getFrame();
+				}
+			});
+			if (SetPaddingAction.isPaddingSupported(elementView)) {
+				menu.add(createPaddingMenu(context, elementView));
+			}
+
+			GroupView groupView = AerialistUtils.getGroupView(component);
+			if (groupView != null && TODO_CREATE_GROUP_MENU_ITEMS) {
+
+				List<Component> elementViews = new ArrayList<>();
+				for (int i = 0; i < groupView.getComponentCount(); i++) {
+					elementViews.add(groupView.getComponent(i));
+				}
+
+				menu.addSeparator();
+				menu.add(new UngroupElementsAction((DocumentEditorPanel) context, pageView, elementViews));
+
+			}
+
+		}
 
 	}
 
@@ -317,7 +338,7 @@ public class ActionUtils {
 		menu.addSeparator();
 
 		menu.add(new InsertElementAction(context, AerialistUtils.createDefaultTextBox(), "Insert text box", Icons.textBoxPlus));
-		menu.add(new InsertElementAction(context, AerialistUtils.createDefaultTable(), "Insert table", Icons.tableLargePlus));
+		menu.add(new InsertElementAction(context, AerialistUtils.createDefaultTable(), "Insert table", Icons.tablePlus));
 		menu.add(new InsertElementAction(context, AerialistUtils.createDefaultImage(), "Insert image", Icons.imagePlus));
 		menu.add(new InsertElementAction(context, AerialistUtils.createDefaultQrCode(), "Insert QR code", Icons.qrcodePlus));
 
@@ -488,11 +509,27 @@ public class ActionUtils {
 
 	}
 
-	public static void populateImageViewMenu(EditorPanel<? extends EditorPanel<?>> context, ImageView imageView, JMenu menu) {
+	public static void populateImageViewMenu(DocumentEditorPanel context, ImageView imageView, JMenu menu) {
 
 		menu.add(new SetImageAction(context, imageView));
 
 		menu.addSeparator();
+
+		populateIScalableViewMenu(context, imageView, menu);
+
+	}
+
+	public static void populateQrCodeViewMenu(DocumentEditorPanel context, QrCodeView qrCodeView, JMenu menu) {
+
+		menu.add(createInsertFieldMenu(context));
+
+		menu.addSeparator();
+
+		populateIScalableViewMenu(context, qrCodeView, menu);
+
+	}
+
+	public static void populateIScalableViewMenu(DocumentEditorPanel context, IScalableView imageView, JMenu menu) {
 
 		JMenu alignmentMenu = new JMenu("Image alignment");
 		menu.add(alignmentMenu);
@@ -533,6 +570,7 @@ public class ActionUtils {
 		menu.addSeparator();
 
 		JMenu insertMenu = new JMenu("Insert");
+		insertMenu.setIcon(Icons.table);
 		menu.add(insertMenu);
 
 		insertMenu.add(new InsertTableRowAction(context, tableCellView, true));

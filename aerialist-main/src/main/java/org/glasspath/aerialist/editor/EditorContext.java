@@ -136,7 +136,7 @@ public abstract class EditorContext<T extends EditorPanel<T>> {
 		JMenu menu = new JMenu(metadataList.getName());
 
 		if (metadataList instanceof TableMetadata) {
-			menu.setIcon(Icons.tableLarge);
+			menu.setIcon(Icons.table);
 		}
 
 		JMenuItem menuItem;

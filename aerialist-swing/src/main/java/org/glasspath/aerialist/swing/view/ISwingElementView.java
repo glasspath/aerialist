@@ -23,6 +23,7 @@
 package org.glasspath.aerialist.swing.view;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.util.List;
 
 import javax.swing.JComponent;
@@ -106,6 +107,16 @@ public interface ISwingElementView<T extends Element> {
 			GroupView view = new GroupView(viewContext);
 			view.init((Group) element);
 			return view;
+		} else {
+			return null;
+		}
+
+	}
+
+	public static Element createElement(Component component) {
+
+		if (component instanceof ISwingElementView<?>) {
+			return ((ISwingElementView<?>) component).toElement();
 		} else {
 			return null;
 		}

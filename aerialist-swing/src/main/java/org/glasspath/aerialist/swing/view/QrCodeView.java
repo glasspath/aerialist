@@ -22,7 +22,10 @@
  */
 package org.glasspath.aerialist.swing.view;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
+import java.awt.Composite;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -33,26 +36,53 @@ import java.util.List;
 import java.util.Objects;
 
 import javax.swing.BorderFactory;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
+import org.glasspath.aerialist.Alignment;
 import org.glasspath.aerialist.Border;
+import org.glasspath.aerialist.FitPolicy;
 import org.glasspath.aerialist.HeightPolicy;
 import org.glasspath.aerialist.QrCode;
 import org.glasspath.aerialist.YPolicy;
 
 import io.nayuki.qrcodegen.QrSegment;
 
-public class QrCodeView extends TextView implements ISwingElementView<QrCode> {
+public class QrCodeView extends TextView implements ISwingElementView<QrCode>, IScalableView {
 
 	private YPolicy yPolicy = YPolicy.DEFAULT;
 	private HeightPolicy heightPolicy = HeightPolicy.DEFAULT;
 	private Color backgroundColor = null;
 	private final List<Border> borders = new ArrayList<>();
+	private float scale = 1.0F;
+	private FitPolicy fitPolicy = FitPolicy.DEFAULT;
+
+	private BufferedImage image = null;
+	private boolean imageValid = false;
 
 	public QrCodeView(ISwingViewContext viewContext) {
 		super(viewContext);
 
 		// TODO: Implement padding for QrCode?
 		setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+
+		getDocument().addDocumentListener(new DocumentListener() {
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				imageValid = false;
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				imageValid = false;
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				imageValid = false;
+			}
+		});
 
 	}
 
@@ -69,6 +99,9 @@ public class QrCodeView extends TextView implements ISwingElementView<QrCode> {
 		for (Border border : element.getBorders()) {
 			borders.add(new Border(border));
 		}
+
+		scale = element.getScale();
+		fitPolicy = FitPolicy.get(element.getFit());
 
 	}
 
@@ -100,6 +133,7 @@ public class QrCodeView extends TextView implements ISwingElementView<QrCode> {
 	@Override
 	public void setBackgroundColor(Color backgroundColor) {
 		this.backgroundColor = backgroundColor;
+		imageValid = false;
 	}
 
 	@Override
@@ -108,11 +142,92 @@ public class QrCodeView extends TextView implements ISwingElementView<QrCode> {
 	}
 
 	@Override
+	public float getScale() {
+		return scale;
+	}
+
+	@Override
+	public void setScale(float scale) {
+		this.scale = scale;
+	}
+
+	@Override
+	public Alignment getAlignment() {
+		return Alignment.get(getTextAlignment());
+	}
+
+	@Override
+	public void setAlignment(Alignment alignment) {
+		setTextAlignment(alignment.intValue);
+	}
+
+	@Override
+	public FitPolicy getFitPolicy() {
+		return fitPolicy;
+	}
+
+	@Override
+	public void setFitPolicy(FitPolicy fitPolicy) {
+		this.fitPolicy = fitPolicy;
+	}
+
+	protected void updateImage() {
+
+		if (!imageValid) {
+
+			try {
+
+				List<QrSegment> segments = QrSegment.makeSegments(getText());
+
+				// TODO: Which parameters to use?
+				io.nayuki.qrcodegen.QrCode qrCode = io.nayuki.qrcodegen.QrCode.encodeSegments(segments, io.nayuki.qrcodegen.QrCode.Ecc.HIGH, 1, 40, -1, false);
+
+				image = toImage(qrCode, 4, 1, backgroundColor != null ? backgroundColor.getRGB() : Color.white.getRGB(), Color.black.getRGB());
+
+			} catch (Exception e) {
+				e.printStackTrace(); // TODO?
+			}
+
+			imageValid = true;
+
+		}
+
+	}
+
+	@Override
+	public Dimension getPreferredSize() {
+
+		Dimension size = super.getPreferredSize();
+
+		updateImage();
+
+		if (image != null) {
+
+			if (heightPolicy == HeightPolicy.AUTO) {
+
+				if (fitPolicy == FitPolicy.WIDTH) {
+					size.height = (int) (image.getHeight() * ((double) getWidth() / (double) image.getWidth()));
+				} else {
+					size.height = image.getHeight();
+				}
+
+			}
+
+		}
+
+		return size;
+
+	}
+
+	@Override
 	public QrCode toElement() {
 
 		QrCode qrCode = new QrCode();
 		ISwingElementView.copyProperties(this, qrCode);
 		toText(qrCode);
+
+		qrCode.setScale(scale);
+		qrCode.setFit(fitPolicy.stringValue);
 
 		return qrCode;
 
@@ -132,44 +247,26 @@ public class QrCodeView extends TextView implements ISwingElementView<QrCode> {
 			g2d.fillRect(0, 0, getWidth(), getHeight());
 		}
 
-		try {
+		updateImage();
 
-			List<QrSegment> segments = QrSegment.makeSegments(getText());
+		if (image != null) {
 
-			// TODO: Which parameters to use?
-			io.nayuki.qrcodegen.QrCode qrCode = io.nayuki.qrcodegen.QrCode.encodeSegments(segments, io.nayuki.qrcodegen.QrCode.Ecc.HIGH, 1, 40, -1, false);
-
-			// TODO: Don't generate image every repaint
-			BufferedImage image = toImage(qrCode, 4, 1, backgroundColor != null ? backgroundColor.getRGB() : Color.white.getRGB(), editMode ? new Color(225, 225, 225).getRGB() : Color.black.getRGB());
-			if (image != null) {
-
-				int w = getWidth();
-				int h = getHeight();
-
-				int x = 0;
-				if (image.getWidth() < w) {
-					x = (w - image.getWidth()) / 2;
-				}
-
-				int y = 0;
-				if (image.getHeight() < h) {
-					y = (h - image.getHeight()) / 2;
-				}
-
-				// TODO: Scale down image if it doesn't fit in the panel
-				g2d.drawImage(image, x, y, null);
-
+			Composite oldComposite = g2d.getComposite();
+			if (editMode) {
+				g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.05F));
 			}
 
-		} catch (Exception e) {
-			e.printStackTrace();
+			PaintUtils.paintImage(g2d, getWidth(), getHeight(), image, scale, getAlignment(), fitPolicy);
+
+			g2d.setComposite(oldComposite);
+
 		}
 
 		if (editMode) {
 			super.paint(g);
 		}
 
-		BorderUtils.paintBorders(g2d, borders, new Rectangle(0, 0, getWidth(), getHeight()));
+		PaintUtils.paintBorders(g2d, borders, new Rectangle(0, 0, getWidth(), getHeight()));
 
 	}
 

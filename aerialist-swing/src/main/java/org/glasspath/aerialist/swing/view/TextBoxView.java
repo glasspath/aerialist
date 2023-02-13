@@ -254,7 +254,7 @@ public class TextBoxView extends TextView implements ISwingElementView<TextBox> 
 			g2d.fillRect(0, 0, getWidth(), getHeight());
 		}
 
-		BorderUtils.paintBorders(g2d, borders, new Rectangle(0, 0, getWidth(), getHeight()));
+		PaintUtils.paintBorders(g2d, borders, new Rectangle(0, 0, getWidth(), getHeight()));
 
 		super.paint(g);
 

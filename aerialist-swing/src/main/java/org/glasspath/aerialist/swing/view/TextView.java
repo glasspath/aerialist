@@ -71,6 +71,7 @@ import javax.swing.undo.UndoableEdit;
 import org.glasspath.aerialist.Alignment;
 import org.glasspath.aerialist.IText;
 import org.glasspath.aerialist.TextStyle;
+import org.glasspath.aerialist.swing.view.ISwingViewContext.ViewEvent;
 
 @SuppressWarnings("nls")
 public class TextView extends JTextPane {
@@ -203,6 +204,18 @@ public class TextView extends JTextPane {
 		}
 
 		return fontMetrics;
+
+	}
+
+	@Override
+	public void copy() {
+		super.copy();
+
+		// TODO? Here we dispatch a event when nothing was copied, this way the editor can invoke
+		// it's own copy action (CTRL-C is registered by both, TextView consumes it when focused)
+		if (getSelectionEnd() <= getSelectionStart()) {
+			viewContext.viewEventHappened(new ViewEvent(this, ViewEvent.EVENT_NOTHING_COPIED));
+		}
 
 	}
 
@@ -554,7 +567,7 @@ public class TextView extends JTextPane {
 			int length = document.getLength();
 
 			iText.setText(document.getText(0, length));
-			iText.setAlignment(Alignment.get(getTextAlignment()));
+			iText.setAlignment(Alignment.get(getTextAlignment()).stringValue);
 
 			iText.setStyles(createStyles());
 

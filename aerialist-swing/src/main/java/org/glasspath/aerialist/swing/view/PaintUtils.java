@@ -27,14 +27,48 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.util.List;
 
+import org.glasspath.aerialist.Alignment;
 import org.glasspath.aerialist.Border;
 import org.glasspath.aerialist.BorderType;
+import org.glasspath.aerialist.FitPolicy;
 
-public class BorderUtils {
+public class PaintUtils {
 
-	private BorderUtils() {
+	private PaintUtils() {
+
+	}
+
+	public static void paintImage(Graphics2D g2d, int width, int height, BufferedImage image, double scale, Alignment alignment, FitPolicy fitPolicy) {
+
+		if (image != null && image.getWidth() > 0 && image.getHeight() > 0) {
+
+			if (fitPolicy == FitPolicy.WIDTH) {
+				scale = (double) width / (double) image.getWidth();
+			} else if (fitPolicy == FitPolicy.HEIGHT) {
+				scale = (double) height / (double) image.getHeight();
+			}
+
+			if (scale > 0.0) {
+
+				int x = 0;
+				int w = (int) (width / scale);
+
+				if (alignment == Alignment.CENTER) {
+					x = (w / 2) - (image.getWidth() / 2);
+				} else if (alignment == Alignment.RIGHT) {
+					x = w - image.getWidth();
+				}
+
+				g2d.scale(scale, scale);
+				g2d.drawImage(image, x, 0, null);
+				g2d.scale(1.0 / scale, 1.0 / scale);
+
+			}
+
+		}
 
 	}
 

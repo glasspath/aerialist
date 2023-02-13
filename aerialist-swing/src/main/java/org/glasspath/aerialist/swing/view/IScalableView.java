@@ -20,53 +20,23 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.glasspath.aerialist;
+package org.glasspath.aerialist.swing.view;
 
-@SuppressWarnings("nls")
-public enum Alignment {
+import org.glasspath.aerialist.Alignment;
+import org.glasspath.aerialist.FitPolicy;
 
-	// Default and left both have value 0 because left is also default (and we want to use same values as StyleConstants)
-	DEFAULT("", 0),
-	LEFT("left", 0),
-	CENTER("center", 1),
-	RIGHT("right", 2);
+public interface IScalableView {
 
-	public final String stringValue;
-	public final int intValue;
+	public float getScale();
 
-	Alignment(String stringValue, int intValue) {
-		this.stringValue = stringValue;
-		this.intValue = intValue;
-	}
+	public void setScale(float scale);
 
-	public static Alignment get(String value) {
+	public Alignment getAlignment();
 
-		if (value != null) {
-			value = value.trim().toLowerCase();
-		} else {
-			return DEFAULT;
-		}
+	public void setAlignment(Alignment alignment);
 
-		for (Alignment alignment : values()) {
-			if (alignment.stringValue.equals(value)) {
-				return alignment;
-			}
-		}
+	public FitPolicy getFitPolicy();
 
-		return DEFAULT;
-
-	}
-
-	public static Alignment get(int value) {
-
-		for (Alignment alignment : values()) {
-			if (alignment.intValue == value) {
-				return alignment;
-			}
-		}
-
-		return DEFAULT;
-
-	}
+	public void setFitPolicy(FitPolicy fitPolicy);
 
 }

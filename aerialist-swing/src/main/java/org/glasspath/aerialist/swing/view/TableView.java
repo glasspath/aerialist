@@ -716,7 +716,7 @@ public class TableView extends JPanel implements ISwingElementView<Table> {
 				}
 
 				Rectangle rect = new Rectangle(0, 0, getWidth(), getHeight());
-				BorderUtils.paintBorders(g2d, borders, rect);
+				PaintUtils.paintBorders(g2d, borders, rect);
 
 				// Table borders
 				for (Border border : borders) {
@@ -769,7 +769,7 @@ public class TableView extends JPanel implements ISwingElementView<Table> {
 							rect.width -= 1;
 						}
 
-						BorderUtils.paintBorders(g2d, colStyle.borders, columnBounds[col]);
+						PaintUtils.paintBorders(g2d, colStyle.borders, columnBounds[col]);
 
 					}
 

@@ -23,47 +23,41 @@
 package org.glasspath.aerialist.editor.actions;
 
 import java.awt.Component;
+import java.awt.Container;
+import java.util.List;
 
+import javax.swing.SwingUtilities;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoableEdit;
 
-import org.glasspath.aerialist.FitPolicy;
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
-import org.glasspath.aerialist.swing.view.IScalableView;
-import org.glasspath.aerialist.swing.view.PageView;
+import org.glasspath.aerialist.swing.view.LayeredPageView;
+import org.glasspath.aerialist.swing.view.PageContainer;
 
-public class SetFitPolicyUndoable implements UndoableEdit {
+public class PasteUndoable implements UndoableEdit {
 
 	private final DocumentEditorPanel context;
-	private final IScalableView view;
-	private final PageView pageView;
-	private final FitPolicy oldFitPolicy;
-	private final FitPolicy fitPolicy;
-	private final boolean yPolicyEnabled;
+	private final List<ComponentInfo> pastedComponents;
 
-	public SetFitPolicyUndoable(DocumentEditorPanel context, IScalableView view, PageView pageView, FitPolicy fitPolicy, FitPolicy oldFitPolicy, boolean yPolicyEnabled) {
+	public PasteUndoable(DocumentEditorPanel context, List<ComponentInfo> pastedComponents) {
 		this.context = context;
-		this.view = view;
-		this.pageView = pageView;
-		this.fitPolicy = fitPolicy;
-		this.oldFitPolicy = oldFitPolicy;
-		this.yPolicyEnabled = yPolicyEnabled;
+		this.pastedComponents = pastedComponents;
 	}
 
 	@Override
 	public String getPresentationName() {
-		return "Change image fit";
+		return "Paste";
 	}
 
 	@Override
 	public String getRedoPresentationName() {
-		return "Redo change image fit";
+		return "Redo paste";
 	}
 
 	@Override
 	public String getUndoPresentationName() {
-		return "Undo change image fit";
+		return "Undo paste";
 	}
 
 	@Override
@@ -83,7 +77,7 @@ public class SetFitPolicyUndoable implements UndoableEdit {
 
 	@Override
 	public void die() {
-
+		pastedComponents.clear();
 	}
 
 	@Override
@@ -94,15 +88,22 @@ public class SetFitPolicyUndoable implements UndoableEdit {
 	@Override
 	public void redo() throws CannotRedoException {
 
-		context.getPageContainer().setYPolicyEnabled(yPolicyEnabled);
+		for (ComponentInfo pastedComponent : pastedComponents) {
+			if (pastedComponent.component instanceof LayeredPageView && pastedComponent.parent instanceof PageContainer) {
+				((PageContainer) pastedComponent.parent).insertPageView((LayeredPageView) pastedComponent.component, pastedComponent.index);
+			} else {
+				pastedComponent.parent.add(pastedComponent.component, pastedComponent.index);
+			}
+		}
 
-		view.setFitPolicy(fitPolicy);
-
-		((Component) view).invalidate();
-		((Component) view).validate();
-		((Component) view).repaint();
-
-		context.refresh(pageView);
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				PasteAction.selectPastedComponents(context, pastedComponents);
+				context.refresh(null);
+			}
+		});
 
 	}
 
@@ -114,15 +115,30 @@ public class SetFitPolicyUndoable implements UndoableEdit {
 	@Override
 	public void undo() throws CannotUndoException {
 
-		context.getPageContainer().setYPolicyEnabled(yPolicyEnabled);
+		for (ComponentInfo pastedComponent : pastedComponents) {
+			if (pastedComponent.component instanceof LayeredPageView && pastedComponent.parent instanceof PageContainer) {
+				((PageContainer) pastedComponent.parent).removePageView((LayeredPageView) pastedComponent.component);
+			} else {
+				pastedComponent.parent.remove(pastedComponent.component);
+			}
+		}
 
-		view.setFitPolicy(oldFitPolicy);
+		context.getSelection().deselectAll();
+		context.refresh(null);
 
-		((Component) view).invalidate();
-		((Component) view).validate();
-		((Component) view).repaint();
+	}
 
-		context.refresh(pageView);
+	public static class ComponentInfo {
+
+		public final Component component;
+		public final Container parent;
+		public final int index;
+
+		public ComponentInfo(Component component, Container parent, int index) {
+			this.component = component;
+			this.parent = parent;
+			this.index = index;
+		}
 
 	}
 

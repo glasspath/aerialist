@@ -22,24 +22,23 @@
  */
 package org.glasspath.aerialist.editor.actions;
 
+import java.awt.Component;
+
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoableEdit;
 
 import org.glasspath.aerialist.Alignment;
-import org.glasspath.aerialist.editor.EditorPanel;
-import org.glasspath.aerialist.swing.view.ImageView;
+import org.glasspath.aerialist.swing.view.IScalableView;
 
 public class SetImageAlignmentUndoable implements UndoableEdit {
 
-	private final EditorPanel<? extends EditorPanel<?>> context;
-	private final ImageView imageView;
+	private final IScalableView view;
 	private final Alignment oldAlignment;
 	private final Alignment newAlignment;
 
-	public SetImageAlignmentUndoable(EditorPanel<? extends EditorPanel<?>> context, ImageView imageView, Alignment oldAlignment, Alignment newAlignment) {
-		this.context = context;
-		this.imageView = imageView;
+	public SetImageAlignmentUndoable(IScalableView view, Alignment oldAlignment, Alignment newAlignment) {
+		this.view = view;
 		this.oldAlignment = oldAlignment;
 		this.newAlignment = newAlignment;
 	}
@@ -86,8 +85,8 @@ public class SetImageAlignmentUndoable implements UndoableEdit {
 
 	@Override
 	public void redo() throws CannotRedoException {
-		imageView.setAlignment(newAlignment);
-		imageView.repaint();
+		view.setAlignment(newAlignment);
+		((Component) view).repaint();
 	}
 
 	@Override
@@ -97,8 +96,8 @@ public class SetImageAlignmentUndoable implements UndoableEdit {
 
 	@Override
 	public void undo() throws CannotUndoException {
-		imageView.setAlignment(oldAlignment);
-		imageView.repaint();
+		view.setAlignment(oldAlignment);
+		((Component) view).repaint();
 	}
 
 }

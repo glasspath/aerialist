@@ -89,6 +89,11 @@ public class DefaultSwingViewContext implements ISwingViewContext {
 	}
 
 	@Override
+	public void viewEventHappened(ViewEvent viewEvent) {
+
+	}
+
+	@Override
 	public void undoableEditHappened(UndoableEdit edit) {
 
 	}
