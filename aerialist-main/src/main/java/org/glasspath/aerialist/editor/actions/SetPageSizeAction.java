@@ -46,12 +46,7 @@ public class SetPageSizeAction extends AbstractAction {
 
 		putValue(Action.NAME, description);
 		putValue(Action.SHORT_DESCRIPTION, description);
-
-		if (pageView.getWidth() == width && pageView.getHeight() == height) {
-			putValue(Action.SELECTED_KEY, true);
-		} else {
-			putValue(Action.SELECTED_KEY, false);
-		}
+		putValue(Action.SELECTED_KEY, pageView.getWidth() == width && pageView.getHeight() == height);
 
 	}
 
