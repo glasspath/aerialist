@@ -91,11 +91,11 @@ public class EditorView<T extends EditorPanel<T>> {
 
 	}
 
-	public void drawEditorBackground(Graphics2D g2d, JPanel pageContainer) {
+	public void drawEditorBackground(Graphics2D g2d, JPanel pageContainer, boolean editable) {
 
 	}
 
-	public void drawEditorForeground(Graphics2D g2d, JPanel pageContainer) {
+	public void drawEditorForeground(Graphics2D g2d, JPanel pageContainer, boolean editable) {
 
 	}
 
@@ -103,7 +103,7 @@ public class EditorView<T extends EditorPanel<T>> {
 
 	}
 
-	protected void drawSelectionRectangle(Graphics2D g2d) {
+	protected void drawSelectionRectangle(Graphics2D g2d, boolean editable) {
 
 		selectionRect = null;
 		selectionOuterRect = null;
@@ -151,19 +151,23 @@ public class EditorView<T extends EditorPanel<T>> {
 
 					if (context.selection.size() == 1) {
 
-						Component elementView = AerialistUtils.getElementViewAsComponent(context.selection.get(0));
-						if (elementView != null) {
+						if (editable) {
 
-							drawVerticalAnchors(g2d, (PageView) parent, elementView);
+							Component elementView = AerialistUtils.getElementViewAsComponent(context.selection.get(0));
+							if (elementView != null) {
 
-							layoutSelectionRectHandles(rect, AerialistUtils.getHeightPolicy(elementView));
-							selectionRectHandlesActive = true;
+								drawVerticalAnchors(g2d, (PageView) parent, elementView);
 
-							selectionOuterRect = new Rectangle(rect);
-							selectionOuterRect.grow(5, 5);
+								layoutSelectionRectHandles(rect, AerialistUtils.getHeightPolicy(elementView));
+								selectionRectHandlesActive = true;
 
-							selectionInnerRect = new Rectangle(rect);
-							selectionInnerRect.grow(-5, -5);
+								selectionOuterRect = new Rectangle(rect);
+								selectionOuterRect.grow(5, 5);
+
+								selectionInnerRect = new Rectangle(rect);
+								selectionInnerRect.grow(-5, -5);
+
+							}
 
 						}
 

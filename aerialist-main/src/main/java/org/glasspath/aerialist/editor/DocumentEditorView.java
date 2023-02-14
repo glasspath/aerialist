@@ -34,7 +34,6 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import org.glasspath.aerialist.swing.view.FooterPageView;
-import org.glasspath.aerialist.swing.view.ISwingViewContext;
 import org.glasspath.aerialist.swing.view.LayeredPageView;
 import org.glasspath.aerialist.swing.view.PageView;
 import org.glasspath.common.swing.graphics.NinePatch;
@@ -53,7 +52,7 @@ public class DocumentEditorView extends EditorView<DocumentEditorPanel> {
 	}
 
 	@Override
-	public void drawEditorBackground(Graphics2D g2d, JPanel pageContainer) {
+	public void drawEditorBackground(Graphics2D g2d, JPanel pageContainer, boolean editable) {
 
 		if (Theme.isDark()) {
 			g2d.setColor(new Color(48, 50, 52));
@@ -112,7 +111,7 @@ public class DocumentEditorView extends EditorView<DocumentEditorPanel> {
 						}
 					}
 
-					if (ISwingViewContext.getContainerPaintFlag(context.pageContainer, ISwingViewContext.CONTAINER_PAINT_FLAG_EDITABLE)) {
+					if (editable) {
 						g2d.setColor(new Color(255, 255, 255, 200));
 						g2d.fill(bounds);
 					}
@@ -134,7 +133,7 @@ public class DocumentEditorView extends EditorView<DocumentEditorPanel> {
 	}
 
 	@Override
-	public void drawEditorForeground(Graphics2D g2d, JPanel pageContainer) {
+	public void drawEditorForeground(Graphics2D g2d, JPanel pageContainer, boolean editable) {
 
 		Component component;
 		Rectangle bounds;
@@ -150,7 +149,7 @@ public class DocumentEditorView extends EditorView<DocumentEditorPanel> {
 					g2d.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
 				}
 
-				if (context.selection.contains(component)) {
+				if (editable && context.selection.contains(component)) {
 					g2d.setStroke(PAGE_SELECTION_STROKE);
 					g2d.setColor(PAGE_SELECTION_COLOR);
 					g2d.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);

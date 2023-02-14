@@ -575,12 +575,14 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 
 			Graphics2D g2d = (Graphics2D) g;
 
-			view.drawEditorBackground(g2d, this);
+			boolean editable = ISwingViewContext.getContainerPaintFlag(this, ISwingViewContext.CONTAINER_PAINT_FLAG_EDITABLE);
+			
+			view.drawEditorBackground(g2d, this, editable);
 
 			super.paint(g);
 
-			view.drawEditorForeground(g2d, this);
-			view.drawSelectionRectangle(g2d);
+			view.drawEditorForeground(g2d, this, editable);
+			view.drawSelectionRectangle(g2d, editable);
 
 		}
 
