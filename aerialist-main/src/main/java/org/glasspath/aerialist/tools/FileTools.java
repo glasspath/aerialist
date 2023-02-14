@@ -44,7 +44,6 @@ import org.glasspath.aerialist.Content;
 import org.glasspath.aerialist.Document;
 import org.glasspath.aerialist.HtmlExporter;
 import org.glasspath.aerialist.IFieldContext;
-import org.glasspath.aerialist.Page.PageSize;
 import org.glasspath.aerialist.XDoc;
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
 import org.glasspath.aerialist.icons.Icons;
