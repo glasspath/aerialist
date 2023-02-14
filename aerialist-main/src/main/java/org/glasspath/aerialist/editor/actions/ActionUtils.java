@@ -158,14 +158,14 @@ public class ActionUtils {
 
 	private static void populatePageViewMenu(DocumentEditorPanel context, PageView pageView, JMenu menu) {
 
-		menu.add(context.getCopyAction());
-		menu.add(context.getPasteAction());
-		menu.add(new DeletePageAction(context, pageView));
+		menu.add(createInsertElementMenu(context));
+		menu.add(createPageSizeMenu(context, (PageView) pageView));
 
 		menu.addSeparator();
 
-		menu.add(createInsertElementMenu(context));
-		menu.add(createPageSizeMenu(context, (PageView) pageView));
+		menu.add(context.getCopyAction());
+		menu.add(context.getPasteAction());
+		menu.add(new DeletePageAction(context, pageView));
 
 		menu.addSeparator();
 
@@ -254,8 +254,8 @@ public class ActionUtils {
 
 			menu.addSeparator();
 
-			if (component instanceof TableCellView) {
-				populateTableCellViewMenu(context, (TableCellView) component, menu);
+			if (component instanceof TableCellView && component.getParent() instanceof TableView) {
+				populateTableCellViewMenu(context, (TableView) component.getParent(), (TableCellView) component, menu);
 				menu.addSeparator();
 			} else if (component instanceof QrCodeView) {
 				populateQrCodeViewMenu(context, (QrCodeView) component, menu);
@@ -275,7 +275,7 @@ public class ActionUtils {
 
 			menu.add(createBackgroundColorMenu(context.getFrame(), elementView.getBackgroundColor(), new SetBackgroundColorAction(context)));
 			if (elementView instanceof TableView) {
-				menu.add(createRowColorsMenu(context));
+				menu.add(createRowColorsMenu(context, (TableView) elementView));
 			}
 			menu.add(new BorderMenu(new SetBorderTypeAction(context), new SetBorderWidthAction(context), new SetBorderColorAction(context)) {
 
@@ -309,8 +309,8 @@ public class ActionUtils {
 
 		JMenu menu = new JMenu("Page size");
 
-		menu.add(new SetPageSizeAction(context, pageView, PageSize.A4.getWidth(), PageSize.A4.getHeight(), "A4 Portrait"));
-		menu.add(new SetPageSizeAction(context, pageView, PageSize.A4.getHeight(), PageSize.A4.getWidth(), "A4 Landscape"));
+		menu.add(new JCheckBoxMenuItem(new SetPageSizeAction(context, pageView, PageSize.A4.getWidth(), PageSize.A4.getHeight(), "A4 Portrait")));
+		menu.add(new JCheckBoxMenuItem(new SetPageSizeAction(context, pageView, PageSize.A4.getHeight(), PageSize.A4.getWidth(), "A4 Landscape")));
 
 		return menu;
 
@@ -563,11 +563,13 @@ public class ActionUtils {
 
 	}
 
-	private static void populateTableCellViewMenu(EditorPanel<? extends EditorPanel<?>> context, TableCellView tableCellView, JMenu menu) {
+	private static void populateTableCellViewMenu(DocumentEditorPanel context, TableView tableView, TableCellView tableCellView, JMenu menu) {
 
 		populateTextViewMenu(context, tableCellView, menu);
 
 		menu.addSeparator();
+
+		menu.add(createTableHeaderMenu(context, tableView));
 
 		JMenu insertMenu = new JMenu("Insert");
 		insertMenu.setIcon(Icons.table);
@@ -617,13 +619,32 @@ public class ActionUtils {
 		return createColorMenu(frame, "Background color", color, action);
 	}
 
-	public static JMenu createRowColorsMenu(DocumentEditorPanel context) {
+	public static JMenu createTableHeaderMenu(DocumentEditorPanel context, TableView tableView) {
+
+		JMenu headerMenu = new JMenu("Table header");
+
+		headerMenu.add(new JCheckBoxMenuItem(new SetHeaderRowsAction(context, tableView, 0)));
+
+		headerMenu.addSeparator();
+
+		headerMenu.add(new JCheckBoxMenuItem(new SetHeaderRowsAction(context, tableView, 1)));
+		headerMenu.add(new JCheckBoxMenuItem(new SetHeaderRowsAction(context, tableView, 2)));
+		headerMenu.add(new JCheckBoxMenuItem(new SetHeaderRowsAction(context, tableView, 3)));
+
+		headerMenu.addSeparator();
+
+		headerMenu.add(createColorMenu(context.getFrame(), "Background color", null, new SetRowColorAction(context, tableView, 0, 0))); // Use row 0 for header
+
+		return headerMenu;
+
+	}
+
+	public static JMenu createRowColorsMenu(DocumentEditorPanel context, TableView tableView) {
 
 		JMenu rowColorsMenu = new JMenu("Row colors");
 
-		rowColorsMenu.add(createColorMenu(context.getFrame(), "Header", null, new SetRowColorAction(context, 1, 0)));
-		rowColorsMenu.add(createColorMenu(context.getFrame(), "Even Rows", null, new SetRowColorAction(context, 2, 2)));
-		rowColorsMenu.add(createColorMenu(context.getFrame(), "Odd rows", null, new SetRowColorAction(context, 1, 2)));
+		rowColorsMenu.add(createColorMenu(context.getFrame(), "Even Rows", null, new SetRowColorAction(context, tableView, 2, 2)));
+		rowColorsMenu.add(createColorMenu(context.getFrame(), "Odd rows", null, new SetRowColorAction(context, tableView, 1, 2)));
 
 		return rowColorsMenu;
 

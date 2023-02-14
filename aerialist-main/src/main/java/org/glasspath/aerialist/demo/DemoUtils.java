@@ -69,6 +69,7 @@ public class DemoUtils {
 
 		Table table = new Table();
 		table.setWidth(470);
+		table.setHeaderRows(1);
 		table.setHeightPolicy(HeightPolicy.AUTO.stringValue);
 		table.setCellPadding(Padding.from(3));
 		table.getBorders().add(AerialistUtils.createBorder(BorderType.VERTICAL, 1, TABLE_VERTICAL_LINE_COLOR));
@@ -89,7 +90,7 @@ public class DemoUtils {
 
 		}
 
-		table.getRowStyles().add(AerialistUtils.createRowStyle(1, 0, ColorUtils.toHex(TABLE_HEADER_ROW_COLOR)));
+		table.getRowStyles().add(AerialistUtils.createRowStyle(0, 0, ColorUtils.toHex(TABLE_HEADER_ROW_COLOR)));
 		table.getRowStyles().add(AerialistUtils.createRowStyle(1, 2, ColorUtils.toHex(TABLE_ALTERNATING_ROW_COLOR)));
 
 		return table;

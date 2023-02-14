@@ -180,12 +180,12 @@ public abstract class DocumentWriter {
 
 				for (RowStyle rowStyle : sortedRowStyles) {
 
-					int row = rowStyle.row - 1;
-					if (row >= 0) {
+					if (rowStyle.background != null) {
 
-						if (rowStyle.background != null) {
+						setFillColor(rowStyle.background);
 
-							setFillColor(rowStyle.background);
+						int row = rowStyle.row - 1;
+						if (row >= 0) {
 
 							if (rowStyle.repeat > 0) {
 
@@ -197,6 +197,14 @@ public abstract class DocumentWriter {
 
 							} else if (row < tableLayoutInfo.rowBounds.length && tableLayoutInfo.rowBounds[row] != null) {
 								fill(table.getX(), table.getY(), tableLayoutInfo.rowBounds[row]);
+							}
+
+						} else if (row == -1 && table.getHeaderRows() > 0) { // Header rows
+
+							for (int i = 0; i < table.getHeaderRows() && i < tableLayoutInfo.rowBounds.length; i += 1) {
+								if (tableLayoutInfo.rowBounds[i] != null) {
+									fill(table.getX(), table.getY(), tableLayoutInfo.rowBounds[i]);
+								}
 							}
 
 						}

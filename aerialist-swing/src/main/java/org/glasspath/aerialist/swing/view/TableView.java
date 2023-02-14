@@ -58,6 +58,7 @@ public class TableView extends JPanel implements ISwingElementView<Table> {
 	private YPolicy yPolicy = YPolicy.DEFAULT;
 	private HeightPolicy heightPolicy = HeightPolicy.DEFAULT;
 	private Color backgroundColor = null;
+	private int headerRows = 0;
 	private final List<Border> borders = new ArrayList<>();
 	private List<ColStyle> colStyles = new ArrayList<>();
 	private final List<RowStyle> rowStyles = new ArrayList<>();
@@ -90,8 +91,8 @@ public class TableView extends JPanel implements ISwingElementView<Table> {
 
 		yPolicy = YPolicy.get(element.getYPolicy());
 		heightPolicy = HeightPolicy.get(element.getHeightPolicy());
-
 		setBackgroundColor(ColorUtils.fromHex(element.getBackground()));
+		headerRows = element.getHeaderRows();
 
 		borders.clear();
 		for (Border border : element.getBorders()) {
@@ -148,6 +149,14 @@ public class TableView extends JPanel implements ISwingElementView<Table> {
 		this.backgroundColor = backgroundColor;
 	}
 
+	public int getHeaderRows() {
+		return headerRows;
+	}
+
+	public void setHeaderRows(int headerRows) {
+		this.headerRows = headerRows;
+	}
+
 	@Override
 	public List<Border> getBorders() {
 		return borders;
@@ -158,6 +167,7 @@ public class TableView extends JPanel implements ISwingElementView<Table> {
 
 		Table table = new Table();
 		ISwingElementView.copyProperties(this, table);
+		table.setHeaderRows(headerRows);
 
 		table.getColStyles().addAll(updateColStyles());
 		table.getRowStyles().addAll(getRowStylesCopy());
@@ -689,13 +699,13 @@ public class TableView extends JPanel implements ISwingElementView<Table> {
 
 				for (RowStyle rowStyle : sortedRowStyles) {
 
-					int row = rowStyle.row - 1;
-					if (row >= 0) {
+					Color color = ColorUtils.fromHex(rowStyle.background);
+					if (color != null) {
 
-						Color color = ColorUtils.fromHex(rowStyle.background);
-						if (color != null) {
+						g2d.setColor(color);
 
-							g2d.setColor(color);
+						int row = rowStyle.row - 1;
+						if (row >= 0) {
 
 							if (rowStyle.repeat > 0) {
 
@@ -707,6 +717,14 @@ public class TableView extends JPanel implements ISwingElementView<Table> {
 
 							} else if (row < rowBounds.length && rowBounds[row] != null) {
 								g2d.fill(rowBounds[row]);
+							}
+
+						} else if (row == -1 && headerRows > 0) { // Header rows
+
+							for (int i = 0; i < headerRows && i < rowBounds.length; i += 1) {
+								if (rowBounds[i] != null) {
+									g2d.fill(rowBounds[i]);
+								}
 							}
 
 						}

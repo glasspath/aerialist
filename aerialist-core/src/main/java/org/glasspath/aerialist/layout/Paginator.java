@@ -361,14 +361,16 @@ public class Paginator {
 			// Text layout info can be null (SwingLayoutMetrics)
 			boolean updateTextLayouts = layoutInfo.textLayouts != null;
 
-			// TODO: For now we only support 1 header row which is repeated on each page by default
-			int headerRowHeight = layoutInfo.rowBounds[0].height;
+			int headerRowsHeight = 0;
+			for (int i = 0; i < table.getHeaderRows() && i < layoutInfo.rowBounds.length; i++) {
+				headerRowsHeight += layoutInfo.rowBounds[i].height;
+			}
 
 			// Determine at which row the table is to be split (splitAtRow is 1-based, rowBounds[i] is 0-based)
-			// Start at 1 because rowBounds[0] contains the bounds of the header row
+			// Skip the header rows (header cannot be split for now)
 			int splitAtRow = -1;
-			int yBottom = table.getY() + headerRowHeight;
-			for (int i = 1; i < layoutInfo.rowCount; i++) {
+			int yBottom = table.getY() + headerRowsHeight;
+			for (int i = table.getHeaderRows(); i < layoutInfo.rowCount; i++) {
 
 				yBottom += layoutInfo.rowBounds[i].height;
 				if (yBottom > yMax) {
@@ -386,14 +388,14 @@ public class Paginator {
 			int fromRow = splitAtRow;
 			int toRow = layoutInfo.rowCount + 1;
 
-			if (fromRow > 1 && toRow > fromRow) {
+			if (fromRow > table.getHeaderRows() && toRow > fromRow) {
 
 				// Create new table by duplicating the original table and removing all the rows that are not in the range fromRow - toRow
 				Table newTable = new Table(table);
 
 				// Create new layout info
 				TableLayoutInfo newLayoutInfo = new TableLayoutInfo();
-				newLayoutInfo.rowCount = (toRow - fromRow) + 1; // TODO: Make repeating of header row configurable?
+				newLayoutInfo.rowCount = (toRow - fromRow) + table.getHeaderRows();
 
 				List<TextLayout> textLayouts = new ArrayList<>();
 				List<TableCell> removeTableCells = new ArrayList<>();
@@ -402,21 +404,21 @@ public class Paginator {
 
 					TableCell tableCell = newTable.getTableCells().get(i);
 
-					// For text layouts we need to include the header also (we can use the same TextLayout instance)
+					// For text layouts we need to include the header rows also (we can use the same TextLayout instance)
 					if (updateTextLayouts) {
-						if (tableCell.getRow() == 1 || (tableCell.getRow() >= fromRow && tableCell.getRow() < toRow)) {
+						if (tableCell.getRow() <= table.getHeaderRows() || (tableCell.getRow() >= fromRow && tableCell.getRow() < toRow)) {
 							textLayouts.add(layoutInfo.textLayouts[i]);
 						}
 					}
 
-					// Skip the header row, we don't have to change it's row number and we also don't have to remove it
-					if (tableCell.getRow() > 1) {
+					// Skip the header rows, we don't have to change their row numbers and we also don't have to remove them
+					if (tableCell.getRow() > table.getHeaderRows()) {
 
 						// For example: rows 10 - 19 have to be moved to new table (fromRow = 10, toRow = 20)
 						// When we find row 10 we have to change it's row number to 2 (header row is 1)
 						// (10 - 10) + 1 + 1 = 2 (add 1 for header row and add 1 because rows start at 1)
 						if (tableCell.getRow() >= fromRow && tableCell.getRow() < toRow) {
-							tableCell.setRow((tableCell.getRow() - fromRow) + 1 + 1);
+							tableCell.setRow((tableCell.getRow() - fromRow) + table.getHeaderRows() + 1);
 						} else {
 							// All other rows need to be removed from this new table
 							removeTableCells.add(tableCell);
@@ -434,21 +436,29 @@ public class Paginator {
 
 				newTable.setY(yMin);
 
-				// Calculate height of the new table, subtract 1 because rowBounds is 0-based (bounds of row 1 are stored in rowBounds[0]),
+				// Calculate height of the new table, subtract 1 because rowBounds is 0-based (bounds of row 11 are stored in rowBounds[10]),
 				// toRow is exclusive, so we need to subtract 2, for example: if last row number is 100 then toRow is 101, bounds of
 				// row number 100 are stored in rowBounds[99] so we need to use toRow - 2
-				newTable.setHeight(headerRowHeight + ((layoutInfo.rowBounds[toRow - 2].y + layoutInfo.rowBounds[toRow - 2].height) - layoutInfo.rowBounds[fromRow - 1].y));
+				newTable.setHeight(headerRowsHeight + ((layoutInfo.rowBounds[toRow - 2].y + layoutInfo.rowBounds[toRow - 2].height) - layoutInfo.rowBounds[fromRow - 1].y));
 
-				// Update height of original table before row-bounds are changed
+				// Update height of original table before row bounds are changed
 				table.setHeight(layoutInfo.rowBounds[fromRow - 1].y);
 
-				int yCorrection = layoutInfo.rowBounds[fromRow - 1].y - layoutInfo.rowBounds[0].height;
+				int yCorrection = layoutInfo.rowBounds[fromRow - 1].y - headerRowsHeight;
 
-				// Copy row bounds from original layout info
+				// Copy header row bounds from original layout info
 				newLayoutInfo.rowBounds = new Bounds[newLayoutInfo.rowCount];
-				newLayoutInfo.rowBounds[0] = layoutInfo.rowBounds[0];
-				for (int i = 1; i < newLayoutInfo.rowBounds.length; i++) {
-					newLayoutInfo.rowBounds[i] = layoutInfo.rowBounds[i + (fromRow - 2)];
+				for (int i = 0; i < table.getHeaderRows() && i < layoutInfo.rowBounds.length; i++) {
+					newLayoutInfo.rowBounds[i] = layoutInfo.rowBounds[i];
+				}
+				
+				// Copy row bounds from original layout info
+				// For example 1 header row, table is split at row 11 (original table will have total of 10 rows)
+				// rowBounds[10] contains first row that needs to be copied to new rowBounds[1]
+				// i will be 1 here, fromRow will be 11, so 1 + 11 = 12 needs to be corrected to 10
+				// we have to subtract 1 because fromRow is 1-based and we need to subtract the header row count
+				for (int i = table.getHeaderRows(); i < newLayoutInfo.rowBounds.length; i++) {
+					newLayoutInfo.rowBounds[i] = layoutInfo.rowBounds[i + (fromRow - (table.getHeaderRows() + 1))];
 					newLayoutInfo.rowBounds[i].y -= yCorrection;
 				}
 

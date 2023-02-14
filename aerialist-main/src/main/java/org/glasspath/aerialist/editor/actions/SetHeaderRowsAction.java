@@ -22,73 +22,50 @@
  */
 package org.glasspath.aerialist.editor.actions;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
-import java.util.List;
 
 import javax.swing.AbstractAction;
+import javax.swing.Action;
 
-import org.glasspath.aerialist.RowStyle;
 import org.glasspath.aerialist.editor.EditorPanel;
 import org.glasspath.aerialist.swing.view.TableView;
-import org.glasspath.common.swing.color.ColorChooserPanel.ColorEvent;
-import org.glasspath.common.swing.color.ColorUtils;
 
-public class SetRowColorAction extends AbstractAction {
+public class SetHeaderRowsAction extends AbstractAction {
 
 	private final EditorPanel<? extends EditorPanel<?>> context;
 	private final TableView tableView;
-	private final int row;
-	private final int repeat;
+	private final int headerRowCount;
 
-	public SetRowColorAction(EditorPanel<? extends EditorPanel<?>> context, TableView tableView, int row, int repeat) {
+	public SetHeaderRowsAction(EditorPanel<? extends EditorPanel<?>> context, TableView tableView, int headerRowCount) {
+
 		this.context = context;
 		this.tableView = tableView;
-		this.row = row;
-		this.repeat = repeat;
+		this.headerRowCount = headerRowCount;
+
+		String description;
+		if (headerRowCount == 0) {
+			description = "No header";
+		} else if (headerRowCount == 1) {
+			description = "1 row";
+		} else {
+			description = headerRowCount + " rows";
+		}
+
+		putValue(Action.NAME, description);
+		putValue(Action.SHORT_DESCRIPTION, description);
+		putValue(Action.SELECTED_KEY, tableView.getHeaderRows() == headerRowCount);
+
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		if (e instanceof ColorEvent) {
+		int oldHeaderRowCount = tableView.getHeaderRows();
 
-			Color color = ((ColorEvent) e).color;
-
-			List<RowStyle> oldRowStyles = tableView.getRowStylesCopy();
-
-			applyRowColor(tableView, row, repeat, color);
-
-			context.undoableEditHappened(new SetRowColorUndoable(tableView, row, repeat, color, oldRowStyles));
-
-		}
-
-	}
-
-	public static void applyRowColor(TableView tableView, int row, int repeat, Color color) {
-
-		boolean create = true;
-
-		for (RowStyle rowStyle : tableView.getRowStyles()) {
-			if (rowStyle.row == row && rowStyle.repeat == repeat) {
-				rowStyle.background = ColorUtils.toHex(color);
-				create = false;
-				break;
-			}
-		}
-
-		if (create) {
-
-			RowStyle rowStyle = new RowStyle();
-			rowStyle.row = row;
-			rowStyle.repeat = repeat;
-			rowStyle.background = ColorUtils.toHex(color);
-
-			tableView.getRowStyles().add(rowStyle);
-
-		}
-
+		tableView.setHeaderRows(headerRowCount);
 		tableView.repaint();
+
+		context.undoableEditHappened(new SetHeaderRowsUndoable(tableView, headerRowCount, oldHeaderRowCount));
 
 	}
 

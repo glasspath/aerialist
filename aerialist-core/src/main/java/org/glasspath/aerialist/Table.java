@@ -36,6 +36,9 @@ public class Table extends Element {
 	@JacksonXmlProperty(isAttribute = true)
 	private String cellPadding = Padding.DEFAULT;
 
+	@JacksonXmlProperty(isAttribute = true)
+	private int headerRows = 0;
+
 	@JacksonXmlElementWrapper(localName = "colStyles")
 	@JacksonXmlProperty(localName = "colStyle")
 	private List<ColStyle> colStyles = new ArrayList<>();
@@ -61,6 +64,7 @@ public class Table extends Element {
 		fromElement(table);
 
 		cellPadding = table.cellPadding;
+		headerRows = table.headerRows;
 
 		colStyles.clear();
 		for (ColStyle colStyle : table.colStyles) {
@@ -85,6 +89,14 @@ public class Table extends Element {
 
 	public void setCellPadding(String cellPadding) {
 		this.cellPadding = cellPadding;
+	}
+
+	public int getHeaderRows() {
+		return headerRows;
+	}
+
+	public void setHeaderRows(int headerRows) {
+		this.headerRows = headerRows;
 	}
 
 	public List<ColStyle> getColStyles() {
