@@ -207,7 +207,10 @@ public class DragHandleOperation extends Operation {
 
 		if (component != null && pageView != null && originalBounds != null) {
 
-			context.undoableEditHappened(new ResizeUndoable(context, component, pageView, originalBounds, component.getBounds(), context.getPageContainer().isYPolicyEnabled()));
+			Rectangle bounds = component.getBounds();
+			if (bounds.x != originalBounds.x || bounds.y != originalBounds.y || bounds.width != originalBounds.width || bounds.height != originalBounds.height) {
+				context.undoableEditHappened(new ResizeUndoable(context, component, pageView, originalBounds, bounds, context.getPageContainer().isYPolicyEnabled()));
+			}
 
 			context.getSelection().fireSelectionChanged();
 			context.refresh(pageView);
