@@ -443,6 +443,7 @@ public class AerialistUtils {
 		QrCode qrCode = new QrCode();
 		qrCode.setWidth(150);
 		qrCode.setHeight(150);
+		qrCode.setFit(FitPolicy.WIDTH.stringValue);
 		qrCode.setText("QR-Code");
 
 		return qrCode;
