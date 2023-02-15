@@ -55,6 +55,7 @@ public class MoveSelectionOperation extends Operation {
 	@Override
 	public void mousePressed(MouseEvent e, Point p) {
 
+		// TODO: Support moving of multiple elements
 		if (context.getSelection().size() == 1) {
 
 			component = AerialistUtils.getElementViewAsComponent(context.getSelection().get(0));
@@ -108,7 +109,10 @@ public class MoveSelectionOperation extends Operation {
 
 			pageView.updateVerticalAnchors();
 
-			context.undoableEditHappened(new MoveSelectionUndoable(context, component, pageView, originalBounds, component.getBounds(), context.getPageContainer().isYPolicyEnabled()));
+			Rectangle bounds = component.getBounds();
+			if (bounds.x != originalBounds.x || bounds.y != originalBounds.y) {
+				context.undoableEditHappened(new MoveSelectionUndoable(context, component, pageView, originalBounds, bounds, context.getPageContainer().isYPolicyEnabled()));
+			}
 
 			context.getSelection().fireSelectionChanged();
 			context.refresh(pageView);
