@@ -33,89 +33,78 @@ import org.glasspath.aerialist.TableCell;
 import org.glasspath.aerialist.editor.ChangeTableLayoutUndoable;
 import org.glasspath.aerialist.editor.ChangeTableLayoutUndoable.TableCellViewData;
 import org.glasspath.aerialist.editor.ChangeTableLayoutUndoable.TableViewData;
+import org.glasspath.aerialist.editor.EditorPanel;
 import org.glasspath.aerialist.swing.view.TableCellView;
 import org.glasspath.aerialist.swing.view.TableView;
-import org.glasspath.aerialist.editor.EditorPanel;
 
 public class InsertTableColumnAction extends AbstractAction {
 
 	private final EditorPanel<? extends EditorPanel<?>> context;
-	private final TableCellView tableCellView;
-	private final boolean left;
+	private final TableView tableView;
+	private final int col;
 
-	public InsertTableColumnAction(EditorPanel<? extends EditorPanel<?>> context, TableCellView tableCellView, boolean left) {
+	public InsertTableColumnAction(EditorPanel<? extends EditorPanel<?>> context, TableView tableView, int col, String description) {
 
 		this.context = context;
-		this.tableCellView = tableCellView;
-		this.left = left;
+		this.tableView = tableView;
+		this.col = col;
 
-		putValue(Action.NAME, left ? "Insert column left" : "Insert column right");
-		putValue(Action.SHORT_DESCRIPTION, left ? "Insert column left" : "Insert column right");
+		putValue(Action.NAME, description);
+		putValue(Action.SHORT_DESCRIPTION, description);
 
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		if (tableCellView.getParent() instanceof TableView) {
+		List<Integer> skipRows = new ArrayList<>();
 
-			TableView tableView = (TableView) tableCellView.getParent();
+		List<TableCellViewData> oldTableCellData = new ArrayList<>();
+		for (TableCellView cellView : tableView.getTableCellViews()) {
 
-			int col = tableCellView.getCol();
-			if (!left) {
-				col = col + (tableCellView.getColSpan() - 1) + 1;
+			oldTableCellData.add(new TableCellViewData(cellView, cellView.toTableCell()));
+
+			if (cellView.getCol() >= col) {
+				cellView.setCol(cellView.getCol() + 1);
+			} else if (cellView.getCol() + (cellView.getColSpan() - 1) >= col) {
+				skipRows.add(cellView.getRow());
+				cellView.setColSpan(cellView.getColSpan() + 1);
 			}
-
-			List<Integer> skipRows = new ArrayList<>();
-
-			List<TableCellViewData> oldTableCellData = new ArrayList<>();
-			for (TableCellView cellView : tableView.getTableCellViews()) {
-
-				oldTableCellData.add(new TableCellViewData(cellView, cellView.toTableCell()));
-
-				if (cellView.getCol() >= col) {
-					cellView.setCol(cellView.getCol() + 1);
-				} else if (cellView.getCol() + (cellView.getColSpan() - 1) >= col) {
-					skipRows.add(cellView.getRow());
-					cellView.setColSpan(cellView.getColSpan() + 1);
-				}
-
-			}
-
-			TableViewData oldTableViewData = new TableViewData(tableView.getColStylesCopy(), oldTableCellData);
-
-			TableCell cell;
-			TableCellView tableCellView;
-			for (int row = 0; row < tableView.getRowCount(); row++) {
-
-				if (!skipRows.contains(row + 1)) {
-
-					cell = new TableCell();
-					cell.setRow(row + 1);
-					cell.setCol(col);
-
-					tableCellView = new TableCellView(tableView.getViewContext());
-					tableCellView.init(cell, tableView.getCellPadding());
-					tableView.getTableCellViews().add(tableCellView);
-
-				}
-
-			}
-
-			List<TableCellViewData> newTableCellData = new ArrayList<>();
-			for (TableCellView cellView : tableView.getTableCellViews()) {
-				newTableCellData.add(new TableCellViewData(cellView, cellView.toTableCell()));
-			}
-
-			tableView.layoutTableCells();
-			tableView.invalidate();
-			tableView.revalidate();
-			tableView.repaint();
-
-			TableViewData newTableViewData = new TableViewData(tableView.updateColStyles(), newTableCellData);
-			context.undoableEditHappened(new ChangeTableLayoutUndoable(tableView, oldTableViewData, newTableViewData));
 
 		}
+
+		TableViewData oldTableViewData = new TableViewData(tableView.getColStylesCopy(), oldTableCellData);
+
+		TableCell cell;
+		TableCellView tableCellView;
+		for (int row = 0; row < tableView.getRowCount(); row++) {
+
+			if (!skipRows.contains(row + 1)) {
+
+				cell = new TableCell();
+				cell.setRow(row + 1);
+				cell.setCol(col);
+
+				tableCellView = new TableCellView(tableView.getViewContext());
+				tableCellView.init(cell, tableView.getCellPadding());
+				tableView.getTableCellViews().add(tableCellView);
+
+			}
+
+		}
+
+		List<TableCellViewData> newTableCellData = new ArrayList<>();
+		for (TableCellView cellView : tableView.getTableCellViews()) {
+			newTableCellData.add(new TableCellViewData(cellView, cellView.toTableCell()));
+		}
+
+		tableView.layoutTableCells();
+		tableView.invalidate();
+		tableView.revalidate();
+		tableView.repaint();
+
+		TableViewData newTableViewData = new TableViewData(tableView.updateColStyles(), newTableCellData);
+		context.undoableEditHappened(new ChangeTableLayoutUndoable(tableView, oldTableViewData, newTableViewData));
 
 	}
 

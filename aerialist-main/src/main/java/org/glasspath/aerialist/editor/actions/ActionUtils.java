@@ -257,6 +257,9 @@ public class ActionUtils {
 			if (component instanceof TableCellView && component.getParent() instanceof TableView) {
 				populateTableCellViewMenu(context, (TableView) component.getParent(), (TableCellView) component, menu);
 				menu.addSeparator();
+			} else if (component instanceof TableView) {
+				populateTableCellViewMenu(context, (TableView) component, null, menu);
+				menu.addSeparator();
 			} else if (component instanceof QrCodeView) {
 				populateQrCodeViewMenu(context, (QrCodeView) component, menu);
 				menu.addSeparator();
@@ -565,9 +568,13 @@ public class ActionUtils {
 
 	private static void populateTableCellViewMenu(DocumentEditorPanel context, TableView tableView, TableCellView tableCellView, JMenu menu) {
 
-		populateTextViewMenu(context, tableCellView, menu);
+		if (tableCellView != null) {
 
-		menu.addSeparator();
+			populateTextViewMenu(context, tableCellView, menu);
+
+			menu.addSeparator();
+
+		}
 
 		menu.add(createTableHeaderMenu(context, tableView));
 
@@ -575,13 +582,33 @@ public class ActionUtils {
 		insertMenu.setIcon(Icons.table);
 		menu.add(insertMenu);
 
-		insertMenu.add(new InsertTableRowAction(context, tableCellView, true));
-		insertMenu.add(new InsertTableRowAction(context, tableCellView, false));
-		insertMenu.add(new InsertTableColumnAction(context, tableCellView, true));
-		insertMenu.add(new InsertTableColumnAction(context, tableCellView, false));
+		if (tableCellView != null) {
 
-		menu.add(new DeleteTableRowAction(context, tableCellView));
-		menu.add(new DeleteTableColumnAction(context, tableCellView));
+			int row = tableCellView.getRow();
+
+			insertMenu.add(new InsertTableRowAction(context, tableView, row, "Insert row above"));
+			insertMenu.add(new InsertTableRowAction(context, tableView, row + (tableCellView.getRowSpan() - 1) + 1, "Insert row below"));
+
+			int col = tableCellView.getCol();
+
+			insertMenu.add(new InsertTableColumnAction(context, tableView, col, "Insert column left"));
+			insertMenu.add(new InsertTableColumnAction(context, tableView, col + (tableCellView.getColSpan() - 1) + 1, "Insert column right"));
+
+			menu.add(new DeleteTableRowAction(context, tableCellView));
+			menu.add(new DeleteTableColumnAction(context, tableCellView));
+
+		} else {
+
+			int row = tableView.getRowCount() + 1;
+
+			insertMenu.add(new InsertTableRowAction(context, tableView, row, "Insert row"));
+
+			int col = tableView.getColumnCount() + 1;
+
+			insertMenu.add(new InsertTableColumnAction(context, tableView, col, "Insert column"));
+
+
+		}
 
 	}
 
