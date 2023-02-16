@@ -73,7 +73,7 @@ public class PaginationDemo {
 		List<String> tableColumn1 = new ArrayList<>();
 		List<String> tableColumn2 = new ArrayList<>();
 
-		for (int row = 1; row <= 50; row++) {
+		for (int row = 1; row <= 35; row++) {
 			tableColumn1.add("col 1, row " + row);
 			tableColumn2.add("col 2, row " + row);
 		}

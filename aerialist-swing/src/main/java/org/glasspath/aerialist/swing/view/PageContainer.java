@@ -32,9 +32,11 @@ import javax.swing.JPanel;
 
 import org.glasspath.aerialist.Document;
 import org.glasspath.aerialist.HeightPolicy;
+import org.glasspath.aerialist.IPagination;
 import org.glasspath.aerialist.Page;
+import org.glasspath.aerialist.Pagination;
 
-public abstract class PageContainer extends JPanel implements ISwingViewContext {
+public abstract class PageContainer extends JPanel implements ISwingViewContext, IPagination {
 
 	private LayoutPhase layoutPhase = LayoutPhase.IDLE;
 	private boolean yPolicyEnabled = false;
@@ -44,6 +46,7 @@ public abstract class PageContainer extends JPanel implements ISwingViewContext 
 	private int footerHeight = 0;
 	private HeaderPageView headerPageView = null;
 	private FooterPageView footerPageView = null;
+	private Pagination pagination = null;
 	private List<PageView> pageViews = new ArrayList<>();
 
 	public PageContainer() {
@@ -70,6 +73,12 @@ public abstract class PageContainer extends JPanel implements ISwingViewContext 
 			footerPageView = null;
 		}
 
+		if (document.getPagination() != null) {
+			pagination = new Pagination(document.getPagination());
+		} else {
+			pagination = null;
+		}
+
 		pageViews = createLayeredPageViews(document.getPages(), this);
 
 		loadPageViews();
@@ -89,6 +98,10 @@ public abstract class PageContainer extends JPanel implements ISwingViewContext 
 
 		if (footerPageView != null) {
 			document.setFooter(footerPageView.toPage());
+		}
+
+		if (pagination != null) {
+			document.setPagination(new Pagination(pagination));
 		}
 
 		for (PageView pageView : pageViews) {
@@ -164,6 +177,16 @@ public abstract class PageContainer extends JPanel implements ISwingViewContext 
 
 	public void setFooterPageView(FooterPageView footerPageView) {
 		this.footerPageView = footerPageView;
+	}
+
+	@Override
+	public Pagination getPagination() {
+		return pagination;
+	}
+
+	@Override
+	public void setPagination(Pagination pagination) {
+		this.pagination = pagination;
 	}
 
 	public List<PageView> getPageViews() {

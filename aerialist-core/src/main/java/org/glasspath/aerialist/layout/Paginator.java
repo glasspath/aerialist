@@ -28,11 +28,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.glasspath.aerialist.Document;
 import org.glasspath.aerialist.Element;
 import org.glasspath.aerialist.HeightPolicy;
 import org.glasspath.aerialist.Padding;
 import org.glasspath.aerialist.Page;
 import org.glasspath.aerialist.Page.PageSize;
+import org.glasspath.aerialist.Pagination;
 import org.glasspath.aerialist.Table;
 import org.glasspath.aerialist.TableCell;
 import org.glasspath.aerialist.TextBox;
@@ -57,7 +59,10 @@ public class Paginator {
 		this.listener = listener;
 	}
 
-	public List<PageLayoutInfo> paginate(PageLayoutInfo pageLayoutInfo, int yMin, int yMax) {
+	public List<PageLayoutInfo> paginate(Document document, Page sourcePage, PageLayoutInfo pageLayoutInfo) {
+
+		int yMin = document.getHeaderHeight();
+		int yMax = sourcePage.getHeight() - document.getFooterHeight();
 
 		List<PageLayoutInfo> newPages = new ArrayList<>();
 
@@ -74,10 +79,30 @@ public class Paginator {
 
 				Element element = page.getElements().get(i);
 
+				// TODO: Implement pagination settings on pages and elements also?
+				Pagination pagination = document.getPagination();
+
 				if (element.getY() > yMax) {
+
+					// Element is beyond page border, so move it
 					moveElements.add(element);
-				} else if (element.getY() > yMin && element.getY() + element.getHeight() > yMax && !isSplittable(element)) {
-					moveElements.add(element);
+
+				} else if (element.getY() > yMin // No need to move to new page if it is already at yMin
+						&& element.getY() + element.getHeight() > yMax) {
+
+					SplitInfo splitInfo = getSplitInfo(element, pagination, pageLayoutInfo, yMax);
+					if (!splitInfo.splitPossible) {
+
+						// Element extends over page border, but it cannot be split, so move it
+						moveElements.add(element);
+
+					} else if (pagination != null && (splitInfo.firstElementHeight < pagination.getMinHeight() || splitInfo.secondElementHeight < pagination.getMinHeight())) {
+
+						// Splitting element would result in a element that is too short, so move it
+						moveElements.add(element);
+
+					}
+
 				}
 
 			}
@@ -107,9 +132,13 @@ public class Paginator {
 
 				Element element = page.getElements().get(i);
 
+				// TODO: Implement pagination settings on pages and elements also?
+				Pagination pagination = document.getPagination();
+
 				if (element.getY() <= yMax && element.getY() + element.getHeight() > yMax) {
 
-					if (HeightPolicy.get(element.getHeightPolicy()) == HeightPolicy.AUTO) {
+					SplitInfo splitInfo = getSplitInfo(element, pagination, pageLayoutInfo, yMax);
+					if (splitInfo.splitPossible) {
 
 						if (newPageLayoutInfo == null) {
 
@@ -122,7 +151,7 @@ public class Paginator {
 
 						}
 
-						Element newElement = split(element, pageLayoutInfo, yMin, yMax, newPageLayoutInfo);
+						Element newElement = split(splitInfo, element, pageLayoutInfo, yMin, newPageLayoutInfo);
 						if (newElement != null) {
 							splitElements.put(element, newElement);
 						}
@@ -177,7 +206,7 @@ public class Paginator {
 				}
 
 				if (layoutUpdated) {
-					newPages.addAll(paginate(newPageLayoutInfo, yMin, yMax));
+					newPages.addAll(paginate(document, sourcePage, newPageLayoutInfo));
 				} else {
 					System.err.println("TODO: Paginator, invalid attempt to paginate");
 				}
@@ -200,62 +229,87 @@ public class Paginator {
 
 	}
 
-	protected boolean isSplittable(Element element) {
+	protected SplitInfo getSplitInfo(Element element, Pagination pagination, PageLayoutInfo pageLayoutInfo, int yMax) {
+
+		SplitInfo splitInfo = new SplitInfo();
 
 		if (HeightPolicy.get(element.getHeightPolicy()) == HeightPolicy.AUTO) {
 			if (element instanceof TextBox) {
-				return true;
+				getTextBoxSplitInfo(splitInfo, (TextBox) element, pagination, pageLayoutInfo, yMax);
 			} else if (element instanceof Table) {
-				return true;
+				getTableSplitInfo(splitInfo, (Table) element, pagination, pageLayoutInfo, yMax);
 			}
 		}
 
-		return false;
+		return splitInfo;
 
 	}
 
-	protected Element split(Element element, PageLayoutInfo pageLayoutInfo, int yMin, int yMax, PageLayoutInfo newPageLayoutInfo) {
+	protected Element split(SplitInfo splitInfo, Element element, PageLayoutInfo pageLayoutInfo, int yMin, PageLayoutInfo newPageLayoutInfo) {
 
 		Element newElement = null;
 
-		// TODO: Implement on all elements that can span multiple pages
 		if (element instanceof TextBox) {
-			newElement = splitTextBox((TextBox) element, pageLayoutInfo, yMin, yMax, newPageLayoutInfo);
+			newElement = splitTextBox(splitInfo, (TextBox) element, pageLayoutInfo, yMin, newPageLayoutInfo);
 		} else if (element instanceof Table) {
-			newElement = splitTable((Table) element, pageLayoutInfo, yMin, yMax, newPageLayoutInfo);
+			newElement = splitTable(splitInfo, (Table) element, pageLayoutInfo, yMin, newPageLayoutInfo);
 		}
 
 		return newElement;
 
 	}
 
-	protected TextBox splitTextBox(TextBox textBox, PageLayoutInfo pageLayoutInfo, int yMin, int yMax, PageLayoutInfo newPageLayoutInfo) {
+	protected void getTextBoxSplitInfo(SplitInfo splitInfo, TextBox textBox, Pagination pagination, PageLayoutInfo pageLayoutInfo, int yMax) {
 
 		TextBoxLayoutInfo layoutInfo = pageLayoutInfo.layoutInfo.textBoxes.get(textBox);
 		if (layoutInfo != null && layoutInfo.textLayout != null && layoutInfo.textLayout.lines != null && textBox.getY() + textBox.getHeight() > yMax) {
 
-			int splitAtLineIndex = -1;
 			Padding padding = new Padding(textBox.getPadding());
 
-			// Determine at which line the txt-box is to be split
-			for (int i = 0; i < layoutInfo.textLayout.lines.length; i++) {
+			// Determine at which line the text-box is to be split
+			// Start at 1 because we want to keep at least 1 line in the original text-box
+			for (int i = 1; i < layoutInfo.textLayout.lines.length; i++) {
 
 				Rect lineBounds = layoutInfo.textLayout.lines[i].lineBounds;
 
-				float yBottom = textBox.getY() + lineBounds.y + lineBounds.height;
-				if (yBottom + padding.bottom > yMax) {
+				float textBoxHeight = padding.top + lineBounds.y + lineBounds.height + padding.bottom;
+				if (textBox.getY() + textBoxHeight > yMax) {
 
-					splitAtLineIndex = i;
+					// At this line the bottom of the text-box is over the max
+					splitInfo.splitPossible = true;
+					splitInfo.splitIndex = i;
 
 					break;
+
+				} else if (pagination != null && textBox.getHeight() - textBoxHeight < pagination.getMinHeight()) {
+
+					// Remaining text-box would be too short, so split here
+					splitInfo.splitPossible = true;
+					splitInfo.splitIndex = i;
+
+					break;
+
+				} else {
+
+					splitInfo.firstElementHeight = (int) textBoxHeight;
+					splitInfo.secondElementHeight = padding.top + (textBox.getHeight() - (int) textBoxHeight) + padding.bottom;
 
 				}
 
 			}
 
-			if (splitAtLineIndex > 0) {
+		}
 
-				Line splitAtLine = layoutInfo.textLayout.lines[splitAtLineIndex];
+	}
+
+	protected TextBox splitTextBox(SplitInfo splitInfo, TextBox textBox, PageLayoutInfo pageLayoutInfo, int yMin, PageLayoutInfo newPageLayoutInfo) {
+
+		TextBoxLayoutInfo layoutInfo = pageLayoutInfo.layoutInfo.textBoxes.get(textBox);
+		if (layoutInfo != null && layoutInfo.textLayout != null && layoutInfo.textLayout.lines != null) {
+
+			if (splitInfo.splitIndex > 0) {
+
+				Line splitAtLine = layoutInfo.textLayout.lines[splitInfo.splitIndex];
 
 				int startCorrection = splitAtLine.start;
 				float yCorrection = splitAtLine.lineBounds.y;
@@ -284,7 +338,7 @@ public class Paginator {
 				TextBoxLayoutInfo newLayoutInfo = new TextBoxLayoutInfo();
 				newLayoutInfo.preferredHeight = layoutInfo.preferredHeight - (int) yCorrection;
 				newLayoutInfo.textLayout = new TextLayout();
-				newLayoutInfo.textLayout.lines = Arrays.copyOfRange(layoutInfo.textLayout.lines, splitAtLineIndex, layoutInfo.textLayout.lines.length);
+				newLayoutInfo.textLayout.lines = Arrays.copyOfRange(layoutInfo.textLayout.lines, splitInfo.splitIndex, layoutInfo.textLayout.lines.length);
 				newLayoutInfo.textLayout.preferredWidth = layoutInfo.textLayout.preferredWidth;
 				newLayoutInfo.textLayout.preferredHeight = layoutInfo.textLayout.preferredHeight - yCorrection;
 
@@ -327,7 +381,7 @@ public class Paginator {
 				textBox.setHeight(textBox.getHeight() - (int) yCorrection);
 
 				layoutInfo.preferredHeight = textBox.getHeight();
-				layoutInfo.textLayout.lines = Arrays.copyOfRange(layoutInfo.textLayout.lines, 0, splitAtLineIndex);
+				layoutInfo.textLayout.lines = Arrays.copyOfRange(layoutInfo.textLayout.lines, 0, splitInfo.splitIndex);
 
 				removeStyles = new ArrayList<>();
 
@@ -343,6 +397,15 @@ public class Paginator {
 
 				textBox.getStyles().removeAll(removeStyles);
 
+				/* TODO: Create unit test
+				if (textBox.getHeight() != splitInfo.firstElementHeight) {
+					System.err.println("TextBox height: " + textBox.getHeight() + " != " + splitInfo.firstElementHeight);
+				}
+				if (newTextBox.getHeight() != splitInfo.secondElementHeight) {
+					System.err.println("New textBox height: " + newTextBox.getHeight() + " != " + splitInfo.secondElementHeight);
+				}
+				*/
+
 				return newTextBox;
 
 			}
@@ -353,39 +416,62 @@ public class Paginator {
 
 	}
 
-	protected Table splitTable(Table table, PageLayoutInfo pageLayoutInfo, int yMin, int yMax, PageLayoutInfo newPageLayoutInfo) {
+	protected void getTableSplitInfo(SplitInfo splitInfo, Table table, Pagination pagination, PageLayoutInfo pageLayoutInfo, int yMax) {
 
 		TableLayoutInfo layoutInfo = pageLayoutInfo.layoutInfo.tables.get(table);
 		if (layoutInfo != null && layoutInfo.rowCount > 1 && layoutInfo.rowBounds != null && table.getY() + table.getHeight() > yMax) {
 
-			// Text layout info can be null (SwingLayoutMetrics)
-			boolean updateTextLayouts = layoutInfo.textLayouts != null;
-
-			int headerRowsHeight = 0;
+			splitInfo.headerHeight = 0;
 			for (int i = 0; i < table.getHeaderRows() && i < layoutInfo.rowBounds.length; i++) {
-				headerRowsHeight += layoutInfo.rowBounds[i].height;
+				splitInfo.headerHeight += layoutInfo.rowBounds[i].height;
 			}
 
 			// Determine at which row the table is to be split (splitAtRow is 1-based, rowBounds[i] is 0-based)
 			// Skip the header rows (header cannot be split for now)
-			int splitAtRow = -1;
-			int yBottom = table.getY() + headerRowsHeight;
+			int tableHeight = splitInfo.headerHeight;
 			for (int i = table.getHeaderRows(); i < layoutInfo.rowCount; i++) {
 
-				yBottom += layoutInfo.rowBounds[i].height;
-				if (yBottom > yMax) {
+				tableHeight += layoutInfo.rowBounds[i].height;
 
-					// This row's bottom is over the max and has to be moved to a new table, add 1 to convert to 1-based row number
-					splitAtRow = i + 1;
+				if (i > table.getHeaderRows() && table.getY() + tableHeight > yMax) {
+
+					// This row's bottom is over the max and has to be moved to a new table (add 1 to convert to 1-based row number)
+					splitInfo.splitPossible = true;
+					splitInfo.splitIndex = i + 1;
 
 					break;
+
+				} else if (i > table.getHeaderRows() && pagination != null && (table.getHeight() - tableHeight) + splitInfo.headerHeight < pagination.getMinHeight()) {
+
+					// Remaining table will be too short, so stop here (add 1 to convert to 1-based row number)
+					splitInfo.splitPossible = true;
+					splitInfo.splitIndex = i + 1;
+
+					break;
+
+				} else {
+
+					splitInfo.firstElementHeight = tableHeight;
+					splitInfo.secondElementHeight = (table.getHeight() - tableHeight) + splitInfo.headerHeight;
 
 				}
 
 			}
 
+		}
+
+	}
+
+	protected Table splitTable(SplitInfo splitInfo, Table table, PageLayoutInfo pageLayoutInfo, int yMin, PageLayoutInfo newPageLayoutInfo) {
+
+		TableLayoutInfo layoutInfo = pageLayoutInfo.layoutInfo.tables.get(table);
+		if (layoutInfo != null && layoutInfo.rowCount > 1 && layoutInfo.rowBounds != null) {
+
+			// Text layout info can be null (SwingLayoutMetrics)
+			boolean updateTextLayouts = layoutInfo.textLayouts != null;
+
 			// Get the range of rows for the new table, fromRow is inclusive, toRow is exclusive, row numbers are 1-based
-			int fromRow = splitAtRow;
+			int fromRow = splitInfo.splitIndex;
 			int toRow = layoutInfo.rowCount + 1;
 
 			if (fromRow > table.getHeaderRows() && toRow > fromRow) {
@@ -439,19 +525,19 @@ public class Paginator {
 				// Calculate height of the new table, subtract 1 because rowBounds is 0-based (bounds of row 11 are stored in rowBounds[10]),
 				// toRow is exclusive, so we need to subtract 2, for example: if last row number is 100 then toRow is 101, bounds of
 				// row number 100 are stored in rowBounds[99] so we need to use toRow - 2
-				newTable.setHeight(headerRowsHeight + ((layoutInfo.rowBounds[toRow - 2].y + layoutInfo.rowBounds[toRow - 2].height) - layoutInfo.rowBounds[fromRow - 1].y));
+				newTable.setHeight(splitInfo.headerHeight + ((layoutInfo.rowBounds[toRow - 2].y + layoutInfo.rowBounds[toRow - 2].height) - layoutInfo.rowBounds[fromRow - 1].y));
 
 				// Update height of original table before row bounds are changed
 				table.setHeight(layoutInfo.rowBounds[fromRow - 1].y);
 
-				int yCorrection = layoutInfo.rowBounds[fromRow - 1].y - headerRowsHeight;
+				int yCorrection = layoutInfo.rowBounds[fromRow - 1].y - splitInfo.headerHeight;
 
 				// Copy header row bounds from original layout info
 				newLayoutInfo.rowBounds = new Bounds[newLayoutInfo.rowCount];
 				for (int i = 0; i < table.getHeaderRows() && i < layoutInfo.rowBounds.length; i++) {
 					newLayoutInfo.rowBounds[i] = layoutInfo.rowBounds[i];
 				}
-				
+
 				// Copy row bounds from original layout info
 				// For example 1 header row, table is split at row 11 (original table will have total of 10 rows)
 				// rowBounds[10] contains first row that needs to be copied to new rowBounds[1]
@@ -497,7 +583,7 @@ public class Paginator {
 				table.getTableCells().removeAll(removeTableCells);
 
 				layoutInfo.preferredHeight = table.getHeight();
-				layoutInfo.rowCount = splitAtRow - 1;
+				layoutInfo.rowCount = fromRow - 1;
 
 				// Update row bounds
 				Bounds[] rowBounds = new Bounds[layoutInfo.rowCount];
@@ -511,6 +597,15 @@ public class Paginator {
 					layoutInfo.columnBounds[i].height = table.getHeight();
 				}
 
+				/* TODO: Create unit test
+				if (table.getHeight() != splitInfo.firstElementHeight) {
+					System.err.println("Table height: " + table.getHeight() + " != " + splitInfo.firstElementHeight);
+				}
+				if (newTable.getHeight() != splitInfo.secondElementHeight) {
+					System.err.println("New table height: " + newTable.getHeight() + " != " + splitInfo.secondElementHeight);
+				}
+				*/
+
 				return newTable;
 
 			}
@@ -518,6 +613,20 @@ public class Paginator {
 		}
 
 		return null;
+
+	}
+
+	protected static class SplitInfo {
+
+		protected boolean splitPossible = false;
+		protected int splitIndex = 0;
+		protected int headerHeight = 0; // TODO? Only used for tables..
+		protected int firstElementHeight = 0;
+		protected int secondElementHeight = 0;
+
+		protected SplitInfo() {
+
+		}
 
 	}
 

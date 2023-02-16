@@ -47,6 +47,7 @@ import org.glasspath.aerialist.Field.DynamicFieldKey;
 import org.glasspath.aerialist.Field.FieldType;
 import org.glasspath.aerialist.FitPolicy;
 import org.glasspath.aerialist.HeightPolicy;
+import org.glasspath.aerialist.IPagination;
 import org.glasspath.aerialist.IVisible;
 import org.glasspath.aerialist.Padding;
 import org.glasspath.aerialist.Page.PageSize;
@@ -238,6 +239,14 @@ public class ActionUtils {
 			menu.add(visibilityMenu);
 		}
 
+		// TODO: For now we only configure pagination settings globally on
+		// document level, later we may also want to edit them on page or
+		// on element level..
+		if (pageView.getParent() instanceof IPagination) {
+			menu.addSeparator();
+			menu.add(createPaginationSettingsMenu(context, (IPagination) pageView.getParent()));
+		}
+
 	}
 
 	private static void populateElementViewMenu(DocumentEditorPanel context, Component component, JMenu menu) {
@@ -314,6 +323,25 @@ public class ActionUtils {
 
 		menu.add(new JCheckBoxMenuItem(new SetPageSizeAction(context, pageView, PageSize.A4.getWidth(), PageSize.A4.getHeight(), "A4 Portrait")));
 		menu.add(new JCheckBoxMenuItem(new SetPageSizeAction(context, pageView, PageSize.A4.getHeight(), PageSize.A4.getWidth(), "A4 Landscape")));
+
+		return menu;
+
+	}
+
+	public static JMenu createPaginationSettingsMenu(DocumentEditorPanel context, IPagination view) {
+
+		JMenu menu = new JMenu("Pagination");
+
+		JMenu minHeightMenu = new JMenu("Minimum element height");
+		menu.add(minHeightMenu);
+
+		minHeightMenu.add(new JCheckBoxMenuItem(new SetPaginationMinHeightAction(context, view, 0)));
+		minHeightMenu.addSeparator();
+		minHeightMenu.add(new JCheckBoxMenuItem(new SetPaginationMinHeightAction(context, view, 50)));
+		minHeightMenu.add(new JCheckBoxMenuItem(new SetPaginationMinHeightAction(context, view, 100)));
+		minHeightMenu.add(new JCheckBoxMenuItem(new SetPaginationMinHeightAction(context, view, 150)));
+		minHeightMenu.add(new JCheckBoxMenuItem(new SetPaginationMinHeightAction(context, view, 200)));
+		minHeightMenu.add(new JCheckBoxMenuItem(new SetPaginationMinHeightAction(context, view, 250)));
 
 		return menu;
 
@@ -606,7 +634,6 @@ public class ActionUtils {
 			int col = tableView.getColumnCount() + 1;
 
 			insertMenu.add(new InsertTableColumnAction(context, tableView, col, "Insert column"));
-
 
 		}
 

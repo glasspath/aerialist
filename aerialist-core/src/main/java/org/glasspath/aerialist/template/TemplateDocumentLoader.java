@@ -302,7 +302,7 @@ public abstract class TemplateDocumentLoader {
 			if (result.pageIndex >= 0) {
 
 				Paginator paginator = new Paginator(layout, listener);
-				result.pages.addAll(paginator.paginate(pageLayoutInfo, document.getHeaderHeight(), page.getHeight() - document.getFooterHeight()));
+				result.pages.addAll(paginator.paginate(document, page, pageLayoutInfo));
 
 			}
 

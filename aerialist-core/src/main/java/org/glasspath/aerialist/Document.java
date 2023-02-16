@@ -31,7 +31,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 @JsonInclude(Include.NON_DEFAULT)
-public class Document extends ContentRoot {
+public class Document extends ContentRoot implements IPagination {
 
 	@JacksonXmlProperty(isAttribute = true)
 	private int headerHeight = 90;
@@ -44,6 +44,9 @@ public class Document extends ContentRoot {
 
 	@JacksonXmlProperty(isAttribute = false)
 	private Page footer = null;
+
+	@JacksonXmlProperty(isAttribute = false)
+	private Pagination pagination = null;
 
 	@JacksonXmlElementWrapper(localName = "pages")
 	@JacksonXmlProperty(localName = "page")
@@ -83,6 +86,16 @@ public class Document extends ContentRoot {
 
 	public void setFooter(Page footer) {
 		this.footer = footer;
+	}
+
+	@Override
+	public Pagination getPagination() {
+		return pagination;
+	}
+
+	@Override
+	public void setPagination(Pagination pagination) {
+		this.pagination = pagination;
 	}
 
 	public List<Page> getPages() {
