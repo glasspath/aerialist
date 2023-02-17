@@ -34,6 +34,7 @@ import org.glasspath.aerialist.Element;
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
 import org.glasspath.aerialist.editor.InsertElementOperation;
 import org.glasspath.aerialist.swing.view.ISwingElementView;
+import org.glasspath.aerialist.swing.view.PageView;
 
 public class InsertElementAction extends AbstractAction {
 
@@ -51,6 +52,11 @@ public class InsertElementAction extends AbstractAction {
 
 	}
 
+	@Override
+	public boolean isEnabled() {
+		return context.getSelection().size() == 1 && context.getSelection().get(0) instanceof PageView;
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 

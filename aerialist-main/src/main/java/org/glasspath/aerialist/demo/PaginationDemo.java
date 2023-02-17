@@ -57,8 +57,6 @@ public class PaginationDemo {
 			@Override
 			public void populateInsertElementMenu(DocumentEditorPanel context, JMenu menu) {
 
-				menu.addSeparator();
-
 				JMenu databaseMenu = new JMenu("Pagination demo");
 				menu.add(databaseMenu);
 

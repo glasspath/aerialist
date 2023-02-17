@@ -57,7 +57,9 @@ import org.glasspath.aerialist.editor.EditorPanel;
 import org.glasspath.aerialist.editor.ElementData;
 import org.glasspath.aerialist.icons.Icons;
 import org.glasspath.aerialist.swing.view.FieldUtils;
+import org.glasspath.aerialist.swing.view.FooterPageView;
 import org.glasspath.aerialist.swing.view.GroupView;
+import org.glasspath.aerialist.swing.view.HeaderPageView;
 import org.glasspath.aerialist.swing.view.IScalableView;
 import org.glasspath.aerialist.swing.view.ISwingElementView;
 import org.glasspath.aerialist.swing.view.ImageView;
@@ -159,18 +161,39 @@ public class ActionUtils {
 
 	private static void populatePageViewMenu(DocumentEditorPanel context, PageView pageView, JMenu menu) {
 
-		menu.add(createInsertElementMenu(context));
-		menu.add(createPageSizeMenu(context, (PageView) pageView));
+		boolean showMinimalMenu = false;
+		boolean editingHeader = context.getPageContainer().isEditingHeader();
+		boolean editingFooter = context.getPageContainer().isEditingFooter();
 
-		menu.addSeparator();
+		// Normal page selected while editing header/footer, don't show full menu
+		if (editingHeader && !(pageView instanceof HeaderPageView)) {
+			showMinimalMenu = true;
+		} else if (editingFooter && !(pageView instanceof FooterPageView)) {
+			showMinimalMenu = true;
+		}
 
-		menu.add(context.getCopyAction());
-		menu.add(context.getPasteAction());
-		menu.add(new DeletePageAction(context, pageView));
+		if (!showMinimalMenu) {
 
-		menu.addSeparator();
+			menu.add(createInsertElementMenu(context, !editingHeader && !editingFooter));
+			menu.add(createPageSizeMenu(context, (PageView) pageView));
 
-		if (context.getPageContainer().isEditingHeader()) {
+			menu.addSeparator();
+
+			// Header/footer cannot be copied or deleted, pasting page while
+			// editing header/footer leads to problems with paste index..
+			if (!editingHeader && !editingFooter) {
+
+				menu.add(context.getCopyAction());
+				menu.add(context.getPasteAction());
+				menu.add(new DeletePageAction(context, pageView));
+
+				menu.addSeparator();
+
+			}
+
+		}
+
+		if (editingHeader) {
 
 			JMenuItem finishEditingHeaderMenuItem = new JMenuItem("Finish editing page header");
 			menu.add(finishEditingHeaderMenuItem);
@@ -182,7 +205,7 @@ public class ActionUtils {
 				}
 			});
 
-		} else if (context.getPageContainer().isEditingFooter()) {
+		} else if (editingFooter) {
 
 			JMenuItem finishEditingFooterMenuItem = new JMenuItem("Finish editing page footer");
 			menu.add(finishEditingFooterMenuItem);
@@ -220,31 +243,35 @@ public class ActionUtils {
 
 		}
 
-		menu.addSeparator();
+		if (!showMinimalMenu) {
 
-		JMenuItem updateFieldsMenuItem = new JMenuItem("Update fields");
-		menu.add(updateFieldsMenuItem);
-		updateFieldsMenuItem.addActionListener(new ActionListener() {
+			menu.addSeparator();
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				FieldUtils.updateDynamicFields(context.getPageContainer());
-				context.getPageContainer().refresh(null);
+			JMenuItem updateFieldsMenuItem = new JMenuItem("Update fields");
+			menu.add(updateFieldsMenuItem);
+			updateFieldsMenuItem.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					FieldUtils.updateDynamicFields(context.getPageContainer());
+					context.getPageContainer().refresh(null);
+				}
+			});
+
+			JMenu visibilityMenu = createVisibilityMenu(context, pageView);
+			if (visibilityMenu != null) {
+				menu.addSeparator();
+				menu.add(visibilityMenu);
 			}
-		});
 
-		JMenu visibilityMenu = createVisibilityMenu(context, pageView);
-		if (visibilityMenu != null) {
-			menu.addSeparator();
-			menu.add(visibilityMenu);
-		}
+			// TODO: For now we only configure pagination settings globally on
+			// document level, later we may also want to edit them on page or
+			// on element level..
+			if (pageView.getParent() instanceof IPagination) {
+				menu.addSeparator();
+				menu.add(createPaginationSettingsMenu(context, (IPagination) pageView.getParent()));
+			}
 
-		// TODO: For now we only configure pagination settings globally on
-		// document level, later we may also want to edit them on page or
-		// on element level..
-		if (pageView.getParent() instanceof IPagination) {
-			menu.addSeparator();
-			menu.add(createPaginationSettingsMenu(context, (IPagination) pageView.getParent()));
 		}
 
 	}
@@ -347,19 +374,25 @@ public class ActionUtils {
 
 	}
 
-	public static JMenu createInsertElementMenu(DocumentEditorPanel context) {
+	public static JMenu createInsertElementMenu(DocumentEditorPanel context, boolean createInsertPageItems) {
 
 		JMenu menu = new JMenu("Insert");
 
-		if (context.getSelection().size() == 1 && context.getSelection().get(0) instanceof PageView) {
+		if (createInsertPageItems) {
 
-			PageView pageView = (PageView) context.getSelection().get(0);
+			if (context.getSelection().size() == 1 && context.getSelection().get(0) instanceof PageView) {
 
-			menu.add(new InsertPageAction(context, AerialistUtils.createDefaultPage(pageView.getWidth(), pageView.getHeight()), InsertPageAction.ABOVE));
-			menu.add(new InsertPageAction(context, AerialistUtils.createDefaultPage(pageView.getWidth(), pageView.getHeight()), InsertPageAction.BELOW));
+				PageView pageView = (PageView) context.getSelection().get(0);
 
-		} else {
-			menu.add(new InsertPageAction(context, AerialistUtils.createDefaultPage(), InsertPageAction.INSERT));
+				menu.add(new InsertPageAction(context, AerialistUtils.createDefaultPage(pageView.getWidth(), pageView.getHeight()), InsertPageAction.ABOVE));
+				menu.add(new InsertPageAction(context, AerialistUtils.createDefaultPage(pageView.getWidth(), pageView.getHeight()), InsertPageAction.BELOW));
+
+			} else {
+				menu.add(new InsertPageAction(context, AerialistUtils.createDefaultPage(), InsertPageAction.INSERT));
+			}
+
+			menu.addSeparator();
+
 		}
 
 		if (context.getEditorContext() != null) {

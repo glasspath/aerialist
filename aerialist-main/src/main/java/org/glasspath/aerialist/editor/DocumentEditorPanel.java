@@ -576,7 +576,7 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 			Graphics2D g2d = (Graphics2D) g;
 
 			boolean editable = ISwingViewContext.getContainerPaintFlag(this, ISwingViewContext.CONTAINER_PAINT_FLAG_EDITABLE);
-			
+
 			view.drawEditorBackground(g2d, this, editable);
 
 			super.paint(g);
@@ -591,6 +591,8 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 			if (!editingHeader && !editingFooter && replacedPageView == null) {
 
 				editingHeader = true;
+
+				selection.clear();
 
 				for (int i = 0; i < getComponentCount(); i++) {
 
@@ -608,6 +610,7 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 						}
 
 						add(headerPageView, i);
+						selection.add(headerPageView);
 
 						validate();
 						repaint();
@@ -622,7 +625,7 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 					editingHeader = false;
 				}
 
-				context.getMainPanel().updateEditMenu();
+				selection.fireSelectionChanged();
 
 			}
 
@@ -633,6 +636,8 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 			if (!editingHeader && !editingFooter && replacedPageView == null) {
 
 				editingFooter = true;
+
+				selection.clear();
 
 				for (int i = 0; i < getComponentCount(); i++) {
 
@@ -650,6 +655,7 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 						}
 
 						add(footerPageView, i);
+						selection.add(footerPageView);
 
 						validate();
 						repaint();
@@ -664,7 +670,7 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 					editingFooter = false;
 				}
 
-				context.getMainPanel().updateEditMenu();
+				selection.fireSelectionChanged();
 
 			}
 
@@ -673,6 +679,8 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 		public void stopEditingHeaderView() {
 
 			if (editingHeader && replacedPageView != null) {
+
+				selection.clear();
 
 				remove(replacedPageViewIndex);
 				add(replacedPageView, replacedPageViewIndex);
@@ -686,7 +694,7 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 				replacedPageViewIndex = -1;
 				editingHeader = false;
 
-				context.getMainPanel().updateEditMenu();
+				selection.fireSelectionChanged();
 
 			}
 
@@ -695,6 +703,8 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 		public void stopEditingFooterView() {
 
 			if (editingFooter && replacedPageView != null) {
+
+				selection.clear();
 
 				remove(replacedPageViewIndex);
 				add(replacedPageView, replacedPageViewIndex);
@@ -708,7 +718,7 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 				replacedPageViewIndex = -1;
 				editingFooter = false;
 
-				context.getMainPanel().updateEditMenu();
+				selection.fireSelectionChanged();
 
 			}
 
