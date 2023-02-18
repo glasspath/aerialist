@@ -673,6 +673,28 @@ public class ActionUtils {
 
 	}
 
+	public static JMenu createTableHeaderMenu(DocumentEditorPanel context, TableView tableView) {
+
+		JMenu headerMenu = new JMenu("Table header");
+
+		headerMenu.add(new JCheckBoxMenuItem(new SetHeaderRowsAction(context, tableView, 0)));
+
+		headerMenu.addSeparator();
+
+		headerMenu.add(new JCheckBoxMenuItem(new SetHeaderRowsAction(context, tableView, 1)));
+		headerMenu.add(new JCheckBoxMenuItem(new SetHeaderRowsAction(context, tableView, 2)));
+		headerMenu.add(new JCheckBoxMenuItem(new SetHeaderRowsAction(context, tableView, 3)));
+
+		headerMenu.addSeparator();
+
+		JMenu headerColorMenu = createColorMenu(context.getFrame(), "Background color", null, new SetRowColorAction(context, tableView, 0, 0)); // Use row 0 for header
+		headerColorMenu.setEnabled(tableView.getHeaderRows() > 0);
+		headerMenu.add(headerColorMenu);
+
+		return headerMenu;
+
+	}
+
 	public static JMenu createLayoutMenu(DocumentEditorPanel context, ISwingElementView<?> elementView, PageView pageView) {
 
 		JMenu menu = new JMenu("Layout");
@@ -705,26 +727,6 @@ public class ActionUtils {
 
 	public static JMenu createBackgroundColorMenu(Frame frame, Color color, Action action) {
 		return createColorMenu(frame, "Background color", color, action);
-	}
-
-	public static JMenu createTableHeaderMenu(DocumentEditorPanel context, TableView tableView) {
-
-		JMenu headerMenu = new JMenu("Table header");
-
-		headerMenu.add(new JCheckBoxMenuItem(new SetHeaderRowsAction(context, tableView, 0)));
-
-		headerMenu.addSeparator();
-
-		headerMenu.add(new JCheckBoxMenuItem(new SetHeaderRowsAction(context, tableView, 1)));
-		headerMenu.add(new JCheckBoxMenuItem(new SetHeaderRowsAction(context, tableView, 2)));
-		headerMenu.add(new JCheckBoxMenuItem(new SetHeaderRowsAction(context, tableView, 3)));
-
-		headerMenu.addSeparator();
-
-		headerMenu.add(createColorMenu(context.getFrame(), "Background color", null, new SetRowColorAction(context, tableView, 0, 0))); // Use row 0 for header
-
-		return headerMenu;
-
 	}
 
 	public static JMenu createRowColorsMenu(DocumentEditorPanel context, TableView tableView) {
