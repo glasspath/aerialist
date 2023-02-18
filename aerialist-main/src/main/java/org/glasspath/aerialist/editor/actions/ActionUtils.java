@@ -63,6 +63,7 @@ import org.glasspath.aerialist.swing.view.HeaderPageView;
 import org.glasspath.aerialist.swing.view.IScalableView;
 import org.glasspath.aerialist.swing.view.ISwingElementView;
 import org.glasspath.aerialist.swing.view.ImageView;
+import org.glasspath.aerialist.swing.view.LayeredPageView;
 import org.glasspath.aerialist.swing.view.PageContainer;
 import org.glasspath.aerialist.swing.view.PageView;
 import org.glasspath.aerialist.swing.view.QrCodeView;
@@ -267,7 +268,7 @@ public class ActionUtils {
 			// TODO: For now we only configure pagination settings globally on
 			// document level, later we may also want to edit them on page or
 			// on element level..
-			if (pageView.getParent() instanceof IPagination) {
+			if (pageView instanceof LayeredPageView && pageView.getParent() instanceof IPagination) {
 				menu.addSeparator();
 				menu.add(createPaginationSettingsMenu(context, (IPagination) pageView.getParent()));
 			}
