@@ -38,6 +38,7 @@ import org.glasspath.aerialist.template.TemplateMetadata.AbstractMetadata;
 import org.glasspath.aerialist.template.TemplateMetadata.FieldMetadata;
 import org.glasspath.aerialist.template.TemplateMetadata.MetadataList;
 import org.glasspath.aerialist.template.TemplateMetadata.TableMetadata;
+import org.glasspath.common.swing.dialog.AboutDialog.IAbout;
 
 public abstract class EditorContext<T extends EditorPanel<T>> {
 
@@ -45,6 +46,7 @@ public abstract class EditorContext<T extends EditorPanel<T>> {
 	private TemplateMetadata templateMetadata = null;
 	private JComponent headerComponent = null;
 	private boolean editable = true;
+	private IAbout about = null;
 
 	public EditorContext() {
 
@@ -80,6 +82,14 @@ public abstract class EditorContext<T extends EditorPanel<T>> {
 
 	public void setEditable(boolean editable) {
 		this.editable = editable;
+	}
+
+	public IAbout getAbout() {
+		return about;
+	}
+
+	public void setAbout(IAbout about) {
+		this.about = about;
 	}
 
 	public abstract void populateInsertElementMenu(T context, JMenu menu);

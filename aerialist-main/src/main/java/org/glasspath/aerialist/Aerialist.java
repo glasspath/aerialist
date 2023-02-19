@@ -42,7 +42,6 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
@@ -57,6 +56,7 @@ import org.glasspath.aerialist.icons.Icons;
 import org.glasspath.aerialist.text.font.FontWeight;
 import org.glasspath.aerialist.tools.EditTools;
 import org.glasspath.aerialist.tools.FileTools;
+import org.glasspath.aerialist.tools.HelpTools;
 import org.glasspath.aerialist.tools.ObjectFormatTools;
 import org.glasspath.aerialist.tools.SearchTools;
 import org.glasspath.aerialist.tools.TextFormatTools;
@@ -79,8 +79,8 @@ import org.slf4j.LoggerFactory;
 @SuppressWarnings("nls")
 public class Aerialist implements FrameContext {
 
-	public static boolean TEMP_TEST_STANDALONE = true;
-	public static Class<?> APPLICATION_CLASS = Aerialist.class;
+	public static boolean TEMP_TEST_STANDALONE = true; // TODO
+	public static Class<?> APPLICATION_CLASS = Aerialist.class; // TODO
 
 	public static final int VERSION_CODE = 1;
 	public static final String VERSION_NAME = "1.0";
@@ -108,6 +108,7 @@ public class Aerialist implements FrameContext {
 	private final SearchTools searchTools;
 	private final TextFormatTools textFormatTools;
 	private final ObjectFormatTools objectFormatTools;
+	private final HelpTools helpTools;
 	private final JLabel statusLabel;
 
 	private boolean sourceEditorEnabled = true;
@@ -135,6 +136,7 @@ public class Aerialist implements FrameContext {
 		this.searchTools = new SearchTools(this);
 		this.textFormatTools = new TextFormatTools(mainPanel.getDocumentEditor());
 		this.objectFormatTools = new ObjectFormatTools(mainPanel.getDocumentEditor());
+		this.helpTools = new HelpTools(this);
 		this.statusLabel = new JLabel();
 
 		glassPane.setContentComponent(mainPanel);
@@ -180,8 +182,8 @@ public class Aerialist implements FrameContext {
 		menuBar.add(viewTools.getMenu());
 		// menuBar.add(formatTools.getMenu()); // TODO?
 		menuBar.add(searchTools.getMenu());
-		menuBar.add(new JMenu("Tools"));
-		menuBar.add(new JMenu("Help"));
+		// menuBar.add(new JMenu("Tools"));
+		menuBar.add(helpTools.getMenu());
 		frame.setJMenuBar(menuBar);
 
 		statusBar.setPreferredSize(new Dimension(100, 20));
