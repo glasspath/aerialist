@@ -355,7 +355,7 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 		if (selection.size() > 1) {
 			ActionUtils.populateMenu(menu, this, selection);
 		} else {
-			ActionUtils.populateMenu(menu, this, component);
+			ActionUtils.populateMenu(menu, this, component, false);
 		}
 
 		JPopupMenu popupMenu = menu.getPopupMenu();
@@ -372,7 +372,7 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 		if (selection.size() > 1) {
 			ActionUtils.populateMenu(menu, this, selection);
 		} else if (selection.size() == 1 && selection.get(0) instanceof Component) { // TODO?
-			ActionUtils.populateMenu(menu, this, (Component) selection.get(0));
+			ActionUtils.populateMenu(menu, this, (Component) selection.get(0), true);
 		}
 	}
 

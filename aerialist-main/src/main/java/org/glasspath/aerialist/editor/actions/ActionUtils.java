@@ -35,6 +35,8 @@ import java.util.List;
 
 import javax.swing.Action;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JColorChooser;
+import javax.swing.JDialog;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.MenuSelectionManager;
@@ -70,8 +72,11 @@ import org.glasspath.aerialist.swing.view.QrCodeView;
 import org.glasspath.aerialist.swing.view.TableCellView;
 import org.glasspath.aerialist.swing.view.TableView;
 import org.glasspath.aerialist.swing.view.TextView;
+import org.glasspath.common.os.OsUtils;
 import org.glasspath.common.swing.border.BorderMenu;
+import org.glasspath.common.swing.color.ColorChooserDialog;
 import org.glasspath.common.swing.color.ColorChooserPanel;
+import org.glasspath.common.swing.color.ColorChooserPanel.ColorEvent;
 import org.glasspath.common.swing.file.chooser.FileChooser;
 import org.glasspath.common.swing.padding.PaddingDialog;
 import org.glasspath.common.swing.padding.PaddingPanel;
@@ -138,14 +143,14 @@ public class ActionUtils {
 
 	}
 
-	public static void populateMenu(JMenu menu, DocumentEditorPanel context, Component component) {
+	public static void populateMenu(JMenu menu, DocumentEditorPanel context, Component component, boolean menuBarMenu) {
 
 		if (component instanceof PageContainer) {
 			populatePageContainerMenu(context, menu);
 		} else if (component instanceof PageView) {
 			populatePageViewMenu(context, (PageView) component, menu);
 		} else {
-			populateElementViewMenu(context, component, menu);
+			populateElementViewMenu(context, component, menu, menuBarMenu);
 		}
 
 	}
@@ -277,7 +282,7 @@ public class ActionUtils {
 
 	}
 
-	private static void populateElementViewMenu(DocumentEditorPanel context, Component component, JMenu menu) {
+	private static void populateElementViewMenu(DocumentEditorPanel context, Component component, JMenu menu, boolean menuBarMenu) {
 
 		Component element = AerialistUtils.getElementViewAsComponent(component);
 		if (element instanceof ISwingElementView<?> && element.getParent() instanceof PageView) {
@@ -292,10 +297,10 @@ public class ActionUtils {
 			menu.addSeparator();
 
 			if (component instanceof TableCellView && component.getParent() instanceof TableView) {
-				populateTableCellViewMenu(context, (TableView) component.getParent(), (TableCellView) component, menu);
+				populateTableCellViewMenu(context, (TableView) component.getParent(), (TableCellView) component, menu, menuBarMenu);
 				menu.addSeparator();
 			} else if (component instanceof TableView) {
-				populateTableCellViewMenu(context, (TableView) component, null, menu);
+				populateTableCellViewMenu(context, (TableView) component, null, menu, menuBarMenu);
 				menu.addSeparator();
 			} else if (component instanceof QrCodeView) {
 				populateQrCodeViewMenu(context, (QrCodeView) component, menu);
@@ -313,11 +318,11 @@ public class ActionUtils {
 
 			menu.addSeparator();
 
-			menu.add(createBackgroundColorMenu(context.getFrame(), elementView.getBackgroundColor(), new SetBackgroundColorAction(context)));
+			menu.add(createBackgroundColorMenuItem(context.getFrame(), elementView.getBackgroundColor(), new SetBackgroundColorAction(context), menuBarMenu));
 			if (elementView instanceof TableView) {
-				menu.add(createRowColorsMenu(context, (TableView) elementView));
+				menu.add(createRowColorsMenu(context, (TableView) elementView, menuBarMenu));
 			}
-			menu.add(new BorderMenu(new SetBorderTypeAction(context), new SetBorderWidthAction(context), new SetBorderColorAction(context)) {
+			menu.add(new BorderMenu(new SetBorderTypeAction(context), new SetBorderWidthAction(context), new SetBorderColorAction(context), menuBarMenu) {
 
 				@Override
 				protected Frame getFrame() {
@@ -628,7 +633,7 @@ public class ActionUtils {
 
 	}
 
-	private static void populateTableCellViewMenu(DocumentEditorPanel context, TableView tableView, TableCellView tableCellView, JMenu menu) {
+	private static void populateTableCellViewMenu(DocumentEditorPanel context, TableView tableView, TableCellView tableCellView, JMenu menu, boolean menuBarMenu) {
 
 		if (tableCellView != null) {
 
@@ -638,7 +643,7 @@ public class ActionUtils {
 
 		}
 
-		menu.add(createTableHeaderMenu(context, tableView));
+		menu.add(createTableHeaderMenu(context, tableView, menuBarMenu));
 
 		JMenu insertMenu = new JMenu("Insert");
 		insertMenu.setIcon(Icons.table);
@@ -673,7 +678,7 @@ public class ActionUtils {
 
 	}
 
-	public static JMenu createTableHeaderMenu(DocumentEditorPanel context, TableView tableView) {
+	public static JMenu createTableHeaderMenu(DocumentEditorPanel context, TableView tableView, boolean menuBarMenu) {
 
 		JMenu headerMenu = new JMenu("Table header");
 
@@ -687,9 +692,9 @@ public class ActionUtils {
 
 		headerMenu.addSeparator();
 
-		JMenu headerColorMenu = createColorMenu(context.getFrame(), "Background color", null, new SetRowColorAction(context, tableView, 0, 0)); // Use row 0 for header
-		headerColorMenu.setEnabled(tableView.getHeaderRows() > 0);
-		headerMenu.add(headerColorMenu);
+		JMenuItem headerColorMenuItem = createColorMenuItem(context.getFrame(), "Background color", null, new SetRowColorAction(context, tableView, 0, 0), menuBarMenu); // Use row 0 for header
+		headerColorMenuItem.setEnabled(tableView.getHeaderRows() > 0);
+		headerMenu.add(headerColorMenuItem);
 
 		return headerMenu;
 
@@ -725,55 +730,96 @@ public class ActionUtils {
 
 	}
 
-	public static JMenu createBackgroundColorMenu(Frame frame, Color color, Action action) {
-		return createColorMenu(frame, "Background color", color, action);
+	public static JMenuItem createBackgroundColorMenuItem(Frame frame, Color color, Action action, boolean menuBarMenu) {
+		return createColorMenuItem(frame, "Background color", color, action, menuBarMenu);
 	}
 
-	public static JMenu createRowColorsMenu(DocumentEditorPanel context, TableView tableView) {
+	public static JMenu createRowColorsMenu(DocumentEditorPanel context, TableView tableView, boolean menuBarMenu) {
 
 		JMenu rowColorsMenu = new JMenu("Row colors");
 
-		rowColorsMenu.add(createColorMenu(context.getFrame(), "Even Rows", null, new SetRowColorAction(context, tableView, 2, 2)));
-		rowColorsMenu.add(createColorMenu(context.getFrame(), "Odd rows", null, new SetRowColorAction(context, tableView, 1, 2)));
+		rowColorsMenu.add(createColorMenuItem(context.getFrame(), "Even Rows", null, new SetRowColorAction(context, tableView, 2, 2), menuBarMenu));
+		rowColorsMenu.add(createColorMenuItem(context.getFrame(), "Odd rows", null, new SetRowColorAction(context, tableView, 1, 2), menuBarMenu));
 
 		return rowColorsMenu;
 
 	}
 
-	public static JMenu createColorMenu(Frame frame, String text, Color color, Action action) {
+	public static JMenuItem createColorMenuItem(Frame frame, String text, Color color, Action action, boolean menuBarMenu) {
 
-		JMenu editColorMenu = new JMenu(text);
+		if (menuBarMenu && OsUtils.PLATFORM_MACOS) {
 
-		ColorChooserPanel colorChooserPanel = new ColorChooserPanel(color) {
+			JMenuItem editColorMenuItem = new JMenuItem(text);
+			editColorMenuItem.addActionListener(new ActionListener() {
 
-			@Override
-			protected Frame getFrame() {
-				return frame;
-			}
-		};
-		editColorMenu.add(colorChooserPanel);
-		colorChooserPanel.getColorChooser().getActionButton().addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				MenuSelectionManager.defaultManager().clearSelectedPath();
-			}
-		});
-		colorChooserPanel.addActionListener(new ActionListener() {
+					JColorChooser colorChooser = new JColorChooser();
+					colorChooser.setColor(color);
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
+					JDialog dialog = new ColorChooserDialog(frame, "Edit color", true, null, colorChooser, new ActionListener() {
 
-				MenuSelectionManager.defaultManager().clearSelectedPath();
+						@Override
+						public void actionPerformed(ActionEvent e) {
 
-				if (action != null) {
-					action.actionPerformed(e);
+							final Color color;
+							if (ColorChooserDialog.NULL_COLOR.equals(colorChooser.getColor())) {
+								color = null;
+							} else {
+								color = colorChooser.getColor();
+							}
+
+							action.actionPerformed(new ColorEvent(e, color));
+
+						}
+					}, null);
+
+					dialog.setLocationRelativeTo(frame);
+					dialog.setVisible(true);
+					dialog.requestFocusInWindow();
+
 				}
+			});
 
-			}
-		});
+			return editColorMenuItem;
 
-		return editColorMenu;
+		} else {
+
+			JMenu editColorMenu = new JMenu(text);
+
+			ColorChooserPanel colorChooserPanel = new ColorChooserPanel(color) {
+
+				@Override
+				protected Frame getFrame() {
+					return frame;
+				}
+			};
+			editColorMenu.add(colorChooserPanel);
+			colorChooserPanel.getColorChooser().getActionButton().addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					MenuSelectionManager.defaultManager().clearSelectedPath();
+				}
+			});
+			colorChooserPanel.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+
+					MenuSelectionManager.defaultManager().clearSelectedPath();
+
+					if (action != null) {
+						action.actionPerformed(e);
+					}
+
+				}
+			});
+
+			return editColorMenu;
+
+		}
 
 	}
 
