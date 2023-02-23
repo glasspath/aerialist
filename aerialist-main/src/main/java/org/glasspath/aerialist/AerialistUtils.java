@@ -323,6 +323,10 @@ public class AerialistUtils {
 
 	}
 
+	public static Document createEmptyDocument() {
+		return new Document();
+	}
+
 	public static Document createDefaultDocument() {
 
 		Document document = new Document();
@@ -338,6 +342,15 @@ public class AerialistUtils {
 
 	public static Page createDefaultPage(int width, int height) {
 		return new Page(width, height);
+	}
+
+	public static Email createEmptyEmail() {
+
+		Email email = new Email();
+		email.setTable(createDefaultEmailTable());
+
+		return email;
+
 	}
 
 	public static Email createDefaultEmail() {
