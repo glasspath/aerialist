@@ -490,7 +490,7 @@ public class FileTools {
 
 	}
 
-	private boolean saveCurrentDocument(String path) {
+	public boolean saveCurrentDocument(String path) {
 
 		DocumentEditorPanel editor = context.getMainPanel().getDocumentEditor();
 
@@ -508,6 +508,29 @@ public class FileTools {
 
 	}
 
+	public void closeDocument() {
+		
+		if (checkFileSaved()) {
+
+			currentFilePath = null;
+			context.setContentChanged(false);
+
+			context.getUndoActions().getUndoManager().discardAllEdits();
+			context.getUndoActions().updateActions();
+
+			DocumentEditorPanel editor = context.getMainPanel().getDocumentEditor();
+
+			editor.getSelection().clear();
+			editor.getPageContainer().init(AerialistUtils.createEmptyDocument());
+
+			editor.invalidate();
+			editor.validate();
+			editor.repaint();
+
+		}
+		
+	}
+	
 	public boolean checkFileSaved() {
 
 		if (context.isContentChanged()) {

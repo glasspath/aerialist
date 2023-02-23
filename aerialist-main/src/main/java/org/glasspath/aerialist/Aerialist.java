@@ -244,7 +244,7 @@ public class Aerialist implements FrameContext {
 
 							@Override
 							public void run() {
-								open(openFile, templateFieldContext);
+								openDocument(openFile, templateFieldContext);
 							}
 						});
 
@@ -276,12 +276,32 @@ public class Aerialist implements FrameContext {
 
 	}
 
-	public void open(String documentPath, IFieldContext templateFieldContext) {
+	public void openDocument(String documentPath, IFieldContext templateFieldContext) {
 		fileTools.loadDocument(documentPath, templateFieldContext);
 	}
 
-	public void export(String filePath) {
+	public void saveDocument(String documentPath) {
+		fileTools.saveCurrentDocument(documentPath);
+	}
+
+	public void exportDocument(String filePath) {
 		fileTools.exportToPdf(filePath, false);
+	}
+
+	public void closeDocument() {
+		fileTools.closeDocument();
+	}
+
+	public void showOverlay(String text) {
+		glassPane.showOverlayLabel(text);
+	}
+
+	public boolean isOverlayVisible() {
+		return glassPane.isOverlayLabelVisible();
+	}
+
+	public void hideOverlay() {
+		glassPane.hideOverlayLabel();
 	}
 
 	@Override
