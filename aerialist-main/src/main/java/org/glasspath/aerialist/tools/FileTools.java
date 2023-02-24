@@ -443,7 +443,7 @@ public class FileTools {
 										documentLoader.setLayoutListener(listener);
 										documentLoader.loadDocument(new File(documentPath), templateFieldContext, OsUtils.getBundledFile(Aerialist.APPLICATION_CLASS, "fonts"), new File("export.pdf"));
 
-										DesktopUtils.open("export.pdf");
+										DesktopUtils.open("export.pdf", context.getFrame());
 
 									}
 								}).start();
@@ -594,7 +594,7 @@ public class FileTools {
 					documentEditor.getPageContainer().setExportPhase(ExportPhase.IDLE);
 
 					if (open) {
-						DesktopUtils.open(filePath);
+						DesktopUtils.open(filePath, context.getFrame());
 					}
 
 				} catch (DocumentException e) {
@@ -627,7 +627,7 @@ public class FileTools {
 
 					documentEditor.getPageContainer().setExportPhase(ExportPhase.IDLE);
 
-					DesktopUtils.open("export.html");
+					DesktopUtils.open("export.html", context.getFrame());
 
 				} catch (DocumentException e) {
 					e.printStackTrace();
