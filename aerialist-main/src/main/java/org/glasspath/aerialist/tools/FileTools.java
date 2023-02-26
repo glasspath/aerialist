@@ -22,6 +22,7 @@
  */
 package org.glasspath.aerialist.tools;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -57,6 +58,7 @@ import org.glasspath.aerialist.swing.BufferedImageMediaCache;
 import org.glasspath.aerialist.swing.SwingLayoutMetrics;
 import org.glasspath.aerialist.swing.view.DefaultSwingViewContext;
 import org.glasspath.aerialist.swing.view.FieldUtils;
+import org.glasspath.aerialist.swing.view.TextView;
 import org.glasspath.aerialist.template.TemplateDocumentLoader;
 import org.glasspath.aerialist.writer.XDocWriter;
 import org.glasspath.common.os.OsUtils;
@@ -509,7 +511,7 @@ public class FileTools {
 	}
 
 	public void closeDocument() {
-		
+
 		if (checkFileSaved()) {
 
 			currentFilePath = null;
@@ -528,9 +530,9 @@ public class FileTools {
 			editor.repaint();
 
 		}
-		
+
 	}
-	
+
 	public boolean checkFileSaved() {
 
 		if (context.isContentChanged()) {
@@ -575,36 +577,40 @@ public class FileTools {
 
 		DocumentEditorPanel documentEditor = context.getMainPanel().getDocumentEditor();
 
-		documentEditor.deselectAll();
-		documentEditor.repaint();
+		// Clear text selection (otherwise it gets painted by PDF graphics2D)
+		for (Component component : documentEditor.getSelection()) {
 
-		SwingUtilities.invokeLater(new Runnable() {
+			if (component instanceof TextView) {
 
-			@Override
-			public void run() {
-
-				try {
-
-					documentEditor.getPageContainer().setExportPhase(ExportPhase.EXPORT);
-
-					File outputFile = new File(filePath);
-
-					AerialistUtils.writeToPDF(documentEditor.getPageContainer(), outputFile);
-
-					documentEditor.getPageContainer().setExportPhase(ExportPhase.IDLE);
-
-					if (open) {
-						DesktopUtils.open(filePath, context.getFrame());
-					}
-
-				} catch (DocumentException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				TextView textView = (TextView) component;
+				textView.setSelectionStart(-1);
+				textView.setSelectionEnd(-1);
 
 			}
-		});
+
+		}
+
+		documentEditor.deselectAll();
+
+		try {
+
+			documentEditor.getPageContainer().setExportPhase(ExportPhase.EXPORT);
+
+			File outputFile = new File(filePath);
+
+			AerialistUtils.writeToPDF(documentEditor.getPageContainer(), outputFile);
+
+			documentEditor.getPageContainer().setExportPhase(ExportPhase.IDLE);
+
+			if (open) {
+				DesktopUtils.open(filePath, context.getFrame());
+			}
+
+		} catch (DocumentException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 	}
 
