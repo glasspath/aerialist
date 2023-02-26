@@ -577,6 +577,8 @@ public class FileTools {
 
 		DocumentEditorPanel documentEditor = context.getMainPanel().getDocumentEditor();
 
+		documentEditor.cancelSearch();
+
 		// Clear text selection (otherwise it gets painted by PDF graphics2D)
 		for (Component component : documentEditor.getSelection()) {
 

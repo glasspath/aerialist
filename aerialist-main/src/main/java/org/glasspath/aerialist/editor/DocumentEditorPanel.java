@@ -29,6 +29,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Shape;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
@@ -43,6 +44,9 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.event.CaretEvent;
+import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
+import javax.swing.text.JTextComponent;
+import javax.swing.text.View;
 import javax.swing.undo.UndoableEdit;
 
 import org.glasspath.aerialist.Aerialist;
@@ -51,6 +55,7 @@ import org.glasspath.aerialist.Page;
 import org.glasspath.aerialist.editor.actions.ActionUtils;
 import org.glasspath.aerialist.editor.actions.CopyAction;
 import org.glasspath.aerialist.editor.actions.PasteAction;
+import org.glasspath.aerialist.layout.ILayoutContext.ExportPhase;
 import org.glasspath.aerialist.media.MediaCache;
 import org.glasspath.aerialist.swing.view.FooterPageView;
 import org.glasspath.aerialist.swing.view.HeaderPageView;
@@ -60,6 +65,7 @@ import org.glasspath.aerialist.swing.view.PageView;
 import org.glasspath.aerialist.swing.view.TableCellView;
 import org.glasspath.aerialist.text.font.FontCache;
 import org.glasspath.common.swing.keyboard.KeyboardUtils;
+import org.glasspath.common.swing.search.UISearchHandler;
 import org.glasspath.common.swing.selection.SelectionListener;
 
 public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
@@ -135,7 +141,47 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 			}
 		});
 
-		createSearchHandler(pageContainer);
+		UISearchHandler searchHandler = new UISearchHandler(pageContainer) {
+
+			@Override
+			public void textFound(JTextComponent component, String text, int index) {
+
+				selection.clear();
+				selection.select(component);
+
+				component.select(index, index + text.length());
+
+				repaint();
+
+			}
+		};
+
+		// TODO? Search handler doesn't clear highlights immediately, so for now we use
+		// custom HighlightPainters to prevent highlights from being exported to PDF..
+		searchHandler.setOccurenceHighlighter(new DefaultHighlightPainter(UISearchHandler.OCCURENCE_COLOR) {
+
+			@Override
+			public Shape paintLayer(Graphics g, int offs0, int offs1, Shape bounds, JTextComponent c, View view) {
+				if (pageContainer.getExportPhase() != ExportPhase.EXPORT) {
+					return super.paintLayer(g, offs0, offs1, bounds, c, view);
+				} else {
+					return null;
+				}
+			}
+		});
+		searchHandler.setSearchHighlighter(new DefaultHighlightPainter(UISearchHandler.HIGHLIGHT_COLOR) {
+
+			@Override
+			public Shape paintLayer(Graphics g, int offs0, int offs1, Shape bounds, JTextComponent c, View view) {
+				if (pageContainer.getExportPhase() != ExportPhase.EXPORT) {
+					return super.paintLayer(g, offs0, offs1, bounds, c, view);
+				} else {
+					return null;
+				}
+			}
+		});
+
+		setSearchHandler(searchHandler);
 
 	}
 

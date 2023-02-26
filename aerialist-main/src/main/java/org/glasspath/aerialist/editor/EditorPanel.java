@@ -24,13 +24,11 @@ package org.glasspath.aerialist.editor;
 
 import java.awt.AWTEvent;
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.Frame;
 import java.awt.event.AWTEventListener;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
-import javax.swing.text.JTextComponent;
 import javax.swing.undo.UndoableEdit;
 
 import org.glasspath.aerialist.swing.BufferedImageMediaCache;
@@ -91,6 +89,30 @@ public abstract class EditorPanel<T extends EditorPanel<T>> extends JPanel imple
 		return editorContext;
 	}
 
+	public UISearchHandler getSearchHandler() {
+		return searchHandler;
+	}
+
+	public void setSearchHandler(UISearchHandler searchHandler) {
+		this.searchHandler = searchHandler;
+	}
+
+	public void searchNext(String text) {
+		if (searchHandler != null) {
+			searchHandler.searchNext(text);
+		}
+	}
+
+	public void searchPrevious(String text) {
+		// TODO
+	}
+
+	public void cancelSearch() {
+		if (searchHandler != null) {
+			searchHandler.cancelSearch();
+		}
+	}
+
 	public void refresh(Component component) {
 		refresh(component, true);
 	}
@@ -116,39 +138,6 @@ public abstract class EditorPanel<T extends EditorPanel<T>> extends JPanel imple
 	public void deselectAll() {
 		focusContentContainer();
 		selection.deselectAll();
-	}
-
-	protected void createSearchHandler(Container container) {
-		searchHandler = new UISearchHandler(container) {
-
-			@Override
-			public void textFound(JTextComponent component, String text, int index) {
-
-				selection.clear();
-				selection.select(component);
-
-				component.select(index, index + text.length());
-
-				repaint();
-
-			}
-		};
-	}
-
-	public void searchNext(String text) {
-		if (searchHandler != null) {
-			searchHandler.searchNext(text);
-		}
-	}
-
-	public void searchPrevious(String text) {
-
-	}
-
-	public void cancelSearch() {
-		if (searchHandler != null) {
-			searchHandler.cancelSearch();
-		}
 	}
 
 	@Override
