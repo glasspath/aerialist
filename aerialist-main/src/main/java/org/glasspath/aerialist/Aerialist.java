@@ -62,7 +62,9 @@ import org.glasspath.aerialist.tools.SearchTools;
 import org.glasspath.aerialist.tools.TextFormatTools;
 import org.glasspath.aerialist.tools.UndoActions;
 import org.glasspath.aerialist.tools.ViewTools;
+import org.glasspath.common.Args;
 import org.glasspath.common.Common;
+import org.glasspath.common.GlasspathSystemProperties;
 import org.glasspath.common.font.Fonts;
 import org.glasspath.common.font.Fonts.FontFilter;
 import org.glasspath.common.os.OsUtils;
@@ -78,9 +80,6 @@ import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("nls")
 public class Aerialist implements FrameContext {
-
-	public static boolean TEMP_TEST_STANDALONE = true; // TODO
-	public static Class<?> APPLICATION_CLASS = Aerialist.class; // TODO
 
 	public static final int VERSION_CODE = 1;
 	public static final String VERSION_NAME = "1.0";
@@ -142,7 +141,7 @@ public class Aerialist implements FrameContext {
 		glassPane.setContentComponent(mainPanel);
 		glassPane.setRightMargin(20);
 
-		List<String> registeredFonts = Fonts.registerBundledFonts(APPLICATION_CLASS, new FontFilter() {
+		List<String> registeredFonts = Fonts.registerBundledFonts(System.getProperty(GlasspathSystemProperties.BUNDLED_FONTS_PATH), new FontFilter() {
 
 			@Override
 			public boolean filter(File file) {
@@ -480,13 +479,13 @@ public class Aerialist implements FrameContext {
 		FrameUtils.saveFrameDimensions(frame, PREFERENCES);
 
 		if (fileTools.checkFileSaved()) {
-			if (TEMP_TEST_STANDALONE) {
-				System.exit(0);
-			} else {
-				frame.setVisible(false);
-			}
+			exitApplication();
 		}
 
+	}
+
+	protected void exitApplication() {
+		frame.setVisible(false);
 	}
 
 	private class ToolBarPanel extends JPanel {
@@ -533,13 +532,17 @@ public class Aerialist implements FrameContext {
 			}
 		});
 
-		LOGGER.info("Application path: " + OsUtils.getApplicationJarFile(Aerialist.class));
+		File applicationJarFile = OsUtils.getApplicationJarFile(Aerialist.class);
+
+		LOGGER.info("Application path: " + applicationJarFile);
 		LOGGER.info("user.dir: " + System.getProperty("user.dir"));
 		LOGGER.info("user.home: " + System.getProperty("user.home"));
 		LOGGER.info("Application versionCode: " + VERSION_CODE + " versionName: " + VERSION_NAME);
 
 		String openFileArgument = null;
 		String themeArgument = null;
+		String nativesArgument = null;
+		String fontsArgument = null;
 
 		if (args != null) {
 
@@ -563,6 +566,16 @@ public class Aerialist implements FrameContext {
 						argParsed = themeArgument != null;
 					}
 
+					if (!argParsed && nativesArgument == null) {
+						nativesArgument = Args.parseArgument(arg, "-natives");
+						argParsed = nativesArgument != null;
+					}
+
+					if (!argParsed && fontsArgument == null) {
+						fontsArgument = Args.parseArgument(arg, "-fonts");
+						argParsed = fontsArgument != null;
+					}
+
 				} catch (Exception e) {
 					LOGGER.error("Exception while parsing argument", e);
 					e.printStackTrace();
@@ -571,6 +584,14 @@ public class Aerialist implements FrameContext {
 			}
 
 		}
+
+		final String nativeLibraryPath = nativesArgument != null ? nativesArgument : applicationJarFile.getParent();
+		System.setProperty(GlasspathSystemProperties.NATIVE_LIBRARY_PATH, nativeLibraryPath);
+
+		OsUtils.configureJna(nativeLibraryPath);
+
+		String bundledFontsPath = fontsArgument != null ? fontsArgument : applicationJarFile.getParent() + "/fonts";
+		System.setProperty(GlasspathSystemProperties.BUNDLED_FONTS_PATH, bundledFontsPath);
 
 		if (openFileArgument == null && PREFERENCES.getBoolean("openLastFileAtStartup", true)) {
 			openFileArgument = PREFERENCES.get("lastOpenedFile", "");
@@ -592,13 +613,20 @@ public class Aerialist implements FrameContext {
 			public void run() {
 
 				try {
-					FrameUtils.installLookAndFeel(OsUtils.getApplicationJarFile(APPLICATION_CLASS).getParent());
+					FrameUtils.installLookAndFeel(nativeLibraryPath);
 				} catch (Exception e) {
 					LOGGER.error("Exception while setting look and feel", e);
 					e.printStackTrace();
 				}
 
-				new Aerialist(editorContext, templateFieldContext, openFile);
+				new Aerialist(editorContext, templateFieldContext, openFile) {
+
+					@Override
+					protected void exitApplication() {
+						super.exitApplication();
+						System.exit(0);
+					}
+				};
 
 			}
 		});

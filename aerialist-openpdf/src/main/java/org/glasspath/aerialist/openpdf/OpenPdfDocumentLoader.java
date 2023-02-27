@@ -61,7 +61,7 @@ public class OpenPdfDocumentLoader {
 		return loadDocument(file, null, null, null);
 	}
 
-	public Document loadDocument(File file, IFieldContext templateFieldContext, File fontsDir, File outputFile) {
+	public Document loadDocument(File file, IFieldContext templateFieldContext, String fontsPath, File outputFile) {
 
 		if (file.exists()) {
 
@@ -75,9 +75,7 @@ public class OpenPdfDocumentLoader {
 				if (templateFieldContext != null) {
 
 					OpenPdfFontCache fontCache = new OpenPdfFontCache();
-					if (fontsDir != null && fontsDir.exists()) {
-						fontCache.registerFonts(fontsDir);
-					}
+					fontCache.registerFonts(fontsPath);
 
 					DefaultLayoutContext<BaseFont, Image> layoutContext = new DefaultLayoutContext<>(fontCache, mediaCache);
 

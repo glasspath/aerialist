@@ -61,6 +61,7 @@ import org.glasspath.aerialist.swing.view.FieldUtils;
 import org.glasspath.aerialist.swing.view.TextView;
 import org.glasspath.aerialist.template.TemplateDocumentLoader;
 import org.glasspath.aerialist.writer.XDocWriter;
+import org.glasspath.common.GlasspathSystemProperties;
 import org.glasspath.common.os.OsUtils;
 import org.glasspath.common.swing.DesktopUtils;
 import org.glasspath.common.swing.color.ColorUtils;
@@ -443,7 +444,7 @@ public class FileTools {
 										// OpenPdfDocumentLoader documentLoader = new OpenPdfDocumentLoader();
 										PdfBoxDocumentLoader documentLoader = new PdfBoxDocumentLoader();
 										documentLoader.setLayoutListener(listener);
-										documentLoader.loadDocument(new File(documentPath), templateFieldContext, OsUtils.getBundledFile(Aerialist.APPLICATION_CLASS, "fonts"), new File("export.pdf"));
+										documentLoader.loadDocument(new File(documentPath), templateFieldContext, System.getProperty(GlasspathSystemProperties.BUNDLED_FONTS_PATH), new File("export.pdf"));
 
 										DesktopUtils.open("export.pdf", context.getFrame());
 

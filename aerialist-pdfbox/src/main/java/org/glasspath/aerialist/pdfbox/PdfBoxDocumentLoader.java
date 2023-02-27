@@ -61,16 +61,14 @@ public class PdfBoxDocumentLoader {
 		return loadDocument(file, null, null, null);
 	}
 
-	public Document loadDocument(File file, IFieldContext templateFieldContext, File fontsDir, File outputFile) {
+	public Document loadDocument(File file, IFieldContext templateFieldContext, String fontsPath, File outputFile) {
 
 		if (file.exists()) {
 
 			PdfBoxMediaCache mediaCache = new PdfBoxMediaCache();
 
 			PdfBoxFontCache fontCache = new PdfBoxFontCache();
-			if (fontsDir != null && fontsDir.exists()) {
-				fontCache.registerFonts(fontsDir);
-			}
+			fontCache.registerFonts(fontsPath);
 
 			DefaultLayoutContext<PDFont, PDImageXObject> layoutContext = new DefaultLayoutContext<>(fontCache, mediaCache);
 

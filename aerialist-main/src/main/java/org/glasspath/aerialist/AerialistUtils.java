@@ -39,6 +39,7 @@ import org.glasspath.aerialist.swing.view.ISwingElementView;
 import org.glasspath.aerialist.swing.view.LayeredPageView;
 import org.glasspath.aerialist.swing.view.PageContainer;
 import org.glasspath.aerialist.swing.view.PageView;
+import org.glasspath.common.GlasspathSystemProperties;
 import org.glasspath.common.os.OsUtils;
 import org.glasspath.common.swing.color.ColorUtils;
 
@@ -298,9 +299,15 @@ public class AerialistUtils {
 		// return sun.font.SunFontManager.getInstance().getPlatformFontPath(true);
 
 		// Try default known locations
-		File fontsDir = OsUtils.getBundledFile(Aerialist.APPLICATION_CLASS, "fonts");
-		if (fontsDir != null && fontsDir.exists()) {
-			return fontsDir.getAbsolutePath();
+
+		File bundledFontsDir = null;
+		String bundledFontsPath = System.getProperty(GlasspathSystemProperties.BUNDLED_FONTS_PATH);
+		if (bundledFontsPath != null && bundledFontsPath.length() > 0) {
+			bundledFontsDir = new File(bundledFontsPath);
+		}
+
+		if (bundledFontsDir != null && bundledFontsDir.isDirectory()) {
+			return bundledFontsDir.getAbsolutePath();
 		} else if (new File("fonts").exists()) {
 			return "fonts";
 		} else if (new File("C:\\Windows\\Fonts").exists()) {

@@ -38,9 +38,15 @@ public abstract class FontCache<T> {
 
 	}
 
+	public void registerFonts(String fontsPath) {
+		if (fontsPath != null && fontsPath.length() > 0) {
+			registerFonts(new File(fontsPath));
+		}
+	}
+
 	public void registerFonts(File fontsDir) {
 
-		if (fontsDir.exists() && fontsDir.isDirectory()) {
+		if (fontsDir != null && fontsDir.isDirectory()) {
 
 			File[] files = fontsDir.listFiles();
 			if (files != null) {

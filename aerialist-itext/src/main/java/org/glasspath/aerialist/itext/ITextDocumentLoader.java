@@ -61,7 +61,7 @@ public class ITextDocumentLoader {
 		return loadDocument(file, null, null, null);
 	}
 
-	public Document loadDocument(File file, IFieldContext templateFieldContext, File fontsDir, File outputFile) {
+	public Document loadDocument(File file, IFieldContext templateFieldContext, String fontsPath, File outputFile) {
 
 		if (file.exists()) {
 
@@ -75,9 +75,7 @@ public class ITextDocumentLoader {
 				if (templateFieldContext != null) {
 
 					ITextFontCache fontCache = new ITextFontCache();
-					if (fontsDir != null && fontsDir.exists()) {
-						fontCache.registerFonts(fontsDir);
-					}
+					fontCache.registerFonts(fontsPath);
 
 					DefaultLayoutContext<Font, Image> layoutContext = new DefaultLayoutContext<>(fontCache, mediaCache);
 
