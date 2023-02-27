@@ -401,11 +401,15 @@ public class ActionUtils {
 
 		}
 
+		int itemCount = menu.getItemCount();
+
 		if (context.getEditorContext() != null) {
 			context.getEditorContext().populateInsertElementMenu(context, menu);
 		}
 
-		menu.addSeparator();
+		if (menu.getItemCount() > itemCount) {
+			menu.addSeparator();
+		}
 
 		menu.add(new InsertElementAction(context, AerialistUtils.createDefaultTextBox(), "Insert text box", Icons.textBoxPlus));
 		menu.add(new InsertElementAction(context, AerialistUtils.createDefaultTable(), "Insert table", Icons.tablePlus));
