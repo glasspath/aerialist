@@ -305,6 +305,10 @@ public class FileTools {
 	}
 
 	public void loadDocument(String documentPath, IFieldContext templateFieldContext) {
+		loadDocument(documentPath, templateFieldContext, true, null);
+	}
+
+	public void loadDocument(String documentPath, IFieldContext templateFieldContext, boolean loadInBackground, Runnable action) {
 
 		currentFilePath = null;
 		context.setContentChanged(false);
@@ -349,7 +353,7 @@ public class FileTools {
 
 			final Document templateDocument = document;
 
-			new Thread(new Runnable() {
+			Runnable loadDocumentRunnable = new Runnable() {
 
 				@Override
 				public void run() {
@@ -358,17 +362,7 @@ public class FileTools {
 
 						@Override
 						public void statusChanged(String status) {
-
-							// Aerialist.LOGGER.info("Template document loader status changed: " + status);
-
-							SwingUtilities.invokeLater(new Runnable() {
-
-								@Override
-								public void run() {
-									context.getStatusLabel().setText(status);
-								}
-							});
-
+							// TODO?
 						}
 					};
 
@@ -382,56 +376,18 @@ public class FileTools {
 						}
 					};
 
-					// TODO
-					if (TEMP_TEST_EXPORT_ON_LOAD) {
-
-						/*
-						OpenPdfMediaCache openPdfmediaCache = new OpenPdfMediaCache();
-						
-						for (Entry<String, ImageResource> entry : mediaCache.getImageResources().entrySet()) {
-							openPdfmediaCache.putImage(entry.getKey(), entry.getValue().getBytes());
-						}
-						
-						documentLoader.setDocumentWriter(new OpenPdfDocumentWriter(new File("export.pdf"), openPdfFontCache, openPdfmediaCache));
-						
-						PdfBoxFontCache pdfBoxFontCache = new PdfBoxFontCache();
-						PdfBoxMediaCache pdfBoxmediaCache = new PdfBoxMediaCache();
-						
-						PdfBoxDocumentWriter pdfBoxDocumentWriter = new PdfBoxDocumentWriter(new File("export.pdf"), pdfBoxFontCache, pdfBoxmediaCache) {
-						
-							@Override
-							public void documentOpened() {
-						
-								try {
-						
-									// PdfBox media cache needs a document for loading images
-									for (Entry<String, ImageResource> entry : mediaCache.getImageResources().entrySet()) {
-										pdfBoxmediaCache.putImage(entry.getKey(), entry.getValue().getBytes());
-									}
-						
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
-						
-							}
-						};
-						documentLoader.setDocumentWriter(pdfBoxDocumentWriter);
-						*/
-
-						/*
-						documentLoader.setDocumentWriter(new ITextDocumentWriter(new File("export.pdf"), mediaCache));
-						*/
-
-					}
-
 					documentLoader.loadDocument(templateDocument, templateFieldContext, mediaCache);
 
-					SwingUtilities.invokeLater(new Runnable() {
+					Runnable showDowcumentRunnable = new Runnable() {
 
 						@Override
 						public void run() {
 
-							loadDocument(editor, templateDocument);
+							showDocument(editor, templateDocument);
+
+							if (action != null) {
+								action.run();
+							}
 
 							// TODO
 							if (TEMP_TEST_EXPORT_ON_LOAD) {
@@ -454,18 +410,36 @@ public class FileTools {
 							}
 
 						}
-					});
+					};
+
+					if (loadInBackground) {
+						SwingUtilities.invokeLater(showDowcumentRunnable);
+					} else {
+						showDowcumentRunnable.run();
+					}
 
 				}
-			}).start();
+			};
+
+			if (loadInBackground) {
+				new Thread(loadDocumentRunnable).start();
+			} else {
+				loadDocumentRunnable.run();
+			}
 
 		} else {
-			loadDocument(editor, document);
+
+			showDocument(editor, document);
+
+			if (action != null) {
+				action.run();
+			}
+
 		}
 
 	}
 
-	private void loadDocument(DocumentEditorPanel editor, Document document) {
+	private void showDocument(DocumentEditorPanel editor, Document document) {
 
 		editor.getPageContainer().setLayoutPhase(LayoutPhase.LOAD_CONTENT);
 		editor.getPageContainer().setYPolicyEnabled(false);

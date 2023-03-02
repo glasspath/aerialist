@@ -243,7 +243,7 @@ public class Aerialist implements FrameContext {
 
 							@Override
 							public void run() {
-								openDocument(openFile, templateFieldContext);
+								fileTools.loadDocument(openFile, templateFieldContext);
 							}
 						});
 
@@ -277,6 +277,10 @@ public class Aerialist implements FrameContext {
 
 	public void openDocument(String documentPath, IFieldContext templateFieldContext) {
 		fileTools.loadDocument(documentPath, templateFieldContext);
+	}
+
+	public void openDocument(String documentPath, IFieldContext templateFieldContext, Runnable action) {
+		fileTools.loadDocument(documentPath, templateFieldContext, true, action);
 	}
 
 	public void saveDocument(String documentPath) {
