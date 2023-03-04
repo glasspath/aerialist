@@ -37,12 +37,38 @@ import org.glasspath.common.swing.tools.AbstractTools;
 
 public class ViewTools extends AbstractTools<Aerialist> {
 
+	private final JCheckBoxMenuItem designMenuItem;
+	private final JCheckBoxMenuItem sourceMenuItem;
 	private final JToolBar viewModeToolBar;
+	private final JToggleButton designButton;
+	private final JToggleButton sourceButton;
 
-	private boolean updatingViewModeButtons = false;
+	private boolean updatingViewModeComponents = false;
 
 	public ViewTools(Aerialist context) {
 		super(context, "View");
+
+		designMenuItem = new JCheckBoxMenuItem("Design");
+		menu.add(designMenuItem);
+		designMenuItem.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				setViewMode(MainPanel.VIEW_MODE_DESIGN);
+			}
+		});
+
+		sourceMenuItem = new JCheckBoxMenuItem("Source");
+		menu.add(sourceMenuItem);
+		sourceMenuItem.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				setViewMode(MainPanel.VIEW_MODE_SOURCE);
+			}
+		});
+
+		menu.addSeparator();
 
 		JMenu toolBarsMenu = new JMenu("Tools");
 		menu.add(toolBarsMenu);
@@ -106,41 +132,27 @@ public class ViewTools extends AbstractTools<Aerialist> {
 		viewModeToolBar.setRollover(true);
 		viewModeToolBar.setBackground(ColorUtils.TITLE_BAR_COLOR);
 
-		JToggleButton designButton = new JToggleButton("Design");
-		designButton.setSelected(true);
+		designButton = new JToggleButton("Design");
 		viewModeToolBar.add(designButton);
-
-		JToggleButton sourceButton = new JToggleButton("Source");
-		viewModeToolBar.add(sourceButton);
-
 		designButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
-				if (!updatingViewModeButtons) {
-					updatingViewModeButtons = true;
-					sourceButton.setSelected(!designButton.isSelected());
-					context.getMainPanel().setViewMode(MainPanel.VIEW_MODE_DESIGN);
-					updatingViewModeButtons = false;
-				}
-
+				setViewMode(MainPanel.VIEW_MODE_DESIGN);
 			}
 		});
+
+		sourceButton = new JToggleButton("Source");
+		viewModeToolBar.add(sourceButton);
 		sourceButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
-				if (!updatingViewModeButtons) {
-					updatingViewModeButtons = true;
-					designButton.setSelected(!sourceButton.isSelected());
-					context.getMainPanel().setViewMode(MainPanel.VIEW_MODE_SOURCE);
-					updatingViewModeButtons = false;
-				}
-
+				setViewMode(MainPanel.VIEW_MODE_SOURCE);
 			}
 		});
+
+		updateViewModeComponents();
 
 	}
 
@@ -154,6 +166,29 @@ public class ViewTools extends AbstractTools<Aerialist> {
 
 	public JToolBar getViewModeToolBar() {
 		return viewModeToolBar;
+	}
+
+	private void setViewMode(int viewMode) {
+		if (!updatingViewModeComponents) {
+			context.getMainPanel().setViewMode(viewMode);
+			updateViewModeComponents();
+		}
+	}
+
+	private void updateViewModeComponents() {
+
+		updatingViewModeComponents = true;
+
+		boolean viewModeSource = context.getMainPanel().getViewMode() == MainPanel.VIEW_MODE_SOURCE;
+
+		designMenuItem.setSelected(!viewModeSource);
+		sourceMenuItem.setSelected(viewModeSource);
+
+		designButton.setSelected(!viewModeSource);
+		sourceButton.setSelected(viewModeSource);
+
+		updatingViewModeComponents = false;
+
 	}
 
 }
