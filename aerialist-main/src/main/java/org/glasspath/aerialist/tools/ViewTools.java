@@ -33,22 +33,16 @@ import javax.swing.JToolBar;
 import org.glasspath.aerialist.Aerialist;
 import org.glasspath.aerialist.MainPanel;
 import org.glasspath.common.swing.color.ColorUtils;
+import org.glasspath.common.swing.tools.AbstractTools;
 
-public class ViewTools {
+public class ViewTools extends AbstractTools<Aerialist> {
 
-	private final JMenu menu;
-	private final JToolBar toolBar;
 	private final JToolBar viewModeToolBar;
 
 	private boolean updatingViewModeButtons = false;
 
 	public ViewTools(Aerialist context) {
-
-		this.menu = new JMenu("View");
-		this.toolBar = new JToolBar("View");
-
-		toolBar.setRollover(true);
-		toolBar.setBackground(ColorUtils.TITLE_BAR_COLOR);
+		super(context, "View");
 
 		JMenu toolBarsMenu = new JMenu("Tools");
 		menu.add(toolBarsMenu);

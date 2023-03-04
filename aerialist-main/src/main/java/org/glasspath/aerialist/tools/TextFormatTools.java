@@ -50,11 +50,13 @@ import org.glasspath.aerialist.editor.actions.TextColorAction;
 import org.glasspath.aerialist.editor.actions.UnderlineAction;
 import org.glasspath.aerialist.icons.Icons;
 import org.glasspath.aerialist.swing.view.TextView;
+import org.glasspath.common.swing.FrameContext;
 import org.glasspath.common.swing.button.SplitButton;
 import org.glasspath.common.swing.color.ColorButton;
 import org.glasspath.common.swing.color.ColorUtils;
+import org.glasspath.common.swing.tools.AbstractTools;
 
-public class TextFormatTools {
+public class TextFormatTools extends AbstractTools<FrameContext> {
 
 	private final EditorPanel<? extends EditorPanel<?>> editor;
 	private final JMenu menu;
@@ -65,8 +67,9 @@ public class TextFormatTools {
 	private boolean defaultFontAvailable = false;
 	private boolean updating = false;
 
-	public TextFormatTools(EditorPanel<? extends EditorPanel<?>> editor) {
-
+	public TextFormatTools(FrameContext context, EditorPanel<? extends EditorPanel<?>> editor) {
+		super(context, "Format");
+		
 		this.editor = editor;
 
 		this.menu = new JMenu("Format");

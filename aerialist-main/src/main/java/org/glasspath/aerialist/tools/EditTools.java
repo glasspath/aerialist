@@ -28,12 +28,10 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JToolBar;
 
-import org.glasspath.common.swing.color.ColorUtils;
+import org.glasspath.common.swing.FrameContext;
+import org.glasspath.common.swing.tools.AbstractTools;
 
-public class EditTools {
-
-	private final JMenu menu;
-	private final JToolBar toolBar;
+public class EditTools extends AbstractTools<FrameContext> {
 
 	private final JMenuItem undoMenuItem;
 	private final JMenuItem redoMenuItem;
@@ -41,12 +39,8 @@ public class EditTools {
 	private final JButton undoButton;
 	private final JButton redoButton;
 
-	public EditTools(UndoActions undoActions) {
-
-		this.menu = new JMenu("Edit");
-		this.toolBar = new JToolBar("Edit");
-		toolBar.setRollover(true);
-		toolBar.setBackground(ColorUtils.TITLE_BAR_COLOR);
+	public EditTools(FrameContext context, UndoActions undoActions) {
+		super(context, "Edit");
 
 		this.undoMenuItem = new JMenuItem(undoActions.getUndoAction());
 		menu.add(undoMenuItem);

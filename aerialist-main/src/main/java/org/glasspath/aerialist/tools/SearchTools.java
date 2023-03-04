@@ -39,29 +39,15 @@ import javax.swing.event.DocumentListener;
 import org.glasspath.aerialist.Aerialist;
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
 import org.glasspath.common.os.OsUtils;
-import org.glasspath.common.swing.color.ColorUtils;
 import org.glasspath.common.swing.search.SearchField;
+import org.glasspath.common.swing.tools.AbstractTools;
 
-public class SearchTools {
-
-	private final JMenu menu;
-	private final JToolBar toolBar;
+public class SearchTools extends AbstractTools<Aerialist> {
 
 	private String searchText = null;
 
 	public SearchTools(Aerialist context) {
-
-		this.menu = new JMenu("Search");
-		this.toolBar = new JToolBar("Search") {
-
-			@Override
-			public void updateUI() {
-				super.updateUI();
-				setBackground(ColorUtils.TITLE_BAR_COLOR);
-			}
-
-		};
-		toolBar.setRollover(true);
+		super(context, "Search");
 
 		JMenuItem searchMenuItem = new JMenuItem("Search");
 		searchMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, OsUtils.CTRL_OR_CMD_MASK));

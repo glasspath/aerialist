@@ -130,11 +130,11 @@ public class Aerialist implements FrameContext {
 		this.mainPanel = new MainPanel(this, editorContext);
 		this.statusBar = new StatusBar();
 		this.fileTools = new FileTools(this);
-		this.editTools = new EditTools(undoActions);
+		this.editTools = new EditTools(this, undoActions);
 		this.viewTools = new ViewTools(this);
 		this.searchTools = new SearchTools(this);
-		this.textFormatTools = new TextFormatTools(mainPanel.getDocumentEditor());
-		this.objectFormatTools = new ObjectFormatTools(mainPanel.getDocumentEditor());
+		this.textFormatTools = new TextFormatTools(this, mainPanel.getDocumentEditor());
+		this.objectFormatTools = new ObjectFormatTools(this, mainPanel.getDocumentEditor());
 		this.helpTools = new HelpTools(this);
 		this.statusLabel = new JLabel();
 

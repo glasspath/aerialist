@@ -31,29 +31,15 @@ import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 
 import org.glasspath.aerialist.Aerialist;
-import org.glasspath.common.swing.color.ColorUtils;
 import org.glasspath.common.swing.dialog.AboutDialog;
 import org.glasspath.common.swing.dialog.AboutDialog.IAbout;
 import org.glasspath.common.swing.help.HelpUtils;
+import org.glasspath.common.swing.tools.AbstractTools;
 
-public class HelpTools {
-
-	private final JMenu menu;
-	private final JToolBar toolBar;
+public class HelpTools extends AbstractTools<Aerialist> {
 
 	public HelpTools(Aerialist context) {
-
-		this.menu = new JMenu("Help");
-		this.toolBar = new JToolBar("Help") {
-
-			@Override
-			public void updateUI() {
-				super.updateUI();
-				setBackground(ColorUtils.TITLE_BAR_COLOR);
-			}
-
-		};
-		toolBar.setRollover(true);
+		super(context, "Help");
 
 		JMenuItem helpMenuItem = new JMenuItem("Help");
 		helpMenuItem.setAccelerator(KeyStroke.getKeyStroke("F1")); //$NON-NLS-1$

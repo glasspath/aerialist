@@ -39,6 +39,7 @@ import javax.swing.JToolBar;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.glasspath.aerialist.Aerialist;
 import org.glasspath.aerialist.AerialistUtils;
 import org.glasspath.aerialist.HeightPolicy;
 import org.glasspath.aerialist.YPolicy;
@@ -60,109 +61,104 @@ import org.glasspath.common.swing.SwingUtils;
 import org.glasspath.common.swing.border.BorderButton;
 import org.glasspath.common.swing.button.SplitButton;
 import org.glasspath.common.swing.color.ColorButton;
-import org.glasspath.common.swing.color.ColorUtils;
 import org.glasspath.common.swing.selection.SelectionListener;
+import org.glasspath.common.swing.tools.AbstractTools;
 
-public class ObjectFormatTools {
+public class ObjectFormatTools extends AbstractTools<Aerialist> {
 
-	private final DocumentEditorPanel context;
-	private final JMenu menu;
-	private final JToolBar toolBar;
+	private final DocumentEditorPanel editor;
 	private final InsertButton insertButton;
 
 	private boolean updatingTools = false;
 
-	public ObjectFormatTools(DocumentEditorPanel context) {
+	public ObjectFormatTools(Aerialist context, DocumentEditorPanel editor) {
+		super(context, "Layout");
 
-		this.context = context;
-		this.menu = new JMenu("Layout");
-		this.toolBar = new JToolBar("Layout");
-		toolBar.setRollover(true);
-		toolBar.setBackground(ColorUtils.TITLE_BAR_COLOR);
+		this.editor = editor;
 
 		JToggleButton snapToGridButton = new JToggleButton();
 		snapToGridButton.setIcon(Icons.magnet);
-		snapToGridButton.setSelected(context.isGridEnabled());
+		snapToGridButton.setSelected(editor.isGridEnabled());
 		snapToGridButton.setToolTipText("Snap to grid");
 		toolBar.add(snapToGridButton);
 		snapToGridButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				context.setGridEnabled(snapToGridButton.isSelected());
+				editor.setGridEnabled(snapToGridButton.isSelected());
 			}
 		});
 
 		JToggleButton showGridButton = new JToggleButton();
 		showGridButton.setIcon(Icons.dotsGrid);
-		showGridButton.setSelected(context.isGridVisible());
+		showGridButton.setSelected(editor.isGridVisible());
 		showGridButton.setToolTipText("Show grid");
 		toolBar.add(showGridButton);
 		showGridButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				context.setGridVisible(showGridButton.isSelected());
-				context.repaint();
+				editor.setGridVisible(showGridButton.isSelected());
+				editor.repaint();
 			}
 		});
 
 		JToggleButton showGuidesButton = new JToggleButton();
 		showGuidesButton.setIcon(Icons.viewAgendaOutline);
-		showGuidesButton.setSelected(context.isGuidesVisible());
+		showGuidesButton.setSelected(editor.isGuidesVisible());
 		showGuidesButton.setToolTipText("Show guides");
 		toolBar.add(showGuidesButton);
 		showGuidesButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				context.setGuidesVisible(showGuidesButton.isSelected());
-				context.repaint();
+				editor.setGuidesVisible(showGuidesButton.isSelected());
+				editor.repaint();
 			}
 		});
 
 		JToggleButton layoutLockedButton = new JToggleButton();
 		layoutLockedButton.setIcon(Icons.lock);
-		layoutLockedButton.setSelected(context.isLayoutLocked());
+		layoutLockedButton.setSelected(editor.isLayoutLocked());
 		layoutLockedButton.setToolTipText("Lock layout");
 		toolBar.add(layoutLockedButton);
 		layoutLockedButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				context.setLayoutLocked(layoutLockedButton.isSelected());
-				context.repaint();
+				editor.setLayoutLocked(layoutLockedButton.isSelected());
+				editor.repaint();
 			}
 		});
 
-		insertButton = new InsertButton(context);
+		insertButton = new InsertButton(editor);
 		insertButton.setToolTipText("Insert");
 		toolBar.add(insertButton);
 
-		AlignButton alignButton = new AlignButton(context);
+		AlignButton alignButton = new AlignButton(editor);
 		alignButton.setToolTipText("Align");
 		toolBar.add(alignButton);
 
-		toolBar.add(new ArrangeElementsAction(context, ArrangeElementsAction.BRING_FORWARD, true));
-		toolBar.add(new ArrangeElementsAction(context, ArrangeElementsAction.BRING_TO_FRONT, true));
-		toolBar.add(new ArrangeElementsAction(context, ArrangeElementsAction.SEND_BACKWARD, true));
-		toolBar.add(new ArrangeElementsAction(context, ArrangeElementsAction.SEND_TO_BACK, true));
+		toolBar.add(new ArrangeElementsAction(editor, ArrangeElementsAction.BRING_FORWARD, true));
+		toolBar.add(new ArrangeElementsAction(editor, ArrangeElementsAction.BRING_TO_FRONT, true));
+		toolBar.add(new ArrangeElementsAction(editor, ArrangeElementsAction.SEND_BACKWARD, true));
+		toolBar.add(new ArrangeElementsAction(editor, ArrangeElementsAction.SEND_TO_BACK, true));
 
-		ColorButton backgroundColorButton = new ColorButton(new SetBackgroundColorAction(context)) {
+		ColorButton backgroundColorButton = new ColorButton(new SetBackgroundColorAction(editor)) {
 
 			@Override
 			protected Frame getFrame() {
-				return context.getFrame();
+				return editor.getFrame();
 			}
 		};
 		backgroundColorButton.setToolTipText("Background color");
 		toolBar.add(backgroundColorButton);
 
-		BorderButton borderButton = new BorderButton(new SetBorderTypeAction(context), new SetBorderWidthAction(context), new SetBorderColorAction(context)) {
+		BorderButton borderButton = new BorderButton(new SetBorderTypeAction(editor), new SetBorderWidthAction(editor), new SetBorderColorAction(editor)) {
 
 			@Override
 			protected Frame getFrame() {
-				return context.getFrame();
+				return editor.getFrame();
 			}
 		};
 		borderButton.setToolTipText("Border");
@@ -202,13 +198,13 @@ public class ObjectFormatTools {
 		wSpinner.addChangeListener(changeListener);
 		hSpinner.addChangeListener(changeListener);
 
-		JToggleButton yPolicyFixedButton = new JToggleButton(new SetYPolicyAction(context, YPolicy.FIXED, true));
+		JToggleButton yPolicyFixedButton = new JToggleButton(new SetYPolicyAction(editor, YPolicy.FIXED, true));
 		toolBar.add(yPolicyFixedButton);
 
-		JToggleButton heightPolicyAutoButton = new JToggleButton(new SetHeightPolicyAction(context, HeightPolicy.AUTO, true));
+		JToggleButton heightPolicyAutoButton = new JToggleButton(new SetHeightPolicyAction(editor, HeightPolicy.AUTO, true));
 		toolBar.add(heightPolicyAutoButton);
 
-		context.getSelection().addSelectionListener(new SelectionListener() {
+		editor.getSelection().addSelectionListener(new SelectionListener() {
 
 			@Override
 			public void selectionChanged() {
@@ -222,14 +218,14 @@ public class ObjectFormatTools {
 
 				Rectangle bounds = new Rectangle();
 
-				if (context.getSelection().size() == 1) {
+				if (editor.getSelection().size() == 1) {
 
-					elementView = AerialistUtils.getElementView(context.getSelection().get(0));
+					elementView = AerialistUtils.getElementView(editor.getSelection().get(0));
 					if (elementView != null) {
 						bounds = ((JComponent) elementView).getBounds();
 					}
 
-					pageView = AerialistUtils.getPageView(context.getSelection().get(0));
+					pageView = AerialistUtils.getPageView(editor.getSelection().get(0));
 
 				}
 
@@ -269,9 +265,9 @@ public class ObjectFormatTools {
 
 	private void setSelectionBounds(Object xValue, Object yValue, Object wValue, Object hValue) {
 
-		if (context.getSelection().size() == 1) {
+		if (editor.getSelection().size() == 1) {
 
-			ISwingElementView<?> elementView = AerialistUtils.getElementView(context.getSelection().get(0));
+			ISwingElementView<?> elementView = AerialistUtils.getElementView(editor.getSelection().get(0));
 			if (elementView != null) {
 
 				JComponent component = (JComponent) elementView;
@@ -299,8 +295,8 @@ public class ObjectFormatTools {
 
 					pageView.elementResized(component, oldBounds);
 
-					context.undoableEditHappened(new ResizeUndoable(context, component, pageView, oldBounds, newBounds, context.getPageContainer().isYPolicyEnabled()));
-					context.refresh(pageView);
+					editor.undoableEditHappened(new ResizeUndoable(editor, component, pageView, oldBounds, newBounds, editor.getPageContainer().isYPolicyEnabled()));
+					editor.refresh(pageView);
 
 				}
 
@@ -312,10 +308,10 @@ public class ObjectFormatTools {
 
 	public void updateInsertButton() {
 
-		boolean editingHeader = context.getPageContainer().isEditingHeader();
-		boolean editingFooter = context.getPageContainer().isEditingFooter();
+		boolean editingHeader = editor.getPageContainer().isEditingHeader();
+		boolean editingFooter = editor.getPageContainer().isEditingFooter();
 
-		insertButton.setPopupMenu(ActionUtils.createInsertElementMenu(context, !editingHeader && !editingFooter).getPopupMenu());
+		insertButton.setPopupMenu(ActionUtils.createInsertElementMenu(editor, !editingHeader && !editingFooter).getPopupMenu());
 
 	}
 

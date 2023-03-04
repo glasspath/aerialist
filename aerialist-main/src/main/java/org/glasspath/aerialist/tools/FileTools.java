@@ -64,35 +64,25 @@ import org.glasspath.aerialist.writer.XDocWriter;
 import org.glasspath.common.GlasspathSystemProperties;
 import org.glasspath.common.os.OsUtils;
 import org.glasspath.common.swing.DesktopUtils;
-import org.glasspath.common.swing.color.ColorUtils;
 import org.glasspath.common.swing.dialog.DialogUtils;
 import org.glasspath.common.swing.file.chooser.FileChooser;
+import org.glasspath.common.swing.tools.AbstractTools;
 
 import com.lowagie.text.DocumentException;
 
-public class FileTools {
+public class FileTools extends AbstractTools<Aerialist> {
 
 	public static boolean TEMP_TEST_EXPORT_ON_LOAD = false;
 	public static boolean TODO_ADD_EXPORT_HTML_MENU_ITEM = false;
 	public static boolean TODO_ADD_PRINT_MENU_ITEM = false;
 
-	private final Aerialist context;
-
-	private final JMenu menu;
-	private final JToolBar toolBar;
 	private final JMenuItem exportPdfMenuItem;
 	private final JMenuItem exportHtmlMenuItem;
 
 	private String currentFilePath = null;
 
 	public FileTools(Aerialist context) {
-
-		this.context = context;
-
-		this.menu = new JMenu("File");
-		this.toolBar = new JToolBar("File");
-		toolBar.setRollover(true);
-		toolBar.setBackground(ColorUtils.TITLE_BAR_COLOR);
+		super(context, "File");
 
 		JMenuItem newMenuItem = new JMenuItem("New");
 		newMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, OsUtils.CTRL_OR_CMD_MASK));
