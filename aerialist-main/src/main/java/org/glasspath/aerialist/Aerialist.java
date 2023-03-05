@@ -269,7 +269,7 @@ public class Aerialist implements FrameContext {
 		});
 
 		undoActions.setUndoManager(mainPanel.getDocumentEditor().getUndoManager());
-		showTools(null); // TODO?
+		showTools(null); // TODO
 
 		frame.setVisible(true);
 
@@ -423,7 +423,7 @@ public class Aerialist implements FrameContext {
 
 	public void setSourceEditorEnabled(boolean sourceEditorEnabled) {
 		this.sourceEditorEnabled = sourceEditorEnabled;
-		showTools(null);
+		showTools(null); // TODO
 	}
 
 	public EditorContext<DocumentEditorPanel> getEditorContext() {
@@ -468,7 +468,9 @@ public class Aerialist implements FrameContext {
 				toolBarPanel.top.add(viewTools.getViewModeToolBar());
 			}
 
-			toolBarPanel.bottom.add(objectFormatTools.getToolBar());
+			if (mainPanel.getViewMode() == MainPanel.VIEW_MODE_DESIGN) {
+				toolBarPanel.bottom.add(objectFormatTools.getToolBar());
+			}
 			toolBarPanel.bottom.add(Box.createHorizontalGlue());
 
 		}

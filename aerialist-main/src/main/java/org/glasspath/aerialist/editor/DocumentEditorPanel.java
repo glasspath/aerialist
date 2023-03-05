@@ -343,7 +343,7 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 	protected void setEditable(boolean editable) {
 		super.setEditable(editable);
 
-		context.showTools(null); // TODO?
+		context.showTools(null); // TODO
 
 		SwingUtilities.invokeLater(new Runnable() {
 

@@ -39,6 +39,7 @@ public class ViewTools extends AbstractTools<Aerialist> {
 
 	private final JCheckBoxMenuItem designMenuItem;
 	private final JCheckBoxMenuItem sourceMenuItem;
+	private final JCheckBoxMenuItem objectFormatToolsMenuItem;
 	private final JToolBar viewModeToolBar;
 	private final JToggleButton designButton;
 	private final JToggleButton sourceButton;
@@ -106,7 +107,7 @@ public class ViewTools extends AbstractTools<Aerialist> {
 		});
 		toolBarsMenu.add(textFormatToolsMenuItem);
 
-		JCheckBoxMenuItem objectFormatToolsMenuItem = new JCheckBoxMenuItem("Object format tools"); // TODO: Use better name?
+		objectFormatToolsMenuItem = new JCheckBoxMenuItem("Object format tools"); // TODO: Use better name?
 		objectFormatToolsMenuItem.setSelected(true);
 		objectFormatToolsMenuItem.addActionListener(new ActionListener() {
 
@@ -183,6 +184,8 @@ public class ViewTools extends AbstractTools<Aerialist> {
 
 		designMenuItem.setSelected(!viewModeSource);
 		sourceMenuItem.setSelected(viewModeSource);
+
+		objectFormatToolsMenuItem.setVisible(!viewModeSource);
 
 		designButton.setSelected(!viewModeSource);
 		sourceButton.setSelected(viewModeSource);
