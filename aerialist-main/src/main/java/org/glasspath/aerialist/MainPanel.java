@@ -27,11 +27,14 @@ import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.undo.UndoableEdit;
+
 import org.glasspath.aerialist.editor.DocumentEditorContext;
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
 import org.glasspath.aerialist.editor.DocumentSourceEditorPanel;
 import org.glasspath.aerialist.editor.actions.EditSourceUndoable;
 import org.glasspath.aerialist.swing.view.PageView;
+import org.glasspath.common.swing.undo.DefaultUndoManager.UndoManagerListener;
 import org.glasspath.common.xml.XmlUtils;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
@@ -42,8 +45,9 @@ public class MainPanel extends AbstractMainPanel<Aerialist> {
 	private DocumentSourceEditorPanel sourceEditor = null; // Takes some time to create, so for now only create it when it is actually used
 	private final XmlMapper xmlMapper;
 
-	public MainPanel(Aerialist context, DocumentEditorContext editorContext) {
+	private boolean designChanged = true; // Initialized at true to make sure source is updated first time
 
+	public MainPanel(Aerialist context, DocumentEditorContext editorContext) {
 		super(context);
 
 		setLayout(new BorderLayout());
@@ -60,6 +64,24 @@ public class MainPanel extends AbstractMainPanel<Aerialist> {
 
 		add(documentEditor, BorderLayout.CENTER);
 
+		documentEditor.getUndoManager().addListener(new UndoManagerListener() {
+
+			@Override
+			public void undoPerformed() {
+				designChanged = true;
+			}
+
+			@Override
+			public void redoPerformed() {
+				designChanged = true;
+			}
+
+			@Override
+			public void editAdded(UndoableEdit edit) {
+				designChanged = true;
+			}
+		});
+
 	}
 
 	public DocumentEditorPanel getDocumentEditor() {
@@ -73,32 +95,18 @@ public class MainPanel extends AbstractMainPanel<Aerialist> {
 			removeAll();
 
 			if (sourceEditor == null) {
-				sourceEditor = new DocumentSourceEditorPanel();
+				sourceEditor = new DocumentSourceEditorPanel(context);
 			}
 
 			if (viewMode == VIEW_MODE_DESIGN) {
 
-				if (sourceEditor.isSourceChanged()) {
-
-					List<PageView> oldPageViews = new ArrayList<>();
-					List<PageView> newPageViews = new ArrayList<>();
-
-					oldPageViews.addAll(documentEditor.getPageContainer().getPageViews());
-
-					updateDocumentEditor();
-
-					newPageViews.addAll(documentEditor.getPageContainer().getPageViews());
-
-					documentEditor.getUndoManager().addEdit(new EditSourceUndoable(documentEditor, oldPageViews, newPageViews));
-
-				}
+				updateDocumentEditor();
 
 				add(documentEditor, BorderLayout.CENTER);
 				context.getUndoActions().setUndoManager(documentEditor.getUndoManager());
 
 			} else if (viewMode == VIEW_MODE_SOURCE) {
 
-				// TODO: Check if something changed
 				updateSourceEditor();
 
 				add(sourceEditor, BorderLayout.CENTER);
@@ -118,26 +126,48 @@ public class MainPanel extends AbstractMainPanel<Aerialist> {
 
 	}
 
-	private void updateDocumentEditor() {
+	public void updateDocumentEditor() {
 
-		try {
-			Document document = xmlMapper.readValue(sourceEditor.getSource(), Document.class);
-			documentEditor.getPageContainer().init(document);
-		} catch (Exception e) {
-			e.printStackTrace();
+		if (sourceEditor.isSourceChanged()) {
+
+			List<PageView> oldPageViews = new ArrayList<>();
+			List<PageView> newPageViews = new ArrayList<>();
+
+			oldPageViews.addAll(documentEditor.getPageContainer().getPageViews());
+
+			try {
+				Document document = xmlMapper.readValue(sourceEditor.getSource(), Document.class);
+				documentEditor.getPageContainer().init(document);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			newPageViews.addAll(documentEditor.getPageContainer().getPageViews());
+
+			documentEditor.getUndoManager().addEdit(new EditSourceUndoable(documentEditor, oldPageViews, newPageViews));
+
+			sourceEditor.setSourceChanged(false);
+			designChanged = false;
+
 		}
 
 	}
 
 	private void updateSourceEditor() {
 
-		Document document = documentEditor.getPageContainer().toDocument();
+		if (designChanged) {
 
-		try {
-			sourceEditor.setSource(xmlMapper.writeValueAsString(document));
+			Document document = documentEditor.getPageContainer().toDocument();
+
+			try {
+				sourceEditor.setSource(xmlMapper.writeValueAsString(document));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
 			sourceEditor.setSourceChanged(false);
-		} catch (Exception e) {
-			e.printStackTrace();
+			designChanged = false;
+
 		}
 
 	}

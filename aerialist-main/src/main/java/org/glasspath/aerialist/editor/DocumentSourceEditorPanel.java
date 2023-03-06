@@ -40,9 +40,10 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextarea.RTextScrollPane;
 import org.fife.ui.rtextarea.RUndoManager;
+import org.glasspath.common.swing.FrameContext;
 import org.glasspath.common.swing.theme.Theme;
-import org.glasspath.common.swing.undo.IUndoManager;
 import org.glasspath.common.swing.undo.DefaultUndoManager.UndoManagerListener;
+import org.glasspath.common.swing.undo.IUndoManager;
 
 public class DocumentSourceEditorPanel extends JPanel {
 
@@ -50,8 +51,9 @@ public class DocumentSourceEditorPanel extends JPanel {
 
 	private UndoManager undoManager = null;
 	private boolean sourceChanged = false;
+	private boolean updatingSource = false;
 
-	public DocumentSourceEditorPanel() {
+	public DocumentSourceEditorPanel(FrameContext context) {
 
 		setLayout(new BorderLayout());
 
@@ -98,17 +100,24 @@ public class DocumentSourceEditorPanel extends JPanel {
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
-				sourceChanged = true;
+				setSourceChanged();
 			}
 
 			@Override
 			public void insertUpdate(DocumentEvent e) {
-				sourceChanged = true;
+				setSourceChanged();
 			}
 
 			@Override
 			public void changedUpdate(DocumentEvent e) {
-				sourceChanged = true;
+				setSourceChanged();
+			}
+
+			private void setSourceChanged() {
+				if (!updatingSource) {
+					sourceChanged = true;
+					context.setContentChanged(true);
+				}
 			}
 		});
 
@@ -124,17 +133,31 @@ public class DocumentSourceEditorPanel extends JPanel {
 
 	public void setSource(String source) {
 
+		updatingSource = true;
+
 		boolean clearFirstUndo = textArea.getText().length() == 0;
 
 		if (source != null && !source.equals(textArea.getText())) {
 
+			if (undoManager != null) {
+				undoManager.beginInternalAtomicEdit();
+			}
+
 			textArea.setText(source);
 
-			if (undoManager != null && clearFirstUndo) {
-				undoManager.discardAllEdits();
+			if (undoManager != null) {
+
+				undoManager.endInternalAtomicEdit();
+
+				if (clearFirstUndo) {
+					undoManager.discardAllEdits();
+				}
+
 			}
 
 		}
+
+		updatingSource = false;
 
 	}
 

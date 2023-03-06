@@ -45,6 +45,7 @@ import org.glasspath.aerialist.Content;
 import org.glasspath.aerialist.Document;
 import org.glasspath.aerialist.HtmlExporter;
 import org.glasspath.aerialist.IFieldContext;
+import org.glasspath.aerialist.MainPanel;
 import org.glasspath.aerialist.XDoc;
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
 import org.glasspath.aerialist.icons.Icons;
@@ -460,6 +461,12 @@ public class FileTools extends AbstractTools<Aerialist> {
 	public boolean saveCurrentDocument(String path) {
 
 		DocumentEditorPanel editor = context.getMainPanel().getDocumentEditor();
+
+		// The contents from the design view-mode are always used for saving, so in
+		// source view-mode we need to apply any changes to the design view-mode first
+		if (context.getMainPanel().getViewMode() == MainPanel.VIEW_MODE_SOURCE) {
+			context.getMainPanel().updateDocumentEditor();
+		}
 
 		XDoc xDoc = new XDoc();
 
