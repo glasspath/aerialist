@@ -255,14 +255,6 @@ public class ObjectFormatTools extends AbstractTools<Aerialist> {
 
 	}
 
-	public JMenu getMenu() {
-		return menu;
-	}
-
-	public JToolBar getToolBar() {
-		return toolBar;
-	}
-
 	private void setSelectionBounds(Object xValue, Object yValue, Object wValue, Object hValue) {
 
 		if (editor.getSelection().size() == 1) {

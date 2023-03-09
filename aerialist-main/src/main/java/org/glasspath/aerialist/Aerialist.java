@@ -123,7 +123,14 @@ public class Aerialist implements FrameContext {
 
 	public Aerialist(DocumentEditorContext editorContext, IFieldContext templateFieldContext, String openFile) {
 
-		this.frame = new JFrame();
+		this.frame = new JFrame() {
+
+			@Override
+			public void revalidate() {
+				super.revalidate();
+				glassPane.updateLayout(true);
+			}
+		};
 		this.toolBarPanel = new ToolBarPanel();
 		this.undoActions = new UndoActions();
 		this.glassPane = new GlassPane(frame);
@@ -388,26 +395,6 @@ public class Aerialist implements FrameContext {
 		return undoActions;
 	}
 
-	public void setFileToolsVisible(boolean visible) {
-		fileTools.getToolBar().setVisible(visible);
-		revalidateFrame();
-	}
-
-	public void setEditToolsVisible(boolean visible) {
-		editTools.getToolBar().setVisible(visible);
-		revalidateFrame();
-	}
-
-	public void setTextFormatToolsVisible(boolean visible) {
-		textFormatTools.getToolBar().setVisible(visible);
-		revalidateFrame();
-	}
-
-	public void setObjectFormatToolsVisible(boolean visible) {
-		objectFormatTools.getToolBar().setVisible(visible);
-		revalidateFrame();
-	}
-
 	public boolean isStatusBarVisible() {
 		return statusBar.isVisible();
 	}
@@ -415,6 +402,14 @@ public class Aerialist implements FrameContext {
 	public void setStatusBarVisible(boolean visible) {
 		statusBar.setVisible(visible);
 		revalidateFrame();
+	}
+
+	private void revalidateFrame() {
+
+		frame.invalidate(); // TODO: Remove?
+		frame.revalidate();
+		frame.repaint();
+
 	}
 
 	public boolean isSourceEditorEnabled() {
@@ -428,16 +423,6 @@ public class Aerialist implements FrameContext {
 
 	public EditorContext<DocumentEditorPanel> getEditorContext() {
 		return mainPanel.getDocumentEditor().getEditorContext();
-	}
-
-	private void revalidateFrame() {
-
-		frame.invalidate();
-		frame.validate();
-		frame.repaint();
-
-		glassPane.updateLayout(true);
-
 	}
 
 	public void showTools(List<JToolBar> toolBars) {

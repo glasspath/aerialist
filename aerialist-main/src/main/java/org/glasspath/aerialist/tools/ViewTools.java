@@ -80,7 +80,7 @@ public class ViewTools extends AbstractTools<Aerialist> {
 
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				context.setFileToolsVisible(fileToolsMenuItem.isSelected());
+				context.getFileTools().setToolBarVisible(fileToolsMenuItem.isSelected());
 			}
 		});
 		toolBarsMenu.add(fileToolsMenuItem);
@@ -91,7 +91,7 @@ public class ViewTools extends AbstractTools<Aerialist> {
 
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				context.setEditToolsVisible(editToolsMenuItem.isSelected());
+				context.getEditTools().setToolBarVisible(editToolsMenuItem.isSelected());
 			}
 		});
 		toolBarsMenu.add(editToolsMenuItem);
@@ -102,7 +102,7 @@ public class ViewTools extends AbstractTools<Aerialist> {
 
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				context.setTextFormatToolsVisible(textFormatToolsMenuItem.isSelected());
+				context.getTextFormatTools().setToolBarVisible(textFormatToolsMenuItem.isSelected());
 			}
 		});
 		toolBarsMenu.add(textFormatToolsMenuItem);
@@ -113,7 +113,7 @@ public class ViewTools extends AbstractTools<Aerialist> {
 
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				context.setObjectFormatToolsVisible(objectFormatToolsMenuItem.isSelected());
+				context.getObjectFormatTools().setToolBarVisible(objectFormatToolsMenuItem.isSelected());
 			}
 		});
 		toolBarsMenu.add(objectFormatToolsMenuItem);
@@ -155,14 +155,6 @@ public class ViewTools extends AbstractTools<Aerialist> {
 
 		updateViewModeComponents();
 
-	}
-
-	public JMenu getMenu() {
-		return menu;
-	}
-
-	public JToolBar getToolBar() {
-		return toolBar;
 	}
 
 	public JToolBar getViewModeToolBar() {

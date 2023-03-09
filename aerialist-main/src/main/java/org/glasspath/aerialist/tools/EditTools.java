@@ -58,10 +58,6 @@ public class EditTools extends AbstractTools<FrameContext> {
 
 	}
 
-	public JMenu getMenu() {
-		return menu;
-	}
-
 	public JMenu prepareMenu() {
 
 		menu.removeAll();

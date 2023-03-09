@@ -30,7 +30,6 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JMenu;
-import javax.swing.JToolBar;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.Element;
 import javax.swing.text.StyleConstants;
@@ -53,14 +52,11 @@ import org.glasspath.aerialist.swing.view.TextView;
 import org.glasspath.common.swing.FrameContext;
 import org.glasspath.common.swing.button.SplitButton;
 import org.glasspath.common.swing.color.ColorButton;
-import org.glasspath.common.swing.color.ColorUtils;
 import org.glasspath.common.swing.tools.AbstractTools;
 
 public class TextFormatTools extends AbstractTools<FrameContext> {
 
 	private final EditorPanel<? extends EditorPanel<?>> editor;
-	private final JMenu menu;
-	private final JToolBar toolBar;
 	private final JComboBox<String> fontComboBox;
 	private final JComboBox<String> fontSizeComboBox;
 
@@ -71,11 +67,6 @@ public class TextFormatTools extends AbstractTools<FrameContext> {
 		super(context, "Format");
 		
 		this.editor = editor;
-
-		this.menu = new JMenu("Format");
-		this.toolBar = new JToolBar("Format");
-		toolBar.setRollover(true);
-		toolBar.setBackground(ColorUtils.TITLE_BAR_COLOR);
 
 		fontComboBox = new JComboBox<>();
 		fontComboBox.setFocusable(false);
@@ -201,14 +192,6 @@ public class TextFormatTools extends AbstractTools<FrameContext> {
 		fontComboBox.setMinimumSize(new Dimension(85, 1));
 		fontComboBox.setMaximumSize(new Dimension(85, 50));
 
-	}
-
-	public JMenu getMenu() {
-		return menu;
-	}
-
-	public JToolBar getToolBar() {
-		return toolBar;
 	}
 
 	public boolean isUpdating() {
