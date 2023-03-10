@@ -498,16 +498,6 @@ public class ActionUtils {
 
 	public static void populateTextViewMenu(EditorPanel<? extends EditorPanel<?>> context, TextView textView, JMenu menu) {
 
-		JMenuItem formatTextMenuItem = new JMenuItem("Format text");
-		// menu.add(formatTextMenuItem);
-		formatTextMenuItem.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO
-			}
-		});
-
 		menu.add(createInsertFieldMenu(context));
 		menu.add(createInsertImageMenuItem(context, textView));
 
