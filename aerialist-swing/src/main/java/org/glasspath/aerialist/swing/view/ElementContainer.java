@@ -125,51 +125,6 @@ public class ElementContainer extends JPanel {
 			layout.validateLayout();
 		}
 
-		/*
-		if (viewContext.isHeightPolicyEnabled()) {
-		
-			for (int i = 0; i < getElementViewCount(); i++) {
-		
-				ISwingElementView<?> elementView = getElementView(i);
-				if (elementView.getHeightPolicy() == HeightPolicy.AUTO) {
-		
-					if (elementView instanceof Component) {
-		
-						Component component = (Component) elementView;
-						Rectangle oldBounds = component.getBounds();
-		
-						int height = component.getPreferredSize().height;
-		
-						// TODO?
-						if (height < 10) {
-							height = 10;
-						}
-		
-						if (height != oldBounds.height) {
-		
-							Rectangle bounds = new Rectangle(oldBounds);
-							bounds.height = height;
-		
-							component.setBounds(bounds);
-		
-							elementResized(component, oldBounds);
-		
-							if (getParent() instanceof ElementContainer) {
-								getParent().invalidate();
-								getParent().validate();
-							}
-		
-						}
-		
-					}
-		
-				}
-		
-			}
-		
-		}
-		*/
-
 		// TODO: Initialize vertical anchors from outside after loading document?
 		SwingUtilities.invokeLater(new Runnable() {
 

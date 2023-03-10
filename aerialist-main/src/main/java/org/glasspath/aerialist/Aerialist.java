@@ -185,9 +185,7 @@ public class Aerialist implements FrameContext {
 		menuBar.add(fileTools.getMenu());
 		menuBar.add(editTools.getMenu());
 		menuBar.add(viewTools.getMenu());
-		// menuBar.add(formatTools.getMenu()); // TODO?
 		menuBar.add(searchTools.getMenu());
-		// menuBar.add(new JMenu("Tools"));
 		menuBar.add(helpTools.getMenu());
 		frame.setJMenuBar(menuBar);
 
