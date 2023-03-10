@@ -45,7 +45,6 @@ import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
-import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 
 import org.glasspath.aerialist.editor.DocumentEditorContext;
@@ -276,7 +275,7 @@ public class Aerialist implements FrameContext {
 		});
 
 		undoActions.setUndoManager(mainPanel.getDocumentEditor().getUndoManager());
-		showTools(null); // TODO
+		updateToolBars();
 
 		frame.setVisible(true);
 
@@ -418,14 +417,14 @@ public class Aerialist implements FrameContext {
 
 	public void setSourceEditorEnabled(boolean sourceEditorEnabled) {
 		this.sourceEditorEnabled = sourceEditorEnabled;
-		showTools(null); // TODO
+		updateToolBars();
 	}
 
 	public EditorContext<DocumentEditorPanel> getEditorContext() {
 		return mainPanel.getDocumentEditor().getEditorContext();
 	}
 
-	public void showTools(List<JToolBar> toolBars) {
+	public void updateToolBars() {
 
 		toolBarPanel.top.removeAll();
 		toolBarPanel.bottom.removeAll();
@@ -438,21 +437,15 @@ public class Aerialist implements FrameContext {
 		} else {
 
 			toolBarPanel.top.setVisible(true);
-			toolBarPanel.bottom.setVisible(true);
-
 			toolBarPanel.top.add(fileTools.getToolBar());
 			toolBarPanel.top.add(editTools.getToolBar());
 			toolBarPanel.top.add(textFormatTools.getToolBar());
-			if (toolBars != null) {
-				for (JToolBar toolBar : toolBars) {
-					toolBarPanel.top.add(toolBar);
-				}
-			}
 			toolBarPanel.top.add(Box.createHorizontalGlue());
 			if (sourceEditorEnabled) {
 				toolBarPanel.top.add(viewTools.getViewModeToolBar());
 			}
 
+			toolBarPanel.bottom.setVisible(true);
 			if (mainPanel.getViewMode() == MainPanel.VIEW_MODE_DESIGN) {
 				toolBarPanel.bottom.add(objectFormatTools.getToolBar());
 			}

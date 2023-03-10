@@ -122,7 +122,7 @@ public class MainPanel extends AbstractMainPanel<Aerialist> {
 
 		super.setViewMode(viewMode);
 
-		context.showTools(null); // TODO
+		context.updateToolBars();
 
 	}
 
