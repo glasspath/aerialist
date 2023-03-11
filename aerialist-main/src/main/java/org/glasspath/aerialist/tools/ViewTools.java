@@ -24,18 +24,27 @@ package org.glasspath.aerialist.tools;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.prefs.Preferences;
 
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
+import javax.swing.SwingUtilities;
 
 import org.glasspath.aerialist.Aerialist;
 import org.glasspath.aerialist.MainPanel;
+import org.glasspath.common.os.preferences.BoolPref;
 import org.glasspath.common.swing.color.ColorUtils;
 import org.glasspath.common.swing.tools.AbstractTools;
 
 public class ViewTools extends AbstractTools<Aerialist> {
+
+	public static final BoolPref FILE_TOOL_BAR_VISIBLE = new BoolPref("fileToolBarVisible", true); //$NON-NLS-1$
+	public static final BoolPref EDIT_TOOL_BAR_VISIBLE = new BoolPref("editToolBarVisible", true); //$NON-NLS-1$
+	public static final BoolPref TEXT_FORMAT_TOOL_BAR_VISIBLE = new BoolPref("textFormatToolBarVisible", true); //$NON-NLS-1$
+	public static final BoolPref OBJECT_FORMAT_TOOL_BAR_VISIBLE = new BoolPref("objectFormatToolBarVisible", true); //$NON-NLS-1$
+	public static final BoolPref STATUS_BAR_VISIBLE = new BoolPref("statusBarVisible", true); //$NON-NLS-1$
 
 	private final JCheckBoxMenuItem designMenuItem;
 	private final JCheckBoxMenuItem sourceMenuItem;
@@ -48,6 +57,8 @@ public class ViewTools extends AbstractTools<Aerialist> {
 
 	public ViewTools(Aerialist context) {
 		super(context, "View");
+
+		Preferences preferences = context.getPreferences();
 
 		designMenuItem = new JCheckBoxMenuItem("Design");
 		menu.add(designMenuItem);
@@ -75,56 +86,61 @@ public class ViewTools extends AbstractTools<Aerialist> {
 		menu.add(toolBarsMenu);
 
 		JCheckBoxMenuItem fileToolsMenuItem = new JCheckBoxMenuItem("File tools");
-		fileToolsMenuItem.setSelected(true);
+		fileToolsMenuItem.setSelected(FILE_TOOL_BAR_VISIBLE.get(preferences));
 		fileToolsMenuItem.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				context.getFileTools().setToolBarVisible(fileToolsMenuItem.isSelected());
+				FILE_TOOL_BAR_VISIBLE.put(preferences, fileToolsMenuItem.isSelected());
 			}
 		});
 		toolBarsMenu.add(fileToolsMenuItem);
 
 		JCheckBoxMenuItem editToolsMenuItem = new JCheckBoxMenuItem("Edit tools");
-		editToolsMenuItem.setSelected(true);
+		editToolsMenuItem.setSelected(EDIT_TOOL_BAR_VISIBLE.get(preferences));
 		editToolsMenuItem.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				context.getEditTools().setToolBarVisible(editToolsMenuItem.isSelected());
+				EDIT_TOOL_BAR_VISIBLE.put(preferences, editToolsMenuItem.isSelected());
 			}
 		});
 		toolBarsMenu.add(editToolsMenuItem);
 
 		JCheckBoxMenuItem textFormatToolsMenuItem = new JCheckBoxMenuItem("Text format tools");
-		textFormatToolsMenuItem.setSelected(true);
+		textFormatToolsMenuItem.setSelected(TEXT_FORMAT_TOOL_BAR_VISIBLE.get(preferences));
 		textFormatToolsMenuItem.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				context.getTextFormatTools().setToolBarVisible(textFormatToolsMenuItem.isSelected());
+				TEXT_FORMAT_TOOL_BAR_VISIBLE.put(preferences, textFormatToolsMenuItem.isSelected());
 			}
 		});
 		toolBarsMenu.add(textFormatToolsMenuItem);
 
 		objectFormatToolsMenuItem = new JCheckBoxMenuItem("Object format tools"); // TODO: Use better name?
-		objectFormatToolsMenuItem.setSelected(true);
+		objectFormatToolsMenuItem.setSelected(OBJECT_FORMAT_TOOL_BAR_VISIBLE.get(preferences));
 		objectFormatToolsMenuItem.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				context.getObjectFormatTools().setToolBarVisible(objectFormatToolsMenuItem.isSelected());
+				OBJECT_FORMAT_TOOL_BAR_VISIBLE.put(preferences, objectFormatToolsMenuItem.isSelected());
 			}
 		});
 		toolBarsMenu.add(objectFormatToolsMenuItem);
 
 		JCheckBoxMenuItem statusBarMenuItem = new JCheckBoxMenuItem("Status bar");
-		statusBarMenuItem.setSelected(context.isStatusBarVisible());
+		statusBarMenuItem.setSelected(STATUS_BAR_VISIBLE.get(preferences));
 		statusBarMenuItem.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				context.setStatusBarVisible(statusBarMenuItem.isSelected());
+				STATUS_BAR_VISIBLE.put(preferences, statusBarMenuItem.isSelected());
 			}
 		});
 		menu.add(statusBarMenuItem);
@@ -154,6 +170,30 @@ public class ViewTools extends AbstractTools<Aerialist> {
 		});
 
 		updateViewModeComponents();
+
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+
+				if (!fileToolsMenuItem.isSelected()) {
+					context.getFileTools().setToolBarVisible(false);
+				}
+				if (!editToolsMenuItem.isSelected()) {
+					context.getEditTools().setToolBarVisible(false);
+				}
+				if (!textFormatToolsMenuItem.isSelected()) {
+					context.getTextFormatTools().setToolBarVisible(false);
+				}
+				if (!objectFormatToolsMenuItem.isSelected()) {
+					context.getObjectFormatTools().setToolBarVisible(false);
+				}
+				if (!statusBarMenuItem.isSelected()) {
+					context.setStatusBarVisible(false);
+				}
+
+			}
+		});
 
 	}
 
