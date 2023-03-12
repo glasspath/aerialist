@@ -26,6 +26,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
 import javax.swing.AbstractAction;
@@ -46,6 +47,9 @@ public class SearchTools extends AbstractTools<Aerialist> {
 
 	public SearchTools(Aerialist context) {
 		super(context, "Search");
+
+		SearchField searchField = context.getGlassPane().getSearchField();
+		DocumentEditorPanel editor = context.getMainPanel().getDocumentEditor();
 
 		JMenuItem searchMenuItem = new JMenuItem("Search");
 		searchMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, OsUtils.CTRL_OR_CMD_MASK));
@@ -69,8 +73,33 @@ public class SearchTools extends AbstractTools<Aerialist> {
 		});
 		menu.add(clearSearchMenuItem);
 
-		SearchField searchField = context.getGlassPane().getSearchField();
-		DocumentEditorPanel editor = context.getMainPanel().getDocumentEditor();
+		menu.addSeparator();
+
+		JMenuItem searchNextMenuItem = new JMenuItem("Search next");
+		searchNextMenuItem.setEnabled(false);
+		searchNextMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0));
+		searchNextMenuItem.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				searchText = searchField.getText();
+				editor.searchNext(searchText);
+			}
+		});
+		menu.add(searchNextMenuItem);
+
+		JMenuItem searchPreviousMenuItem = new JMenuItem("Search previous");
+		searchPreviousMenuItem.setEnabled(false);
+		searchPreviousMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F3, InputEvent.SHIFT_DOWN_MASK));
+		searchPreviousMenuItem.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				searchText = searchField.getText();
+				editor.searchPrevious(searchText);
+			}
+		});
+		menu.add(searchPreviousMenuItem);
 
 		searchField.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), new AbstractAction() {
 
@@ -87,6 +116,14 @@ public class SearchTools extends AbstractTools<Aerialist> {
 			public void componentHidden(ComponentEvent e) {
 				searchText = null;
 				editor.cancelSearch();
+				searchNextMenuItem.setEnabled(false);
+				searchPreviousMenuItem.setEnabled(false);
+			}
+
+			@Override
+			public void componentShown(ComponentEvent e) {
+				searchNextMenuItem.setEnabled(true);
+				searchPreviousMenuItem.setEnabled(true);
 			}
 		});
 

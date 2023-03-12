@@ -99,12 +99,14 @@ public abstract class EditorPanel<T extends EditorPanel<T>> extends JPanel imple
 
 	public void searchNext(String text) {
 		if (searchHandler != null) {
-			searchHandler.searchNext(text);
+			searchHandler.search(text, false);
 		}
 	}
 
 	public void searchPrevious(String text) {
-		// TODO
+		if (searchHandler != null) {
+			searchHandler.search(text, true);
+		}
 	}
 
 	public void cancelSearch() {
