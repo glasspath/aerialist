@@ -40,7 +40,10 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextarea.RTextScrollPane;
 import org.fife.ui.rtextarea.RUndoManager;
+import org.fife.ui.rtextarea.SearchContext;
+import org.fife.ui.rtextarea.SearchEngine;
 import org.glasspath.common.swing.FrameContext;
+import org.glasspath.common.swing.color.ColorUtils;
 import org.glasspath.common.swing.theme.Theme;
 import org.glasspath.common.swing.undo.DefaultUndoManager.UndoManagerListener;
 import org.glasspath.common.swing.undo.IUndoManager;
@@ -53,6 +56,8 @@ public class DocumentSourceEditorPanel extends JPanel {
 	private boolean sourceChanged = false;
 	private boolean updatingSource = false;
 
+	private boolean inited = false;
+
 	public DocumentSourceEditorPanel(FrameContext context) {
 
 		setLayout(new BorderLayout());
@@ -62,8 +67,8 @@ public class DocumentSourceEditorPanel extends JPanel {
 			@Override
 			protected JPopupMenu createPopupMenu() {
 
-				final JPopupMenu menu = super.createPopupMenu();
-
+				JPopupMenu menu = super.createPopupMenu();
+				
 				return menu;
 
 			}
@@ -91,6 +96,8 @@ public class DocumentSourceEditorPanel extends JPanel {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		textArea.setCurrentLineHighlightColor(ColorUtils.createTransparentColor(ColorUtils.SELECTION_COLOR_FOCUSSED, Theme.isDark() ? 75 : 175));
 
 		final RTextScrollPane textAreaScrollPane = new RTextScrollPane(textArea);
 		textAreaScrollPane.setBorder(BorderFactory.createEmptyBorder());
@@ -135,8 +142,6 @@ public class DocumentSourceEditorPanel extends JPanel {
 
 		updatingSource = true;
 
-		boolean clearFirstUndo = textArea.getText().length() == 0;
-
 		if (source != null && !source.equals(textArea.getText())) {
 
 			if (undoManager != null) {
@@ -149,7 +154,7 @@ public class DocumentSourceEditorPanel extends JPanel {
 
 				undoManager.endInternalAtomicEdit();
 
-				if (clearFirstUndo) {
+				if (!inited) {
 					undoManager.discardAllEdits();
 				}
 
@@ -158,6 +163,20 @@ public class DocumentSourceEditorPanel extends JPanel {
 		}
 
 		updatingSource = false;
+
+	}
+
+	public void sourceEditorShown() {
+
+		if (!inited) {
+
+			textArea.setCaretPosition(0);
+
+			inited = true;
+
+		}
+
+		textArea.requestFocusInWindow();
 
 	}
 
@@ -171,6 +190,36 @@ public class DocumentSourceEditorPanel extends JPanel {
 
 	public void setSourceChanged(boolean sourceChanged) {
 		this.sourceChanged = sourceChanged;
+	}
+
+	public void clearSearch() {
+		search("", false); //$NON-NLS-1$
+	}
+
+	public void searchNext(String text) {
+		search(text, false);
+	}
+
+	public void searchPrevious(String text) {
+		search(text, true);
+	}
+
+	private void search(String text, boolean reverse) {
+
+		if (text != null) {
+
+			SearchContext context = new SearchContext();
+			context.setSearchFor(text);
+			context.setMatchCase(false);
+			context.setSearchForward(!reverse);
+			context.setRegularExpression(false);
+			context.setWholeWord(false);
+			context.setMarkAll(true);
+
+			SearchEngine.find(textArea, context);
+
+		}
+
 	}
 
 	public static class UndoManager extends RUndoManager implements IUndoManager {

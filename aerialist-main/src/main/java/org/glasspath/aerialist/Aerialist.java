@@ -26,7 +26,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Insets;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
@@ -50,7 +49,6 @@ import javax.swing.SwingUtilities;
 import org.glasspath.aerialist.editor.DocumentEditorContext;
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
 import org.glasspath.aerialist.editor.EditorContext;
-import org.glasspath.aerialist.editor.EditorPanel;
 import org.glasspath.aerialist.icons.Icons;
 import org.glasspath.aerialist.text.font.FontWeight;
 import org.glasspath.aerialist.tools.EditTools;
@@ -72,6 +70,7 @@ import org.glasspath.common.swing.border.HidpiMatteBorder;
 import org.glasspath.common.swing.color.ColorUtils;
 import org.glasspath.common.swing.frame.FrameUtils;
 import org.glasspath.common.swing.glasspane.GlassPane;
+import org.glasspath.common.swing.search.SearchField.SearchAdapter;
 import org.glasspath.common.swing.statusbar.StatusBar;
 import org.glasspath.common.swing.theme.Theme;
 import org.slf4j.Logger;
@@ -146,6 +145,23 @@ public class Aerialist implements FrameContext {
 
 		glassPane.setContentComponent(mainPanel);
 		glassPane.setRightMargin(20);
+		glassPane.getSearchField().addSearchListener(new SearchAdapter() {
+
+			@Override
+			public void searchCleared() {
+				mainPanel.clearSearch();
+			}
+
+			@Override
+			public void searchNext(String text) {
+				mainPanel.searchNext(text);
+			}
+
+			@Override
+			public void searchPrevious(String text) {
+				mainPanel.searchPrevious(text);
+			}
+		});
 
 		List<String> registeredFonts = Fonts.registerBundledFonts(System.getProperty(GlasspathSystemProperties.BUNDLED_FONTS_PATH), new FontFilter() {
 
@@ -222,8 +238,7 @@ public class Aerialist implements FrameContext {
 			@Override
 			public void windowActivated(WindowEvent e) {
 
-				Toolkit.getDefaultToolkit().addAWTEventListener(mainPanel.getDocumentEditor(), EditorPanel.MOUSE_EVENTS_MASK);
-
+				mainPanel.windowActivated(e);
 				mainPanel.requestFocusInWindow();
 
 				if (!inited) {
@@ -263,7 +278,7 @@ public class Aerialist implements FrameContext {
 
 			@Override
 			public void windowDeactivated(WindowEvent e) {
-				Toolkit.getDefaultToolkit().removeAWTEventListener(mainPanel.getDocumentEditor());
+				mainPanel.windowDeactivated(e);
 			}
 
 			@Override

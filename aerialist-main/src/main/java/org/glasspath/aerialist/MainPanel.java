@@ -24,6 +24,8 @@ package org.glasspath.aerialist;
 
 import java.awt.BorderLayout;
 import java.awt.Frame;
+import java.awt.Toolkit;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +34,7 @@ import javax.swing.undo.UndoableEdit;
 import org.glasspath.aerialist.editor.DocumentEditorContext;
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
 import org.glasspath.aerialist.editor.DocumentSourceEditorPanel;
+import org.glasspath.aerialist.editor.EditorPanel;
 import org.glasspath.aerialist.editor.actions.EditSourceUndoable;
 import org.glasspath.aerialist.swing.view.PageView;
 import org.glasspath.common.swing.undo.DefaultUndoManager.UndoManagerListener;
@@ -45,6 +48,7 @@ public class MainPanel extends AbstractMainPanel<Aerialist> {
 	private DocumentSourceEditorPanel sourceEditor = null; // Takes some time to create, so for now only create it when it is actually used
 	private final XmlMapper xmlMapper;
 
+	private boolean awtEventListenerInstalled = false;
 	private boolean designChanged = true; // Initialized at true to make sure source is updated first time
 
 	public MainPanel(Aerialist context, DocumentEditorContext editorContext) {
@@ -88,6 +92,30 @@ public class MainPanel extends AbstractMainPanel<Aerialist> {
 		return documentEditor;
 	}
 
+	public void windowActivated(WindowEvent e) {
+		if (viewMode == VIEW_MODE_DESIGN) {
+			installAwtEventListener();
+		}
+	}
+
+	public void windowDeactivated(WindowEvent e) {
+		uninstallAwtEventListener();
+	}
+
+	private void installAwtEventListener() {
+		if (!awtEventListenerInstalled) {
+			Toolkit.getDefaultToolkit().addAWTEventListener(documentEditor, EditorPanel.MOUSE_EVENTS_MASK);
+			awtEventListenerInstalled = true;
+		}
+	}
+
+	private void uninstallAwtEventListener() {
+		if (awtEventListenerInstalled) {
+			Toolkit.getDefaultToolkit().removeAWTEventListener(documentEditor);
+			awtEventListenerInstalled = false;
+		}
+	}
+
 	public void setViewMode(int viewMode) {
 
 		if (this.viewMode != viewMode) {
@@ -100,6 +128,8 @@ public class MainPanel extends AbstractMainPanel<Aerialist> {
 
 			if (viewMode == VIEW_MODE_DESIGN) {
 
+				installAwtEventListener();
+
 				updateDocumentEditor();
 
 				add(documentEditor, BorderLayout.CENTER);
@@ -107,10 +137,13 @@ public class MainPanel extends AbstractMainPanel<Aerialist> {
 
 			} else if (viewMode == VIEW_MODE_SOURCE) {
 
+				uninstallAwtEventListener();
+
 				updateSourceEditor();
 
 				add(sourceEditor, BorderLayout.CENTER);
 				context.getUndoActions().setUndoManager(sourceEditor.getUndoManager());
+				sourceEditor.sourceEditorShown();
 
 			}
 
@@ -175,6 +208,28 @@ public class MainPanel extends AbstractMainPanel<Aerialist> {
 	public void updateEditMenu() {
 		documentEditor.populateEditMenu(context.getEditTools().prepareMenu());
 		context.getEditTools().finishMenu();
+	}
+
+	public void clearSearch() {
+		if (viewMode == VIEW_MODE_SOURCE) {
+			sourceEditor.clearSearch();
+		}
+	}
+
+	public void searchNext(String text) {
+		if (viewMode == VIEW_MODE_DESIGN) {
+			documentEditor.searchNext(text);
+		} else if (viewMode == VIEW_MODE_SOURCE) {
+			sourceEditor.searchNext(text);
+		}
+	}
+
+	public void searchPrevious(String text) {
+		if (viewMode == VIEW_MODE_DESIGN) {
+			documentEditor.searchPrevious(text);
+		} else if (viewMode == VIEW_MODE_SOURCE) {
+			sourceEditor.searchPrevious(text);
+		}
 	}
 
 }

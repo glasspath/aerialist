@@ -29,7 +29,6 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
-import javax.swing.AbstractAction;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
@@ -42,8 +41,6 @@ import org.glasspath.common.swing.search.SearchField;
 import org.glasspath.common.swing.tools.AbstractTools;
 
 public class SearchTools extends AbstractTools<Aerialist> {
-
-	private String searchText = null;
 
 	public SearchTools(Aerialist context) {
 		super(context, "Search");
@@ -82,8 +79,7 @@ public class SearchTools extends AbstractTools<Aerialist> {
 
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				searchText = searchField.getText();
-				editor.searchNext(searchText);
+				searchField.searchNext();
 			}
 		});
 		menu.add(searchNextMenuItem);
@@ -95,26 +91,15 @@ public class SearchTools extends AbstractTools<Aerialist> {
 
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				searchText = searchField.getText();
-				editor.searchPrevious(searchText);
+				searchField.searchPrevious();
 			}
 		});
 		menu.add(searchPreviousMenuItem);
-
-		searchField.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), new AbstractAction() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				searchText = searchField.getText();
-				editor.searchNext(searchText);
-			}
-		});
 
 		searchField.addComponentListener(new ComponentAdapter() {
 
 			@Override
 			public void componentHidden(ComponentEvent e) {
-				searchText = null;
 				editor.cancelSearch();
 				searchNextMenuItem.setEnabled(false);
 				searchPreviousMenuItem.setEnabled(false);
@@ -145,10 +130,6 @@ public class SearchTools extends AbstractTools<Aerialist> {
 			}
 		});
 
-	}
-
-	public String getSearchText() {
-		return searchText;
 	}
 
 }
