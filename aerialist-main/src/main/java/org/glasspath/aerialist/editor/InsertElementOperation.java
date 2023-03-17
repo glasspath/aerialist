@@ -32,7 +32,6 @@ import java.nio.file.Files;
 
 import javax.swing.SwingUtilities;
 
-import org.glasspath.aerialist.Aerialist;
 import org.glasspath.aerialist.AerialistUtils;
 import org.glasspath.aerialist.icons.Icons;
 import org.glasspath.aerialist.swing.view.ImageView;
@@ -135,7 +134,7 @@ public class InsertElementOperation extends Operation {
 				ImageView imageView = (ImageView) component;
 				if (imageView.getSrc() == null || imageView.getSrc().length() == 0) {
 
-					String filePath = FileChooser.browseForImageFile(Icons.image, false, context.getFrame(), Aerialist.PREFERENCES, "lastImageFilePath"); //$NON-NLS-1$
+					String filePath = FileChooser.browseForImageFile(Icons.image, false, context.getFrame(), context.getPreferences(), "lastImageFilePath"); //$NON-NLS-1$
 					if (filePath != null) {
 
 						try {

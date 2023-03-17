@@ -90,8 +90,7 @@ public class Aerialist implements FrameContext {
 
 	public static final String APP_TITLE = "Aerialist";
 
-	// TODO: Don't allow public access (pass through ApplicationContext)
-	public static Preferences PREFERENCES = Preferences.userNodeForPackage(Aerialist.class);
+	private static final Preferences preferences = Preferences.userNodeForPackage(Aerialist.class);
 
 	private final JFrame frame;
 	private final ToolBarPanel toolBarPanel;
@@ -192,7 +191,7 @@ public class Aerialist implements FrameContext {
 		}
 		 */
 
-		FrameUtils.loadFrameDimensions(frame, PREFERENCES);
+		FrameUtils.loadFrameDimensions(frame, preferences);
 
 		frame.getContentPane().setLayout(new BorderLayout());
 
@@ -247,12 +246,12 @@ public class Aerialist implements FrameContext {
 
 						@Override
 						public void componentResized(ComponentEvent e) {
-							FrameUtils.saveFrameDimensions(frame, PREFERENCES);
+							FrameUtils.saveFrameDimensions(frame, preferences);
 						}
 
 						@Override
 						public void componentMoved(ComponentEvent e) {
-							FrameUtils.saveFrameDimensions(frame, PREFERENCES);
+							FrameUtils.saveFrameDimensions(frame, preferences);
 						}
 					});
 
@@ -332,7 +331,7 @@ public class Aerialist implements FrameContext {
 	}
 
 	public Preferences getPreferences() {
-		return PREFERENCES; // TODO
+		return preferences;
 	}
 
 	@Override
@@ -473,7 +472,7 @@ public class Aerialist implements FrameContext {
 
 	public void exit() {
 
-		FrameUtils.saveFrameDimensions(frame, PREFERENCES);
+		FrameUtils.saveFrameDimensions(frame, preferences);
 
 		if (fileTools.checkFileSaved()) {
 			exitApplication();
@@ -590,8 +589,8 @@ public class Aerialist implements FrameContext {
 		String bundledFontsPath = fontsArgument != null ? fontsArgument : applicationJarFile.getParent() + "/fonts";
 		System.setProperty(GlasspathSystemProperties.BUNDLED_FONTS_PATH, bundledFontsPath);
 
-		if (openFileArgument == null && PREFERENCES.getBoolean("openLastFileAtStartup", true)) {
-			openFileArgument = PREFERENCES.get("lastOpenedFile", "");
+		if (openFileArgument == null && preferences.getBoolean("openLastFileAtStartup", true)) {
+			openFileArgument = preferences.get("lastOpenedFile", "");
 		}
 
 		final String openFile = openFileArgument;
@@ -599,7 +598,7 @@ public class Aerialist implements FrameContext {
 		if (themeArgument != null) {
 			Theme.load(themeArgument);
 		} else {
-			Theme.load(PREFERENCES);
+			Theme.load(preferences);
 		}
 
 		FrameUtils.setSystemLookAndFeelProperties(APP_TITLE);

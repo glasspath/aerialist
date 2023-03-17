@@ -233,7 +233,7 @@ public class FileTools extends AbstractTools<Aerialist> {
 		if (checkFileSaved()) {
 
 			// TODO: Icon
-			String path = FileChooser.browseForFile(XDoc.DOCUMENT_EXTENSION, Icons.image, false, context.getFrame(), Aerialist.PREFERENCES, "lastFilePath"); //$NON-NLS-1$
+			String path = FileChooser.browseForFile(XDoc.DOCUMENT_EXTENSION, Icons.image, false, context.getFrame(), context.getPreferences(), "lastFilePath"); //$NON-NLS-1$
 			if (path != null) {
 				loadDocument(path, null);
 			}
@@ -269,7 +269,7 @@ public class FileTools extends AbstractTools<Aerialist> {
 		}
 
 		// TODO: Icon
-		String newFilePath = FileChooser.browseForFile(XDoc.DOCUMENT_EXTENSION, Icons.image, true, context.getFrame(), Aerialist.PREFERENCES, "lastFilePath", suggestedName); //$NON-NLS-1$
+		String newFilePath = FileChooser.browseForFile(XDoc.DOCUMENT_EXTENSION, Icons.image, true, context.getFrame(), context.getPreferences(), "lastFilePath", suggestedName); //$NON-NLS-1$
 		if (newFilePath != null) {
 
 			saved = saveCurrentDocument(newFilePath);
@@ -528,7 +528,7 @@ public class FileTools extends AbstractTools<Aerialist> {
 		}
 
 		// TODO
-		String filePath = FileChooser.browseForFile("pdf", Icons.image, true, context.getFrame(), Aerialist.PREFERENCES, "generateInvoiceDestinationPath", suggestedFileName + ".pdf"); //$NON-NLS-1$
+		String filePath = FileChooser.browseForFile("pdf", Icons.image, true, context.getFrame(), context.getPreferences(), "generateInvoiceDestinationPath", suggestedFileName + ".pdf"); //$NON-NLS-1$
 		if (filePath != null) {
 			exportToPdf(filePath, true);
 		}

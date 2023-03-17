@@ -42,7 +42,6 @@ import javax.swing.JMenuItem;
 import javax.swing.MenuSelectionManager;
 import javax.swing.SwingUtilities;
 
-import org.glasspath.aerialist.Aerialist;
 import org.glasspath.aerialist.AerialistUtils;
 import org.glasspath.aerialist.Alignment;
 import org.glasspath.aerialist.Field.DynamicFieldKey;
@@ -524,7 +523,7 @@ public class ActionUtils {
 
 				if (selectedTextView != null) {
 
-					String filePath = FileChooser.browseForImageFile(Icons.image, false, context.getFrame(), Aerialist.PREFERENCES, "lastImageFilePath");
+					String filePath = FileChooser.browseForImageFile(Icons.image, false, context.getFrame(), context.getPreferences(), "lastImageFilePath");
 					if (filePath != null) {
 
 						try {

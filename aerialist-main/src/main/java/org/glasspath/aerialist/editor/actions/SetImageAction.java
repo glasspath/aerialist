@@ -30,7 +30,6 @@ import java.nio.file.Files;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-import org.glasspath.aerialist.Aerialist;
 import org.glasspath.aerialist.editor.EditorPanel;
 import org.glasspath.aerialist.icons.Icons;
 import org.glasspath.aerialist.swing.view.ImageView;
@@ -57,7 +56,7 @@ public class SetImageAction extends AbstractAction {
 
 		String oldSrc = imageView.getSrc();
 
-		String filePath = FileChooser.browseForImageFile(Icons.image, false, context.getFrame(), Aerialist.PREFERENCES, "lastImageFilePath");
+		String filePath = FileChooser.browseForImageFile(Icons.image, false, context.getFrame(), context.getPreferences(), "lastImageFilePath");
 		if (filePath != null) {
 
 			try {

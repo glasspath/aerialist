@@ -27,6 +27,7 @@ import java.awt.Component;
 import java.awt.Frame;
 import java.awt.event.AWTEventListener;
 import java.awt.event.MouseEvent;
+import java.util.prefs.Preferences;
 
 import javax.swing.JPanel;
 import javax.swing.undo.UndoableEdit;
@@ -55,9 +56,11 @@ public abstract class EditorPanel<T extends EditorPanel<T>> extends JPanel imple
 
 	}
 
-	public Frame getFrame() {
-		return null;
-	}
+	// TODO?
+	public abstract Frame getFrame();
+
+	// TODO?
+	public abstract Preferences getPreferences();
 
 	public abstract Component getContentContainer();
 
