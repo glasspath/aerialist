@@ -33,6 +33,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import org.glasspath.aerialist.Margin;
+import org.glasspath.aerialist.Page;
 import org.glasspath.aerialist.swing.view.FooterPageView;
 import org.glasspath.aerialist.swing.view.LayeredPageView;
 import org.glasspath.aerialist.swing.view.PageView;
@@ -197,11 +199,21 @@ public class DocumentEditorView extends EditorView<DocumentEditorPanel> {
 
 	protected void drawGuides(Graphics2D g2d, PageView pageView) {
 
-		// TODO
-		int left = 60;
-		int right = 65;
-		int top = 60;
-		int bottom = 60;
+		int top = Page.DEFAULT_MARGIN_TOP;
+		int right = Page.DEFAULT_MARGIN_RIGHT;
+		int bottom = Page.DEFAULT_MARGIN_BOTTOM;
+		int left = Page.DEFAULT_MARGIN_LEFT;
+
+		if (pageView.getMargin() != null) {
+
+			Margin margin = new Margin(pageView.getMargin());
+
+			top = margin.top;
+			right = margin.right;
+			bottom = margin.bottom;
+			left = margin.left;
+
+		}
 
 		int x = pageView.getX();
 		int y = pageView.getY();

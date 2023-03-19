@@ -33,6 +33,7 @@ import org.glasspath.aerialist.Page;
 
 public class PageView extends ElementContainer implements IVisible {
 
+	private String margin = null;
 	private String visible = null;
 
 	public PageView(ISwingViewContext viewContext) {
@@ -44,6 +45,14 @@ public class PageView extends ElementContainer implements IVisible {
 
 		init(page);
 
+	}
+
+	public String getMargin() {
+		return margin;
+	}
+
+	public void setMargin(String margin) {
+		this.margin = margin;
 	}
 
 	@Override
@@ -60,6 +69,7 @@ public class PageView extends ElementContainer implements IVisible {
 
 		setPageSize(page.getWidth(), page.getHeight());
 
+		margin = page.getMaring();
 		visible = page.getVisible();
 
 		JComponent elementView;
@@ -95,6 +105,7 @@ public class PageView extends ElementContainer implements IVisible {
 		Page page = new Page();
 		page.setWidth(getWidth());
 		page.setHeight(getHeight());
+		page.setMaring(margin);
 		page.setVisible(visible);
 
 		Component elementView;
