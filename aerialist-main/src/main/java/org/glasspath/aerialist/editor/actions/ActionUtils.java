@@ -50,7 +50,9 @@ import org.glasspath.aerialist.FitPolicy;
 import org.glasspath.aerialist.HeightPolicy;
 import org.glasspath.aerialist.IPagination;
 import org.glasspath.aerialist.IVisible;
+import org.glasspath.aerialist.Margin;
 import org.glasspath.aerialist.Padding;
+import org.glasspath.aerialist.Page;
 import org.glasspath.aerialist.Page.PageSize;
 import org.glasspath.aerialist.YPolicy;
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
@@ -84,6 +86,7 @@ import org.glasspath.common.swing.selection.SelectionListener;
 public class ActionUtils {
 
 	public static boolean TODO_CREATE_GROUP_MENU_ITEMS = false;
+	public static boolean TODO_CREATE_CUSTOM_PAGE_MARGINS_ITEM = false;
 
 	private ActionUtils() {
 
@@ -355,6 +358,46 @@ public class ActionUtils {
 
 		menu.add(new JCheckBoxMenuItem(new SetPageSizeAction(context, pageView, PageSize.A4.getWidth(), PageSize.A4.getHeight(), "A4 Portrait")));
 		menu.add(new JCheckBoxMenuItem(new SetPageSizeAction(context, pageView, PageSize.A4.getHeight(), PageSize.A4.getWidth(), "A4 Landscape")));
+
+		if (SetMarginAction.isMarginSupported(pageView)) {
+
+			menu.addSeparator();
+
+			JMenu marginMenu = new JMenu("Margins");
+			menu.add(marginMenu);
+
+			marginMenu.add(new JCheckBoxMenuItem(new SetMarginAction(context, new Margin(40, 45, 40, 40), "Small")));
+			marginMenu.add(new JCheckBoxMenuItem(new SetMarginAction(context, new Margin(Page.DEFAULT_MARGIN_TOP, Page.DEFAULT_MARGIN_RIGHT, Page.DEFAULT_MARGIN_BOTTOM, Page.DEFAULT_MARGIN_LEFT), "Default")));
+			marginMenu.add(new JCheckBoxMenuItem(new SetMarginAction(context, new Margin(80, 85, 80, 80), "Large")));
+
+			if (TODO_CREATE_CUSTOM_PAGE_MARGINS_ITEM) {
+
+				marginMenu.addSeparator();
+
+				JMenuItem customMenuItem = new JMenuItem("Custom");
+				marginMenu.add(customMenuItem);
+				customMenuItem.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+
+						Margin margin = SetMarginAction.getMargin(pageView);
+						if (margin == null) {
+							margin = new Margin(Page.DEFAULT_MARGIN_TOP, Page.DEFAULT_MARGIN_RIGHT, Page.DEFAULT_MARGIN_BOTTOM, Page.DEFAULT_MARGIN_LEFT);
+						}
+
+						PaddingDialog marginDialog = new PaddingDialog(context.getContext(), margin.top, margin.right, margin.bottom, margin.left);
+						if (marginDialog.setVisibleAndGetAction()) {
+							PaddingPanel p = marginDialog.getPaddingPanel();
+							new SetMarginAction(context, new Margin(p.getTopPadding(), p.getRightPadding(), p.getBottomPadding(), p.getLeftPadding()), "Custom").actionPerformed();
+						}
+
+					}
+				});
+
+			}
+
+		}
 
 		return menu;
 
@@ -819,12 +862,12 @@ public class ActionUtils {
 	public static JMenuItem createPaddingMenu(DocumentEditorPanel context, ISwingElementView<?> elementView) {
 
 		JMenu paddingMenu = new JMenu("Padding");
-		paddingMenu.add(new SetPaddingAction(context, 0));
-		paddingMenu.add(new SetPaddingAction(context, 1));
-		paddingMenu.add(new SetPaddingAction(context, 2));
-		paddingMenu.add(new SetPaddingAction(context, 3));
-		paddingMenu.add(new SetPaddingAction(context, 4));
-		paddingMenu.add(new SetPaddingAction(context, 5));
+		paddingMenu.add(new JCheckBoxMenuItem(new SetPaddingAction(context, 0)));
+		paddingMenu.add(new JCheckBoxMenuItem(new SetPaddingAction(context, 1)));
+		paddingMenu.add(new JCheckBoxMenuItem(new SetPaddingAction(context, 2)));
+		paddingMenu.add(new JCheckBoxMenuItem(new SetPaddingAction(context, 3)));
+		paddingMenu.add(new JCheckBoxMenuItem(new SetPaddingAction(context, 4)));
+		paddingMenu.add(new JCheckBoxMenuItem(new SetPaddingAction(context, 5)));
 
 		paddingMenu.addSeparator();
 

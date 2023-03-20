@@ -137,4 +137,14 @@ public class Margin {
 		return new Margin(top, right, bottom, left).toString();
 	}
 
+	@Override
+	public boolean equals(Object object) {
+		if (object instanceof Margin) {
+			Margin margin = (Margin) object;
+			return margin.top == top && margin.right == right && margin.bottom == bottom && margin.left == left;
+		} else {
+			return super.equals(object);
+		}
+	}
+
 }

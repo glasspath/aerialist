@@ -51,6 +51,7 @@ public class SetPaddingAction extends AbstractAction {
 
 		putValue(Action.NAME, padding + "px");
 		putValue(Action.SHORT_DESCRIPTION, "Padding");
+		putValue(Action.SELECTED_KEY, this.padding.equals(getPadding(getElementView())));
 
 	}
 
@@ -61,25 +62,29 @@ public class SetPaddingAction extends AbstractAction {
 
 	public void actionPerformed(Padding padding) {
 
-		if (context.getSelection().size() == 1) {
+		ISwingElementView<?> elementView = getElementView();
+		if (elementView != null) {
 
-			ISwingElementView<?> elementView = AerialistUtils.getElementView(context.getSelection().get(0));
-			if (elementView != null) {
+			Padding oldPadding = getPadding(elementView);
+			if (oldPadding != null) {
 
-				Padding oldPadding = getPadding(elementView);
-				if (oldPadding != null) {
+				applyPadding(elementView, padding);
+				context.refresh(null);
 
-					applyPadding(elementView, padding);
-					context.refresh(null);
-
-					context.undoableEditHappened(new SetPaddingUndoable(context, elementView, padding, oldPadding, context.getPageContainer().isYPolicyEnabled()));
-
-				}
+				context.undoableEditHappened(new SetPaddingUndoable(context, elementView, padding, oldPadding, context.getPageContainer().isYPolicyEnabled()));
 
 			}
 
 		}
 
+	}
+
+	private ISwingElementView<?> getElementView() {
+		if (context.getSelection().size() == 1) {
+			return AerialistUtils.getElementView(context.getSelection().get(0));
+		} else {
+			return null;
+		}
 	}
 
 	public static boolean isPaddingSupported(ISwingElementView<?> elementView) {
