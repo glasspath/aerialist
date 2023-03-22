@@ -37,7 +37,6 @@ import org.glasspath.aerialist.Element;
 import org.glasspath.aerialist.Field;
 import org.glasspath.aerialist.IFieldContext;
 import org.glasspath.aerialist.Page;
-import org.glasspath.aerialist.Page.PageSize;
 import org.glasspath.aerialist.layout.DefaultVerticalLayout;
 import org.glasspath.aerialist.layout.DocumentLayoutInfo;
 import org.glasspath.aerialist.layout.DocumentLayoutInfo.PageLayoutInfo;
@@ -211,12 +210,13 @@ public abstract class TemplateDocumentLoader {
 
 	protected void writeDocument(DocumentLayoutInfo documentLayoutInfo) {
 
-		if (documentWriter != null) {
+		if (documentWriter != null && documentLayoutInfo.pages.size() > 0) {
 
 			try {
 
 				if (!documentWriter.isDocumentOpen()) {
-					documentWriter.open(PageSize.A4.getWidth(), PageSize.A4.getHeight()); // TODO
+					PageLayoutInfo pageLayoutInfo = documentLayoutInfo.pages.get(0);
+					documentWriter.open(pageLayoutInfo.page.getWidth(), pageLayoutInfo.page.getHeight());
 				}
 
 				for (PageLayoutInfo pageLayoutInfo : documentLayoutInfo.pages) {
