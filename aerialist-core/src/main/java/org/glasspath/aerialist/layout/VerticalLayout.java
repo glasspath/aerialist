@@ -88,10 +88,6 @@ public abstract class VerticalLayout<C, E> extends Layout<C, E> {
 
 					int height = layoutMetrics.getPreferredHeight(element);
 
-					// if (viewContext.getLayoutPhase() == LayoutPhase.LAYOUT_ELEMENTS) {
-					// System.out.println(oldBounds.h + " -> " + height + " (" + element + ")");
-					// }
-
 					// TODO?
 					if (height < 10) {
 						height = 10;

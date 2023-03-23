@@ -119,8 +119,6 @@ public class TextUtils {
 			String text = iText.getText().substring(style.start, style.end);
 			SpanInfo info = fontCache.getSpanInfo(text, style.font != null ? style.font : TextStyle.DEFAULT_FONT, style.fontSize, style.bold, style.italic);
 
-			// System.out.println(text + ", ascent: " + info.ascent + ", descent: " + info.descent);
-
 			Span span = new Span(style);
 			span.fontIndex = info.fontIndex;
 			span.start = style.start;
@@ -131,7 +129,7 @@ public class TextUtils {
 
 			x += info.width;
 
-			newLineIndex = text.indexOf("\n");
+			newLineIndex = text.indexOf("\n"); //$NON-NLS-1$
 
 			// TODO: Is this possible?
 			if (newLineIndex >= 0 && newLineIndex != text.length() - 1) {
@@ -157,7 +155,7 @@ public class TextUtils {
 
 					x = span.x;
 
-					int spaceIndex = text.lastIndexOf(" ");
+					int spaceIndex = text.lastIndexOf(" "); //$NON-NLS-1$
 					while (spaceIndex >= 0) {
 
 						int offset = alignment == Alignment.RIGHT ? 0 : 1;
@@ -213,7 +211,7 @@ public class TextUtils {
 
 						}
 
-						spaceIndex = text.lastIndexOf(" ", spaceIndex - 1);
+						spaceIndex = text.lastIndexOf(" ", spaceIndex - 1); //$NON-NLS-1$
 
 					}
 

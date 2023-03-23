@@ -43,7 +43,7 @@ public class XDocReader {
 		try {
 
 			XDoc xDoc = new XDoc();
-			xDoc.setVersionInfo("");
+			xDoc.setVersionInfo(""); //$NON-NLS-1$
 
 			xDoc.setMediaCache(mediaCache);
 
