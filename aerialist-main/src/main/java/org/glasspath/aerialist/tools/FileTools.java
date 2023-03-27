@@ -205,15 +205,18 @@ public class FileTools extends AbstractTools<Aerialist> {
 		exportHtmlMenuItem.setEnabled(enabled);
 	}
 
+	private void clearUndoHistory() {
+		context.getUndoActions().getUndoManager().discardAllEdits();
+		context.getUndoActions().updateActions();
+	}
+
 	private void newAction() {
 
 		if (checkFileSaved()) {
 
 			currentFilePath = null;
 			context.setContentChanged(false);
-
-			context.getUndoActions().getUndoManager().discardAllEdits();
-			context.getUndoActions().updateActions();
+			clearUndoHistory();
 
 			DocumentEditorPanel editor = context.getMainPanel().getDocumentEditor();
 
@@ -293,6 +296,7 @@ public class FileTools extends AbstractTools<Aerialist> {
 
 		currentFilePath = null;
 		context.setContentChanged(false);
+		clearUndoHistory();
 
 		DocumentEditorPanel editor = context.getMainPanel().getDocumentEditor();
 		editor.getSelection().clear();
@@ -478,6 +482,7 @@ public class FileTools extends AbstractTools<Aerialist> {
 
 			currentFilePath = null;
 			context.setContentChanged(false);
+			clearUndoHistory();
 
 			context.getUndoActions().getUndoManager().discardAllEdits();
 			context.getUndoActions().updateActions();
