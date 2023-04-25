@@ -35,7 +35,6 @@ import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JSpinner;
 import javax.swing.JToggleButton;
-import javax.swing.JToolBar;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
