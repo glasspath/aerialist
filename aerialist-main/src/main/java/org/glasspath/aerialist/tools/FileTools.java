@@ -432,7 +432,7 @@ public class FileTools extends AbstractTools<Aerialist> {
 		editor.getPageContainer().setVisible(false);
 		editor.getPageContainer().init(document);
 
-		FieldUtils.updateDynamicFields(editor.getPageContainer());
+		FieldUtils.updateDynamicFields(AerialistUtils.getDynamicFieldContext(editor), editor.getPageContainer());
 
 		SwingUtilities.invokeLater(new Runnable() {
 

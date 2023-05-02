@@ -34,9 +34,8 @@ public class FieldUtils {
 
 	}
 
-	public static void updateDynamicFields(PageContainer pageContainer) {
+	public static void updateDynamicFields(DynamicFieldContext fieldContext, PageContainer pageContainer) {
 
-		DynamicFieldContext fieldContext = new DynamicFieldContext();
 		fieldContext.setMillis(System.currentTimeMillis());
 		fieldContext.setPages(pageContainer.getPageViews().size());
 		fieldContext.setPage(1);

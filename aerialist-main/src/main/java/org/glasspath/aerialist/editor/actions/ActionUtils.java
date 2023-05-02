@@ -261,7 +261,7 @@ public class ActionUtils {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					FieldUtils.updateDynamicFields(context.getPageContainer());
+					FieldUtils.updateDynamicFields(AerialistUtils.getDynamicFieldContext(context), context.getPageContainer());
 					context.getPageContainer().refresh(null);
 				}
 			});

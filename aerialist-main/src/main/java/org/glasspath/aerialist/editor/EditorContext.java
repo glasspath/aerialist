@@ -27,6 +27,7 @@ import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
+import org.glasspath.aerialist.DynamicFieldContext;
 import org.glasspath.aerialist.Field.FieldType;
 import org.glasspath.aerialist.IVisible;
 import org.glasspath.aerialist.editor.actions.InsertFieldAction;
@@ -47,6 +48,7 @@ public abstract class EditorContext<T extends EditorPanel<T>> {
 	private JComponent headerComponent = null;
 	private boolean editable = true;
 	private IAbout about = null;
+	private DynamicFieldContext dynamicFieldContext = new DynamicFieldContext();
 
 	public EditorContext() {
 
@@ -90,6 +92,14 @@ public abstract class EditorContext<T extends EditorPanel<T>> {
 
 	public void setAbout(IAbout about) {
 		this.about = about;
+	}
+
+	public DynamicFieldContext getDynamicFieldContext() {
+		return dynamicFieldContext;
+	}
+
+	public void setDynamicFieldContext(DynamicFieldContext dynamicFieldContext) {
+		this.dynamicFieldContext = dynamicFieldContext;
 	}
 
 	public abstract void populateInsertElementMenu(T context, JMenu menu);

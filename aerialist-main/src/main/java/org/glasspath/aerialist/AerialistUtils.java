@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import org.glasspath.aerialist.Page.PageSize;
+import org.glasspath.aerialist.editor.EditorPanel;
 import org.glasspath.aerialist.swing.view.EmailContainer;
 import org.glasspath.aerialist.swing.view.FooterPageView;
 import org.glasspath.aerialist.swing.view.GroupView;
@@ -545,6 +546,22 @@ public class AerialistUtils {
 		rowStyle.background = background;
 
 		return rowStyle;
+
+	}
+
+	public static DynamicFieldContext getDynamicFieldContext(EditorPanel<?> editorPanel) {
+
+		DynamicFieldContext fieldContext = null;
+
+		if (editorPanel.getEditorContext() != null) {
+			fieldContext = editorPanel.getEditorContext().getDynamicFieldContext();
+		}
+
+		if (fieldContext == null) {
+			fieldContext = new DynamicFieldContext();
+		}
+
+		return fieldContext;
 
 	}
 
