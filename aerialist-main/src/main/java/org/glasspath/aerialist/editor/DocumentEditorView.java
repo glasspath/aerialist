@@ -28,6 +28,8 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Shape;
+import java.awt.image.BufferedImage;
+import java.awt.image.WritableRaster;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -43,11 +45,15 @@ import org.glasspath.common.swing.theme.Theme;
 
 public class DocumentEditorView extends EditorView<DocumentEditorPanel> {
 
+	public static boolean TODO_TEST_BG_IMAGE = false;
+
 	public static final Color GRID_COLOR = new Color(200, 200, 200);
 	public static final Color GUIDE_COLOR = new Color(150, 195, 255, 75);
 	public static final Color HEADER_FOOTER_GUIDE_COLOR = new Color(150, 195, 255, 150);
 
 	private final NinePatch shadow = new NinePatch(new ImageIcon(getClass().getClassLoader().getResource("org/glasspath/common/swing/graphics/shadow.png")).getImage(), 10, 10); //$NON-NLS-1$
+
+	protected BufferedImage bgImage = null;
 
 	public DocumentEditorView(DocumentEditorPanel context) {
 		super(context);
@@ -77,8 +83,12 @@ public class DocumentEditorView extends EditorView<DocumentEditorPanel> {
 
 				shadow.paintNinePatch(g2d, bounds.x - 7, bounds.y - 7, bounds.width + 14, bounds.height + 14);
 
-				g2d.setColor(Color.white);
-				g2d.fill(bounds);
+				if (TODO_TEST_BG_IMAGE) {
+					g2d.drawImage(getBgImage(pageView), bounds.x, bounds.y, pageView);
+				} else {
+					g2d.setColor(Color.white);
+					g2d.fill(bounds);
+				}
 
 				if (context.getPageContainer().isEditingHeader()) {
 
@@ -182,6 +192,48 @@ public class DocumentEditorView extends EditorView<DocumentEditorPanel> {
 		SwingUtilities.paintComponent(g2d, layerView, context.getPageContainer(), x, y, size.width, size.height);
 
 		g2d.setClip(oldClip);
+
+	}
+
+	protected BufferedImage getBgImage(PageView pageView) {
+
+		int w = pageView.getWidth();
+		int h = pageView.getHeight();
+
+		if (bgImage == null || bgImage.getWidth() != w || bgImage.getHeight() != h) {
+
+			// TODO: For now we create a transparency background as seen in image editors
+
+			bgImage = new BufferedImage(w, h, BufferedImage.TYPE_BYTE_GRAY);
+			WritableRaster raster = bgImage.getRaster();
+
+			for (int x = 0; x < w; x++) {
+
+				for (int y = 0; y < h; y++) {
+
+					if (x % 20 < 10) {
+						if (y % 20 < 10) {
+							raster.setSample(x, y, 0, 235);
+						} else {
+							raster.setSample(x, y, 0, 155);
+						}
+					} else {
+						if (y % 20 > 10) {
+							raster.setSample(x, y, 0, 235);
+						} else {
+							raster.setSample(x, y, 0, 155);
+						}
+					}
+
+				}
+
+			}
+
+			bgImage.setAccelerationPriority(1.0F);
+
+		}
+
+		return bgImage;
 
 	}
 
