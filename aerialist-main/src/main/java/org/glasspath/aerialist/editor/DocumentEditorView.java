@@ -123,7 +123,8 @@ public class DocumentEditorView extends EditorView<DocumentEditorPanel> {
 						}
 					}
 
-					if (editable) {
+					// TODO
+					if (editable && !(TODO_TEST_BG_IMAGE && Theme.isDark())) {
 						g2d.setColor(new Color(255, 255, 255, 200));
 						g2d.fill(bounds);
 					}
@@ -207,21 +208,31 @@ public class DocumentEditorView extends EditorView<DocumentEditorPanel> {
 			bgImage = new BufferedImage(w, h, BufferedImage.TYPE_BYTE_GRAY);
 			WritableRaster raster = bgImage.getRaster();
 
+			int color1, color2;
+			if (Theme.isDark()) {
+				color1 = 45;
+				color2 = 85;
+			} else {
+				// TODO: Adjust when turning of transparent layer
+				color1 = 235;
+				color2 = 155;
+			}
+
 			for (int x = 0; x < w; x++) {
 
 				for (int y = 0; y < h; y++) {
 
 					if (x % 20 < 10) {
 						if (y % 20 < 10) {
-							raster.setSample(x, y, 0, 235);
+							raster.setSample(x, y, 0, color1);
 						} else {
-							raster.setSample(x, y, 0, 155);
+							raster.setSample(x, y, 0, color2);
 						}
 					} else {
 						if (y % 20 > 10) {
-							raster.setSample(x, y, 0, 235);
+							raster.setSample(x, y, 0, color1);
 						} else {
-							raster.setSample(x, y, 0, 155);
+							raster.setSample(x, y, 0, color2);
 						}
 					}
 
