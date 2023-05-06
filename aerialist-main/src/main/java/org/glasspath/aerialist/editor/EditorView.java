@@ -99,7 +99,7 @@ public class EditorView<T extends EditorPanel<T>> {
 
 	}
 
-	public void drawLayerView(Graphics2D g2d, PageView pageView, PageView layerView) {
+	public void drawLayerView(Graphics2D g2d, PageView pageView, PageView layerView, boolean editable) {
 
 	}
 

@@ -22,8 +22,10 @@
  */
 package org.glasspath.aerialist.editor;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Composite;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -126,14 +128,8 @@ public class DocumentEditorView extends EditorView<DocumentEditorPanel> {
 
 					if (pageView instanceof LayeredPageView) {
 						for (PageView layerView : ((LayeredPageView) pageView).getLayers()) {
-							drawLayerView(g2d, pageView, layerView);
+							drawLayerView(g2d, pageView, layerView, editable);
 						}
-					}
-
-					// TODO!
-					if (editable && !TODO_TEST_BG_IMAGE) {
-						g2d.setColor(new Color(255, 255, 255, 200));
-						g2d.fill(bounds);
 					}
 
 				}
@@ -182,7 +178,7 @@ public class DocumentEditorView extends EditorView<DocumentEditorPanel> {
 	}
 
 	@Override
-	public void drawLayerView(Graphics2D g2d, PageView pageView, PageView layerView) {
+	public void drawLayerView(Graphics2D g2d, PageView pageView, PageView layerView, boolean editable) {
 
 		Dimension size = layerView.getPreferredSize();
 
@@ -197,8 +193,14 @@ public class DocumentEditorView extends EditorView<DocumentEditorPanel> {
 		Shape oldClip = g2d.getClip();
 		g2d.setClip(pageView.getX(), pageView.getY(), pageView.getWidth(), pageView.getHeight());
 
+		Composite oldComposite = g2d.getComposite();
+		if (editable) {
+			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25F));
+		}
+
 		SwingUtilities.paintComponent(g2d, layerView, context.getPageContainer(), x, y, size.width, size.height);
 
+		g2d.setComposite(oldComposite);
 		g2d.setClip(oldClip);
 
 	}
