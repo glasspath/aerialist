@@ -314,7 +314,7 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 	}
 
 	@Override
-	public void refresh(Component component, boolean resetYPolicy) {
+	public void refresh(Component component, boolean resetYPolicy, boolean revalidateScrollPane) {
 
 		if (component != null) {
 
@@ -332,9 +332,11 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 			pageContainer.validate();
 			pageContainer.repaint();
 
-			// If a page was added/removed we need to re-validate the scroll-pane
-			mainScrollPane.revalidate();
+		}
 
+		// If a page was added/removed we need to re-validate the scroll-pane
+		if (revalidateScrollPane) {
+			mainScrollPane.revalidate();
 		}
 
 		if (resetYPolicy) {

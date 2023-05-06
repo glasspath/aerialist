@@ -119,12 +119,10 @@ public abstract class EditorPanel<T extends EditorPanel<T>> extends JPanel imple
 	}
 
 	public void refresh(Component component) {
-		refresh(component, true);
+		refresh(component, true, false);
 	}
 
-	public void refresh(Component component, boolean resetYPolicy) {
-
-	}
+	public abstract void refresh(Component component, boolean resetYPolicy, boolean revalidateScrollPane);
 
 	protected boolean isEditable() {
 		return editorContext == null || editorContext.isEditable();

@@ -28,7 +28,6 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-import org.glasspath.aerialist.AerialistUtils;
 import org.glasspath.aerialist.Page;
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
 import org.glasspath.aerialist.icons.Icons;
@@ -104,11 +103,7 @@ public class InsertPageAction extends AbstractAction {
 		PageView pageView = PageContainer.createLayeredPageView(page, context.getPageContainer());
 
 		context.getPageContainer().insertPageView(pageView, index);
-
-		context.invalidate();
-		context.validate();
-		context.repaint();
-
+		context.refresh(null, false, true);
 		context.undoableEditHappened(new InsertPageUndoable(context, pageView, index));
 
 	}

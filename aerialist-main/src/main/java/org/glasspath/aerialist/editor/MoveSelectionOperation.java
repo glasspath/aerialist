@@ -96,7 +96,7 @@ public class MoveSelectionOperation extends Operation {
 			pageView.elementMoved(component, oldBounds, true);
 
 			context.getSelection().fireSelectionChanged();
-			context.refresh(pageView, false);
+			context.refresh(pageView, false, false);
 
 		}
 

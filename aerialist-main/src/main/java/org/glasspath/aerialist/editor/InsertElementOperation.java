@@ -118,7 +118,7 @@ public class InsertElementOperation extends Operation {
 			pageView.updateVerticalAnchors();
 
 			context.getSelection().fireSelectionChanged();
-			context.refresh(null, false);
+			context.refresh(null, false, false);
 
 		}
 

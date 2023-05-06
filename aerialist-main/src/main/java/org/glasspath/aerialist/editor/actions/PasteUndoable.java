@@ -101,7 +101,7 @@ public class PasteUndoable implements UndoableEdit {
 			@Override
 			public void run() {
 				PasteAction.selectPastedComponents(context, pastedComponents);
-				context.refresh(null);
+				context.refresh(null, true, true);
 			}
 		});
 
@@ -124,7 +124,7 @@ public class PasteUndoable implements UndoableEdit {
 		}
 
 		context.getSelection().deselectAll();
-		context.refresh(null);
+		context.refresh(null, true, true);
 
 	}
 

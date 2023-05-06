@@ -84,7 +84,14 @@ public class DocumentEditorView extends EditorView<DocumentEditorPanel> {
 				shadow.paintNinePatch(g2d, bounds.x - 7, bounds.y - 7, bounds.width + 14, bounds.height + 14);
 
 				if (TODO_TEST_BG_IMAGE) {
+
 					g2d.drawImage(getBgImage(pageView), bounds.x, bounds.y, pageView);
+
+					if (Theme.isDark()) {
+						g2d.setColor(Color.black);
+						g2d.draw(bounds);
+					}
+
 				} else {
 					g2d.setColor(Color.white);
 					g2d.fill(bounds);
@@ -123,8 +130,8 @@ public class DocumentEditorView extends EditorView<DocumentEditorPanel> {
 						}
 					}
 
-					// TODO
-					if (editable && !(TODO_TEST_BG_IMAGE && Theme.isDark())) {
+					// TODO!
+					if (editable && !TODO_TEST_BG_IMAGE) {
 						g2d.setColor(new Color(255, 255, 255, 200));
 						g2d.fill(bounds);
 					}
@@ -210,12 +217,11 @@ public class DocumentEditorView extends EditorView<DocumentEditorPanel> {
 
 			int color1, color2;
 			if (Theme.isDark()) {
-				color1 = 45;
-				color2 = 85;
+				color1 = 55;
+				color2 = 75;
 			} else {
-				// TODO: Adjust when turning of transparent layer
-				color1 = 235;
-				color2 = 155;
+				color1 = 251;
+				color2 = 233;
 			}
 
 			for (int x = 0; x < w; x++) {

@@ -91,7 +91,7 @@ public class PaginationDemo {
 
 		String filePath = DemoUtils.getDemoResourcePath("pagination-demo.gpdx");
 		if (filePath != null) {
-			Aerialist.launch(editorContext, templateFieldContext, new String[] { filePath });
+			Aerialist.launch(editorContext, templateFieldContext, new String[] { filePath, "-theme:dark" });
 		}
 
 	}
