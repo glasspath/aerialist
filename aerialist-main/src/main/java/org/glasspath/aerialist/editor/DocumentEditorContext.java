@@ -22,6 +22,9 @@
  */
 package org.glasspath.aerialist.editor;
 
+import org.glasspath.aerialist.AerialistUtils;
+import org.glasspath.aerialist.Document;
+
 public abstract class DocumentEditorContext extends EditorContext<DocumentEditorPanel> {
 
 	private boolean gridDefaultVisible = true;
@@ -45,6 +48,10 @@ public abstract class DocumentEditorContext extends EditorContext<DocumentEditor
 
 	public void setGuidesDefaultVisible(boolean guidesDefaultVisible) {
 		this.guidesDefaultVisible = guidesDefaultVisible;
+	}
+
+	public Document createDocument() {
+		return AerialistUtils.createDefaultDocument();
 	}
 
 }

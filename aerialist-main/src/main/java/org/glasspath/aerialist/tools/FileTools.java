@@ -45,6 +45,7 @@ import org.glasspath.aerialist.HtmlExporter;
 import org.glasspath.aerialist.IFieldContext;
 import org.glasspath.aerialist.MainPanel;
 import org.glasspath.aerialist.XDoc;
+import org.glasspath.aerialist.editor.DocumentEditorContext;
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
 import org.glasspath.aerialist.icons.Icons;
 import org.glasspath.aerialist.layout.IElementLayoutMetrics;
@@ -221,7 +222,15 @@ public class FileTools extends AbstractTools<Aerialist> {
 			DocumentEditorPanel editor = context.getMainPanel().getDocumentEditor();
 
 			editor.getSelection().clear();
-			editor.getPageContainer().init(AerialistUtils.createDefaultDocument());
+
+			Document document;
+			if (editor.getEditorContext() instanceof DocumentEditorContext) {
+				document = ((DocumentEditorContext) editor.getEditorContext()).createDocument();
+			} else {
+				document = AerialistUtils.createDefaultDocument();
+			}
+
+			editor.getPageContainer().init(document);
 
 			editor.invalidate();
 			editor.validate();
@@ -328,7 +337,11 @@ public class FileTools extends AbstractTools<Aerialist> {
 				DialogUtils.showWarningMessage(context.getFrame(), "Loading failed", "The document could not be opened");
 			}
 
-			document = AerialistUtils.createDefaultDocument();
+			if (editor.getEditorContext() instanceof DocumentEditorContext) {
+				document = ((DocumentEditorContext) editor.getEditorContext()).createDocument();
+			} else {
+				document = AerialistUtils.createDefaultDocument();
+			}
 
 		}
 
