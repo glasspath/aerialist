@@ -22,7 +22,7 @@
  */
 package org.glasspath.aerialist;
 
-public class Padding extends Margin {
+public class Padding extends Sides.Integer {
 
 	public Padding() {
 

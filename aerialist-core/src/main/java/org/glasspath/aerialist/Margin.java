@@ -22,129 +22,26 @@
  */
 package org.glasspath.aerialist;
 
-import java.util.ArrayList;
-import java.util.List;
-
-@SuppressWarnings("nls")
-public class Margin {
-
-	public static final String DEFAULT = null;
-	public static final int DEFAULT_MARGIN = 0;
-
-	public int top = DEFAULT_MARGIN;
-	public int right = DEFAULT_MARGIN;
-	public int bottom = DEFAULT_MARGIN;
-	public int left = DEFAULT_MARGIN;
+public class Margin extends Sides.Integer {
 
 	public Margin() {
 
 	}
 
 	public Margin(Margin margin) {
-		from(margin);
+		super(margin);
 	}
 
 	public Margin(String margin) {
-		parse(margin);
+		super(margin);
 	}
 
 	public Margin(int margin) {
-		this(margin, margin, margin, margin);
+		super(margin);
 	}
 
 	public Margin(int top, int right, int bottom, int left) {
-		this.top = top;
-		this.right = right;
-		this.bottom = bottom;
-		this.left = left;
-	}
-
-	public void from(Margin margin) {
-		top = margin.top;
-		right = margin.right;
-		bottom = margin.bottom;
-		left = margin.left;
-	}
-
-	public void parse(String margin) {
-
-		if (margin != null) {
-
-			List<Integer> integers = new ArrayList<>();
-
-			String[] split = margin.split(" ");
-			for (String s : split) {
-				try {
-					integers.add(Integer.parseInt(s));
-				} catch (Exception e) {
-					// Not an integer
-				}
-			}
-
-			if (integers.size() >= 4) {
-				top = integers.get(0);
-				right = integers.get(1);
-				bottom = integers.get(2);
-				left = integers.get(3);
-			} else if (integers.size() == 3) {
-				top = integers.get(0);
-				right = integers.get(1);
-				bottom = integers.get(2);
-				left = right;
-			} else if (integers.size() == 2) {
-				top = integers.get(0);
-				right = integers.get(1);
-				bottom = top;
-				left = right;
-			} else if (integers.size() == 1) {
-				top = integers.get(0);
-				right = top;
-				bottom = top;
-				left = top;
-			}
-
-		} else {
-			top = DEFAULT_MARGIN;
-			right = top;
-			bottom = top;
-			left = top;
-		}
-
-	}
-
-	@Override
-	public String toString() {
-		if (right == top && bottom == top && left == top) {
-			if (top == DEFAULT_MARGIN) {
-				return DEFAULT;
-			} else {
-				return "" + top;
-			}
-		} else {
-			return "" + top + " " + right + " " + bottom + " " + left;
-		}
-	}
-
-	public static String from(int margin) {
-		if (margin == DEFAULT_MARGIN) {
-			return DEFAULT;
-		} else {
-			return "" + margin;
-		}
-	}
-
-	public static String from(int top, int right, int bottom, int left) {
-		return new Margin(top, right, bottom, left).toString();
-	}
-
-	@Override
-	public boolean equals(Object object) {
-		if (object instanceof Margin) {
-			Margin margin = (Margin) object;
-			return margin.top == top && margin.right == right && margin.bottom == bottom && margin.left == left;
-		} else {
-			return super.equals(object);
-		}
+		super(top, right, bottom, left);
 	}
 
 }

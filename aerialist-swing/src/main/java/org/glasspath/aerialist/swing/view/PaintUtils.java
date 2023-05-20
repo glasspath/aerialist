@@ -27,6 +27,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
+import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
@@ -34,10 +35,35 @@ import org.glasspath.aerialist.Alignment;
 import org.glasspath.aerialist.Border;
 import org.glasspath.aerialist.BorderType;
 import org.glasspath.aerialist.FitPolicy;
+import org.glasspath.aerialist.Radius;
 
 public class PaintUtils {
 
 	private PaintUtils() {
+
+	}
+
+	public static void paintBackground(Graphics2D g2d, Rectangle rect, Color color, Radius radius) {
+
+		if (color != null) {
+
+			g2d.setColor(color);
+
+			if (radius != null) {
+
+				if (radius.isComplex()) {
+
+					// TODO: Create GeneralPath
+
+				} else {
+					g2d.fill(new RoundRectangle2D.Float(rect.x, rect.y, rect.width, rect.height, radius.topLeft, radius.topLeft));
+				}
+
+			} else {
+				g2d.fill(rect);
+			}
+
+		}
 
 	}
 
@@ -72,13 +98,13 @@ public class PaintUtils {
 
 	}
 
-	public static void paintBorders(Graphics2D g2d, List<Border> borders, Rectangle rect) {
+	public static void paintBorders(Graphics2D g2d, List<Border> borders, Rectangle rect, Radius radius) {
 		for (Border border : borders) {
-			paintBorder(g2d, border, rect);
+			paintBorder(g2d, border, rect, radius);
 		}
 	}
 
-	public static void paintBorder(Graphics2D g2d, Border border, Rectangle rect) {
+	public static void paintBorder(Graphics2D g2d, Border border, Rectangle rect, Radius radius) {
 
 		Color color = ColorUtils.fromHex(border.color);
 		if (color != null && border.width > 0.0) {

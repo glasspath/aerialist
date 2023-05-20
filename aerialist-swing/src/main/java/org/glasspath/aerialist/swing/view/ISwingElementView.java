@@ -34,6 +34,7 @@ import org.glasspath.aerialist.Group;
 import org.glasspath.aerialist.HeightPolicy;
 import org.glasspath.aerialist.Image;
 import org.glasspath.aerialist.QrCode;
+import org.glasspath.aerialist.Radius;
 import org.glasspath.aerialist.Table;
 import org.glasspath.aerialist.TextBox;
 import org.glasspath.aerialist.YPolicy;
@@ -64,6 +65,10 @@ public interface ISwingElementView<T extends Element> {
 
 	public void setBackgroundColor(Color color);
 
+	public Radius getRadius();
+
+	public void setRadius(Radius radius);
+
 	public List<Border> getBorders();
 
 	public static void copyProperties(ISwingElementView<? extends Element> elementView, Element element) {
@@ -77,6 +82,8 @@ public interface ISwingElementView<T extends Element> {
 		element.setHeightPolicy(elementView.getHeightPolicy() != null ? elementView.getHeightPolicy().stringValue : HeightPolicy.DEFAULT.stringValue);
 
 		element.setBackground(ColorUtils.toHex(elementView.getBackgroundColor()));
+
+		element.setRadius(elementView.getRadius() != null ? elementView.getRadius().toString() : null);
 
 		element.getBorders().clear();
 		for (Border border : elementView.getBorders()) {

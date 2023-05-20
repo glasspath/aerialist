@@ -64,6 +64,9 @@ public abstract class Element {
 	@JacksonXmlProperty(isAttribute = true)
 	private String background = null;
 
+	@JacksonXmlProperty(isAttribute = true)
+	private String radius = Radius.DEFAULT;
+
 	@JacksonXmlElementWrapper(localName = "borders")
 	@JacksonXmlProperty(localName = "border")
 	private List<Border> borders = new ArrayList<>();
@@ -87,6 +90,8 @@ public abstract class Element {
 		heightPolicy = element.heightPolicy;
 
 		background = element.background;
+
+		radius = element.radius;
 
 		borders.clear();
 		for (Border border : element.borders) {
@@ -149,6 +154,14 @@ public abstract class Element {
 
 	public void setBackground(String background) {
 		this.background = background;
+	}
+
+	public String getRadius() {
+		return radius;
+	}
+
+	public void setRadius(String radius) {
+		this.radius = radius;
 	}
 
 	public List<Border> getBorders() {

@@ -40,6 +40,7 @@ import javax.swing.text.View;
 import org.glasspath.aerialist.Border;
 import org.glasspath.aerialist.HeightPolicy;
 import org.glasspath.aerialist.Padding;
+import org.glasspath.aerialist.Radius;
 import org.glasspath.aerialist.TextBox;
 import org.glasspath.aerialist.YPolicy;
 import org.glasspath.aerialist.layout.DocumentLayoutInfo.Rect;
@@ -52,6 +53,7 @@ public class TextBoxView extends TextView implements ISwingElementView<TextBox> 
 	private YPolicy yPolicy = YPolicy.DEFAULT;
 	private HeightPolicy heightPolicy = HeightPolicy.DEFAULT;
 	private Color backgroundColor = null;
+	private Radius radius = new Radius();
 	private final List<Border> borders = new ArrayList<>();
 	private Padding padding = new Padding();
 
@@ -70,6 +72,8 @@ public class TextBoxView extends TextView implements ISwingElementView<TextBox> 
 		heightPolicy = HeightPolicy.get(element.getHeightPolicy());
 
 		setBackgroundColor(ColorUtils.fromHex(element.getBackground()));
+
+		radius.parse(element.getRadius());
 
 		borders.clear();
 		for (Border border : element.getBorders()) {
@@ -109,6 +113,16 @@ public class TextBoxView extends TextView implements ISwingElementView<TextBox> 
 	@Override
 	public void setBackgroundColor(Color backgroundColor) {
 		this.backgroundColor = backgroundColor;
+	}
+
+	@Override
+	public Radius getRadius() {
+		return radius;
+	}
+
+	@Override
+	public void setRadius(Radius radius) {
+		this.radius = radius;
 	}
 
 	@Override
@@ -249,12 +263,9 @@ public class TextBoxView extends TextView implements ISwingElementView<TextBox> 
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-		if (backgroundColor != null) {
-			g2d.setColor(backgroundColor);
-			g2d.fillRect(0, 0, getWidth(), getHeight());
-		}
-
-		PaintUtils.paintBorders(g2d, borders, new Rectangle(0, 0, getWidth(), getHeight()));
+		Rectangle rect = new Rectangle(0, 0, getWidth(), getHeight());
+		PaintUtils.paintBackground(g2d, rect, backgroundColor, radius);
+		PaintUtils.paintBorders(g2d, borders, rect, radius);
 
 		super.paint(g);
 

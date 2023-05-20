@@ -38,6 +38,7 @@ import org.glasspath.aerialist.Border;
 import org.glasspath.aerialist.Element;
 import org.glasspath.aerialist.Group;
 import org.glasspath.aerialist.HeightPolicy;
+import org.glasspath.aerialist.Radius;
 import org.glasspath.aerialist.YPolicy;
 
 public class GroupView extends ElementContainer implements ISwingElementView<Group> {
@@ -45,6 +46,7 @@ public class GroupView extends ElementContainer implements ISwingElementView<Gro
 	private YPolicy yPolicy = YPolicy.DEFAULT;
 	private HeightPolicy heightPolicy = HeightPolicy.DEFAULT;
 	private Color backgroundColor = null;
+	private Radius radius = new Radius();
 	private final List<Border> borders = new ArrayList<>();
 
 	public GroupView(ISwingViewContext viewContext) {
@@ -61,6 +63,8 @@ public class GroupView extends ElementContainer implements ISwingElementView<Gro
 		heightPolicy = HeightPolicy.get(group.getHeightPolicy());
 
 		setBackgroundColor(ColorUtils.fromHex(group.getBackground()));
+
+		radius.parse(group.getRadius());
 
 		borders.clear();
 		for (Border border : group.getBorders()) {
@@ -116,6 +120,16 @@ public class GroupView extends ElementContainer implements ISwingElementView<Gro
 			setOpaque(false);
 		}
 
+	}
+
+	@Override
+	public Radius getRadius() {
+		return radius;
+	}
+
+	@Override
+	public void setRadius(Radius radius) {
+		this.radius = radius;
 	}
 
 	@Override
@@ -183,7 +197,9 @@ public class GroupView extends ElementContainer implements ISwingElementView<Gro
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-		PaintUtils.paintBorders(g2d, borders, new Rectangle(0, 0, getWidth(), getHeight()));
+		Rectangle rect = new Rectangle(0, 0, getWidth(), getHeight());
+		PaintUtils.paintBackground(g2d, rect, backgroundColor, radius);
+		PaintUtils.paintBorders(g2d, borders, rect, radius);
 
 	}
 

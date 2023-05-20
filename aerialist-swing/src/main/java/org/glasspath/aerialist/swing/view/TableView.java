@@ -42,6 +42,7 @@ import org.glasspath.aerialist.BorderType;
 import org.glasspath.aerialist.ColStyle;
 import org.glasspath.aerialist.HeightPolicy;
 import org.glasspath.aerialist.Padding;
+import org.glasspath.aerialist.Radius;
 import org.glasspath.aerialist.RowStyle;
 import org.glasspath.aerialist.Table;
 import org.glasspath.aerialist.TableCell;
@@ -58,12 +59,13 @@ public class TableView extends JPanel implements ISwingElementView<Table> {
 	private YPolicy yPolicy = YPolicy.DEFAULT;
 	private HeightPolicy heightPolicy = HeightPolicy.DEFAULT;
 	private Color backgroundColor = null;
-	private int headerRows = 0;
+	private Radius radius = new Radius();
 	private final List<Border> borders = new ArrayList<>();
 	private List<ColStyle> colStyles = new ArrayList<>();
 	private final List<RowStyle> rowStyles = new ArrayList<>();
 	private final List<TableCellView> tableCellViews = new ArrayList<>();
 	private Padding cellPadding = new Padding();
+	private int headerRows = 0;
 	private boolean verticalFillEnabled = false;
 	private int rowCount = 0;
 	private int columnCount = 0;
@@ -91,8 +93,10 @@ public class TableView extends JPanel implements ISwingElementView<Table> {
 
 		yPolicy = YPolicy.get(element.getYPolicy());
 		heightPolicy = HeightPolicy.get(element.getHeightPolicy());
+
 		setBackgroundColor(ColorUtils.fromHex(element.getBackground()));
-		headerRows = element.getHeaderRows();
+
+		radius.parse(element.getRadius());
 
 		borders.clear();
 		for (Border border : element.getBorders()) {
@@ -113,6 +117,8 @@ public class TableView extends JPanel implements ISwingElementView<Table> {
 		}
 
 		cellPadding.parse(element.getCellPadding());
+
+		headerRows = element.getHeaderRows();
 
 		createTableCells(element);
 		layoutTableCells();
@@ -149,17 +155,27 @@ public class TableView extends JPanel implements ISwingElementView<Table> {
 		this.backgroundColor = backgroundColor;
 	}
 
+	@Override
+	public Radius getRadius() {
+		return radius;
+	}
+
+	@Override
+	public void setRadius(Radius radius) {
+		this.radius = radius;
+	}
+
+	@Override
+	public List<Border> getBorders() {
+		return borders;
+	}
+
 	public int getHeaderRows() {
 		return headerRows;
 	}
 
 	public void setHeaderRows(int headerRows) {
 		this.headerRows = headerRows;
-	}
-
-	@Override
-	public List<Border> getBorders() {
-		return borders;
 	}
 
 	@Override
@@ -652,10 +668,8 @@ public class TableView extends JPanel implements ISwingElementView<Table> {
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-		if (backgroundColor != null) {
-			g2d.setColor(backgroundColor);
-			g2d.fillRect(0, 0, getWidth(), getHeight());
-		}
+		Rectangle rect = new Rectangle(0, 0, getWidth(), getHeight());
+		PaintUtils.paintBackground(g2d, rect, backgroundColor, radius);
 
 		// TODO! (For now vertical fill is only used for email layout)
 		if (!verticalFillEnabled) {
@@ -733,8 +747,7 @@ public class TableView extends JPanel implements ISwingElementView<Table> {
 
 				}
 
-				Rectangle rect = new Rectangle(0, 0, getWidth(), getHeight());
-				PaintUtils.paintBorders(g2d, borders, rect);
+				PaintUtils.paintBorders(g2d, borders, rect, radius);
 
 				// Table borders
 				for (Border border : borders) {
@@ -787,7 +800,8 @@ public class TableView extends JPanel implements ISwingElementView<Table> {
 							rect.width -= 1;
 						}
 
-						PaintUtils.paintBorders(g2d, colStyle.borders, columnBounds[col]);
+						// TODO: Use topLeft/bottomLeft radius for first column and topRight/bottomRight radius for last column
+						PaintUtils.paintBorders(g2d, colStyle.borders, columnBounds[col], null);
 
 					}
 

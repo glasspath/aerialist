@@ -44,6 +44,7 @@ import org.glasspath.aerialist.Border;
 import org.glasspath.aerialist.FitPolicy;
 import org.glasspath.aerialist.HeightPolicy;
 import org.glasspath.aerialist.QrCode;
+import org.glasspath.aerialist.Radius;
 import org.glasspath.aerialist.YPolicy;
 
 import io.nayuki.qrcodegen.QrSegment;
@@ -53,6 +54,7 @@ public class QrCodeView extends TextView implements ISwingElementView<QrCode>, I
 	private YPolicy yPolicy = YPolicy.DEFAULT;
 	private HeightPolicy heightPolicy = HeightPolicy.DEFAULT;
 	private Color backgroundColor = null;
+	private Radius radius = new Radius();
 	private final List<Border> borders = new ArrayList<>();
 	private float scale = 1.0F;
 	private FitPolicy fitPolicy = FitPolicy.DEFAULT;
@@ -95,6 +97,8 @@ public class QrCodeView extends TextView implements ISwingElementView<QrCode>, I
 
 		setBackgroundColor(ColorUtils.fromHex(element.getBackground()));
 
+		radius.parse(element.getRadius());
+
 		borders.clear();
 		for (Border border : element.getBorders()) {
 			borders.add(new Border(border));
@@ -134,6 +138,16 @@ public class QrCodeView extends TextView implements ISwingElementView<QrCode>, I
 	public void setBackgroundColor(Color backgroundColor) {
 		this.backgroundColor = backgroundColor;
 		imageValid = false;
+	}
+
+	@Override
+	public Radius getRadius() {
+		return radius;
+	}
+
+	@Override
+	public void setRadius(Radius radius) {
+		this.radius = radius;
 	}
 
 	@Override
@@ -242,10 +256,8 @@ public class QrCodeView extends TextView implements ISwingElementView<QrCode>, I
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
 
-		if (backgroundColor != null) {
-			g2d.setColor(backgroundColor);
-			g2d.fillRect(0, 0, getWidth(), getHeight());
-		}
+		Rectangle rect = new Rectangle(0, 0, getWidth(), getHeight());
+		PaintUtils.paintBackground(g2d, rect, backgroundColor, radius);
 
 		updateImage();
 
@@ -266,7 +278,7 @@ public class QrCodeView extends TextView implements ISwingElementView<QrCode>, I
 			super.paint(g);
 		}
 
-		PaintUtils.paintBorders(g2d, borders, new Rectangle(0, 0, getWidth(), getHeight()));
+		PaintUtils.paintBorders(g2d, borders, rect, radius);
 
 	}
 

@@ -39,6 +39,7 @@ import org.glasspath.aerialist.Border;
 import org.glasspath.aerialist.FitPolicy;
 import org.glasspath.aerialist.HeightPolicy;
 import org.glasspath.aerialist.Image;
+import org.glasspath.aerialist.Radius;
 import org.glasspath.aerialist.YPolicy;
 
 public class ImageView extends JComponent implements ISwingElementView<Image>, IScalableView {
@@ -47,6 +48,7 @@ public class ImageView extends JComponent implements ISwingElementView<Image>, I
 	private YPolicy yPolicy = YPolicy.DEFAULT;
 	private HeightPolicy heightPolicy = HeightPolicy.DEFAULT;
 	private Color backgroundColor = null;
+	private Radius radius = new Radius();
 	private final List<Border> borders = new ArrayList<>();
 	private String src = ""; //$NON-NLS-1$
 	private float scale = 1.0F;
@@ -70,6 +72,8 @@ public class ImageView extends JComponent implements ISwingElementView<Image>, I
 		heightPolicy = HeightPolicy.get(element.getHeightPolicy());
 
 		setBackgroundColor(ColorUtils.fromHex(element.getBackground()));
+
+		radius.parse(element.getRadius());
 
 		borders.clear();
 		for (Border border : element.getBorders()) {
@@ -155,6 +159,16 @@ public class ImageView extends JComponent implements ISwingElementView<Image>, I
 	}
 
 	@Override
+	public Radius getRadius() {
+		return radius;
+	}
+
+	@Override
+	public void setRadius(Radius radius) {
+		this.radius = radius;
+	}
+
+	@Override
 	public List<Border> getBorders() {
 		return borders;
 	}
@@ -204,14 +218,10 @@ public class ImageView extends JComponent implements ISwingElementView<Image>, I
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
 
-		if (backgroundColor != null) {
-			g2d.setColor(backgroundColor);
-			g2d.fillRect(0, 0, getWidth(), getHeight());
-		}
-
+		Rectangle rect = new Rectangle(0, 0, getWidth(), getHeight());
+		PaintUtils.paintBackground(g2d, rect, backgroundColor, radius);
 		PaintUtils.paintImage(g2d, getWidth(), getHeight(), image, scale, alignment, fitPolicy);
-
-		PaintUtils.paintBorders(g2d, borders, new Rectangle(0, 0, getWidth(), getHeight()));
+		PaintUtils.paintBorders(g2d, borders, rect, radius);
 
 	}
 
