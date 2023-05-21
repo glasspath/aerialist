@@ -22,6 +22,7 @@
  */
 package org.glasspath.aerialist.swing.view;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -117,19 +118,35 @@ public class PaintUtils {
 
 			case DEFAULT:
 
-				r.setFrame(rect.x, rect.y, rect.x + rect.width, border.width);
-				Area area = new Area(r);
+				// TODO: Implement radius on all borders
+				if (radius != null && !radius.isComplex() && radius.topLeft > 0.0F) {
 
-				r.setFrame(rect.x + rect.width - border.width, rect.y, border.width, rect.y + rect.height);
-				area.add(new Area(r));
+					float xyOffset = (border.width / 2) - 0.5F;
+					float whOffset = border.width - 0.5F;
 
-				r.setFrame(rect.x, rect.y + rect.height - border.width, rect.x + rect.width, border.width);
-				area.add(new Area(r));
+					RoundRectangle2D roundRect = new RoundRectangle2D.Float(rect.x + xyOffset, rect.y + xyOffset, rect.width - whOffset, rect.height - whOffset, radius.topLeft, radius.topLeft);
+					g2d.setStroke(new BasicStroke(border.width));
+					g2d.draw(roundRect);
 
-				r.setFrame(rect.x, rect.y, border.width, rect.y + rect.height);
-				area.add(new Area(r));
+					// TODO: Background color is showing around the edges, it would be better to fill this shape..
 
-				g2d.fill(area);
+				} else {
+
+					r.setFrame(rect.x, rect.y, rect.x + rect.width, border.width);
+					Area area = new Area(r);
+
+					r.setFrame(rect.x + rect.width - border.width, rect.y, border.width, rect.y + rect.height);
+					area.add(new Area(r));
+
+					r.setFrame(rect.x, rect.y + rect.height - border.width, rect.x + rect.width, border.width);
+					area.add(new Area(r));
+
+					r.setFrame(rect.x, rect.y, border.width, rect.y + rect.height);
+					area.add(new Area(r));
+
+					g2d.fill(area);
+
+				}
 
 				break;
 
