@@ -44,26 +44,46 @@ public class PaintUtils {
 
 	}
 
-	public static void paintBackground(Graphics2D g2d, Rectangle rect, Color color, Radius radius) {
+	public static void paintBackground(Graphics2D g2d, Rectangle rect, Color color, List<Border> borders, Radius radius) {
 
-		if (color != null) {
+		if (radius != null && !radius.isComplex() && radius.topLeft > 0.0F) {
 
-			g2d.setColor(color);
+			boolean filled = false;
 
-			if (radius != null) {
+			for (Border border : borders) {
 
-				if (radius.isComplex()) {
+				Color borderColor = ColorUtils.fromHex(border.color);
+				if (borderColor != null && border.width > 0.0) {
 
-					// TODO: Create GeneralPath
+					float xyOffset = (border.width / 2) - 0.5F;
+					float whOffset = border.width - 0.5F;
+					RoundRectangle2D roundRect = new RoundRectangle2D.Float(rect.x + xyOffset, rect.y + xyOffset, rect.width - whOffset, rect.height - whOffset, radius.topLeft, radius.topLeft);
 
-				} else {
-					g2d.fill(new RoundRectangle2D.Float(rect.x, rect.y, rect.width, rect.height, radius.topLeft, radius.topLeft));
+					if (color != null && !filled) {
+
+						g2d.setColor(color);
+						g2d.fill(roundRect);
+
+						filled = true;
+
+					}
+
+					g2d.setColor(borderColor);
+					g2d.setStroke(new BasicStroke(border.width));
+					g2d.draw(roundRect);
+
 				}
 
-			} else {
-				g2d.fill(rect);
 			}
 
+			if (color != null && !filled) {
+				g2d.setColor(color);
+				g2d.fill(new RoundRectangle2D.Float(rect.x, rect.y, rect.width, rect.height, radius.topLeft, radius.topLeft));
+			}
+
+		} else if (color != null) {
+			g2d.setColor(color);
+			g2d.fill(rect);
 		}
 
 	}
@@ -121,14 +141,7 @@ public class PaintUtils {
 				// TODO: Implement radius on all borders
 				if (radius != null && !radius.isComplex() && radius.topLeft > 0.0F) {
 
-					float xyOffset = (border.width / 2) - 0.5F;
-					float whOffset = border.width - 0.5F;
-
-					RoundRectangle2D roundRect = new RoundRectangle2D.Float(rect.x + xyOffset, rect.y + xyOffset, rect.width - whOffset, rect.height - whOffset, radius.topLeft, radius.topLeft);
-					g2d.setStroke(new BasicStroke(border.width));
-					g2d.draw(roundRect);
-
-					// TODO: Background color is showing around the edges, it would be better to fill this shape..
+					// This border was painted when filling the background (to prevent painting artifacts around the edges)
 
 				} else {
 

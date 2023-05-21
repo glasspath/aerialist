@@ -198,7 +198,7 @@ public class GroupView extends ElementContainer implements ISwingElementView<Gro
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 		Rectangle rect = new Rectangle(0, 0, getWidth(), getHeight());
-		PaintUtils.paintBackground(g2d, rect, backgroundColor, radius);
+		PaintUtils.paintBackground(g2d, rect, backgroundColor, borders, radius);
 		PaintUtils.paintBorders(g2d, borders, rect, radius);
 
 	}

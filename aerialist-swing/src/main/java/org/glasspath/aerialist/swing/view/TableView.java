@@ -669,7 +669,7 @@ public class TableView extends JPanel implements ISwingElementView<Table> {
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 		Rectangle rect = new Rectangle(0, 0, getWidth(), getHeight());
-		PaintUtils.paintBackground(g2d, rect, backgroundColor, radius);
+		PaintUtils.paintBackground(g2d, rect, backgroundColor, borders, radius);
 
 		// TODO! (For now vertical fill is only used for email layout)
 		if (!verticalFillEnabled) {

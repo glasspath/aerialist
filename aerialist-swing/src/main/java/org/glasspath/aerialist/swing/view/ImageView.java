@@ -219,7 +219,7 @@ public class ImageView extends JComponent implements ISwingElementView<Image>, I
 		g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
 
 		Rectangle rect = new Rectangle(0, 0, getWidth(), getHeight());
-		PaintUtils.paintBackground(g2d, rect, backgroundColor, radius);
+		PaintUtils.paintBackground(g2d, rect, backgroundColor, borders, radius);
 		PaintUtils.paintImage(g2d, getWidth(), getHeight(), image, scale, alignment, fitPolicy);
 		PaintUtils.paintBorders(g2d, borders, rect, radius);
 

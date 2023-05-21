@@ -257,7 +257,7 @@ public class QrCodeView extends TextView implements ISwingElementView<QrCode>, I
 		g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
 
 		Rectangle rect = new Rectangle(0, 0, getWidth(), getHeight());
-		PaintUtils.paintBackground(g2d, rect, backgroundColor, radius);
+		PaintUtils.paintBackground(g2d, rect, backgroundColor, borders, radius);
 
 		updateImage();
 
