@@ -334,6 +334,9 @@ public class ActionUtils {
 			if (SetPaddingAction.isPaddingSupported(elementView)) {
 				menu.add(createPaddingMenu(context, elementView));
 			}
+			if (SetRadiusAction.isRadiusSupported(elementView)) {
+				menu.add(createRadiusMenu(context, elementView));
+			}
 
 			GroupView groupView = AerialistUtils.getGroupView(component);
 			if (groupView != null && TODO_CREATE_GROUP_MENU_ITEMS) {
@@ -893,6 +896,22 @@ public class ActionUtils {
 		});
 
 		return paddingMenu;
+
+	}
+
+	public static JMenuItem createRadiusMenu(DocumentEditorPanel context, ISwingElementView<?> elementView) {
+
+		JMenu radiusMenu = new JMenu("Radius");
+		radiusMenu.add(new JCheckBoxMenuItem(new SetRadiusAction(context, 0)));
+		radiusMenu.add(new JCheckBoxMenuItem(new SetRadiusAction(context, 5)));
+		radiusMenu.add(new JCheckBoxMenuItem(new SetRadiusAction(context, 10)));
+		radiusMenu.add(new JCheckBoxMenuItem(new SetRadiusAction(context, 15)));
+		radiusMenu.add(new JCheckBoxMenuItem(new SetRadiusAction(context, 20)));
+		radiusMenu.add(new JCheckBoxMenuItem(new SetRadiusAction(context, 25)));
+
+		// TODO: Add menu item for setting custom radius
+
+		return radiusMenu;
 
 	}
 
