@@ -60,7 +60,6 @@ public class SetBorderColorAction extends AbstractAction {
 				if (elementView != null) {
 
 					List<Border> oldBorders = new ArrayList<>();
-
 					for (Border border : elementView.getBorders()) {
 						oldBorders.add(new Border(border));
 					}
@@ -68,7 +67,12 @@ public class SetBorderColorAction extends AbstractAction {
 					applyBorderColor(elementView, color);
 					((Component) elementView).repaint();
 
-					context.undoableEditHappened(new SetBorderColorUndoable(elementView, color, oldBorders));
+					List<Border> newBorders = new ArrayList<>();
+					for (Border border : elementView.getBorders()) {
+						newBorders.add(border);
+					}
+
+					context.undoableEditHappened(new SetBorderColorUndoable(elementView, newBorders, oldBorders));
 
 				}
 

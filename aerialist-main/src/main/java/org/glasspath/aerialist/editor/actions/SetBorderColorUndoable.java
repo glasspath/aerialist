@@ -22,7 +22,6 @@
  */
 package org.glasspath.aerialist.editor.actions;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.util.List;
 
@@ -36,12 +35,12 @@ import org.glasspath.aerialist.swing.view.ISwingElementView;
 public class SetBorderColorUndoable implements UndoableEdit {
 
 	private final ISwingElementView<?> elementView;
-	private final Color color;
+	private final List<Border> newBorders;
 	private final List<Border> oldBorders;
 
-	public SetBorderColorUndoable(ISwingElementView<?> elementView, Color color, List<Border> oldBorders) {
+	public SetBorderColorUndoable(ISwingElementView<?> elementView, List<Border> newBorders, List<Border> oldBorders) {
 		this.elementView = elementView;
-		this.color = color;
+		this.newBorders = newBorders;
 		this.oldBorders = oldBorders;
 	}
 
@@ -87,7 +86,8 @@ public class SetBorderColorUndoable implements UndoableEdit {
 
 	@Override
 	public void redo() throws CannotRedoException {
-		SetBorderColorAction.applyBorderColor(elementView, color);
+		elementView.getBorders().clear();
+		elementView.getBorders().addAll(newBorders);
 		((Component) elementView).repaint();
 	}
 
