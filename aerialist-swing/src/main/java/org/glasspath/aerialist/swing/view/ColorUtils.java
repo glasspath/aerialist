@@ -43,20 +43,39 @@ public class ColorUtils {
 		if (color == null) {
 			return null;
 		} else {
-			return String.format("#%02X%02X%02X", color.getRed(), color.getGreen(), color.getBlue());
+			if (color.getAlpha() < 255) {
+				return String.format("#%02X%02X%02X%02X", color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+			} else {
+				return String.format("#%02X%02X%02X", color.getRed(), color.getGreen(), color.getBlue());
+			}
 		}
 	}
 
 	public static Color fromHex(String hex) {
-		if (hex != null && hex.length() > 0) {
+
+		if (hex != null && hex.length() >= 7) {
+
 			try {
-				return Color.decode(hex);
+
+				Integer intval = Integer.decode(hex);
+				int i = intval.intValue();
+
+				if (hex.length() == 7) {
+					return new Color((i >> 16) & 0xFF, (i >> 8) & 0xFF, i & 0xFF);
+				} else if (hex.length() == 9) {
+					return new Color((i >> 24) & 0xFF, (i >> 16) & 0xFF, (i >> 8) & 0xFF, i & 0xFF);
+				} else {
+					return null;
+				}
+
 			} catch (Exception e) {
 				return null;
 			}
+
 		} else {
 			return null;
 		}
+
 	}
 
 }
