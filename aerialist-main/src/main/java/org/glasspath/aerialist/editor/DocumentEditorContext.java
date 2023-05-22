@@ -54,4 +54,8 @@ public abstract class DocumentEditorContext extends EditorContext<DocumentEditor
 		return AerialistUtils.createDefaultDocument();
 	}
 
+	public void documentShown(DocumentEditorPanel context, Document document) {
+
+	}
+
 }

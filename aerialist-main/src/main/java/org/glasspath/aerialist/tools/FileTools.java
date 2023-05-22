@@ -387,6 +387,10 @@ public class FileTools extends AbstractTools<Aerialist> {
 								action.run();
 							}
 
+							if (editor.getEditorContext() instanceof DocumentEditorContext) {
+								((DocumentEditorContext) editor.getEditorContext()).documentShown(editor, templateDocument);
+							}
+
 							// TODO
 							if (TEMP_TEST_EXPORT_ON_LOAD) {
 
@@ -431,6 +435,10 @@ public class FileTools extends AbstractTools<Aerialist> {
 
 			if (action != null) {
 				action.run();
+			}
+
+			if (editor.getEditorContext() instanceof DocumentEditorContext) {
+				((DocumentEditorContext) editor.getEditorContext()).documentShown(editor, document);
 			}
 
 		}
