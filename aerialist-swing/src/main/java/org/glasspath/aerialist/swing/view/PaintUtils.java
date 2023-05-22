@@ -55,8 +55,8 @@ public class PaintUtils {
 				Color borderColor = ColorUtils.fromHex(border.color);
 				if (borderColor != null && border.width > 0.0) {
 
-					float xyOffset = (border.width / 2) - 0.5F;
-					float whOffset = border.width - 0.5F;
+					float xyOffset = (border.width / 2);
+					float whOffset = border.width;
 					RoundRectangle2D roundRect = new RoundRectangle2D.Float(rect.x + xyOffset, rect.y + xyOffset, rect.width - whOffset, rect.height - whOffset, radius.topLeft, radius.topLeft);
 
 					if (color != null && !filled) {
