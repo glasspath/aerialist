@@ -25,6 +25,7 @@ package org.glasspath.aerialist.swing.view;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.text.DefaultCaret;
 import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.StyledDocument;
 
@@ -103,25 +104,32 @@ public class DynamicFieldCache {
 			String replacement = fieldContext.getString(cachedField.field.key);
 			if (replacement != null) {
 
+				cachedField.textView.setUpdatingComponent(true);
+
+				// Disable auto scrolling
+				DefaultCaret caret = (DefaultCaret) cachedField.textView.getCaret();
+				int caretUpdatePolicy = caret.getUpdatePolicy();
+				caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
+
 				int oldLength = cachedField.length;
 
 				StyledDocument document = cachedField.textView.getStyledDocument();
 
-				cachedField.textView.setUpdatingComponent(true);
-
 				try {
 
-					document.remove(cachedField.start, cachedField.length);
-					cachedField.length = 0;
+					if (cachedField.length > 0) {
+						document.remove(cachedField.start, cachedField.length);
+						cachedField.length = 0;
+					}
 
-					document.insertString(cachedField.start, replacement, cachedField.attributeSet);
-					cachedField.length = replacement.length();
+					if (replacement.length() > 0) {
+						document.insertString(cachedField.start, replacement, cachedField.attributeSet);
+						cachedField.length = replacement.length();
+					}
 
 				} catch (Exception e) {
 					// TODO?
 				}
-
-				cachedField.textView.setUpdatingComponent(false);
 
 				if (cachedField.nextFields != null) {
 
@@ -135,6 +143,9 @@ public class DynamicFieldCache {
 					}
 
 				}
+
+				caret.setUpdatePolicy(caretUpdatePolicy);
+				cachedField.textView.setUpdatingComponent(false);
 
 			}
 

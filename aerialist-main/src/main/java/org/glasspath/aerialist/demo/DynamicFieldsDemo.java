@@ -85,7 +85,8 @@ public class DynamicFieldsDemo {
 					}
 				};
 
-				Timer timer = new Timer(10, new ActionListener() {
+				// Repaint at 30 frames per second (for testing video overlay performance)
+				Timer timer = new Timer(1000 / 30, new ActionListener() {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {

@@ -94,6 +94,7 @@ public class TextView extends JTextPane {
 		setFont(new Font(TextStyle.DEFAULT_FONT, Font.PLAIN, TextStyle.DEFAULT_FONT_SIZE));
 
 		// See https://bugs.openjdk.org/browse/JDK-8298017
+		// We don't need auto scrolling when dragging the mouse
 		setAutoscrolls(false);
 
 		// getDocument().putProperty("i18n", Boolean.TRUE); // Hack to force GlyphPainter2 to be used, looks good in editor but not in PDF (text is painted as glyph vectors)
