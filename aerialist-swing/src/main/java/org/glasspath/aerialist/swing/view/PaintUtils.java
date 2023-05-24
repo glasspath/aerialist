@@ -46,44 +46,35 @@ public class PaintUtils {
 
 	public static void paintBackground(Graphics2D g2d, Rectangle rect, Color color, List<Border> borders, Radius radius) {
 
-		if (radius != null && !radius.isComplex() && radius.topLeft > 0.0F) {
+		if (color != null) {
 
-			boolean filled = false;
+			g2d.setColor(color);
 
-			for (Border border : borders) {
+			// TODO: Implement radius on all borders
+			if (radius != null && !radius.isComplex() && radius.topLeft > 0.0F) {
 
-				Color borderColor = ColorUtils.fromHex(border.color);
-				if (borderColor != null && border.width > 0.0) {
+				for (Border border : borders) {
 
-					float xyOffset = (border.width / 2);
-					float whOffset = border.width;
-					RoundRectangle2D roundRect = new RoundRectangle2D.Float(rect.x + xyOffset, rect.y + xyOffset, rect.width - whOffset, rect.height - whOffset, radius.topLeft, radius.topLeft);
+					if (BorderType.get(border.type) == BorderType.DEFAULT) {
 
-					if (color != null && !filled) {
+						if (ColorUtils.fromHex(border.color) != null && border.width > 0.0) {
 
-						g2d.setColor(color);
-						g2d.fill(roundRect);
+							g2d.fill(createRoundRectangle(rect, radius, border.width));
 
-						filled = true;
+							return;
+
+						}
 
 					}
 
-					g2d.setColor(borderColor);
-					g2d.setStroke(new BasicStroke(border.width));
-					g2d.draw(roundRect);
-
 				}
 
-			}
-
-			if (color != null && !filled) {
-				g2d.setColor(color);
 				g2d.fill(new RoundRectangle2D.Float(rect.x, rect.y, rect.width, rect.height, radius.topLeft, radius.topLeft));
+
+			} else {
+				g2d.fill(rect);
 			}
 
-		} else if (color != null) {
-			g2d.setColor(color);
-			g2d.fill(rect);
 		}
 
 	}
@@ -141,7 +132,8 @@ public class PaintUtils {
 				// TODO: Implement radius on all borders
 				if (radius != null && !radius.isComplex() && radius.topLeft > 0.0F) {
 
-					// This border was painted when filling the background (to prevent painting artifacts around the edges)
+					g2d.setStroke(new BasicStroke(border.width));
+					g2d.draw(createRoundRectangle(rect, radius, border.width));
 
 				} else {
 
@@ -196,6 +188,15 @@ public class PaintUtils {
 			}
 
 		}
+
+	}
+
+	private static RoundRectangle2D createRoundRectangle(Rectangle rect, Radius radius, float borderWidth) {
+
+		float xyOffset = (borderWidth / 2);
+		float whOffset = borderWidth;
+
+		return new RoundRectangle2D.Float(rect.x + xyOffset, rect.y + xyOffset, rect.width - whOffset, rect.height - whOffset, radius.topLeft, radius.topLeft);
 
 	}
 
