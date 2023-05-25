@@ -388,7 +388,7 @@ public class FileTools extends AbstractTools<Aerialist> {
 							}
 
 							if (editor.getEditorContext() instanceof DocumentEditorContext) {
-								((DocumentEditorContext) editor.getEditorContext()).documentShown(editor, templateDocument);
+								((DocumentEditorContext) editor.getEditorContext()).documentShown(editor, templateDocument, documentPath);
 							}
 
 							// TODO
@@ -438,7 +438,7 @@ public class FileTools extends AbstractTools<Aerialist> {
 			}
 
 			if (editor.getEditorContext() instanceof DocumentEditorContext) {
-				((DocumentEditorContext) editor.getEditorContext()).documentShown(editor, document);
+				((DocumentEditorContext) editor.getEditorContext()).documentShown(editor, document, documentPath);
 			}
 
 		}
@@ -493,7 +493,13 @@ public class FileTools extends AbstractTools<Aerialist> {
 
 		xDoc.setMediaCache(editor.getMediaCache());
 
-		return XDocWriter.write(xDoc, new File(path));
+		boolean saved = XDocWriter.write(xDoc, new File(path));
+
+		if (saved && editor.getEditorContext() instanceof DocumentEditorContext) {
+			((DocumentEditorContext) editor.getEditorContext()).documentSaved(editor, document, path);
+		}
+
+		return saved;
 
 	}
 

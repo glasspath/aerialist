@@ -22,6 +22,8 @@
  */
 package org.glasspath.aerialist.editor;
 
+import java.io.File;
+
 import org.glasspath.aerialist.AerialistUtils;
 import org.glasspath.aerialist.Document;
 
@@ -54,7 +56,11 @@ public abstract class DocumentEditorContext extends EditorContext<DocumentEditor
 		return AerialistUtils.createDefaultDocument();
 	}
 
-	public void documentShown(DocumentEditorPanel context, Document document) {
+	public void documentShown(DocumentEditorPanel context, Document document, String path) {
+
+	}
+
+	public void documentSaved(DocumentEditorPanel context, Document document, String path) {
 
 	}
 

@@ -51,9 +51,8 @@ public class DynamicFieldCache {
 				TextData iText = new TextData();
 				textView.toText(iText);
 
-				for (int i = 0; i < iText.getStyles().size(); i++) {
+				for (TextStyle textStyle : iText.getStyles()) {
 
-					TextStyle textStyle = iText.getStyles().get(i);
 					if (textStyle.source != null) {
 
 						Field field = new Field(textStyle.source);

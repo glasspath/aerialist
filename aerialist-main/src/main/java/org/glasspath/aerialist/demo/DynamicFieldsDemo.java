@@ -51,7 +51,7 @@ public class DynamicFieldsDemo {
 			}
 
 			@Override
-			public void documentShown(DocumentEditorPanel context, Document document) {
+			public void documentShown(DocumentEditorPanel context, Document document, String path) {
 				if (!demoStarted) {
 					startDemo(context);
 					demoStarted = true;
