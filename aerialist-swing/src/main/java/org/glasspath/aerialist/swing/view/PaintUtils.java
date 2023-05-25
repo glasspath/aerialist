@@ -194,7 +194,7 @@ public class PaintUtils {
 	private static RoundRectangle2D createRoundRectangle(Rectangle rect, Radius radius, float borderWidth) {
 
 		float xyOffset = (borderWidth / 2);
-		float whOffset = borderWidth;
+		float whOffset = borderWidth + 0.5F;
 
 		return new RoundRectangle2D.Float(rect.x + xyOffset, rect.y + xyOffset, rect.width - whOffset, rect.height - whOffset, radius.topLeft, radius.topLeft);
 
