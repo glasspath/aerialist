@@ -25,6 +25,8 @@ package org.glasspath.aerialist;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.glasspath.aerialist.Field.FieldType;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
@@ -45,6 +47,47 @@ public class Content {
 
 	public void setRoot(ContentRoot root) {
 		this.root = root;
+	}
+
+	public List<String> getFieldKeys(FieldType fieldType) {
+
+		List<String> fieldKeys = new ArrayList<>();
+
+		if (root != null) {
+
+			ContentParser contentParser = new ContentParser() {
+
+				@Override
+				public void parseIText(IText iText) {
+
+					for (TextStyle textStyle : iText.getStyles()) {
+
+						if (textStyle.source != null) {
+
+							Field field = new Field(textStyle.source);
+							if (fieldType == null || field.type == fieldType) {
+								addFieldKey(field.key);
+							}
+
+						}
+
+					}
+
+				}
+
+				private void addFieldKey(String key) {
+					if (!fieldKeys.contains(key)) {
+						fieldKeys.add(key);
+					}
+				}
+			};
+
+			contentParser.parseRoot(root);
+
+		}
+
+		return fieldKeys;
+
 	}
 
 	public List<String> getImageKeys() {
