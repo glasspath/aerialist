@@ -22,6 +22,7 @@
  */
 package org.glasspath.aerialist.swing.view;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -31,6 +32,7 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
+import java.awt.Stroke;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -78,6 +80,7 @@ public class TextView extends JTextPane {
 
 	public static final String SOURCE_ATTRIBUTE = "source";
 	public static final Color SOURCE_RECT_COLOR = new Color(200, 200, 200);
+	public static final Stroke SOURCE_RECT_STROKE = new BasicStroke(1.0F);
 
 	protected final ISwingViewContext viewContext;
 	private boolean singleLine = false;
@@ -870,6 +873,7 @@ public class TextView extends JTextPane {
 						if (source != null && source.length() > 0) {
 
 							g2d.setColor(SOURCE_RECT_COLOR);
+							g2d.setStroke(SOURCE_RECT_STROKE);
 
 							Rectangle rect = new Rectangle(a.getBounds());
 							rect.y += 1;
