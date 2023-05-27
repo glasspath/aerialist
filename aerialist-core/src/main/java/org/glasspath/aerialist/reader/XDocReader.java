@@ -22,6 +22,7 @@
  */
 package org.glasspath.aerialist.reader;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
@@ -29,6 +30,7 @@ import java.util.zip.ZipFile;
 
 import org.glasspath.aerialist.Content;
 import org.glasspath.aerialist.XDoc;
+import org.glasspath.aerialist.media.BasicMediaCache;
 import org.glasspath.aerialist.media.MediaCache;
 import org.glasspath.aerialist.writer.XDocWriter;
 
@@ -38,59 +40,55 @@ public class XDocReader {
 
 	}
 
-	public static XDoc read(String path, MediaCache<?> mediaCache) {
+	public static XDoc read(String path) throws IOException {
+		return read(path, new BasicMediaCache());
+	}
 
-		try {
+	public static XDoc read(String path, MediaCache<?> mediaCache) throws IOException {
 
-			XDoc xDoc = new XDoc();
-			xDoc.setVersionInfo(""); //$NON-NLS-1$
+		XDoc xDoc = new XDoc();
+		xDoc.setVersionInfo(""); //$NON-NLS-1$
 
-			xDoc.setMediaCache(mediaCache);
+		xDoc.setMediaCache(mediaCache);
 
-			ZipFile zipFile = new ZipFile(path);
+		ZipFile zipFile = new ZipFile(path);
 
-			Enumeration<? extends ZipEntry> zipEntries = zipFile.entries();
-			while (zipEntries.hasMoreElements()) {
+		Enumeration<? extends ZipEntry> zipEntries = zipFile.entries();
+		while (zipEntries.hasMoreElements()) {
 
-				ZipEntry zipEntry = zipEntries.nextElement();
+			ZipEntry zipEntry = zipEntries.nextElement();
 
-				String name = zipEntry.getName();
+			String name = zipEntry.getName();
 
-				if (XDoc.VERSION_INFO_PATH.equals(name)) {
+			if (XDoc.VERSION_INFO_PATH.equals(name)) {
 
-					InputStream inputStream = zipFile.getInputStream(zipEntry);
-					xDoc.setVersionInfo(new String(inputStream.readAllBytes()));
-					inputStream.close();
+				InputStream inputStream = zipFile.getInputStream(zipEntry);
+				xDoc.setVersionInfo(new String(inputStream.readAllBytes()));
+				inputStream.close();
 
-				} else if (XDoc.CONTENT_PATH.equals(name)) {
+			} else if (XDoc.CONTENT_PATH.equals(name)) {
 
-					InputStream inputStream = zipFile.getInputStream(zipEntry);
-					xDoc.setContent(XDocWriter.createXmlMapper().readValue(inputStream, Content.class));
-					inputStream.close();
+				InputStream inputStream = zipFile.getInputStream(zipEntry);
+				xDoc.setContent(XDocWriter.createXmlMapper().readValue(inputStream, Content.class));
+				inputStream.close();
 
-				} else if (name.startsWith(XDoc.IMAGES_PATH)) {
+			} else if (name.startsWith(XDoc.IMAGES_PATH)) {
 
-					InputStream inputStream = zipFile.getInputStream(zipEntry);
+				InputStream inputStream = zipFile.getInputStream(zipEntry);
 
-					String imageKey = name.substring(XDoc.IMAGES_PATH.length());
-					byte[] imageBytes = inputStream.readAllBytes();
-					mediaCache.putImage(imageKey, imageBytes);
+				String imageKey = name.substring(XDoc.IMAGES_PATH.length());
+				byte[] imageBytes = inputStream.readAllBytes();
+				mediaCache.putImage(imageKey, imageBytes);
 
-					inputStream.close();
-
-				}
+				inputStream.close();
 
 			}
 
-			zipFile.close();
-
-			return xDoc;
-
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 
-		return null;
+		zipFile.close();
+
+		return xDoc;
 
 	}
 

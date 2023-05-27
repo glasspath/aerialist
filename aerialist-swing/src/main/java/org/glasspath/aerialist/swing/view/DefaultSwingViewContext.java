@@ -8,8 +8,8 @@ import java.awt.image.BufferedImage;
 import javax.swing.event.CaretEvent;
 import javax.swing.undo.UndoableEdit;
 
+import org.glasspath.aerialist.media.BufferedImageMediaCache;
 import org.glasspath.aerialist.media.MediaCache;
-import org.glasspath.aerialist.swing.BufferedImageMediaCache;
 import org.glasspath.aerialist.text.font.FontCache;
 
 public class DefaultSwingViewContext implements ISwingViewContext {

@@ -32,7 +32,7 @@ import java.util.prefs.Preferences;
 import javax.swing.JPanel;
 import javax.swing.undo.UndoableEdit;
 
-import org.glasspath.aerialist.swing.BufferedImageMediaCache;
+import org.glasspath.aerialist.media.BufferedImageMediaCache;
 import org.glasspath.common.swing.search.UISearchHandler;
 import org.glasspath.common.swing.selection.Selection;
 import org.glasspath.common.swing.undo.DefaultUndoManager;

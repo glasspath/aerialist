@@ -24,6 +24,8 @@ package org.glasspath.aerialist.writer;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.zip.ZipEntry;
@@ -48,38 +50,42 @@ public class XDocWriter {
 
 	}
 
-	public static boolean write(XDoc xDoc, File file) {
+	public static ZipOutputStream write(XDoc xDoc, File file) throws IOException {
+		return write(xDoc, file, false);
+	}
 
-		try {
+	public static ZipOutputStream write(XDoc xDoc, File file, boolean close) throws IOException {
+		return write(xDoc, new FileOutputStream(file), close);
+	}
 
-			ZipOutputStream zipOutputStream = new ZipOutputStream(new FileOutputStream(file));
+	public static ZipOutputStream write(XDoc xDoc, OutputStream outputStream, boolean close) throws IOException {
 
-			ZipEntry zipEntry = new ZipEntry(XDoc.VERSION_INFO_PATH);
+		ZipOutputStream zipOutputStream = new ZipOutputStream(outputStream);
+
+		ZipEntry zipEntry = new ZipEntry(XDoc.VERSION_INFO_PATH);
+		zipOutputStream.putNextEntry(zipEntry);
+		zipOutputStream.write(XDoc.VERSION_INFO.getBytes());
+		zipOutputStream.closeEntry();
+
+		if (xDoc.getContent() != null) {
+
+			zipEntry = new ZipEntry(XDoc.CONTENT_PATH);
 			zipOutputStream.putNextEntry(zipEntry);
-			zipOutputStream.write(XDoc.VERSION_INFO.getBytes());
+			createXmlMapper().writeValue(zipOutputStream, xDoc.getContent());
 			zipOutputStream.closeEntry();
 
-			if (xDoc.getContent() != null) {
+			if (xDoc.getMediaCache() != null) {
 
-				zipEntry = new ZipEntry(XDoc.CONTENT_PATH);
-				zipOutputStream.putNextEntry(zipEntry);
-				createXmlMapper().writeValue(zipOutputStream, xDoc.getContent());
-				zipOutputStream.closeEntry();
+				List<String> imageKeys = xDoc.getContent().getImageKeys();
 
-				if (xDoc.getMediaCache() != null) {
+				for (Entry<String, ImageResource> entry : xDoc.getMediaCache().getImageResources().entrySet()) {
 
-					List<String> imageKeys = xDoc.getContent().getImageKeys();
+					if (imageKeys.contains(entry.getKey())) {
 
-					for (Entry<String, ImageResource> entry : xDoc.getMediaCache().getImageResources().entrySet()) {
-
-						if (imageKeys.contains(entry.getKey())) {
-
-							zipEntry = new ZipEntry(XDoc.IMAGES_PATH + entry.getKey());
-							zipOutputStream.putNextEntry(zipEntry);
-							zipOutputStream.write(entry.getValue().getBytes());
-							zipOutputStream.closeEntry();
-
-						}
+						zipEntry = new ZipEntry(XDoc.IMAGES_PATH + entry.getKey());
+						zipOutputStream.putNextEntry(zipEntry);
+						zipOutputStream.write(entry.getValue().getBytes());
+						zipOutputStream.closeEntry();
 
 					}
 
@@ -87,15 +93,13 @@ public class XDocWriter {
 
 			}
 
-			zipOutputStream.close();
-
-			return true;
-
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 
-		return false;
+		if (close) {
+			zipOutputStream.close();
+		}
+
+		return zipOutputStream;
 
 	}
 

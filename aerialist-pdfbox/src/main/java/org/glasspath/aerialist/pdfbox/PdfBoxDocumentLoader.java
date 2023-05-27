@@ -65,43 +65,49 @@ public class PdfBoxDocumentLoader {
 
 		if (file.exists()) {
 
-			PdfBoxMediaCache mediaCache = new PdfBoxMediaCache();
-
-			PdfBoxFontCache fontCache = new PdfBoxFontCache();
-			fontCache.registerFonts(fontsPath);
-
-			DefaultLayoutContext<PDFont, PDImageXObject> layoutContext = new DefaultLayoutContext<>(fontCache, mediaCache);
-
-			TemplateDocumentLoader documentLoader = new TemplateDocumentLoader(layoutListener, layoutContext) {
-
-				@Override
-				protected IElementLayoutMetrics createLayoutMetrics() {
-					return new DefaultLayoutMetrics(layoutContext);
-				}
-			};
-
-			if (outputFile != null) {
-				documentLoader.setDocumentWriter(new PdfBoxDocumentWriter(outputFile, fontCache, mediaCache));
-			}
-
-			// TODO: We need to open the document first because PdfBoxMediaCache and PdfBoxFontCache need a PDDocument
 			try {
-				documentLoader.getDocumentWriter().open(PageSize.A4.getWidth(), PageSize.A4.getHeight()); // TODO
+
+				PdfBoxMediaCache mediaCache = new PdfBoxMediaCache();
+
+				PdfBoxFontCache fontCache = new PdfBoxFontCache();
+				fontCache.registerFonts(fontsPath);
+
+				DefaultLayoutContext<PDFont, PDImageXObject> layoutContext = new DefaultLayoutContext<>(fontCache, mediaCache);
+
+				TemplateDocumentLoader documentLoader = new TemplateDocumentLoader(layoutListener, layoutContext) {
+
+					@Override
+					protected IElementLayoutMetrics createLayoutMetrics() {
+						return new DefaultLayoutMetrics(layoutContext);
+					}
+				};
+
+				if (outputFile != null) {
+					documentLoader.setDocumentWriter(new PdfBoxDocumentWriter(outputFile, fontCache, mediaCache));
+				}
+
+				// TODO: We need to open the document first because PdfBoxMediaCache and PdfBoxFontCache need a PDDocument
+				try {
+					documentLoader.getDocumentWriter().open(PageSize.A4.getWidth(), PageSize.A4.getHeight()); // TODO
+				} catch (Exception e) {
+					e.printStackTrace(); // TODO
+				}
+
+				XDoc xDoc = XDocReader.read(file.getAbsolutePath(), mediaCache);
+				if (xDoc != null && xDoc.getContent() != null && xDoc.getContent().getRoot() instanceof Document) {
+
+					Document document = (Document) xDoc.getContent().getRoot();
+
+					if (templateFieldContext != null) {
+						documentLoader.loadDocument(document, templateFieldContext, mediaCache);
+					}
+
+					return document;
+
+				}
+
 			} catch (Exception e) {
 				e.printStackTrace(); // TODO
-			}
-
-			XDoc xDoc = XDocReader.read(file.getAbsolutePath(), mediaCache);
-			if (xDoc != null && xDoc.getContent() != null && xDoc.getContent().getRoot() instanceof Document) {
-
-				Document document = (Document) xDoc.getContent().getRoot();
-
-				if (templateFieldContext != null) {
-					documentLoader.loadDocument(document, templateFieldContext, mediaCache);
-				}
-
-				return document;
-
 			}
 
 		}

@@ -65,38 +65,44 @@ public class OpenPdfDocumentLoader {
 
 		if (file.exists()) {
 
-			OpenPdfMediaCache mediaCache = new OpenPdfMediaCache();
+			try {
 
-			XDoc xDoc = XDocReader.read(file.getAbsolutePath(), mediaCache);
-			if (xDoc != null && xDoc.getContent() != null && xDoc.getContent().getRoot() instanceof Document) {
+				OpenPdfMediaCache mediaCache = new OpenPdfMediaCache();
 
-				Document document = (Document) xDoc.getContent().getRoot();
+				XDoc xDoc = XDocReader.read(file.getAbsolutePath(), mediaCache);
+				if (xDoc != null && xDoc.getContent() != null && xDoc.getContent().getRoot() instanceof Document) {
 
-				if (templateFieldContext != null) {
+					Document document = (Document) xDoc.getContent().getRoot();
 
-					OpenPdfFontCache fontCache = new OpenPdfFontCache();
-					fontCache.registerFonts(fontsPath);
+					if (templateFieldContext != null) {
 
-					DefaultLayoutContext<BaseFont, Image> layoutContext = new DefaultLayoutContext<>(fontCache, mediaCache);
+						OpenPdfFontCache fontCache = new OpenPdfFontCache();
+						fontCache.registerFonts(fontsPath);
 
-					TemplateDocumentLoader documentLoader = new TemplateDocumentLoader(layoutListener, layoutContext) {
+						DefaultLayoutContext<BaseFont, Image> layoutContext = new DefaultLayoutContext<>(fontCache, mediaCache);
 
-						@Override
-						protected IElementLayoutMetrics createLayoutMetrics() {
-							return new DefaultLayoutMetrics(layoutContext);
+						TemplateDocumentLoader documentLoader = new TemplateDocumentLoader(layoutListener, layoutContext) {
+
+							@Override
+							protected IElementLayoutMetrics createLayoutMetrics() {
+								return new DefaultLayoutMetrics(layoutContext);
+							}
+						};
+
+						if (outputFile != null) {
+							documentLoader.setDocumentWriter(new OpenPdfDocumentWriter(outputFile, fontCache, mediaCache));
 						}
-					};
 
-					if (outputFile != null) {
-						documentLoader.setDocumentWriter(new OpenPdfDocumentWriter(outputFile, fontCache, mediaCache));
+						documentLoader.loadDocument(document, templateFieldContext, mediaCache);
+
 					}
 
-					documentLoader.loadDocument(document, templateFieldContext, mediaCache);
+					return document;
 
 				}
 
-				return document;
-
+			} catch (Exception e) {
+				e.printStackTrace(); // TODO
 			}
 
 		}

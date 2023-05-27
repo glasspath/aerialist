@@ -52,9 +52,9 @@ import org.glasspath.aerialist.layout.IElementLayoutMetrics;
 import org.glasspath.aerialist.layout.ILayoutContext.ExportPhase;
 import org.glasspath.aerialist.layout.ILayoutContext.LayoutPhase;
 import org.glasspath.aerialist.layout.LayoutListener;
+import org.glasspath.aerialist.media.BufferedImageMediaCache;
 import org.glasspath.aerialist.pdfbox.PdfBoxDocumentLoader;
 import org.glasspath.aerialist.reader.XDocReader;
-import org.glasspath.aerialist.swing.BufferedImageMediaCache;
 import org.glasspath.aerialist.swing.SwingLayoutMetrics;
 import org.glasspath.aerialist.swing.view.DefaultSwingViewContext;
 import org.glasspath.aerialist.swing.view.FieldUtils;
@@ -315,18 +315,25 @@ public class FileTools extends AbstractTools<Aerialist> {
 
 		if (documentPath != null && new File(documentPath).exists()) {
 
-			XDoc xDoc = XDocReader.read(documentPath, mediaCache);
-			if (xDoc != null && xDoc.getContent() != null && xDoc.getContent().getRoot() instanceof Document) {
+			try {
 
-				document = (Document) xDoc.getContent().getRoot();
+				XDoc xDoc = XDocReader.read(documentPath, mediaCache);
+				if (xDoc != null && xDoc.getContent() != null && xDoc.getContent().getRoot() instanceof Document) {
 
-				// When creating a new document by parsing template data we don't want to set currentPath
-				// because this would overwrite the template document when saving
-				if (templateFieldContext == null) {
-					currentFilePath = documentPath;
-					context.setContentChanged(false);
+					document = (Document) xDoc.getContent().getRoot();
+
+					// When creating a new document by parsing template data we don't want to set currentPath
+					// because this would overwrite the template document when saving
+					if (templateFieldContext == null) {
+						currentFilePath = documentPath;
+						context.setContentChanged(false);
+					}
+
 				}
 
+			} catch (Exception e) {
+				Aerialist.LOGGER.error("Exception while reading XDoc", e); //$NON-NLS-1$
+				DialogUtils.showWarningMessage(context.getFrame(), "Error while loading", "The file could not be opened.", e);
 			}
 
 		}
@@ -493,13 +500,22 @@ public class FileTools extends AbstractTools<Aerialist> {
 
 		xDoc.setMediaCache(editor.getMediaCache());
 
-		boolean saved = XDocWriter.write(xDoc, new File(path));
+		try {
 
-		if (saved && editor.getEditorContext() instanceof DocumentEditorContext) {
-			((DocumentEditorContext) editor.getEditorContext()).documentSaved(editor, document, path);
+			XDocWriter.write(xDoc, new File(path));
+
+			if (editor.getEditorContext() instanceof DocumentEditorContext) {
+				((DocumentEditorContext) editor.getEditorContext()).documentSaved(editor, document, path);
+			}
+
+			return true;
+
+		} catch (Exception e) {
+			Aerialist.LOGGER.error("Exception while writing XDoc", e); //$NON-NLS-1$
+			DialogUtils.showWarningMessage(context.getFrame(), "Error while saving", "The file could not be saved.", e);
 		}
 
-		return saved;
+		return false;
 
 	}
 
