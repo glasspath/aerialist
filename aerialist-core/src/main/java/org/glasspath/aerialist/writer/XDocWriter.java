@@ -52,7 +52,7 @@ public class XDocWriter {
 	}
 
 	public static ZipOutputStream write(XDoc xDoc, File file) throws IOException {
-		return write(xDoc, file, false);
+		return write(xDoc, file, true);
 	}
 
 	public static ZipOutputStream write(XDoc xDoc, File file, boolean close) throws IOException {
