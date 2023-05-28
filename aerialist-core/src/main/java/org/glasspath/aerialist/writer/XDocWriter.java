@@ -38,6 +38,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -107,6 +108,7 @@ public class XDocWriter {
 	public static XmlMapper createXmlMapper() {
 
 		XmlFactory xmlFactory = new XmlFactory();
+		xmlFactory.configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, false); // When reading XML from a ZipInputStream we don't want the stream to be closed automatically
 		xmlFactory.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false); // When writing XML to a ZipOutputStream we don't want the stream to be closed automatically
 
 		XmlMapper mapper = new XmlMapper(xmlFactory);
