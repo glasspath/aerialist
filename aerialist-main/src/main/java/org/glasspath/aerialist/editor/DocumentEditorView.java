@@ -139,7 +139,7 @@ public class DocumentEditorView extends EditorView<DocumentEditorPanel> {
 				}
 
 				if (context.isGuidesVisible()) {
-					drawGuides(g2d, pageView);
+					drawGuides(g2d, pageView, context.getPageContainer().getHeaderHeight(), context.getPageContainer().getFooterHeight());
 				}
 
 			}
@@ -268,7 +268,7 @@ public class DocumentEditorView extends EditorView<DocumentEditorPanel> {
 
 	}
 
-	protected void drawGuides(Graphics2D g2d, PageView pageView) {
+	protected void drawGuides(Graphics2D g2d, PageView pageView, int headerHeight, int footerHeight) {
 
 		int top = Page.DEFAULT_MARGIN_TOP;
 		int right = Page.DEFAULT_MARGIN_RIGHT;
@@ -297,9 +297,8 @@ public class DocumentEditorView extends EditorView<DocumentEditorPanel> {
 		g2d.drawLine(x, y + top, x + w, y + top);
 		g2d.drawLine(x, y + h - bottom, x + w, y + h - bottom);
 
-		// TODO
-		top = 90;
-		bottom = 90;
+		top = headerHeight;
+		bottom = footerHeight;
 
 		g2d.setColor(HEADER_FOOTER_GUIDE_COLOR);
 		g2d.drawLine(x, y + top, x + w, y + top);
