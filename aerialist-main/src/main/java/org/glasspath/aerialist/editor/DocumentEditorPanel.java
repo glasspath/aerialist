@@ -593,7 +593,11 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 
 		@Override
 		public Color getDefaultForeground() {
-			return Color.black;
+			if (getEditorContext() != null) {
+				return getEditorContext().getDefaultForeground();
+			} else {
+				return Color.black;
+			}
 		}
 
 		@Override

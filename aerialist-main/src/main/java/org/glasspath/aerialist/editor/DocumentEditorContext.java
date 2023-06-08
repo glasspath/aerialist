@@ -22,8 +22,6 @@
  */
 package org.glasspath.aerialist.editor;
 
-import java.io.File;
-
 import org.glasspath.aerialist.AerialistUtils;
 import org.glasspath.aerialist.Document;
 

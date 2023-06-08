@@ -22,6 +22,8 @@
  */
 package org.glasspath.aerialist.editor;
 
+import java.awt.Color;
+
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
@@ -46,6 +48,7 @@ public abstract class EditorContext<T extends EditorPanel<T>> {
 	private String suggestedFileName = null;
 	private TemplateMetadata templateMetadata = null;
 	private JComponent headerComponent = null;
+	private Color defaultForeground = Color.black;
 	private boolean editable = true;
 	private IAbout about = null;
 	private DynamicFieldContext dynamicFieldContext = new DynamicFieldContext();
@@ -76,6 +79,14 @@ public abstract class EditorContext<T extends EditorPanel<T>> {
 
 	public void setHeaderComponent(JComponent headerComponent) {
 		this.headerComponent = headerComponent;
+	}
+
+	public Color getDefaultForeground() {
+		return defaultForeground;
+	}
+
+	public void setDefaultForeground(Color defaultForeground) {
+		this.defaultForeground = defaultForeground;
 	}
 
 	public boolean isEditable() {
