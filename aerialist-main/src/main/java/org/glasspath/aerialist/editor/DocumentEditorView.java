@@ -47,7 +47,7 @@ import org.glasspath.common.swing.theme.Theme;
 
 public class DocumentEditorView extends EditorView<DocumentEditorPanel> {
 
-	public static boolean TODO_TEST_BG_IMAGE = false;
+	public static boolean TODO_TEST_BG_IMAGE = true;
 
 	public static final Color GRID_COLOR = new Color(200, 200, 200);
 	public static final Color GUIDE_COLOR = new Color(150, 195, 255, 75);
@@ -108,7 +108,7 @@ public class DocumentEditorView extends EditorView<DocumentEditorPanel> {
 						bolowHeaderBounds.y += context.getPageContainer().getHeaderHeight();
 						bolowHeaderBounds.height -= context.getPageContainer().getHeaderHeight();
 
-						g2d.setColor(new Color(248, 248, 248));
+						g2d.setColor(TODO_TEST_BG_IMAGE ? new Color(0, 0, 0, 35) : new Color(248, 248, 248));
 						g2d.fill(bolowHeaderBounds);
 
 					}
@@ -120,7 +120,7 @@ public class DocumentEditorView extends EditorView<DocumentEditorPanel> {
 						Rectangle aboveFooterBounds = new Rectangle(bounds);
 						aboveFooterBounds.height -= context.getPageContainer().getFooterHeight();
 
-						g2d.setColor(new Color(248, 248, 248));
+						g2d.setColor(TODO_TEST_BG_IMAGE ? new Color(0, 0, 0, 35) : new Color(248, 248, 248));
 						g2d.fill(aboveFooterBounds);
 
 					}
