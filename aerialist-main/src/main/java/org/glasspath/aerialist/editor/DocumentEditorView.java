@@ -47,7 +47,7 @@ import org.glasspath.common.swing.theme.Theme;
 
 public class DocumentEditorView extends EditorView<DocumentEditorPanel> {
 
-	public static boolean TODO_TEST_BG_IMAGE = true;
+	public static boolean TODO_TEST_BG_IMAGE = false;
 
 	public static final Color GRID_COLOR = new Color(200, 200, 200);
 	public static final Color GUIDE_COLOR = new Color(150, 195, 255, 75);
