@@ -33,9 +33,9 @@ import java.awt.Shape;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 
+import javax.swing.CellRendererPane;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
 import org.glasspath.aerialist.Margin;
 import org.glasspath.aerialist.Page;
@@ -54,6 +54,7 @@ public class DocumentEditorView extends EditorView<DocumentEditorPanel> {
 	public static final Color HEADER_FOOTER_GUIDE_COLOR = new Color(150, 195, 255, 150);
 
 	private final NinePatch shadow = new NinePatch(new ImageIcon(getClass().getClassLoader().getResource("org/glasspath/common/swing/graphics/shadow.png")).getImage(), 10, 10); //$NON-NLS-1$
+	private final CellRendererPane cellRendererPane = new CellRendererPane();
 
 	protected BufferedImage bgImage = null;
 
@@ -198,7 +199,11 @@ public class DocumentEditorView extends EditorView<DocumentEditorPanel> {
 			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25F));
 		}
 
-		SwingUtilities.paintComponent(g2d, layerView, context.getPageContainer(), x, y, size.width, size.height);
+		cellRendererPane.add(layerView);
+		context.getPageContainer().add(cellRendererPane);
+		cellRendererPane.paintComponent(g2d, layerView, context.getPageContainer(), x, y, size.width, size.height, true);
+		context.getPageContainer().remove(cellRendererPane);
+		cellRendererPane.remove(layerView);
 
 		g2d.setComposite(oldComposite);
 		g2d.setClip(oldClip);
