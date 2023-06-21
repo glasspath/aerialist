@@ -83,9 +83,17 @@ public class DeletePageUndoable implements UndoableEdit {
 
 	@Override
 	public void redo() throws CannotRedoException {
+
+		if (context.getPageContainer().isEditingHeader()) {
+			context.getPageContainer().stopEditingHeaderView();
+		} else if (context.getPageContainer().isEditingFooter()) {
+			context.getPageContainer().stopEditingFooterView();
+		}
+
 		context.getPageContainer().removePageView(pageView);
 		context.deselectAll();
 		context.refresh(null);
+
 	}
 
 	@Override
@@ -95,9 +103,17 @@ public class DeletePageUndoable implements UndoableEdit {
 
 	@Override
 	public void undo() throws CannotUndoException {
+
+		if (context.getPageContainer().isEditingHeader()) {
+			context.getPageContainer().stopEditingHeaderView();
+		} else if (context.getPageContainer().isEditingFooter()) {
+			context.getPageContainer().stopEditingFooterView();
+		}
+
 		context.getPageContainer().insertPageView(pageView, index);
 		context.deselectAll();
 		context.refresh(null);
+
 	}
 
 }

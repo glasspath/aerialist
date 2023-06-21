@@ -22,6 +22,7 @@
  */
 package org.glasspath.aerialist.editor.actions;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
@@ -66,7 +67,7 @@ public class SetRadiusAction extends AbstractAction {
 			if (oldRadius != null) {
 
 				applyRadius(elementView, radius);
-				context.refresh(null);
+				context.refresh((Component) elementView);
 
 				context.undoableEditHappened(new SetRadiusUndoable(context, elementView, radius, oldRadius));
 

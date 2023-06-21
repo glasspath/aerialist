@@ -68,7 +68,7 @@ public class SetImageAction extends AbstractAction {
 				if (image != null) {
 
 					imageView.setImage(key, image);
-					imageView.repaint();
+					context.refresh(imageView);
 
 					context.undoableEditHappened(new SetImageUndoable(context, imageView, oldSrc, key));
 

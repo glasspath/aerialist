@@ -317,14 +317,32 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 	public void refresh(Component component, boolean resetYPolicy, boolean revalidateScrollPane) {
 
 		if (component != null) {
-
 			component.invalidate();
 			component.validate();
-			component.repaint();
+			// component.repaint();
+		}
 
-			if (component == pageContainer.getHeaderPageView() || component == pageContainer.getFooterPageView()) {
-				pageContainer.repaint();
+		if (!pageContainer.isEditingHeader() && pageContainer.getHeaderPageView() != null && (component == pageContainer.getHeaderPageView() || AerialistUtils.getPageView(component) == pageContainer.getHeaderPageView())) {
+
+			// TODO: This is a bit of a hack to get refreshing of the header working during undo/redo
+			if (pageContainer.getPageViews().size() > 0) {
+				pageContainer.editHeaderPageView(pageContainer.getPageViews().get(0));
+				pageContainer.stopEditingHeaderView();
 			}
+
+		} else if (!pageContainer.isEditingFooter() && pageContainer.getFooterPageView() != null && (component == pageContainer.getFooterPageView() || AerialistUtils.getPageView(component) == pageContainer.getFooterPageView())) {
+
+			// TODO: This is a bit of a hack to get refreshing of the footer working during undo/redo
+			if (pageContainer.getPageViews().size() > 0) {
+				pageContainer.editFooterPageView(pageContainer.getPageViews().get(0));
+				pageContainer.stopEditingFooterView();
+			}
+
+		} else if (component != null) {
+
+			// TODO? For now we repaint the container because when a component was partially outside the
+			// page and then moved inside the page the selection rectangle is not repainted correctly..
+			pageContainer.repaint();
 
 		} else {
 

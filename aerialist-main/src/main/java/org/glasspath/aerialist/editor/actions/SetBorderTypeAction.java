@@ -68,9 +68,9 @@ public class SetBorderTypeAction extends AbstractAction {
 					}
 
 					applyBorderMenuType(elementView, borderMenuType);
-					((Component) elementView).repaint();
+					context.refresh((Component) elementView);
 
-					context.undoableEditHappened(new SetBorderTypeUndoable(elementView, borderMenuType, oldBorders));
+					context.undoableEditHappened(new SetBorderTypeUndoable(context, elementView, borderMenuType, oldBorders));
 
 				}
 

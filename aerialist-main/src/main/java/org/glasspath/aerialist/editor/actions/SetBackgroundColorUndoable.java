@@ -29,15 +29,18 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoableEdit;
 
+import org.glasspath.aerialist.editor.EditorPanel;
+import org.glasspath.aerialist.editor.EditorUndoable;
 import org.glasspath.aerialist.swing.view.ISwingElementView;
 
-public class SetBackgroundColorUndoable implements UndoableEdit {
+public class SetBackgroundColorUndoable extends EditorUndoable {
 
 	private final ISwingElementView<?> elementView;
 	private final Color color;
 	private final Color oldColor;
 
-	public SetBackgroundColorUndoable(ISwingElementView<?> elementView, Color color, Color oldColor) {
+	public SetBackgroundColorUndoable(EditorPanel<? extends EditorPanel<?>> context, ISwingElementView<?> elementView, Color color, Color oldColor) {
+		super(context);
 		this.elementView = elementView;
 		this.color = color;
 		this.oldColor = oldColor;
@@ -86,7 +89,7 @@ public class SetBackgroundColorUndoable implements UndoableEdit {
 	@Override
 	public void redo() throws CannotRedoException {
 		elementView.setBackgroundColor(color);
-		((Component) elementView).repaint();
+		context.refresh((Component) elementView);
 	}
 
 	@Override
@@ -97,7 +100,7 @@ public class SetBackgroundColorUndoable implements UndoableEdit {
 	@Override
 	public void undo() throws CannotUndoException {
 		elementView.setBackgroundColor(oldColor);
-		((Component) elementView).repaint();
+		context.refresh((Component) elementView);
 	}
 
 }

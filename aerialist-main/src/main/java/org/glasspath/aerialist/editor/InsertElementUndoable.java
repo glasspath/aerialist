@@ -91,15 +91,6 @@ public class InsertElementUndoable implements UndoableEdit {
 
 		context.refresh(pageView);
 
-		SwingUtilities.invokeLater(new Runnable() {
-
-			@Override
-			public void run() {
-				context.deselectAll();
-				context.getSelection().select(component);
-			}
-		});
-
 	}
 
 	@Override

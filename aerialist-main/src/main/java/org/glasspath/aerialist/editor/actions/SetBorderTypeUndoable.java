@@ -30,16 +30,19 @@ import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoableEdit;
 
 import org.glasspath.aerialist.Border;
+import org.glasspath.aerialist.editor.EditorPanel;
+import org.glasspath.aerialist.editor.EditorUndoable;
 import org.glasspath.aerialist.swing.view.ISwingElementView;
 import org.glasspath.common.swing.border.BorderMenu.BorderMenuType;
 
-public class SetBorderTypeUndoable implements UndoableEdit {
+public class SetBorderTypeUndoable extends EditorUndoable {
 
 	private final ISwingElementView<?> elementView;
 	private final BorderMenuType borderMenuType;
 	private final List<Border> oldBorders;
 
-	public SetBorderTypeUndoable(ISwingElementView<?> elementView, BorderMenuType borderMenuType, List<Border> oldBorders) {
+	public SetBorderTypeUndoable(EditorPanel<? extends EditorPanel<?>> context, ISwingElementView<?> elementView, BorderMenuType borderMenuType, List<Border> oldBorders) {
+		super(context);
 		this.elementView = elementView;
 		this.borderMenuType = borderMenuType;
 		this.oldBorders = oldBorders;
@@ -88,7 +91,7 @@ public class SetBorderTypeUndoable implements UndoableEdit {
 	@Override
 	public void redo() throws CannotRedoException {
 		SetBorderTypeAction.applyBorderMenuType(elementView, borderMenuType);
-		((Component) elementView).repaint();
+		context.refresh((Component) elementView);
 	}
 
 	@Override
@@ -100,7 +103,7 @@ public class SetBorderTypeUndoable implements UndoableEdit {
 	public void undo() throws CannotUndoException {
 		elementView.getBorders().clear();
 		elementView.getBorders().addAll(oldBorders);
-		((Component) elementView).repaint();
+		context.refresh((Component) elementView);
 	}
 
 }

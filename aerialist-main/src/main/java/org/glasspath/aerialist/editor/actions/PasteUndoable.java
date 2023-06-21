@@ -88,20 +88,35 @@ public class PasteUndoable implements UndoableEdit {
 	@Override
 	public void redo() throws CannotRedoException {
 
-		for (ComponentInfo pastedComponent : pastedComponents) {
-			if (pastedComponent.component instanceof LayeredPageView && pastedComponent.parent instanceof PageContainer) {
-				((PageContainer) pastedComponent.parent).insertPageView((LayeredPageView) pastedComponent.component, pastedComponent.index);
-			} else {
-				pastedComponent.parent.add(pastedComponent.component, pastedComponent.index);
-			}
+		if (context.getPageContainer().isEditingHeader()) {
+			context.getPageContainer().stopEditingHeaderView();
+		} else if (context.getPageContainer().isEditingFooter()) {
+			context.getPageContainer().stopEditingFooterView();
 		}
 
+		// TODO? Make sure only one parent is used?
+		Container parent = null;
+
+		for (ComponentInfo pastedComponent : pastedComponents) {
+
+			parent = pastedComponent.parent;
+
+			if (pastedComponent.component instanceof LayeredPageView && parent instanceof PageContainer) {
+				((PageContainer) parent).insertPageView((LayeredPageView) pastedComponent.component, pastedComponent.index);
+			} else {
+				parent.add(pastedComponent.component, pastedComponent.index);
+			}
+
+		}
+
+		Container refreshComponent = parent;
+
 		SwingUtilities.invokeLater(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				PasteAction.selectPastedComponents(context, pastedComponents);
-				context.refresh(null, true, true);
+				context.refresh(refreshComponent, true, true);
 			}
 		});
 
@@ -115,16 +130,29 @@ public class PasteUndoable implements UndoableEdit {
 	@Override
 	public void undo() throws CannotUndoException {
 
+		if (context.getPageContainer().isEditingHeader()) {
+			context.getPageContainer().stopEditingHeaderView();
+		} else if (context.getPageContainer().isEditingFooter()) {
+			context.getPageContainer().stopEditingFooterView();
+		}
+
+		// TODO? Make sure only one parent is used?
+		Container parent = null;
+
 		for (ComponentInfo pastedComponent : pastedComponents) {
-			if (pastedComponent.component instanceof LayeredPageView && pastedComponent.parent instanceof PageContainer) {
-				((PageContainer) pastedComponent.parent).removePageView((LayeredPageView) pastedComponent.component);
+
+			parent = pastedComponent.parent;
+
+			if (pastedComponent.component instanceof LayeredPageView && parent instanceof PageContainer) {
+				((PageContainer) parent).removePageView((LayeredPageView) pastedComponent.component);
 			} else {
-				pastedComponent.parent.remove(pastedComponent.component);
+				parent.remove(pastedComponent.component);
 			}
+
 		}
 
 		context.getSelection().deselectAll();
-		context.refresh(null, true, true);
+		context.refresh(parent, true, true);
 
 	}
 

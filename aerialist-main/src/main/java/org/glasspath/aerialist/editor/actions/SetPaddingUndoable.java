@@ -26,14 +26,15 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoableEdit;
 
+import org.glasspath.aerialist.AerialistUtils;
 import org.glasspath.aerialist.Padding;
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
 import org.glasspath.aerialist.swing.view.ISwingElementView;
 
 public class SetPaddingUndoable implements UndoableEdit {
 
-	private final ISwingElementView<?> elementView;
 	private final DocumentEditorPanel context;
+	private final ISwingElementView<?> elementView;
 	private final Padding padding;
 	private final Padding oldPadding;
 	private final boolean yPolicyEnabled;
@@ -90,7 +91,7 @@ public class SetPaddingUndoable implements UndoableEdit {
 	public void redo() throws CannotRedoException {
 		context.getPageContainer().setYPolicyEnabled(yPolicyEnabled);
 		SetPaddingAction.applyPadding(elementView, padding);
-		context.refresh(null);
+		context.refresh(AerialistUtils.getPageView(elementView));
 	}
 
 	@Override
@@ -102,7 +103,7 @@ public class SetPaddingUndoable implements UndoableEdit {
 	public void undo() throws CannotUndoException {
 		context.getPageContainer().setYPolicyEnabled(yPolicyEnabled);
 		SetPaddingAction.applyPadding(elementView, oldPadding);
-		context.refresh(null);
+		context.refresh(AerialistUtils.getPageView(elementView));
 	}
 
 }

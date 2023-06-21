@@ -30,17 +30,17 @@ import javax.swing.undo.UndoableEdit;
 
 import org.glasspath.aerialist.Radius;
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
+import org.glasspath.aerialist.editor.EditorUndoable;
 import org.glasspath.aerialist.swing.view.ISwingElementView;
 
-public class SetRadiusUndoable implements UndoableEdit {
+public class SetRadiusUndoable extends EditorUndoable {
 
 	private final ISwingElementView<?> elementView;
-	private final DocumentEditorPanel context;
 	private final Radius radius;
 	private final Radius oldRadius;
 
 	public SetRadiusUndoable(DocumentEditorPanel context, ISwingElementView<?> elementView, Radius radius, Radius oldRadius) {
-		this.context = context;
+		super(context);
 		this.elementView = elementView;
 		this.radius = radius;
 		this.oldRadius = oldRadius;

@@ -1060,7 +1060,7 @@ public class TextView extends JTextPane {
 		public void redo() throws CannotRedoException {
 			viewContext.setYPolicyEnabled(yPolicyEnabled);
 			textView.init(newTextData);
-			viewContext.refresh(null); // TODO
+			viewContext.refresh(textView);
 		}
 
 		@Override
@@ -1072,7 +1072,7 @@ public class TextView extends JTextPane {
 		public void undo() throws CannotUndoException {
 			viewContext.setYPolicyEnabled(yPolicyEnabled);
 			textView.init(oldTextData);
-			viewContext.refresh(null); // TODO
+			viewContext.refresh(textView);
 		}
 
 	}

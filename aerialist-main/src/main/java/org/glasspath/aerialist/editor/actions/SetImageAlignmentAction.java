@@ -69,9 +69,9 @@ public class SetImageAlignmentAction extends AbstractAction {
 		Alignment oldAlignment = view.getAlignment();
 
 		view.setAlignment(alignment);
-		((Component) view).repaint();
+		context.refresh((Component) view);
 
-		context.undoableEditHappened(new SetImageAlignmentUndoable(view, oldAlignment, alignment));
+		context.undoableEditHappened(new SetImageAlignmentUndoable(context, view, oldAlignment, alignment));
 
 	}
 

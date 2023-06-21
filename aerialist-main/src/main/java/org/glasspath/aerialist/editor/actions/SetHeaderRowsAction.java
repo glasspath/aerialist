@@ -63,9 +63,9 @@ public class SetHeaderRowsAction extends AbstractAction {
 		int oldHeaderRowCount = tableView.getHeaderRows();
 
 		tableView.setHeaderRows(headerRowCount);
-		tableView.repaint();
+		context.refresh(tableView);
 
-		context.undoableEditHappened(new SetHeaderRowsUndoable(tableView, headerRowCount, oldHeaderRowCount));
+		context.undoableEditHappened(new SetHeaderRowsUndoable(context, tableView, headerRowCount, oldHeaderRowCount));
 
 	}
 

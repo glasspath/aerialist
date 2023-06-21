@@ -69,7 +69,7 @@ public class SetPaddingAction extends AbstractAction {
 			if (oldPadding != null) {
 
 				applyPadding(elementView, padding);
-				context.refresh(null);
+				context.refresh(AerialistUtils.getPageView(elementView));
 
 				context.undoableEditHappened(new SetPaddingUndoable(context, elementView, padding, oldPadding, context.getPageContainer().isYPolicyEnabled()));
 

@@ -22,6 +22,7 @@
  */
 package org.glasspath.aerialist.editor.actions;
 
+import java.awt.Container;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
@@ -120,6 +121,8 @@ public class PasteAction extends AbstractAction {
 
 		} else {
 
+			// TODO? Make sure only one parent is used?
+			Container parent = null;
 			List<ComponentInfo> pastedComponents = new ArrayList<>();
 
 			if (context.getSelection().size() == 0) {
@@ -134,6 +137,7 @@ public class PasteAction extends AbstractAction {
 							int index = context.getPageContainer().getPageViews().size();
 							context.getPageContainer().insertPageView(newPageView, index);
 
+							parent = context.getPageContainer();
 							pastedComponents.add(new ComponentInfo(newPageView, context.getPageContainer(), index));
 
 						}
@@ -167,6 +171,7 @@ public class PasteAction extends AbstractAction {
 							int index = pageView.getComponentCount();
 							pageView.add(newComponent, index);
 
+							parent = pageView;
 							pastedComponents.add(new ComponentInfo(newComponent, pageView, index));
 
 						}
@@ -186,6 +191,7 @@ public class PasteAction extends AbstractAction {
 							LayeredPageView newPageView = PageContainer.createLayeredPageView((Page) object, context.getPageContainer());
 							context.getPageContainer().insertPageView(newPageView, index);
 
+							parent = context.getPageContainer();
 							pastedComponents.add(new ComponentInfo(newPageView, context.getPageContainer(), index));
 
 							index++;
@@ -202,12 +208,14 @@ public class PasteAction extends AbstractAction {
 
 				context.undoableEditHappened(new PasteUndoable(context, pastedComponents));
 
+				Container refreshComponent = parent;
+
 				SwingUtilities.invokeLater(new Runnable() {
 
 					@Override
 					public void run() {
 						selectPastedComponents(context, pastedComponents);
-						context.refresh(null, true, true);
+						context.refresh(refreshComponent, true, true);
 					}
 				});
 

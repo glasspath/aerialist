@@ -30,15 +30,18 @@ import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoableEdit;
 
 import org.glasspath.aerialist.Border;
+import org.glasspath.aerialist.editor.EditorPanel;
+import org.glasspath.aerialist.editor.EditorUndoable;
 import org.glasspath.aerialist.swing.view.ISwingElementView;
 
-public class SetBorderColorUndoable implements UndoableEdit {
+public class SetBorderColorUndoable extends EditorUndoable {
 
 	private final ISwingElementView<?> elementView;
 	private final List<Border> newBorders;
 	private final List<Border> oldBorders;
 
-	public SetBorderColorUndoable(ISwingElementView<?> elementView, List<Border> newBorders, List<Border> oldBorders) {
+	public SetBorderColorUndoable(EditorPanel<? extends EditorPanel<?>> context, ISwingElementView<?> elementView, List<Border> newBorders, List<Border> oldBorders) {
+		super(context);
 		this.elementView = elementView;
 		this.newBorders = newBorders;
 		this.oldBorders = oldBorders;
@@ -88,7 +91,7 @@ public class SetBorderColorUndoable implements UndoableEdit {
 	public void redo() throws CannotRedoException {
 		elementView.getBorders().clear();
 		elementView.getBorders().addAll(newBorders);
-		((Component) elementView).repaint();
+		context.refresh((Component) elementView);
 	}
 
 	@Override
@@ -100,7 +103,7 @@ public class SetBorderColorUndoable implements UndoableEdit {
 	public void undo() throws CannotUndoException {
 		elementView.getBorders().clear();
 		elementView.getBorders().addAll(oldBorders);
-		((Component) elementView).repaint();
+		context.refresh((Component) elementView);
 	}
 
 }

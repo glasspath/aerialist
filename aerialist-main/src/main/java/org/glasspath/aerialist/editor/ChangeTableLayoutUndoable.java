@@ -33,13 +33,14 @@ import org.glasspath.aerialist.TableCell;
 import org.glasspath.aerialist.swing.view.TableCellView;
 import org.glasspath.aerialist.swing.view.TableView;
 
-public class ChangeTableLayoutUndoable implements UndoableEdit {
+public class ChangeTableLayoutUndoable extends EditorUndoable {
 
 	private final TableView tableView;
 	private final TableViewData oldTableViewData;
 	private final TableViewData newTableViewData;
 
-	public ChangeTableLayoutUndoable(TableView tableView, TableViewData oldTableViewData, TableViewData newTableViewData) {
+	public ChangeTableLayoutUndoable(EditorPanel<? extends EditorPanel<?>> context, TableView tableView, TableViewData oldTableViewData, TableViewData newTableViewData) {
+		super(context);
 		this.tableView = tableView;
 		this.oldTableViewData = oldTableViewData;
 		this.newTableViewData = newTableViewData;
@@ -100,9 +101,7 @@ public class ChangeTableLayoutUndoable implements UndoableEdit {
 
 		tableView.setColStyles(newTableViewData.colStyles);
 		tableView.layoutTableCells();
-		tableView.invalidate();
-		tableView.revalidate();
-		tableView.repaint();
+		context.refresh(tableView);
 
 	}
 
@@ -126,9 +125,7 @@ public class ChangeTableLayoutUndoable implements UndoableEdit {
 
 		tableView.setColStyles(oldTableViewData.colStyles);
 		tableView.layoutTableCells();
-		tableView.invalidate();
-		tableView.revalidate();
-		tableView.repaint();
+		context.refresh(tableView);
 
 	}
 

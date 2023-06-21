@@ -30,15 +30,18 @@ import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoableEdit;
 
 import org.glasspath.aerialist.Border;
+import org.glasspath.aerialist.editor.EditorPanel;
+import org.glasspath.aerialist.editor.EditorUndoable;
 import org.glasspath.aerialist.swing.view.ISwingElementView;
 
-public class SetBorderWidthUndoable implements UndoableEdit {
+public class SetBorderWidthUndoable extends EditorUndoable {
 
 	private final ISwingElementView<?> elementView;
 	private final float width;
 	private final List<Border> oldBorders;
 
-	public SetBorderWidthUndoable(ISwingElementView<?> elementView, float width, List<Border> oldBorders) {
+	public SetBorderWidthUndoable(EditorPanel<? extends EditorPanel<?>> context, ISwingElementView<?> elementView, float width, List<Border> oldBorders) {
+		super(context);
 		this.elementView = elementView;
 		this.width = width;
 		this.oldBorders = oldBorders;
@@ -87,7 +90,7 @@ public class SetBorderWidthUndoable implements UndoableEdit {
 	@Override
 	public void redo() throws CannotRedoException {
 		SetBorderWidthAction.applyBorderWidth(elementView, width);
-		((Component) elementView).repaint();
+		context.refresh((Component) elementView);
 	}
 
 	@Override
@@ -99,7 +102,7 @@ public class SetBorderWidthUndoable implements UndoableEdit {
 	public void undo() throws CannotUndoException {
 		elementView.getBorders().clear();
 		elementView.getBorders().addAll(oldBorders);
-		((Component) elementView).repaint();
+		context.refresh((Component) elementView);
 	}
 
 }

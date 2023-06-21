@@ -33,8 +33,8 @@ import org.glasspath.aerialist.editor.DocumentEditorPanel;
 
 public class SetMarginUndoable implements UndoableEdit {
 
-	private final Component view;
 	private final DocumentEditorPanel context;
+	private final Component view;
 	private final Margin margin;
 	private final Margin oldMargin;
 	private final boolean yPolicyEnabled;

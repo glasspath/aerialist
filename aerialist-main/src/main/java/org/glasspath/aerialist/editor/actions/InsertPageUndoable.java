@@ -83,8 +83,16 @@ public class InsertPageUndoable implements UndoableEdit {
 
 	@Override
 	public void redo() throws CannotRedoException {
+
+		if (context.getPageContainer().isEditingHeader()) {
+			context.getPageContainer().stopEditingHeaderView();
+		} else if (context.getPageContainer().isEditingFooter()) {
+			context.getPageContainer().stopEditingFooterView();
+		}
+
 		context.getPageContainer().insertPageView(pageView, index);
 		context.refresh(null, false, true);
+
 	}
 
 	@Override
@@ -94,8 +102,16 @@ public class InsertPageUndoable implements UndoableEdit {
 
 	@Override
 	public void undo() throws CannotUndoException {
+
+		if (context.getPageContainer().isEditingHeader()) {
+			context.getPageContainer().stopEditingHeaderView();
+		} else if (context.getPageContainer().isEditingFooter()) {
+			context.getPageContainer().stopEditingFooterView();
+		}
+
 		context.getPageContainer().removePageView(pageView);
 		context.refresh(null, false, true);
+
 	}
 
 }

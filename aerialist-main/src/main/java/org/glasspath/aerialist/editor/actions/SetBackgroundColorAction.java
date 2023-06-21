@@ -58,9 +58,9 @@ public class SetBackgroundColorAction extends AbstractAction {
 					Color oldColor = elementView.getBackgroundColor();
 
 					elementView.setBackgroundColor(color);
-					((Component) elementView).repaint();
+					context.refresh((Component) elementView);
 
-					context.undoableEditHappened(new SetBackgroundColorUndoable(elementView, color, oldColor));
+					context.undoableEditHappened(new SetBackgroundColorUndoable(context, elementView, color, oldColor));
 
 				}
 

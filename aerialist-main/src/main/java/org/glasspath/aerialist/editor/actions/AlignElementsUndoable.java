@@ -30,18 +30,18 @@ import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoableEdit;
 
 import org.glasspath.aerialist.editor.EditorPanel;
+import org.glasspath.aerialist.editor.EditorUndoable;
 import org.glasspath.aerialist.editor.ElementData;
 import org.glasspath.aerialist.swing.view.PageView;
 
-public class AlignElementsUndoable implements UndoableEdit {
+public class AlignElementsUndoable extends EditorUndoable {
 
-	private final EditorPanel<? extends EditorPanel<?>> context;
 	private final PageView pageView;
 	private final List<ElementData> elementsData;
 	private final int alignAction;
 
 	public AlignElementsUndoable(EditorPanel<? extends EditorPanel<?>> context, PageView pageView, List<ElementData> elementsData, int alignAction) {
-		this.context = context;
+		super(context);
 		this.pageView = pageView;
 		this.elementsData = elementsData;
 		this.alignAction = alignAction;

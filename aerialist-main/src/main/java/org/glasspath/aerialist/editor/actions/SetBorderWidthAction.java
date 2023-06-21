@@ -62,9 +62,9 @@ public class SetBorderWidthAction extends AbstractAction {
 					}
 
 					applyBorderWidth(elementView, width);
-					((Component) elementView).repaint();
+					context.refresh((Component) elementView);
 
-					context.undoableEditHappened(new SetBorderWidthUndoable(elementView, width, oldBorders));
+					context.undoableEditHappened(new SetBorderWidthUndoable(context, elementView, width, oldBorders));
 
 				}
 

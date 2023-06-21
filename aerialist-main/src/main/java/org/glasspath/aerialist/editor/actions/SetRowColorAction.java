@@ -58,8 +58,9 @@ public class SetRowColorAction extends AbstractAction {
 			List<RowStyle> oldRowStyles = tableView.getRowStylesCopy();
 
 			applyRowColor(tableView, row, repeat, color);
+			context.refresh(tableView);
 
-			context.undoableEditHappened(new SetRowColorUndoable(tableView, row, repeat, color, oldRowStyles));
+			context.undoableEditHappened(new SetRowColorUndoable(context, tableView, row, repeat, color, oldRowStyles));
 
 		}
 
@@ -87,8 +88,6 @@ public class SetRowColorAction extends AbstractAction {
 			tableView.getRowStyles().add(rowStyle);
 
 		}
-
-		tableView.repaint();
 
 	}
 

@@ -90,12 +90,10 @@ public class DeleteTableRowAction extends AbstractAction {
 			}
 
 			tableView.layoutTableCells();
-			tableView.invalidate();
-			tableView.revalidate();
-			tableView.repaint();
+			context.refresh(tableView);
 
 			TableViewData newTableViewData = new TableViewData(tableView.getColStylesCopy(), newTableCellData);
-			context.undoableEditHappened(new ChangeTableLayoutUndoable(tableView, oldTableViewData, newTableViewData));
+			context.undoableEditHappened(new ChangeTableLayoutUndoable(context, tableView, oldTableViewData, newTableViewData));
 
 		}
 
