@@ -31,6 +31,7 @@ import javax.swing.Action;
 
 import org.glasspath.aerialist.Margin;
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
+import org.glasspath.aerialist.swing.view.PageContainer;
 import org.glasspath.aerialist.swing.view.PageView;
 
 public class SetMarginAction extends AbstractAction {
@@ -38,14 +39,16 @@ public class SetMarginAction extends AbstractAction {
 	private final DocumentEditorPanel context;
 	private final Margin margin;
 
-	public SetMarginAction(DocumentEditorPanel context, Margin margin, String description) {
+	public SetMarginAction(DocumentEditorPanel context, Margin margin, String description, boolean defaultMargin) {
 
 		this.context = context;
 		this.margin = margin;
 
+		Margin m = getMargin(getView());
+
 		putValue(Action.NAME, description);
 		putValue(Action.SHORT_DESCRIPTION, description);
-		putValue(Action.SELECTED_KEY, this.margin.equals(getMargin(getView())));
+		putValue(Action.SELECTED_KEY, this.margin.equals(m) || (defaultMargin && m == null));
 
 	}
 
@@ -60,34 +63,44 @@ public class SetMarginAction extends AbstractAction {
 		if (view != null) {
 
 			Margin oldMargin = getMargin(view);
-			if (oldMargin != null) {
 
-				applyMargin(view, margin);
-				context.refresh(null);
+			applyMargin(view, margin);
+			context.refresh(null);
 
-				context.undoableEditHappened(new SetMarginUndoable(context, view, margin, oldMargin, context.getPageContainer().isYPolicyEnabled()));
-
-			}
+			context.undoableEditHappened(new SetMarginUndoable(context, view, margin, oldMargin, context.getPageContainer().isYPolicyEnabled()));
 
 		}
 
 	}
 
 	private Component getView() {
+		/* TODO: Support page margins (for now we only support document margins)
 		if (context.getSelection().size() == 1) {
 			return context.getSelection().get(0);
 		} else {
 			return null;
 		}
+		*/
+		return context.getPageContainer();
 	}
-	
+
 	public static boolean isMarginSupported(Component view) {
-		return view instanceof PageView;
+		return view instanceof PageContainer || view instanceof PageView;
 	}
 
 	public static Margin getMargin(Component view) {
-		if (view instanceof PageView) {
-			return new Margin(((PageView) view).getMargin());
+		if (view instanceof PageContainer) {
+			return getMargin(((PageContainer) view).getMargin());
+		} else if (view instanceof PageView) {
+			return getMargin(((PageView) view).getMargin());
+		} else {
+			return null;
+		}
+	}
+
+	public static Margin getMargin(String margin) {
+		if (margin != null) {
+			return new Margin(margin);
 		} else {
 			return null;
 		}
@@ -97,7 +110,9 @@ public class SetMarginAction extends AbstractAction {
 
 		Consumer<String> consumer = null;
 
-		if (view instanceof PageView) {
+		if (view instanceof PageContainer) {
+			consumer = ((PageContainer) view)::setMargin;
+		} else if (view instanceof PageView) {
 			consumer = ((PageView) view)::setMargin;
 		}
 

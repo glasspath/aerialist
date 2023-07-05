@@ -69,7 +69,7 @@ public class PageView extends ElementContainer implements IVisible {
 
 		setPageSize(page.getWidth(), page.getHeight());
 
-		margin = page.getMaring();
+		margin = page.getMargin();
 		visible = page.getVisible();
 
 		JComponent elementView;
@@ -105,7 +105,7 @@ public class PageView extends ElementContainer implements IVisible {
 		Page page = new Page();
 		page.setWidth(getWidth());
 		page.setHeight(getHeight());
-		page.setMaring(margin);
+		page.setMargin(margin);
 		page.setVisible(visible);
 
 		Component elementView;

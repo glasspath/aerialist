@@ -44,6 +44,7 @@ import javax.swing.SwingUtilities;
 
 import org.glasspath.aerialist.AerialistUtils;
 import org.glasspath.aerialist.Alignment;
+import org.glasspath.aerialist.Document;
 import org.glasspath.aerialist.Field.DynamicFieldKey;
 import org.glasspath.aerialist.Field.FieldType;
 import org.glasspath.aerialist.FitPolicy;
@@ -52,7 +53,6 @@ import org.glasspath.aerialist.IPagination;
 import org.glasspath.aerialist.IVisible;
 import org.glasspath.aerialist.Margin;
 import org.glasspath.aerialist.Padding;
-import org.glasspath.aerialist.Page;
 import org.glasspath.aerialist.Page.PageSize;
 import org.glasspath.aerialist.YPolicy;
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
@@ -369,9 +369,9 @@ public class ActionUtils {
 			JMenu marginMenu = new JMenu("Margins");
 			menu.add(marginMenu);
 
-			marginMenu.add(new JCheckBoxMenuItem(new SetMarginAction(context, new Margin(40, 45, 40, 40), "Small")));
-			marginMenu.add(new JCheckBoxMenuItem(new SetMarginAction(context, new Margin(Page.DEFAULT_MARGIN_TOP, Page.DEFAULT_MARGIN_RIGHT, Page.DEFAULT_MARGIN_BOTTOM, Page.DEFAULT_MARGIN_LEFT), "Default")));
-			marginMenu.add(new JCheckBoxMenuItem(new SetMarginAction(context, new Margin(80, 85, 80, 80), "Large")));
+			marginMenu.add(new JCheckBoxMenuItem(new SetMarginAction(context, new Margin(40, 45, 40, 40), "Small", false)));
+			marginMenu.add(new JCheckBoxMenuItem(new SetMarginAction(context, new Margin(Document.DEFAULT_MARGIN_TOP, Document.DEFAULT_MARGIN_RIGHT, Document.DEFAULT_MARGIN_BOTTOM, Document.DEFAULT_MARGIN_LEFT), "Default", true)));
+			marginMenu.add(new JCheckBoxMenuItem(new SetMarginAction(context, new Margin(80, 85, 80, 80), "Large", false)));
 
 			if (TODO_CREATE_CUSTOM_PAGE_MARGINS_ITEM) {
 
@@ -386,13 +386,13 @@ public class ActionUtils {
 
 						Margin margin = SetMarginAction.getMargin(pageView);
 						if (margin == null) {
-							margin = new Margin(Page.DEFAULT_MARGIN_TOP, Page.DEFAULT_MARGIN_RIGHT, Page.DEFAULT_MARGIN_BOTTOM, Page.DEFAULT_MARGIN_LEFT);
+							margin = new Margin(Document.DEFAULT_MARGIN_TOP, Document.DEFAULT_MARGIN_RIGHT, Document.DEFAULT_MARGIN_BOTTOM, Document.DEFAULT_MARGIN_LEFT);
 						}
 
 						PaddingDialog marginDialog = new PaddingDialog(context.getContext(), margin.top, margin.right, margin.bottom, margin.left);
 						if (marginDialog.setVisibleAndGetAction()) {
 							PaddingPanel p = marginDialog.getPaddingPanel();
-							new SetMarginAction(context, new Margin(p.getTopPadding(), p.getRightPadding(), p.getBottomPadding(), p.getLeftPadding()), "Custom").actionPerformed();
+							new SetMarginAction(context, new Margin(p.getTopPadding(), p.getRightPadding(), p.getBottomPadding(), p.getLeftPadding()), "Custom", false).actionPerformed();
 						}
 
 					}

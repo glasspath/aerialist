@@ -34,11 +34,6 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 @SuppressWarnings("nls")
 public class Page implements IElementContainer, IVisible {
 
-	public static final int DEFAULT_MARGIN_TOP = 60;
-	public static final int DEFAULT_MARGIN_RIGHT = 65; // TODO? Right margin is 65 for better alignment with grid
-	public static final int DEFAULT_MARGIN_BOTTOM = 60;
-	public static final int DEFAULT_MARGIN_LEFT = 60;
-
 	public enum PageSize {
 
 		A4("A4", 595, 842);
@@ -74,7 +69,7 @@ public class Page implements IElementContainer, IVisible {
 	private int height = 0;
 
 	@JacksonXmlProperty(isAttribute = true)
-	private String maring = Margin.from(DEFAULT_MARGIN_TOP, DEFAULT_MARGIN_RIGHT, DEFAULT_MARGIN_BOTTOM, DEFAULT_MARGIN_LEFT);
+	private String margin = null;
 
 	@JacksonXmlProperty(isAttribute = true)
 	private String visible = null;
@@ -113,12 +108,12 @@ public class Page implements IElementContainer, IVisible {
 		this.height = height;
 	}
 
-	public String getMaring() {
-		return maring;
+	public String getMargin() {
+		return margin;
 	}
 
-	public void setMaring(String maring) {
-		this.maring = maring;
+	public void setMargin(String margin) {
+		this.margin = margin;
 	}
 
 	@Override

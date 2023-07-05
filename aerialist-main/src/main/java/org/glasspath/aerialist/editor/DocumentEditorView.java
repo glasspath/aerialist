@@ -37,10 +37,11 @@ import javax.swing.CellRendererPane;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
+import org.glasspath.aerialist.Document;
 import org.glasspath.aerialist.Margin;
-import org.glasspath.aerialist.Page;
 import org.glasspath.aerialist.swing.view.FooterPageView;
 import org.glasspath.aerialist.swing.view.LayeredPageView;
+import org.glasspath.aerialist.swing.view.PageContainer;
 import org.glasspath.aerialist.swing.view.PageView;
 import org.glasspath.common.swing.graphics.NinePatch;
 import org.glasspath.common.swing.theme.Theme;
@@ -140,7 +141,7 @@ public class DocumentEditorView extends EditorView<DocumentEditorPanel> {
 				}
 
 				if (context.isGuidesVisible()) {
-					drawGuides(g2d, pageView, context.getPageContainer().getHeaderHeight(), context.getPageContainer().getFooterHeight());
+					drawGuides(g2d, context.getPageContainer(), pageView);
 				}
 
 			}
@@ -273,22 +274,26 @@ public class DocumentEditorView extends EditorView<DocumentEditorPanel> {
 
 	}
 
-	protected void drawGuides(Graphics2D g2d, PageView pageView, int headerHeight, int footerHeight) {
+	protected void drawGuides(Graphics2D g2d, PageContainer pageContainer, PageView pageView) {
 
-		int top = Page.DEFAULT_MARGIN_TOP;
-		int right = Page.DEFAULT_MARGIN_RIGHT;
-		int bottom = Page.DEFAULT_MARGIN_BOTTOM;
-		int left = Page.DEFAULT_MARGIN_LEFT;
+		int top = Document.DEFAULT_MARGIN_TOP;
+		int right = Document.DEFAULT_MARGIN_RIGHT;
+		int bottom = Document.DEFAULT_MARGIN_BOTTOM;
+		int left = Document.DEFAULT_MARGIN_LEFT;
 
-		if (pageView.getMargin() != null) {
+		Margin margin = null;
 
-			Margin margin = new Margin(pageView.getMargin());
+		if (pageContainer.getMargin() != null) {
+			margin = new Margin(pageContainer.getMargin());
+		} else if (pageView.getMargin() != null) {
+			margin = new Margin(pageView.getMargin());
+		}
 
+		if (margin != null) {
 			top = margin.top;
 			right = margin.right;
 			bottom = margin.bottom;
 			left = margin.left;
-
 		}
 
 		int x = pageView.getX();
@@ -302,8 +307,8 @@ public class DocumentEditorView extends EditorView<DocumentEditorPanel> {
 		g2d.drawLine(x, y + top, x + w, y + top);
 		g2d.drawLine(x, y + h - bottom, x + w, y + h - bottom);
 
-		top = headerHeight;
-		bottom = footerHeight;
+		top = pageContainer.getHeaderHeight();
+		bottom = pageContainer.getFooterHeight();
 
 		g2d.setColor(HEADER_FOOTER_GUIDE_COLOR);
 		g2d.drawLine(x, y + top, x + w, y + top);

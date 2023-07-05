@@ -42,6 +42,7 @@ public abstract class PageContainer extends JPanel implements ISwingViewContext,
 	private boolean yPolicyEnabled = false;
 	private ExportPhase exportPhase = ExportPhase.IDLE;
 
+	private String margin = null;
 	private int headerHeight = 0;
 	private int footerHeight = 0;
 	private HeaderPageView headerPageView = null;
@@ -58,6 +59,7 @@ public abstract class PageContainer extends JPanel implements ISwingViewContext,
 
 	public void init(Document document) {
 
+		margin = document.getMargin();
 		headerHeight = document.getHeaderHeight();
 		footerHeight = document.getFooterHeight();
 
@@ -89,6 +91,7 @@ public abstract class PageContainer extends JPanel implements ISwingViewContext,
 
 		Document document = new Document();
 
+		document.setMargin(margin);
 		document.setHeaderHeight(headerHeight);
 		document.setFooterHeight(footerHeight);
 
@@ -145,6 +148,14 @@ public abstract class PageContainer extends JPanel implements ISwingViewContext,
 	@Override
 	public void setExportPhase(ExportPhase exportPhase) {
 		this.exportPhase = exportPhase;
+	}
+
+	public String getMargin() {
+		return margin;
+	}
+
+	public void setMargin(String margin) {
+		this.margin = margin;
 	}
 
 	public int getHeaderHeight() {

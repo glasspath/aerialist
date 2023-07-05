@@ -33,6 +33,14 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 @JsonInclude(Include.NON_DEFAULT)
 public class Document extends ContentRoot implements IPagination {
 
+	public static final int DEFAULT_MARGIN_TOP = 60;
+	public static final int DEFAULT_MARGIN_RIGHT = 65; // TODO? Right margin is 65 for better alignment with grid
+	public static final int DEFAULT_MARGIN_BOTTOM = 60;
+	public static final int DEFAULT_MARGIN_LEFT = 60;
+
+	@JacksonXmlProperty(isAttribute = true)
+	private String margin = null;
+
 	@JacksonXmlProperty(isAttribute = true)
 	private int headerHeight = 90;
 
@@ -54,6 +62,14 @@ public class Document extends ContentRoot implements IPagination {
 
 	public Document() {
 
+	}
+
+	public String getMargin() {
+		return margin;
+	}
+
+	public void setMargin(String margin) {
+		this.margin = margin;
 	}
 
 	public int getHeaderHeight() {
