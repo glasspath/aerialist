@@ -35,6 +35,8 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +71,7 @@ import org.glasspath.aerialist.text.font.FontCache;
 import org.glasspath.common.swing.keyboard.KeyboardUtils;
 import org.glasspath.common.swing.search.UISearchHandler;
 import org.glasspath.common.swing.selection.SelectionListener;
+import org.glasspath.common.swing.splitpane.InvisibleSplitPane;
 
 public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 
@@ -129,7 +132,85 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 		mainScrollPane = new JScrollPane(pageContainer);
 		mainScrollPane.setBorder(BorderFactory.createEmptyBorder());
 		mainScrollPane.getVerticalScrollBar().setUnitIncrement(25);
-		add(mainScrollPane, BorderLayout.CENTER);
+
+		if (pageContainer.getPageMode() == PageContainer.PAGE_MODE_SINGLE) {
+
+			PagePreviewList pagePreviewList = new PagePreviewList(pageContainer, mainScrollPane);
+
+			JScrollPane pagePreviewScrollPane = new JScrollPane(pagePreviewList);
+			pagePreviewScrollPane.setBorder(BorderFactory.createEmptyBorder());
+			pagePreviewScrollPane.getVerticalScrollBar().setUnitIncrement(25);
+
+			InvisibleSplitPane mainSplitPane = new InvisibleSplitPane();
+			mainSplitPane.setDividerLocation(250);
+			mainSplitPane.setLeftComponent(pagePreviewScrollPane);
+			mainSplitPane.setRightComponent(mainScrollPane);
+
+			add(mainSplitPane, BorderLayout.CENTER);
+
+			mainScrollPane.addMouseWheelListener(new MouseWheelListener() {
+
+				private long lastScroll = 0;
+
+				@Override
+				public void mouseWheelMoved(MouseWheelEvent e) {
+
+					if (pageContainer.isEditingHeader()) {
+						// Don't automatically scroll to other page when editing header
+					} else if (pageContainer.isEditingFooter()) {
+						// Don't automatically scroll to other page when editing footer
+					} else if (e.getWheelRotation() < 0 && mainScrollPane.getVerticalScrollBar().getValue() == 0) {
+
+						if (System.currentTimeMillis() > lastScroll + 500) { // TODO: Move minimum interval between scrolls to constant
+
+							if (pageContainer.previousPage()) {
+
+								if (selection.size() > 0) {
+									selection.deselectAll();
+									pageContainer.requestFocusInWindow();
+								}
+
+								mainScrollPane.getVerticalScrollBar().setValue(Integer.MAX_VALUE);
+								pageContainer.refresh(null);
+								pagePreviewList.refresh();
+
+								lastScroll = System.currentTimeMillis();
+
+							}
+
+						}
+
+					} else if (e.getWheelRotation() > 0 && mainScrollPane.getVerticalScrollBar().getValue() + mainScrollPane.getVerticalScrollBar().getVisibleAmount() >= mainScrollPane.getVerticalScrollBar().getMaximum()) {
+
+						if (System.currentTimeMillis() > lastScroll + 500) { // TODO: Move minimum interval between scrolls to constant
+
+							if (pageContainer.nextPage()) {
+
+								if (selection.size() > 0) {
+									selection.deselectAll();
+									pageContainer.requestFocusInWindow();
+								}
+
+								mainScrollPane.getVerticalScrollBar().setValue(0);
+								pageContainer.refresh(null);
+								pagePreviewList.refresh();
+
+								lastScroll = System.currentTimeMillis();
+
+							}
+
+						}
+
+					} else {
+						lastScroll = System.currentTimeMillis();
+					}
+
+				}
+			});
+
+		} else {
+			add(mainScrollPane, BorderLayout.CENTER);
+		}
 
 		copyAction = new CopyAction(this);
 		pasteAction = new PasteAction(this, copyAction);
@@ -326,7 +407,11 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 
 			// TODO: This is a bit of a hack to get refreshing of the header working during undo/redo
 			if (pageContainer.getPageViews().size() > 0) {
-				pageContainer.editHeaderPageView(pageContainer.getPageViews().get(0));
+				if (pageContainer.getPageMode() == PageContainer.PAGE_MODE_SINGLE && pageContainer.getPageIndex() >= 0 && pageContainer.getPageIndex() < pageContainer.getPageViews().size()) {
+					pageContainer.editHeaderPageView(pageContainer.getPageViews().get(pageContainer.getPageIndex()));
+				} else {
+					pageContainer.editHeaderPageView(pageContainer.getPageViews().get(0));
+				}
 				pageContainer.stopEditingHeaderView();
 			}
 
@@ -334,7 +419,11 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 
 			// TODO: This is a bit of a hack to get refreshing of the footer working during undo/redo
 			if (pageContainer.getPageViews().size() > 0) {
-				pageContainer.editFooterPageView(pageContainer.getPageViews().get(0));
+				if (pageContainer.getPageMode() == PageContainer.PAGE_MODE_SINGLE && pageContainer.getPageIndex() >= 0 && pageContainer.getPageIndex() < pageContainer.getPageViews().size()) {
+					pageContainer.editFooterPageView(pageContainer.getPageViews().get(pageContainer.getPageIndex()));
+				} else {
+					pageContainer.editFooterPageView(pageContainer.getPageViews().get(0));
+				}
 				pageContainer.stopEditingFooterView();
 			}
 
@@ -463,6 +552,10 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 
 		public EditorPageContainer() {
 			super();
+
+			if (Aerialist.TODO_TEST_SHEET_MODE) {
+				setPageMode(PageContainer.PAGE_MODE_SINGLE);
+			}
 
 			setFocusable(true);
 			addFocusListener(new FocusAdapter() {

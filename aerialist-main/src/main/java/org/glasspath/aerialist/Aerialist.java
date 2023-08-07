@@ -79,6 +79,8 @@ import org.slf4j.LoggerFactory;
 @SuppressWarnings("nls")
 public class Aerialist implements FrameContext {
 
+	public static boolean TODO_TEST_SHEET_MODE = false;
+
 	public static final int VERSION_CODE = 1;
 	public static final String VERSION_NAME = "1.0";
 

@@ -38,6 +38,9 @@ import org.glasspath.aerialist.Pagination;
 
 public abstract class PageContainer extends JPanel implements ISwingViewContext, IPagination {
 
+	public static final int PAGE_MODE_MULTIPLE = 0;
+	public static final int PAGE_MODE_SINGLE = 1;
+
 	private LayoutPhase layoutPhase = LayoutPhase.IDLE;
 	private boolean yPolicyEnabled = false;
 	private ExportPhase exportPhase = ExportPhase.IDLE;
@@ -49,6 +52,8 @@ public abstract class PageContainer extends JPanel implements ISwingViewContext,
 	private FooterPageView footerPageView = null;
 	private Pagination pagination = null;
 	private List<PageView> pageViews = new ArrayList<>();
+	private int pageMode = PAGE_MODE_MULTIPLE;
+	private int pageIndex = 0;
 
 	public PageContainer() {
 
@@ -208,15 +213,72 @@ public abstract class PageContainer extends JPanel implements ISwingViewContext,
 		this.pageViews = pageViews;
 	}
 
-	protected void loadPageViews() {
+	public int getPageMode() {
+		return pageMode;
+	}
+
+	public void setPageMode(int pageMode) {
+		this.pageMode = pageMode;
+	}
+
+	public int getPageIndex() {
+		return pageIndex;
+	}
+
+	public void setPageIndex(int pageIndex) {
+		this.pageIndex = pageIndex;
+	}
+
+	public boolean previousPage() {
+
+		if (pageIndex > 0) {
+
+			pageIndex--;
+			loadPageViews();
+
+			return true;
+
+		} else {
+			return false;
+		}
+
+	}
+
+	public boolean nextPage() {
+
+		if (pageIndex < pageViews.size() - 1) {
+
+			pageIndex++;
+			loadPageViews();
+
+			return true;
+
+		} else {
+			return false;
+		}
+
+	}
+
+	public void loadPageViews() {
 
 		removeAll();
 
 		add(Box.createRigidArea(new Dimension(25, 20)));
 
-		for (PageView pageView : pageViews) {
-			add(pageView);
-			add(Box.createRigidArea(new Dimension(25, 25)));
+		if (pageMode == PAGE_MODE_SINGLE) {
+
+			if (pageIndex >= 0 && pageIndex < pageViews.size()) {
+				add(pageViews.get(pageIndex));
+				add(Box.createRigidArea(new Dimension(25, 25)));
+			}
+
+		} else {
+
+			for (PageView pageView : pageViews) {
+				add(pageView);
+				add(Box.createRigidArea(new Dimension(25, 25)));
+			}
+
 		}
 
 	}
