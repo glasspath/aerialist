@@ -74,20 +74,7 @@ public class InsertPageAction extends AbstractAction {
 
 			PageView selectedPageView = (PageView) context.getSelection().get(0);
 
-			int selectedIndex = -1;
-			int pageIndex = -1;
-			for (int i = 0; i < context.getPageContainer().getComponentCount(); i++) {
-
-				Component component = context.getPageContainer().getComponent(i);
-				if (component instanceof PageView) {
-					pageIndex++;
-					if (component == selectedPageView) {
-						selectedIndex = pageIndex;
-						break;
-					}
-				}
-			}
-
+			int selectedIndex = context.getPageContainer().getPageViews().indexOf(selectedPageView);
 			if (selectedIndex >= 0) {
 
 				if (option == ABOVE) {

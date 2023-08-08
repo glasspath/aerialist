@@ -33,22 +33,18 @@ import java.awt.RenderingHints;
 import javax.swing.AbstractListModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
-import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import org.glasspath.aerialist.swing.view.PageContainer;
+import org.glasspath.aerialist.Aerialist;
 import org.glasspath.aerialist.swing.view.PageView;
 import org.glasspath.common.swing.theme.Theme;
 
-public class PagePreviewList extends JList<PageView> {
+public abstract class PagePreviewList extends JList<PageView> {
 
-	private final PageContainer pageContainer;
 	private final PagePreviewListModel model;
 
-	public PagePreviewList(PageContainer pageContainer, JScrollPane scrollPane) {
-
-		this.pageContainer = pageContainer;
+	public PagePreviewList() {
 
 		if (Theme.isDark()) {
 			setBackground(new Color(54, 56, 58));
@@ -67,18 +63,8 @@ public class PagePreviewList extends JList<PageView> {
 			public void valueChanged(ListSelectionEvent e) {
 
 				int index = getSelectedIndex();
-				if (index != pageContainer.getPageIndex()) {
-
-					pageContainer.setPageIndex(index);
-
-					pageContainer.loadPageViews();
-					pageContainer.repaint();
-
-					if (scrollPane != null) {
-						scrollPane.getVerticalScrollBar().setValue(0);
-						scrollPane.getHorizontalScrollBar().setValue(0);
-					}
-
+				if (index != getPageIndex()) {
+					setPageIndex(index);
 				}
 
 			}
@@ -86,11 +72,19 @@ public class PagePreviewList extends JList<PageView> {
 
 	}
 
+	public abstract int getPageCount();
+
+	public abstract int getPageIndex();
+
+	public abstract void setPageIndex(int index);
+
+	public abstract PageView getPageView(int index);
+
 	public void refresh() {
 
 		model.refresh();
 
-		setSelectedIndex(pageContainer.getPageIndex());
+		setSelectedIndex(getPageIndex());
 
 	}
 
@@ -102,16 +96,16 @@ public class PagePreviewList extends JList<PageView> {
 
 		@Override
 		public int getSize() {
-			return pageContainer.getPageViews().size();
+			return getPageCount();
 		}
 
 		@Override
 		public PageView getElementAt(int index) {
-			return pageContainer.getPageViews().get(index);
+			return getPageView(index);
 		}
 
 		protected void refresh() {
-			fireContentsChanged(this, 0, getSize()); // TODO: This is a quick hack..
+			fireContentsChanged(this, 0, getPageCount()); // TODO: This is a quick hack..
 		}
 
 	}
@@ -146,9 +140,13 @@ public class PagePreviewList extends JList<PageView> {
 			Graphics2D g2d = (Graphics2D) g;
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-			Rectangle rect = new Rectangle(50, 15, 150, 95);
+			Rectangle rect = new Rectangle(50, 0, 150, 100);
 
-			g2d.setColor(Color.white);
+			if (Aerialist.TODO_TEST_SHEET_MODE) {
+				g2d.setColor(Theme.isDark() ? new Color(75, 75, 75) : new Color(254, 254, 254));
+			} else {
+				g2d.setColor(Color.white);
+			}
 			g2d.fill(rect);
 
 			if (selected) {

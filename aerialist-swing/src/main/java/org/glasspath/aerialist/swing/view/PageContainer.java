@@ -54,6 +54,7 @@ public abstract class PageContainer extends JPanel implements ISwingViewContext,
 	private List<PageView> pageViews = new ArrayList<>();
 	private int pageMode = PAGE_MODE_MULTIPLE;
 	private int pageIndex = 0;
+	private final List<PageListener> pageListeners = new ArrayList<>();
 
 	public PageContainer() {
 
@@ -89,6 +90,8 @@ public abstract class PageContainer extends JPanel implements ISwingViewContext,
 		pageViews = createLayeredPageViews(document.getPages(), this);
 
 		loadPageViews();
+
+		firePagesLoaded();
 
 	}
 
@@ -229,36 +232,6 @@ public abstract class PageContainer extends JPanel implements ISwingViewContext,
 		this.pageIndex = pageIndex;
 	}
 
-	public boolean previousPage() {
-
-		if (pageIndex > 0) {
-
-			pageIndex--;
-			loadPageViews();
-
-			return true;
-
-		} else {
-			return false;
-		}
-
-	}
-
-	public boolean nextPage() {
-
-		if (pageIndex < pageViews.size() - 1) {
-
-			pageIndex++;
-			loadPageViews();
-
-			return true;
-
-		} else {
-			return false;
-		}
-
-	}
-
 	public void loadPageViews() {
 
 		removeAll();
@@ -289,13 +262,19 @@ public abstract class PageContainer extends JPanel implements ISwingViewContext,
 
 			pageViews.add(index, pageView);
 
-			int viewIndex = 1 + (index * 2);
-			if (viewIndex >= 1 && viewIndex <= getComponentCount()) {
+			if (pageMode == PAGE_MODE_MULTIPLE) {
 
-				add(pageView, viewIndex);
-				add(Box.createRigidArea(new Dimension(25, 25)), viewIndex + 1);
+				int viewIndex = 1 + (index * 2);
+				if (viewIndex >= 1 && viewIndex <= getComponentCount()) {
+
+					add(pageView, viewIndex);
+					add(Box.createRigidArea(new Dimension(25, 25)), viewIndex + 1);
+
+				}
 
 			}
+
+			firePagesAdded();
 
 		}
 
@@ -306,12 +285,18 @@ public abstract class PageContainer extends JPanel implements ISwingViewContext,
 		int index = pageViews.indexOf(pageView);
 		if (index >= 0) {
 
-			int viewIndex = 1 + (index * 2);
-
 			pageViews.remove(index);
 
-			remove(viewIndex + 1);
-			remove(viewIndex);
+			if (pageMode == PAGE_MODE_MULTIPLE) {
+
+				int viewIndex = 1 + (index * 2);
+
+				remove(viewIndex + 1);
+				remove(viewIndex);
+
+			}
+
+			firePagesRemoved();
 
 		}
 
@@ -381,6 +366,42 @@ public abstract class PageContainer extends JPanel implements ISwingViewContext,
 		pageView.init(page);
 
 		return pageView;
+
+	}
+
+	public void addPageListener(PageListener listener) {
+		pageListeners.add(listener);
+	}
+
+	public void removePageListener(PageListener listener) {
+		pageListeners.remove(listener);
+	}
+
+	private void firePagesLoaded() {
+		for (PageListener listener : pageListeners) {
+			listener.pagesLoaded();
+		}
+	}
+
+	private void firePagesAdded() {
+		for (PageListener listener : pageListeners) {
+			listener.pagesAdded();
+		}
+	}
+
+	private void firePagesRemoved() {
+		for (PageListener listener : pageListeners) {
+			listener.pagesRemoved();
+		}
+	}
+
+	public static interface PageListener {
+
+		public void pagesLoaded();
+
+		public void pagesAdded();
+
+		public void pagesRemoved();
 
 	}
 

@@ -34,6 +34,7 @@ import javax.swing.SwingUtilities;
 
 import org.glasspath.aerialist.Aerialist;
 import org.glasspath.aerialist.MainPanel;
+import org.glasspath.aerialist.swing.view.PageContainer;
 import org.glasspath.common.os.preferences.BoolPref;
 import org.glasspath.common.swing.color.ColorUtils;
 import org.glasspath.common.swing.tools.AbstractTools;
@@ -48,12 +49,15 @@ public class ViewTools extends AbstractTools<Aerialist> {
 
 	private final JCheckBoxMenuItem designMenuItem;
 	private final JCheckBoxMenuItem sourceMenuItem;
+	private final JCheckBoxMenuItem multiplePagesLayoutMenuItem;
+	private final JCheckBoxMenuItem singlePageLayoutMenuItem;
 	private final JCheckBoxMenuItem objectFormatToolsMenuItem;
 	private final JToolBar viewModeToolBar;
 	private final JToggleButton designButton;
 	private final JToggleButton sourceButton;
 
 	private boolean updatingViewModeComponents = false;
+	private boolean updatingPageModeComponents = false;
 
 	public ViewTools(Aerialist context) {
 		super(context, "View");
@@ -82,10 +86,36 @@ public class ViewTools extends AbstractTools<Aerialist> {
 
 		menu.addSeparator();
 
+		JMenu layoutMenu = new JMenu("Layout");
+		menu.add(layoutMenu);
+
+		multiplePagesLayoutMenuItem = new JCheckBoxMenuItem("Multiple pages");
+		layoutMenu.add(multiplePagesLayoutMenuItem);
+		multiplePagesLayoutMenuItem.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				setPageMode(PageContainer.PAGE_MODE_MULTIPLE);
+			}
+		});
+
+		singlePageLayoutMenuItem = new JCheckBoxMenuItem("Single page");
+		layoutMenu.add(singlePageLayoutMenuItem);
+		singlePageLayoutMenuItem.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				setPageMode(PageContainer.PAGE_MODE_SINGLE);
+			}
+		});
+
+		menu.addSeparator();
+
 		JMenu toolBarsMenu = new JMenu("Tools");
 		menu.add(toolBarsMenu);
 
 		JCheckBoxMenuItem fileToolsMenuItem = new JCheckBoxMenuItem("File tools");
+		toolBarsMenu.add(fileToolsMenuItem);
 		fileToolsMenuItem.setSelected(FILE_TOOL_BAR_VISIBLE.get(preferences));
 		fileToolsMenuItem.addActionListener(new ActionListener() {
 
@@ -95,9 +125,9 @@ public class ViewTools extends AbstractTools<Aerialist> {
 				FILE_TOOL_BAR_VISIBLE.put(preferences, fileToolsMenuItem.isSelected());
 			}
 		});
-		toolBarsMenu.add(fileToolsMenuItem);
 
 		JCheckBoxMenuItem editToolsMenuItem = new JCheckBoxMenuItem("Edit tools");
+		toolBarsMenu.add(editToolsMenuItem);
 		editToolsMenuItem.setSelected(EDIT_TOOL_BAR_VISIBLE.get(preferences));
 		editToolsMenuItem.addActionListener(new ActionListener() {
 
@@ -107,9 +137,9 @@ public class ViewTools extends AbstractTools<Aerialist> {
 				EDIT_TOOL_BAR_VISIBLE.put(preferences, editToolsMenuItem.isSelected());
 			}
 		});
-		toolBarsMenu.add(editToolsMenuItem);
 
 		JCheckBoxMenuItem textFormatToolsMenuItem = new JCheckBoxMenuItem("Text format tools");
+		toolBarsMenu.add(textFormatToolsMenuItem);
 		textFormatToolsMenuItem.setSelected(TEXT_FORMAT_TOOL_BAR_VISIBLE.get(preferences));
 		textFormatToolsMenuItem.addActionListener(new ActionListener() {
 
@@ -119,9 +149,9 @@ public class ViewTools extends AbstractTools<Aerialist> {
 				TEXT_FORMAT_TOOL_BAR_VISIBLE.put(preferences, textFormatToolsMenuItem.isSelected());
 			}
 		});
-		toolBarsMenu.add(textFormatToolsMenuItem);
 
 		objectFormatToolsMenuItem = new JCheckBoxMenuItem("Object format tools"); // TODO: Use better name?
+		toolBarsMenu.add(objectFormatToolsMenuItem);
 		objectFormatToolsMenuItem.setSelected(OBJECT_FORMAT_TOOL_BAR_VISIBLE.get(preferences));
 		objectFormatToolsMenuItem.addActionListener(new ActionListener() {
 
@@ -131,9 +161,9 @@ public class ViewTools extends AbstractTools<Aerialist> {
 				OBJECT_FORMAT_TOOL_BAR_VISIBLE.put(preferences, objectFormatToolsMenuItem.isSelected());
 			}
 		});
-		toolBarsMenu.add(objectFormatToolsMenuItem);
 
 		JCheckBoxMenuItem statusBarMenuItem = new JCheckBoxMenuItem("Status bar");
+		menu.add(statusBarMenuItem);
 		statusBarMenuItem.setSelected(STATUS_BAR_VISIBLE.get(preferences));
 		statusBarMenuItem.addActionListener(new ActionListener() {
 
@@ -143,7 +173,6 @@ public class ViewTools extends AbstractTools<Aerialist> {
 				STATUS_BAR_VISIBLE.put(preferences, statusBarMenuItem.isSelected());
 			}
 		});
-		menu.add(statusBarMenuItem);
 
 		viewModeToolBar = new JToolBar("View");
 		viewModeToolBar.setRollover(true);
@@ -170,6 +199,7 @@ public class ViewTools extends AbstractTools<Aerialist> {
 		});
 
 		updateViewModeComponents();
+		updatePageModeComponents();
 
 		SwingUtilities.invokeLater(new Runnable() {
 
@@ -223,6 +253,34 @@ public class ViewTools extends AbstractTools<Aerialist> {
 		sourceButton.setSelected(viewModeSource);
 
 		updatingViewModeComponents = false;
+
+	}
+
+	public void setPageMode(int pageMode) {
+
+		if (!updatingPageModeComponents) {
+
+			// TODO: Support searching in single page mode..
+			if (pageMode == PageContainer.PAGE_MODE_SINGLE) {
+				context.getGlassPane().hideSearchField();
+			}
+
+			context.getMainPanel().getDocumentEditor().setPageMode(pageMode);
+
+			updatePageModeComponents();
+
+		}
+
+	}
+
+	private void updatePageModeComponents() {
+
+		updatingPageModeComponents = true;
+
+		multiplePagesLayoutMenuItem.setSelected(context.getMainPanel().getDocumentEditor().getPageMode() == PageContainer.PAGE_MODE_MULTIPLE);
+		singlePageLayoutMenuItem.setSelected(context.getMainPanel().getDocumentEditor().getPageMode() == PageContainer.PAGE_MODE_SINGLE);
+
+		updatingPageModeComponents = false;
 
 	}
 

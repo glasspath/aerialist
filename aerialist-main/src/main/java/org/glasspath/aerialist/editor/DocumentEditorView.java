@@ -88,11 +88,18 @@ public class DocumentEditorView extends EditorView<DocumentEditorPanel> {
 
 				if (Aerialist.TODO_TEST_SHEET_MODE) {
 
-					g2d.drawImage(getBgImage(pageView), bounds.x, bounds.y, pageView);
+					if (context.isGridVisible()) {
 
-					if (Theme.isDark()) {
-						g2d.setColor(Color.black);
-						g2d.draw(bounds);
+						g2d.drawImage(getBgImage(pageView), bounds.x, bounds.y, pageView);
+
+						if (Theme.isDark()) {
+							g2d.setColor(Color.black);
+							g2d.draw(bounds);
+						}
+
+					} else {
+						g2d.setColor(Theme.isDark() ? new Color(75, 75, 75) : new Color(250, 250, 250));
+						g2d.fill(bounds);
 					}
 
 				} else {
@@ -135,7 +142,7 @@ public class DocumentEditorView extends EditorView<DocumentEditorPanel> {
 
 				}
 
-				if (context.isGridVisible()) {
+				if (context.isGridVisible() && !Aerialist.TODO_TEST_SHEET_MODE) {
 					drawGrid(g2d, pageView);
 				}
 

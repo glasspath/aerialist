@@ -30,6 +30,7 @@ import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
@@ -65,6 +66,7 @@ import org.glasspath.aerialist.swing.view.FooterPageView;
 import org.glasspath.aerialist.swing.view.HeaderPageView;
 import org.glasspath.aerialist.swing.view.ISwingViewContext;
 import org.glasspath.aerialist.swing.view.PageContainer;
+import org.glasspath.aerialist.swing.view.PageContainer.PageListener;
 import org.glasspath.aerialist.swing.view.PageView;
 import org.glasspath.aerialist.swing.view.TableCellView;
 import org.glasspath.aerialist.text.font.FontCache;
@@ -79,7 +81,10 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 	protected final DocumentEditorView view;
 	protected final MouseOperationHandler<DocumentEditorPanel> mouseOperationHandler;
 	protected final EditorPageContainer pageContainer;
-	private final JScrollPane mainScrollPane;
+	private final JScrollPane pageContainerScrollPane;
+	private final PagePreviewList pagePreviewList;
+	private final JScrollPane pagePreviewScrollPane;
+	private final InvisibleSplitPane mainSplitPane;
 	private final CopyAction copyAction;
 	private final PasteAction pasteAction;
 
@@ -129,49 +134,104 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 
 		pageContainer = new EditorPageContainer();
 
-		mainScrollPane = new JScrollPane(pageContainer);
-		mainScrollPane.setBorder(BorderFactory.createEmptyBorder());
-		mainScrollPane.getVerticalScrollBar().setUnitIncrement(25);
+		pageContainerScrollPane = new JScrollPane(pageContainer);
+		pageContainerScrollPane.setBorder(BorderFactory.createEmptyBorder());
+		pageContainerScrollPane.getVerticalScrollBar().setUnitIncrement(25);
 
-		if (pageContainer.getPageMode() == PageContainer.PAGE_MODE_SINGLE) {
+		pagePreviewList = new PagePreviewList() {
 
-			PagePreviewList pagePreviewList = new PagePreviewList(pageContainer, mainScrollPane);
+			@Override
+			public int getPageCount() {
+				return pageContainer.getPageViews().size();
+			}
 
-			JScrollPane pagePreviewScrollPane = new JScrollPane(pagePreviewList);
-			pagePreviewScrollPane.setBorder(BorderFactory.createEmptyBorder());
-			pagePreviewScrollPane.getVerticalScrollBar().setUnitIncrement(25);
+			@Override
+			public int getPageIndex() {
+				return pageContainer.getPageIndex();
+			}
 
-			InvisibleSplitPane mainSplitPane = new InvisibleSplitPane();
-			mainSplitPane.setDividerLocation(250);
-			mainSplitPane.setLeftComponent(pagePreviewScrollPane);
-			mainSplitPane.setRightComponent(mainScrollPane);
+			@Override
+			public void setPageIndex(int index) {
+				DocumentEditorPanel.this.setPageIndex(index, false);
+			}
 
-			add(mainSplitPane, BorderLayout.CENTER);
+			@Override
+			public PageView getPageView(int index) {
+				return pageContainer.getPageViews().get(index);
+			}
+		};
+		pagePreviewList.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
+		pageContainer.addPageListener(new PageListener() {
 
-			mainScrollPane.addMouseWheelListener(new MouseWheelListener() {
+			@Override
+			public void pagesLoaded() {
+				refresh(false);
+			}
 
-				private long lastScroll = 0;
+			@Override
+			public void pagesAdded() {
+				refresh(true);
+			}
 
-				@Override
-				public void mouseWheelMoved(MouseWheelEvent e) {
+			@Override
+			public void pagesRemoved() {
+				refresh(true);
+			}
+
+			private void refresh(boolean refreshPageContainer) {
+
+				if (pageContainer.getPageMode() == PageContainer.PAGE_MODE_SINGLE) {
+
+					if (refreshPageContainer) {
+
+						int index = pageContainer.getPageIndex();
+						if (index >= pageContainer.getPageViews().size()) {
+							index = pageContainer.getPageViews().size() - 1;
+						}
+						if (index < 0) {
+							index = 0;
+						}
+
+						setPageIndex(index, false);
+
+					}
+
+					pagePreviewList.refresh();
+
+				}
+
+			}
+		});
+
+		pagePreviewScrollPane = new JScrollPane(pagePreviewList);
+		pagePreviewScrollPane.setBorder(BorderFactory.createEmptyBorder());
+		pagePreviewScrollPane.getVerticalScrollBar().setUnitIncrement(25);
+
+		mainSplitPane = new InvisibleSplitPane();
+		mainSplitPane.setDividerLocation(250);
+		mainSplitPane.setLeftComponent(pagePreviewScrollPane);
+
+		pageContainerScrollPane.addMouseWheelListener(new MouseWheelListener() {
+
+			private long lastScroll = 0;
+
+			@Override
+			public void mouseWheelMoved(MouseWheelEvent e) {
+
+				if (pageContainer.getPageMode() == PageContainer.PAGE_MODE_SINGLE) {
 
 					if (pageContainer.isEditingHeader()) {
 						// Don't automatically scroll to other page when editing header
 					} else if (pageContainer.isEditingFooter()) {
 						// Don't automatically scroll to other page when editing footer
-					} else if (e.getWheelRotation() < 0 && mainScrollPane.getVerticalScrollBar().getValue() == 0) {
+					} else if (e.getWheelRotation() < 0 && pageContainerScrollPane.getVerticalScrollBar().getValue() == 0) {
 
 						if (System.currentTimeMillis() > lastScroll + 500) { // TODO: Move minimum interval between scrolls to constant
 
-							if (pageContainer.previousPage()) {
+							if (pageContainer.getPageIndex() > 0) {
 
-								if (selection.size() > 0) {
-									selection.deselectAll();
-									pageContainer.requestFocusInWindow();
-								}
+								setPageIndex(pageContainer.getPageIndex() - 1, true);
 
-								mainScrollPane.getVerticalScrollBar().setValue(Integer.MAX_VALUE);
-								pageContainer.refresh(null);
 								pagePreviewList.refresh();
 
 								lastScroll = System.currentTimeMillis();
@@ -180,19 +240,14 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 
 						}
 
-					} else if (e.getWheelRotation() > 0 && mainScrollPane.getVerticalScrollBar().getValue() + mainScrollPane.getVerticalScrollBar().getVisibleAmount() >= mainScrollPane.getVerticalScrollBar().getMaximum()) {
+					} else if (e.getWheelRotation() > 0 && pageContainerScrollPane.getVerticalScrollBar().getValue() + pageContainerScrollPane.getVerticalScrollBar().getVisibleAmount() >= pageContainerScrollPane.getVerticalScrollBar().getMaximum()) {
 
 						if (System.currentTimeMillis() > lastScroll + 500) { // TODO: Move minimum interval between scrolls to constant
 
-							if (pageContainer.nextPage()) {
+							if (pageContainer.getPageIndex() < pageContainer.getPageViews().size() - 1) {
 
-								if (selection.size() > 0) {
-									selection.deselectAll();
-									pageContainer.requestFocusInWindow();
-								}
+								setPageIndex(pageContainer.getPageIndex() + 1, false);
 
-								mainScrollPane.getVerticalScrollBar().setValue(0);
-								pageContainer.refresh(null);
 								pagePreviewList.refresh();
 
 								lastScroll = System.currentTimeMillis();
@@ -206,10 +261,15 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 					}
 
 				}
-			});
 
+			}
+		});
+
+		if (pageContainer.getPageMode() == PageContainer.PAGE_MODE_SINGLE) {
+			mainSplitPane.setRightComponent(pageContainerScrollPane);
+			add(mainSplitPane, BorderLayout.CENTER);
 		} else {
-			add(mainScrollPane, BorderLayout.CENTER);
+			add(pageContainerScrollPane, BorderLayout.CENTER);
 		}
 
 		copyAction = new CopyAction(this);
@@ -307,8 +367,65 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 		return pageContainer;
 	}
 
-	public JScrollPane getMainScrollPane() {
-		return mainScrollPane;
+	public int getPageMode() {
+		return pageContainer.getPageMode();
+	}
+
+	public void setPageMode(int pageMode) {
+
+		if (pageMode != pageContainer.getPageMode()) {
+
+			pageContainer.setPageMode(pageMode);
+
+			removeAll();
+
+			if (pageContainer.getPageMode() == PageContainer.PAGE_MODE_SINGLE) {
+
+				mainSplitPane.setRightComponent(pageContainerScrollPane);
+				add(mainSplitPane, BorderLayout.CENTER);
+
+				// TODO
+				mainSplitPane.setDividerLocation(250);
+
+				setPageIndex(pageContainer.getPageIndex(), false);
+
+			} else {
+
+				PageView scrollToPageView;
+				if (pageContainer.getPageIndex() >= 0 && pageContainer.getPageIndex() < pageContainer.getPageViews().size()) {
+					scrollToPageView = pageContainer.getPageViews().get(pageContainer.getPageIndex());
+				} else {
+					scrollToPageView = null;
+				}
+
+				add(pageContainerScrollPane, BorderLayout.CENTER);
+
+				pageContainer.loadPageViews();
+
+				if (scrollToPageView != null) {
+
+					SwingUtilities.invokeLater(new Runnable() {
+
+						@Override
+						public void run() {
+							pageContainerScrollPane.getVerticalScrollBar().setValue(scrollToPageView.getY() - 20);
+						}
+					});
+
+				}
+
+			}
+
+			invalidate();
+			revalidate();
+			repaint();
+
+		}
+
+	}
+
+	public JScrollPane getPageContainerScrollPane() {
+		return pageContainerScrollPane;
 	}
 
 	public CopyAction getCopyAction() {
@@ -362,6 +479,28 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 
 	public void setScrollLock(boolean scrollLock) {
 		this.scrollLock = scrollLock;
+	}
+
+	private void setPageIndex(int index, boolean scrollToBottom) {
+
+		pageContainer.setPageIndex(index);
+		pageContainer.loadPageViews();
+
+		if (selection.size() > 0) {
+			selection.deselectAll();
+			pageContainer.requestFocusInWindow();
+		}
+
+		if (scrollToBottom) {
+			pageContainerScrollPane.getVerticalScrollBar().setValue(Integer.MAX_VALUE);
+		} else {
+			pageContainerScrollPane.getVerticalScrollBar().setValue(0);
+		}
+
+		pageContainer.invalidate();
+		pageContainer.validate();
+		pageContainer.repaint();
+
 	}
 
 	@Override
@@ -443,7 +582,7 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 
 		// If a page was added/removed we need to re-validate the scroll-pane
 		if (revalidateScrollPane) {
-			mainScrollPane.revalidate();
+			pageContainerScrollPane.revalidate();
 		}
 
 		if (resetYPolicy) {
@@ -511,7 +650,7 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 	}
 
 	public void scrollToTop() {
-		mainScrollPane.getVerticalScrollBar().setValue(0);
+		pageContainerScrollPane.getVerticalScrollBar().setValue(0);
 	}
 
 	@Override
@@ -602,7 +741,7 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 		@Override
 		public void setPageViews(List<PageView> pageViews) {
 
-			int scrollPosition = mainScrollPane.getVerticalScrollBar().getValue();
+			int scrollPosition = pageContainerScrollPane.getVerticalScrollBar().getValue();
 
 			selection.clear();
 
@@ -614,7 +753,7 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 				@Override
 				public void run() {
 
-					mainScrollPane.getVerticalScrollBar().setValue(scrollPosition);
+					pageContainerScrollPane.getVerticalScrollBar().setValue(scrollPosition);
 					selection.fireSelectionChanged();
 
 				}

@@ -36,6 +36,7 @@ import javax.swing.event.DocumentListener;
 
 import org.glasspath.aerialist.Aerialist;
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
+import org.glasspath.aerialist.swing.view.PageContainer;
 import org.glasspath.common.os.OsUtils;
 import org.glasspath.common.swing.search.SearchField;
 import org.glasspath.common.swing.tools.AbstractTools;
@@ -54,7 +55,14 @@ public class SearchTools extends AbstractTools<Aerialist> {
 
 			@Override
 			public void actionPerformed(ActionEvent event) {
+
+				// TODO: Restore page mode
+				if (editor.getPageMode() == PageContainer.PAGE_MODE_SINGLE) {
+					context.getViewTools().setPageMode(PageContainer.PAGE_MODE_MULTIPLE);
+				}
+
 				context.getGlassPane().showSearchField();
+
 			}
 		});
 		menu.add(searchMenuItem);
