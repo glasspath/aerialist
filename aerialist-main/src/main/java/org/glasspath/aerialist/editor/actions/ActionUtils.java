@@ -924,11 +924,20 @@ public class ActionUtils {
 
 				editor.focusContentContainer();
 				editor.getSelection().clear();
-				for (ElementData elementData : elementsData) {
-					editor.getSelection().add(elementData.element);
+
+				// TODO? In single page layout mode the PageView will not have a
+				// parent if it is not visible, so we don't want to select anything..
+				if (pageView.getParent() != null) {
+
+					for (ElementData elementData : elementsData) {
+						editor.getSelection().add(elementData.element);
+					}
+					editor.getSelection().fireSelectionChanged();
+					editor.refresh(pageView);
+
+				} else {
+					editor.getSelection().fireSelectionChanged();
 				}
-				editor.getSelection().fireSelectionChanged();
-				editor.refresh(pageView);
 
 			}
 		});

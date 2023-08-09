@@ -35,6 +35,7 @@ public class PageView extends ElementContainer implements IVisible {
 
 	private String margin = null;
 	private String visible = null;
+	private long lastUpdate = 0L;
 
 	public PageView(ISwingViewContext viewContext) {
 		super(viewContext);
@@ -63,6 +64,14 @@ public class PageView extends ElementContainer implements IVisible {
 	@Override
 	public void setVisible(String visible) {
 		this.visible = visible;
+	}
+
+	public long getLastUpdate() {
+		return lastUpdate;
+	}
+
+	public void setLastUpdate(long lastUpdate) {
+		this.lastUpdate = lastUpdate;
 	}
 
 	public void init(Page page) {

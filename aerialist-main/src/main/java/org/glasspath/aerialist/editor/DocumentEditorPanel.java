@@ -29,8 +29,8 @@ import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
@@ -70,12 +70,16 @@ import org.glasspath.aerialist.swing.view.PageContainer.PageListener;
 import org.glasspath.aerialist.swing.view.PageView;
 import org.glasspath.aerialist.swing.view.TableCellView;
 import org.glasspath.aerialist.text.font.FontCache;
+import org.glasspath.common.swing.border.HidpiMatteBorder;
 import org.glasspath.common.swing.keyboard.KeyboardUtils;
 import org.glasspath.common.swing.search.UISearchHandler;
 import org.glasspath.common.swing.selection.SelectionListener;
 import org.glasspath.common.swing.splitpane.InvisibleSplitPane;
+import org.glasspath.common.swing.undo.DefaultUndoManager.UndoManagerListener;
 
 public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
+
+	public static final int DEFAULT_PAGE_PREVIEW_WIDTH = 210;
 
 	private final Aerialist context;
 	protected final DocumentEditorView view;
@@ -141,11 +145,6 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 		pagePreviewList = new PagePreviewList() {
 
 			@Override
-			public int getPageCount() {
-				return pageContainer.getPageViews().size();
-			}
-
-			@Override
 			public int getPageIndex() {
 				return pageContainer.getPageIndex();
 			}
@@ -156,8 +155,8 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 			}
 
 			@Override
-			public PageView getPageView(int index) {
-				return pageContainer.getPageViews().get(index);
+			public List<PageView> getPageViews() {
+				return pageContainer.getPageViews();
 			}
 		};
 		pagePreviewList.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
@@ -206,9 +205,10 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 		pagePreviewScrollPane = new JScrollPane(pagePreviewList);
 		pagePreviewScrollPane.setBorder(BorderFactory.createEmptyBorder());
 		pagePreviewScrollPane.getVerticalScrollBar().setUnitIncrement(25);
+		pagePreviewScrollPane.setBorder(new HidpiMatteBorder(new Insets(0, 0, 0, 1), new Color(225, 225, 225)));
 
 		mainSplitPane = new InvisibleSplitPane();
-		mainSplitPane.setDividerLocation(250);
+		mainSplitPane.setDividerLocation(DEFAULT_PAGE_PREVIEW_WIDTH);
 		mainSplitPane.setLeftComponent(pagePreviewScrollPane);
 
 		pageContainerScrollPane.addMouseWheelListener(new MouseWheelListener() {
@@ -281,6 +281,47 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 			public void selectionChanged() {
 				context.getMainPanel().updateEditMenu();
 				context.getTextFormatTools().textSelectionChanged();
+			}
+		});
+
+		getUndoManager().addListener(new UndoManagerListener() {
+
+			@Override
+			public void editAdded(UndoableEdit edit) {
+				update(false);
+			}
+
+			@Override
+			public void undoPerformed() {
+				update(true);
+			}
+
+			@Override
+			public void redoPerformed() {
+				update(true);
+			}
+
+			private void update(boolean updateAll) {
+
+				context.setContentChanged(true);
+
+				// TODO: This is a quick hack, we should probably implement this in the undo/redo mechanism,
+				// for now this is only used for refreshing page preview images in single page layout mode..
+				if (getPageMode() == PageContainer.PAGE_MODE_SINGLE) {
+
+					if (updateAll) {
+
+						// Undo/redo might be performed while other page is visible, so for now update all..
+						for (PageView pageView : pageContainer.getPageViews()) {
+							pageView.setLastUpdate(System.currentTimeMillis());
+						}
+
+					} else if (pageContainer.getPageIndex() >= 0 && pageContainer.getPageIndex() < pageContainer.getPageViews().size()) {
+						pageContainer.getPageViews().get(pageContainer.getPageIndex()).setLastUpdate(System.currentTimeMillis());
+					}
+
+				}
+
 			}
 		});
 
@@ -357,12 +398,6 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 		return mouseOperationHandler;
 	}
 
-	@Override
-	public void undoableEditHappened(UndoableEdit edit) {
-		super.undoableEditHappened(edit);
-		context.setContentChanged(true);
-	}
-
 	public EditorPageContainer getPageContainer() {
 		return pageContainer;
 	}
@@ -385,7 +420,7 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 				add(mainSplitPane, BorderLayout.CENTER);
 
 				// TODO
-				mainSplitPane.setDividerLocation(250);
+				mainSplitPane.setDividerLocation(DEFAULT_PAGE_PREVIEW_WIDTH);
 
 				setPageIndex(pageContainer.getPageIndex(), false);
 
