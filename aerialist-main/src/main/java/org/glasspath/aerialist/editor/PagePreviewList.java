@@ -188,11 +188,12 @@ public abstract class PagePreviewList extends JList<PageView> {
 	protected class PagePreviewListCellRenderer extends DefaultListCellRenderer {
 
 		private int index = 0;
+		private PreviewImage previewImage = null;
 
 		public PagePreviewListCellRenderer() {
 
 			setOpaque(false);
-			setPreferredSize(new Dimension(182, 182));
+			setPreferredSize(new Dimension(190, 182));
 
 		}
 
@@ -203,6 +204,11 @@ public abstract class PagePreviewList extends JList<PageView> {
 			setText(""); //$NON-NLS-1$
 
 			this.index = index;
+			this.previewImage = getPreviewImage(index);
+
+			if (previewImage != null && previewImage.image != null) {
+				setPreferredSize(new Dimension(previewImage.image.getWidth(null) + 71, previewImage.image.getHeight(null) + 14));
+			}
 
 			return this;
 
@@ -226,7 +232,6 @@ public abstract class PagePreviewList extends JList<PageView> {
 			}
 
 			Rectangle rect;
-			PreviewImage previewImage = getPreviewImage(index);
 			if (previewImage != null && previewImage.image != null) {
 
 				rect = new Rectangle(45, 0, previewImage.image.getWidth(null), previewImage.image.getHeight(null));

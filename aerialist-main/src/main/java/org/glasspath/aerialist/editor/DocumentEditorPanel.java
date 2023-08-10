@@ -75,11 +75,13 @@ import org.glasspath.common.swing.keyboard.KeyboardUtils;
 import org.glasspath.common.swing.search.UISearchHandler;
 import org.glasspath.common.swing.selection.SelectionListener;
 import org.glasspath.common.swing.splitpane.InvisibleSplitPane;
+import org.glasspath.common.swing.theme.Theme;
 import org.glasspath.common.swing.undo.DefaultUndoManager.UndoManagerListener;
 
 public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 
-	public static final int DEFAULT_PAGE_PREVIEW_WIDTH = 210;
+	public static final int DEFAULT_PAGE_PREVIEW_WIDTH = 195;
+	public static final int MAX_PAGE_PREVIEW_WIDTH = 500;
 
 	private final Aerialist context;
 	protected final DocumentEditorView view;
@@ -195,7 +197,13 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 
 					}
 
-					pagePreviewList.refresh();
+					SwingUtilities.invokeLater(new Runnable() {
+
+						@Override
+						public void run() {
+							pagePreviewList.refresh();
+						}
+					});
 
 				}
 
@@ -205,10 +213,9 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 		pagePreviewScrollPane = new JScrollPane(pagePreviewList);
 		pagePreviewScrollPane.setBorder(BorderFactory.createEmptyBorder());
 		pagePreviewScrollPane.getVerticalScrollBar().setUnitIncrement(25);
-		pagePreviewScrollPane.setBorder(new HidpiMatteBorder(new Insets(0, 0, 0, 1), new Color(225, 225, 225)));
+		pagePreviewScrollPane.setBorder(new HidpiMatteBorder(new Insets(0, 0, 0, 1), Theme.isDark() ? new Color(42, 42, 42) : new Color(225, 225, 225)));
 
 		mainSplitPane = new InvisibleSplitPane();
-		mainSplitPane.setDividerLocation(DEFAULT_PAGE_PREVIEW_WIDTH);
 		mainSplitPane.setLeftComponent(pagePreviewScrollPane);
 
 		pageContainerScrollPane.addMouseWheelListener(new MouseWheelListener() {
@@ -266,8 +273,14 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 		});
 
 		if (pageContainer.getPageMode() == PageContainer.PAGE_MODE_SINGLE) {
+
 			mainSplitPane.setRightComponent(pageContainerScrollPane);
 			add(mainSplitPane, BorderLayout.CENTER);
+
+			// TODO
+			// mainSplitPane.setDividerLocation(getPreferredPagePreviewWidth());
+			mainSplitPane.setDividerLocation(DEFAULT_PAGE_PREVIEW_WIDTH);
+
 		} else {
 			add(pageContainerScrollPane, BorderLayout.CENTER);
 		}
@@ -418,9 +431,7 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 
 				mainSplitPane.setRightComponent(pageContainerScrollPane);
 				add(mainSplitPane, BorderLayout.CENTER);
-
-				// TODO
-				mainSplitPane.setDividerLocation(DEFAULT_PAGE_PREVIEW_WIDTH);
+				mainSplitPane.setDividerLocation(getPreferredPagePreviewWidth());
 
 				setPageIndex(pageContainer.getPageIndex(), false);
 
@@ -456,6 +467,41 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 			repaint();
 
 		}
+
+	}
+
+	private int getPreferredPagePreviewWidth() {
+
+		int width = pagePreviewScrollPane.getPreferredSize().width;
+		if (width < DEFAULT_PAGE_PREVIEW_WIDTH) {
+			width = DEFAULT_PAGE_PREVIEW_WIDTH;
+		} else if (width > MAX_PAGE_PREVIEW_WIDTH) {
+			width = MAX_PAGE_PREVIEW_WIDTH;
+		}
+
+		return width;
+
+	}
+
+	private void setPageIndex(int index, boolean scrollToBottom) {
+
+		pageContainer.setPageIndex(index);
+		pageContainer.loadPageViews();
+
+		if (selection.size() > 0) {
+			selection.deselectAll();
+			pageContainer.requestFocusInWindow();
+		}
+
+		if (scrollToBottom) {
+			pageContainerScrollPane.getVerticalScrollBar().setValue(Integer.MAX_VALUE);
+		} else {
+			pageContainerScrollPane.getVerticalScrollBar().setValue(0);
+		}
+
+		pageContainer.invalidate();
+		pageContainer.validate();
+		pageContainer.repaint();
 
 	}
 
@@ -514,28 +560,6 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 
 	public void setScrollLock(boolean scrollLock) {
 		this.scrollLock = scrollLock;
-	}
-
-	private void setPageIndex(int index, boolean scrollToBottom) {
-
-		pageContainer.setPageIndex(index);
-		pageContainer.loadPageViews();
-
-		if (selection.size() > 0) {
-			selection.deselectAll();
-			pageContainer.requestFocusInWindow();
-		}
-
-		if (scrollToBottom) {
-			pageContainerScrollPane.getVerticalScrollBar().setValue(Integer.MAX_VALUE);
-		} else {
-			pageContainerScrollPane.getVerticalScrollBar().setValue(0);
-		}
-
-		pageContainer.invalidate();
-		pageContainer.validate();
-		pageContainer.repaint();
-
 	}
 
 	@Override
@@ -731,6 +755,7 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 				setPageMode(PageContainer.PAGE_MODE_SINGLE);
 			}
 
+			setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
 			setFocusable(true);
 			addFocusListener(new FocusAdapter() {
 
