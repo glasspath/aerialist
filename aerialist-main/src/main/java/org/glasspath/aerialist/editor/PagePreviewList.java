@@ -30,6 +30,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -222,8 +223,10 @@ public abstract class PagePreviewList extends JList<PageView> {
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
+			String s = "" + (index + 1); //$NON-NLS-1$
+			Rectangle2D fontRect = g2d.getFontMetrics().getStringBounds(s, g2d);
 			g2d.setColor(new Color(175, 175, 175));
-			SwingUtils.drawString(this, g2d, "" + (index + 1), 30, 11); //$NON-NLS-1$
+			SwingUtils.drawString(this, g2d, s, 35 - (int) fontRect.getWidth(), 11);
 
 			if (Aerialist.TODO_TEST_SHEET_MODE) {
 				g2d.setColor(Theme.isDark() ? new Color(75, 75, 75) : new Color(254, 254, 254));
