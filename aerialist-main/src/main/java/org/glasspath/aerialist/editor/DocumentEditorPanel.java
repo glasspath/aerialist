@@ -94,6 +94,7 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 	private final CopyAction copyAction;
 	private final PasteAction pasteAction;
 
+	private boolean mainSplitPaneInited = false;
 	private boolean gridEnabled = true;
 	private boolean gridVisible = true;
 	private int gridSpacing = 10;
@@ -167,6 +168,25 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 			@Override
 			public void pagesLoaded() {
 				refresh(false);
+
+				if (!mainSplitPaneInited) {
+
+					if (pageContainer.getPageMode() == PageContainer.PAGE_MODE_SINGLE) {
+
+						SwingUtilities.invokeLater(new Runnable() {
+
+							@Override
+							public void run() {
+								mainSplitPane.setDividerLocation(getPreferredPagePreviewWidth());
+							}
+						});
+
+					}
+
+					mainSplitPaneInited = true;
+
+				}
+
 			}
 
 			@Override
@@ -277,8 +297,6 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 			mainSplitPane.setRightComponent(pageContainerScrollPane);
 			add(mainSplitPane, BorderLayout.CENTER);
 
-			// TODO
-			// mainSplitPane.setDividerLocation(getPreferredPagePreviewWidth());
 			mainSplitPane.setDividerLocation(DEFAULT_PAGE_PREVIEW_WIDTH);
 
 		} else {
@@ -431,7 +449,12 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 
 				mainSplitPane.setRightComponent(pageContainerScrollPane);
 				add(mainSplitPane, BorderLayout.CENTER);
-				mainSplitPane.setDividerLocation(getPreferredPagePreviewWidth());
+
+				if (mainSplitPaneInited) {
+					mainSplitPane.setDividerLocation(getPreferredPagePreviewWidth());
+				} else {
+					mainSplitPane.setDividerLocation(DEFAULT_PAGE_PREVIEW_WIDTH);
+				}
 
 				setPageIndex(pageContainer.getPageIndex(), false);
 
