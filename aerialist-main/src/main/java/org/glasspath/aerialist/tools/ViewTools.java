@@ -273,7 +273,7 @@ public class ViewTools extends AbstractTools<Aerialist> {
 
 	}
 
-	private void updatePageModeComponents() {
+	public void updatePageModeComponents() {
 
 		updatingPageModeComponents = true;
 

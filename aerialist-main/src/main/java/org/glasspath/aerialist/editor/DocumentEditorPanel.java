@@ -485,6 +485,9 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 
 			}
 
+			// TODO: Create page mode listener?
+			context.getViewTools().updatePageModeComponents();
+
 			invalidate();
 			revalidate();
 			repaint();
