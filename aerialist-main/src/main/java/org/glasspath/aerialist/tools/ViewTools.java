@@ -49,8 +49,8 @@ public class ViewTools extends AbstractTools<Aerialist> {
 
 	private final JCheckBoxMenuItem designMenuItem;
 	private final JCheckBoxMenuItem sourceMenuItem;
-	private final JCheckBoxMenuItem multiplePagesLayoutMenuItem;
 	private final JCheckBoxMenuItem singlePageLayoutMenuItem;
+	private final JCheckBoxMenuItem multiplePagesLayoutMenuItem;
 	private final JCheckBoxMenuItem objectFormatToolsMenuItem;
 	private final JToolBar viewModeToolBar;
 	private final JToggleButton designButton;
@@ -89,16 +89,6 @@ public class ViewTools extends AbstractTools<Aerialist> {
 		JMenu layoutMenu = new JMenu("Layout");
 		menu.add(layoutMenu);
 
-		multiplePagesLayoutMenuItem = new JCheckBoxMenuItem("Multiple pages");
-		layoutMenu.add(multiplePagesLayoutMenuItem);
-		multiplePagesLayoutMenuItem.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				setPageMode(PageContainer.PAGE_MODE_MULTIPLE);
-			}
-		});
-
 		singlePageLayoutMenuItem = new JCheckBoxMenuItem("Single page");
 		layoutMenu.add(singlePageLayoutMenuItem);
 		singlePageLayoutMenuItem.addActionListener(new ActionListener() {
@@ -106,6 +96,16 @@ public class ViewTools extends AbstractTools<Aerialist> {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				setPageMode(PageContainer.PAGE_MODE_SINGLE);
+			}
+		});
+
+		multiplePagesLayoutMenuItem = new JCheckBoxMenuItem("Multiple pages");
+		layoutMenu.add(multiplePagesLayoutMenuItem);
+		multiplePagesLayoutMenuItem.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				setPageMode(PageContainer.PAGE_MODE_MULTIPLE);
 			}
 		});
 
@@ -277,8 +277,8 @@ public class ViewTools extends AbstractTools<Aerialist> {
 
 		updatingPageModeComponents = true;
 
-		multiplePagesLayoutMenuItem.setSelected(context.getMainPanel().getDocumentEditor().getPageMode() == PageContainer.PAGE_MODE_MULTIPLE);
 		singlePageLayoutMenuItem.setSelected(context.getMainPanel().getDocumentEditor().getPageMode() == PageContainer.PAGE_MODE_SINGLE);
+		multiplePagesLayoutMenuItem.setSelected(context.getMainPanel().getDocumentEditor().getPageMode() == PageContainer.PAGE_MODE_MULTIPLE);
 
 		updatingPageModeComponents = false;
 
