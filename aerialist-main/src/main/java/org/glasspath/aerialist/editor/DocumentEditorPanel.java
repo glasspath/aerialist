@@ -80,7 +80,7 @@ import org.glasspath.common.swing.undo.DefaultUndoManager.UndoManagerListener;
 
 public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 
-	public static final int DEFAULT_PAGE_PREVIEW_WIDTH = 195;
+	public static final int DEFAULT_PAGE_PREVIEW_WIDTH = 200;
 	public static final int MAX_PAGE_PREVIEW_WIDTH = 500;
 
 	private final Aerialist context;

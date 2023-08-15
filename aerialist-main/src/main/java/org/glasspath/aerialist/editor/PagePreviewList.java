@@ -208,7 +208,7 @@ public abstract class PagePreviewList extends JList<PageView> {
 			this.previewImage = getPreviewImage(index);
 
 			if (previewImage != null && previewImage.image != null) {
-				setPreferredSize(new Dimension(previewImage.image.getWidth(null) + 65, previewImage.image.getHeight(null) + 14));
+				setPreferredSize(new Dimension(previewImage.image.getWidth(null) + 70, previewImage.image.getHeight(null) + 14));
 			}
 
 			return this;

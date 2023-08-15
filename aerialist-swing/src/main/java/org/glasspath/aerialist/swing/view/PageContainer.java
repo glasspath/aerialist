@@ -38,8 +38,8 @@ import org.glasspath.aerialist.Pagination;
 
 public abstract class PageContainer extends JPanel implements ISwingViewContext, IPagination {
 
-	public static final int PAGE_MODE_MULTIPLE = 0;
-	public static final int PAGE_MODE_SINGLE = 1;
+	public static final int PAGE_MODE_SINGLE = 0;
+	public static final int PAGE_MODE_MULTIPLE = 1;
 
 	private LayoutPhase layoutPhase = LayoutPhase.IDLE;
 	private boolean yPolicyEnabled = false;
@@ -52,7 +52,7 @@ public abstract class PageContainer extends JPanel implements ISwingViewContext,
 	private FooterPageView footerPageView = null;
 	private Pagination pagination = null;
 	private List<PageView> pageViews = new ArrayList<>();
-	private int pageMode = PAGE_MODE_MULTIPLE;
+	private int pageMode = PAGE_MODE_SINGLE;
 	private int pageIndex = 0;
 	private final List<PageListener> pageListeners = new ArrayList<>();
 
