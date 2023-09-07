@@ -51,6 +51,7 @@ import org.glasspath.common.swing.theme.Theme;
 
 public abstract class PagePreviewList extends JList<PageView> {
 
+	public static final boolean TODO_PERFORM_DOUBLE_VALIDATION_HACK = true;
 	public static final double DEFAULT_PREVIEW_SCALE = 0.2;
 
 	private final PagePreviewListModel model;
@@ -119,9 +120,16 @@ public abstract class PagePreviewList extends JList<PageView> {
 
 					if (pageView.getParent() == null) {
 
+						// TODO: After many attempts this was the first way to get the layout of tables to update correctly..
+						if (TODO_PERFORM_DOUBLE_VALIDATION_HACK) {
+							cellRendererPane.add(pageView);
+							pageView.validate();
+							cellRendererPane.remove(pageView);
+						}
+
 						// TODO: Do we really need a CellRendererPane?
 						cellRendererPane.add(pageView);
-						pageView.validate();
+						pageView.validate(); // TODO: Tables are not updated correctly.. (for now fixed with TODO_PERFORM_DOUBLE_VALIDATION_HACK)
 						pageView.print(g2d);
 						cellRendererPane.remove(pageView);
 
@@ -149,14 +157,24 @@ public abstract class PagePreviewList extends JList<PageView> {
 	}
 
 	public void refresh() {
+		refresh(false);
+	}
 
-		List<PageView> removePreviewImages = new ArrayList<>();
-		for (PageView pageView : previewImageCache.keySet()) {
-			if (!getPageViews().contains(pageView)) {
-				removePreviewImages.add(pageView);
+	public void refresh(boolean clearCache) {
+
+		if (clearCache) {
+			previewImageCache.clear();
+		} else {
+
+			List<PageView> removePreviewImages = new ArrayList<>();
+			for (PageView pageView : previewImageCache.keySet()) {
+				if (!getPageViews().contains(pageView)) {
+					removePreviewImages.add(pageView);
+				}
 			}
+			previewImageCache.keySet().removeAll(removePreviewImages);
+
 		}
-		previewImageCache.keySet().removeAll(removePreviewImages);
 
 		model.refresh();
 

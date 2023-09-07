@@ -167,7 +167,7 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 
 			@Override
 			public void pagesLoaded() {
-				refresh(false);
+				refresh(false, true);
 
 				if (!mainSplitPaneInited) {
 
@@ -191,15 +191,15 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 
 			@Override
 			public void pagesAdded() {
-				refresh(true);
+				refresh(true, false);
 			}
 
 			@Override
 			public void pagesRemoved() {
-				refresh(true);
+				refresh(true, false);
 			}
 
-			private void refresh(boolean refreshPageContainer) {
+			private void refresh(boolean refreshPageContainer, boolean clearPreviewCache) {
 
 				if (pageContainer.getPageMode() == PageContainer.PAGE_MODE_SINGLE) {
 
@@ -221,7 +221,7 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 
 						@Override
 						public void run() {
-							pagePreviewList.refresh();
+							pagePreviewList.refresh(clearPreviewCache);
 						}
 					});
 
