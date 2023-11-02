@@ -193,7 +193,7 @@ public class Aerialist implements FrameContext {
 		}
 		 */
 
-		FrameUtils.loadFrameDimensions(frame, preferences);
+		FrameUtils.loadFrameDimensions(frame, preferences, 30, 30, 885, 785, 0);
 
 		frame.getContentPane().setLayout(new BorderLayout());
 
