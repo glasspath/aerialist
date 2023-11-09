@@ -99,7 +99,7 @@ public class DocumentSourceEditorPanel extends JPanel {
 
 		textArea.setCurrentLineHighlightColor(ColorUtils.createTransparentColor(ColorUtils.SELECTION_COLOR_FOCUSSED, Theme.isDark() ? 75 : 175));
 
-		final RTextScrollPane textAreaScrollPane = new RTextScrollPane(textArea);
+		RTextScrollPane textAreaScrollPane = new RTextScrollPane(textArea);
 		textAreaScrollPane.setBorder(BorderFactory.createEmptyBorder());
 		add(textAreaScrollPane, BorderLayout.CENTER);
 
