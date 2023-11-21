@@ -50,7 +50,7 @@ public class HelpTools extends AbstractTools<Aerialist> {
 		});
 		menu.add(helpMenuItem);
 
-		JMenuItem aboutMenuItem = new JMenuItem("About"); //$NON-NLS-1$
+		JMenuItem aboutMenuItem = new JMenuItem("About");
 		aboutMenuItem.setEnabled(context.getEditorContext() != null && context.getEditorContext().getAbout() != null);
 		aboutMenuItem.addActionListener(new ActionListener() {
 
