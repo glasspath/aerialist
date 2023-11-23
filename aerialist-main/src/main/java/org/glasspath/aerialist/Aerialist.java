@@ -337,13 +337,14 @@ public class Aerialist implements FrameContext {
 	}
 
 	@Override
+	public boolean isContentChanged() {
+		return contentChanged;
+	}
+
+	@Override
 	public void setContentChanged(boolean changed) {
 		this.contentChanged = changed;
 		updateTitle();
-	}
-
-	public boolean isContentChanged() {
-		return contentChanged;
 	}
 
 	private void updateTitle() {
