@@ -61,7 +61,7 @@ public abstract class PagePreviewList extends JList<PageView> {
 	public PagePreviewList() {
 
 		if (Theme.isDark()) {
-			setBackground(new Color(54, 56, 58));
+			setBackground(new Color(48, 50, 53));
 		} else {
 			setBackground(new Color(245, 245, 245));
 		}

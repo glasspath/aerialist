@@ -780,7 +780,7 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 			if (Aerialist.TODO_TEST_SHEET_MODE) {
 				setPageMode(PageContainer.PAGE_MODE_SINGLE);
 			}
-
+			
 			setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
 			setFocusable(true);
 			addFocusListener(new FocusAdapter() {

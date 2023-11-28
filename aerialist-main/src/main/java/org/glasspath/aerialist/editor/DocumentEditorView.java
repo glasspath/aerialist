@@ -66,7 +66,7 @@ public class DocumentEditorView extends EditorView<DocumentEditorPanel> {
 	public void drawEditorBackground(Graphics2D g2d, JPanel pageContainer, boolean editable) {
 
 		if (Theme.isDark()) {
-			g2d.setColor(new Color(48, 50, 52));
+			g2d.setColor(new Color(48, 50, 53));
 		} else {
 			g2d.setColor(new Color(242, 242, 242));
 		}
