@@ -193,7 +193,7 @@ public class Aerialist implements FrameContext {
 		JRootPane rootPane = frame.getRootPane();
 		rootPane.setBackground(ColorUtils.TITLE_BAR_COLOR);
 		if (OsUtils.PLATFORM_MACOS) {
-			MacOSUtils.hideTitleBar(frame);
+			MacOSUtils.hideTitleBar(frame, false, true);
 		}
 
 		FrameUtils.loadFrameDimensions(frame, preferences, 30, 30, 885, 785, 0);
