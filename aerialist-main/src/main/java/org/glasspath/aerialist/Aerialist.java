@@ -64,6 +64,7 @@ import org.glasspath.common.Common;
 import org.glasspath.common.GlasspathSystemProperties;
 import org.glasspath.common.font.Fonts;
 import org.glasspath.common.font.Fonts.FontFilter;
+import org.glasspath.common.macos.MacOSUtils;
 import org.glasspath.common.os.OsUtils;
 import org.glasspath.common.swing.FrameContext;
 import org.glasspath.common.swing.border.HidpiMatteBorder;
@@ -109,6 +110,7 @@ public class Aerialist implements FrameContext {
 	private final HelpTools helpTools;
 	private final JLabel statusLabel;
 
+	private boolean fullScreen = false;
 	private boolean sourceEditorEnabled = true;
 	private boolean contentChanged = false;
 
@@ -121,6 +123,10 @@ public class Aerialist implements FrameContext {
 	}
 
 	public Aerialist(DocumentEditorContext editorContext, IFieldContext templateFieldContext, String openFile) {
+		this(editorContext, templateFieldContext, openFile, true);
+	}
+
+	public Aerialist(DocumentEditorContext editorContext, IFieldContext templateFieldContext, String openFile, boolean show) {
 
 		this.frame = new JFrame() {
 
@@ -186,12 +192,9 @@ public class Aerialist implements FrameContext {
 
 		JRootPane rootPane = frame.getRootPane();
 		rootPane.setBackground(ColorUtils.TITLE_BAR_COLOR);
-		/*
-		if (OsUtils.PLATFORM_MACOS && Theme.isDark()) {
-			rootPane.putClientProperty("apple.awt.fullWindowContent", true);
-			rootPane.putClientProperty("apple.awt.transparentTitleBar", false);
+		if (OsUtils.PLATFORM_MACOS) {
+			MacOSUtils.hideTitleBar(frame);
 		}
-		 */
 
 		FrameUtils.loadFrameDimensions(frame, preferences, 30, 30, 885, 785, 0);
 
@@ -249,6 +252,21 @@ public class Aerialist implements FrameContext {
 						@Override
 						public void componentResized(ComponentEvent e) {
 							FrameUtils.saveFrameDimensions(frame, preferences);
+
+							if (OsUtils.PLATFORM_MACOS) {
+
+								boolean fullScreen = FrameUtils.isFullScreen(frame);
+
+								if (Aerialist.this.fullScreen && !fullScreen) {
+									rootPane.setBorder(BorderFactory.createEmptyBorder(MacOSUtils.DEFAULT_HIDDEN_TITLE_BAR_HEIGHT, 0, 0, 0));
+								} else if (!Aerialist.this.fullScreen && fullScreen) {
+									rootPane.setBorder(BorderFactory.createEmptyBorder());
+								}
+
+								Aerialist.this.fullScreen = fullScreen;
+
+							}
+
 						}
 
 						@Override
@@ -291,7 +309,9 @@ public class Aerialist implements FrameContext {
 		undoActions.setUndoManager(mainPanel.getDocumentEditor().getUndoManager());
 		updateToolBars();
 
-		frame.setVisible(true);
+		if (show) {
+			frame.setVisible(true);
+		}
 
 	}
 
@@ -448,6 +468,7 @@ public class Aerialist implements FrameContext {
 
 			toolBarPanel.top.setVisible(false);
 			toolBarPanel.bottom.setVisible(false);
+			// toolBarPanel.setBorder(BorderFactory.createEmptyBorder());
 
 		} else {
 
@@ -465,6 +486,7 @@ public class Aerialist implements FrameContext {
 				toolBarPanel.bottom.add(objectFormatTools.getToolBar());
 			}
 			toolBarPanel.bottom.add(Box.createHorizontalGlue());
+			// toolBarPanel.setBorder(ToolBarPanel.BORDER);
 
 		}
 
@@ -487,7 +509,9 @@ public class Aerialist implements FrameContext {
 		frame.setVisible(false);
 	}
 
-	private class ToolBarPanel extends JPanel {
+	private static class ToolBarPanel extends JPanel {
+
+		private static final HidpiMatteBorder BORDER = new HidpiMatteBorder(new Insets(0, 0, 1, 0), Theme.isDark() ? HidpiMatteBorder.COLOR : new Color(230, 230, 230));
 
 		private final JPanel top;
 		private final JPanel bottom;
@@ -496,7 +520,7 @@ public class Aerialist implements FrameContext {
 
 			setLayout(new BorderLayout());
 			setBackground(ColorUtils.TITLE_BAR_COLOR);
-			setBorder(new HidpiMatteBorder(new Insets(0, 0, 1, 0), Theme.isDark() ? new Color(45, 45, 45) : new Color(230, 230, 230)));
+			setBorder(BORDER);
 
 			top = new JPanel();
 			top.setLayout(new BoxLayout(top, BoxLayout.LINE_AXIS));
