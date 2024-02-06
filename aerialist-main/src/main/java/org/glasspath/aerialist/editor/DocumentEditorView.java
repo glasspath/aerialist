@@ -44,6 +44,7 @@ import org.glasspath.aerialist.swing.view.FooterPageView;
 import org.glasspath.aerialist.swing.view.LayeredPageView;
 import org.glasspath.aerialist.swing.view.PageContainer;
 import org.glasspath.aerialist.swing.view.PageView;
+import org.glasspath.common.swing.color.ColorUtils;
 import org.glasspath.common.swing.graphics.NinePatch;
 import org.glasspath.common.swing.theme.Theme;
 
@@ -98,7 +99,7 @@ public class DocumentEditorView extends EditorView<DocumentEditorPanel> {
 						}
 
 					} else {
-						g2d.setColor(Theme.isDark() ? new Color(75, 75, 75) : new Color(250, 250, 250));
+						g2d.setColor(Theme.isDark() ? ColorUtils.GRAY_75 : ColorUtils.GRAY_250);
 						g2d.fill(bounds);
 					}
 
@@ -169,7 +170,7 @@ public class DocumentEditorView extends EditorView<DocumentEditorPanel> {
 				bounds = component.getBounds();
 
 				if (!Theme.isDark()) {
-					g2d.setColor(Color.lightGray);
+					g2d.setColor(ColorUtils.GRAY_192);
 					g2d.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
 				}
 

@@ -47,6 +47,7 @@ import javax.swing.event.ListSelectionListener;
 import org.glasspath.aerialist.Aerialist;
 import org.glasspath.aerialist.swing.view.PageView;
 import org.glasspath.common.swing.SwingUtils;
+import org.glasspath.common.swing.color.ColorUtils;
 import org.glasspath.common.swing.theme.Theme;
 
 public abstract class PagePreviewList extends JList<PageView> {
@@ -61,9 +62,9 @@ public abstract class PagePreviewList extends JList<PageView> {
 	public PagePreviewList() {
 
 		if (Theme.isDark()) {
-			setBackground(new Color(48, 50, 53));
+			setBackground(ColorUtils.DARK_48_B);
 		} else {
-			setBackground(new Color(245, 245, 245));
+			setBackground(ColorUtils.GRAY_245);
 		}
 
 		model = new PagePreviewListModel();
@@ -247,7 +248,7 @@ public abstract class PagePreviewList extends JList<PageView> {
 			SwingUtils.drawString(this, g2d, s, 35 - (int) fontRect.getWidth(), 11);
 
 			if (Aerialist.TODO_TEST_SHEET_MODE) {
-				g2d.setColor(Theme.isDark() ? new Color(75, 75, 75) : new Color(254, 254, 254));
+				g2d.setColor(Theme.isDark() ? ColorUtils.GRAY_75 : ColorUtils.GRAY_254);
 			} else {
 				g2d.setColor(Color.white);
 			}

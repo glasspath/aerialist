@@ -71,6 +71,7 @@ import org.glasspath.aerialist.swing.view.PageView;
 import org.glasspath.aerialist.swing.view.TableCellView;
 import org.glasspath.aerialist.text.font.FontCache;
 import org.glasspath.common.swing.border.HidpiMatteBorder;
+import org.glasspath.common.swing.color.ColorUtils;
 import org.glasspath.common.swing.keyboard.KeyboardUtils;
 import org.glasspath.common.swing.search.UISearchHandler;
 import org.glasspath.common.swing.selection.SelectionListener;
@@ -233,7 +234,7 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 		pagePreviewScrollPane = new JScrollPane(pagePreviewList);
 		pagePreviewScrollPane.setBorder(BorderFactory.createEmptyBorder());
 		pagePreviewScrollPane.getVerticalScrollBar().setUnitIncrement(25);
-		pagePreviewScrollPane.setBorder(new HidpiMatteBorder(new Insets(0, 0, 0, 1), Theme.isDark() ? new Color(42, 42, 42) : new Color(225, 225, 225)));
+		pagePreviewScrollPane.setBorder(new HidpiMatteBorder(new Insets(0, 0, 0, 1), Theme.isDark() ? ColorUtils.GRAY_42 : ColorUtils.GRAY_225));
 
 		mainSplitPane = new InvisibleSplitPane();
 		mainSplitPane.setLeftComponent(pagePreviewScrollPane);

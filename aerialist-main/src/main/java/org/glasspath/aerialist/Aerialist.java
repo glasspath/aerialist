@@ -511,7 +511,7 @@ public class Aerialist implements FrameContext {
 
 	private static class ToolBarPanel extends JPanel {
 
-		private static final HidpiMatteBorder BORDER = new HidpiMatteBorder(new Insets(0, 0, 1, 0), Theme.isDark() ? HidpiMatteBorder.COLOR : new Color(230, 230, 230));
+		private static final HidpiMatteBorder BORDER = new HidpiMatteBorder(new Insets(0, 0, 1, 0), Theme.isDark() ? HidpiMatteBorder.COLOR : ColorUtils.GRAY_230);
 
 		private final JPanel top;
 		private final JPanel bottom;
