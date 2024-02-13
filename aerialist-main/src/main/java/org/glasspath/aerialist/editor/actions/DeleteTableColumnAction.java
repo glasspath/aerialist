@@ -33,16 +33,16 @@ import org.glasspath.aerialist.ColStyle;
 import org.glasspath.aerialist.editor.ChangeTableLayoutUndoable;
 import org.glasspath.aerialist.editor.ChangeTableLayoutUndoable.TableCellViewData;
 import org.glasspath.aerialist.editor.ChangeTableLayoutUndoable.TableViewData;
-import org.glasspath.aerialist.editor.EditorPanel;
+import org.glasspath.aerialist.editor.DocumentEditorPanel;
 import org.glasspath.aerialist.swing.view.TableCellView;
 import org.glasspath.aerialist.swing.view.TableView;
 
 public class DeleteTableColumnAction extends AbstractAction {
 
-	private final EditorPanel<? extends EditorPanel<?>> context;
+	private final DocumentEditorPanel context;
 	private final TableCellView tableCellView;
 
-	public DeleteTableColumnAction(EditorPanel<? extends EditorPanel<?>> context, TableCellView tableCellView) {
+	public DeleteTableColumnAction(DocumentEditorPanel context, TableCellView tableCellView) {
 
 		this.context = context;
 		this.tableCellView = tableCellView;
@@ -94,7 +94,7 @@ public class DeleteTableColumnAction extends AbstractAction {
 			context.refresh(tableView);
 
 			TableViewData newTableViewData = new TableViewData(tableView.updateColStyles(), newTableCellData);
-			context.undoableEditHappened(new ChangeTableLayoutUndoable(context, tableView, oldTableViewData, newTableViewData));
+			context.undoableEditHappened(new ChangeTableLayoutUndoable(context, tableView, oldTableViewData, newTableViewData, context.getPageContainer().isYPolicyEnabled()));
 
 		}
 

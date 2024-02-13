@@ -33,17 +33,17 @@ import org.glasspath.aerialist.TableCell;
 import org.glasspath.aerialist.editor.ChangeTableLayoutUndoable;
 import org.glasspath.aerialist.editor.ChangeTableLayoutUndoable.TableCellViewData;
 import org.glasspath.aerialist.editor.ChangeTableLayoutUndoable.TableViewData;
-import org.glasspath.aerialist.editor.EditorPanel;
+import org.glasspath.aerialist.editor.DocumentEditorPanel;
 import org.glasspath.aerialist.swing.view.TableCellView;
 import org.glasspath.aerialist.swing.view.TableView;
 
 public class InsertTableColumnAction extends AbstractAction {
 
-	private final EditorPanel<? extends EditorPanel<?>> context;
+	private final DocumentEditorPanel context;
 	private final TableView tableView;
 	private final int col;
 
-	public InsertTableColumnAction(EditorPanel<? extends EditorPanel<?>> context, TableView tableView, int col, String description) {
+	public InsertTableColumnAction(DocumentEditorPanel context, TableView tableView, int col, String description) {
 
 		this.context = context;
 		this.tableView = tableView;
@@ -102,7 +102,7 @@ public class InsertTableColumnAction extends AbstractAction {
 		context.refresh(tableView);
 
 		TableViewData newTableViewData = new TableViewData(tableView.updateColStyles(), newTableCellData);
-		context.undoableEditHappened(new ChangeTableLayoutUndoable(context, tableView, oldTableViewData, newTableViewData));
+		context.undoableEditHappened(new ChangeTableLayoutUndoable(context, tableView, oldTableViewData, newTableViewData, context.getPageContainer().isYPolicyEnabled()));
 
 	}
 

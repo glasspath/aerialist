@@ -105,7 +105,7 @@ public class ResizeTableCellOperation extends Operation {
 
 			TableViewData newTableViewData = new TableViewData(tableView.updateColStyles(), null);
 
-			context.undoableEditHappened(new ChangeTableLayoutUndoable(context, tableView, oldTableViewData, newTableViewData));
+			context.undoableEditHappened(new ChangeTableLayoutUndoable(context, tableView, oldTableViewData, newTableViewData, context.getPageContainer().isYPolicyEnabled()));
 
 			context.getSelection().fireSelectionChanged();
 			context.refresh(pageView);

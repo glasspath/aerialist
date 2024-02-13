@@ -38,12 +38,14 @@ public class ChangeTableLayoutUndoable extends EditorUndoable {
 	private final TableView tableView;
 	private final TableViewData oldTableViewData;
 	private final TableViewData newTableViewData;
+	private final boolean yPolicyEnabled;
 
-	public ChangeTableLayoutUndoable(EditorPanel<? extends EditorPanel<?>> context, TableView tableView, TableViewData oldTableViewData, TableViewData newTableViewData) {
+	public ChangeTableLayoutUndoable(DocumentEditorPanel context, TableView tableView, TableViewData oldTableViewData, TableViewData newTableViewData, boolean yPolicyEnabled) {
 		super(context);
 		this.tableView = tableView;
 		this.oldTableViewData = oldTableViewData;
 		this.newTableViewData = newTableViewData;
+		this.yPolicyEnabled = yPolicyEnabled;
 	}
 
 	@Override
@@ -89,6 +91,9 @@ public class ChangeTableLayoutUndoable extends EditorUndoable {
 	@Override
 	public void redo() throws CannotRedoException {
 
+		// TODO: Create DocumentEditorUndoable?
+		((DocumentEditorPanel) context).getPageContainer().setYPolicyEnabled(yPolicyEnabled);
+
 		if (newTableViewData.cellViewData != null) {
 
 			tableView.getTableCellViews().clear();
@@ -112,6 +117,9 @@ public class ChangeTableLayoutUndoable extends EditorUndoable {
 
 	@Override
 	public void undo() throws CannotUndoException {
+
+		// TODO: Create DocumentEditorUndoable?
+		((DocumentEditorPanel) context).getPageContainer().setYPolicyEnabled(yPolicyEnabled);
 
 		if (oldTableViewData.cellViewData != null) {
 
