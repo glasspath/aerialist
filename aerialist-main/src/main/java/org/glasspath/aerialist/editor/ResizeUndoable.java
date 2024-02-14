@@ -24,6 +24,7 @@ package org.glasspath.aerialist.editor;
 
 import java.awt.Component;
 import java.awt.Rectangle;
+import java.util.Map;
 
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
@@ -31,22 +32,23 @@ import javax.swing.undo.UndoableEdit;
 
 import org.glasspath.aerialist.swing.view.PageView;
 
-public class ResizeUndoable implements UndoableEdit {
+public class ResizeUndoable extends DefaultEditorUndoable {
 
-	private final DocumentEditorPanel context;
 	private final Component component;
 	private final PageView pageView;
 	private final Rectangle oldBounds;
 	private final Rectangle newBounds;
 	private final boolean yPolicyEnabled;
 
-	public ResizeUndoable(DocumentEditorPanel context, Component component, PageView pageView, Rectangle oldBounds, Rectangle newBounds, boolean yPolicyEnabled) {
-		this.context = context;
+	public ResizeUndoable(AbstractEditorPanel context, Component component, PageView pageView, Rectangle oldBounds, Rectangle newBounds, Map<Component, Rectangle> anchoredElementBounds) {
+		super(context, anchoredElementBounds);
+
 		this.component = component;
 		this.pageView = pageView;
 		this.oldBounds = oldBounds;
 		this.newBounds = newBounds;
-		this.yPolicyEnabled = yPolicyEnabled;
+		this.yPolicyEnabled = context instanceof DocumentEditorPanel ? ((DocumentEditorPanel) context).getPageContainer().isYPolicyEnabled() : false;
+
 	}
 
 	@Override
@@ -91,10 +93,15 @@ public class ResizeUndoable implements UndoableEdit {
 
 	@Override
 	public void redo() throws CannotRedoException {
-		context.getPageContainer().setYPolicyEnabled(yPolicyEnabled);
+
+		if (context instanceof DocumentEditorPanel) {
+			((DocumentEditorPanel) context).getPageContainer().setYPolicyEnabled(yPolicyEnabled);
+		}
+
 		component.setBounds(newBounds);
 		pageView.elementResized(component, oldBounds);
 		context.refresh(pageView);
+
 	}
 
 	@Override
@@ -104,10 +111,11 @@ public class ResizeUndoable implements UndoableEdit {
 
 	@Override
 	public void undo() throws CannotUndoException {
-		context.getPageContainer().setYPolicyEnabled(yPolicyEnabled);
+
 		component.setBounds(oldBounds);
 		pageView.elementResized(component, newBounds);
-		context.refresh(pageView);
+		context.refresh(pageView, anchoredElementBounds);
+
 	}
 
 }

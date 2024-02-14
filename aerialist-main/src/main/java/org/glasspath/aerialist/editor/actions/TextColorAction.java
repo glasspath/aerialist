@@ -30,14 +30,14 @@ import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
-import org.glasspath.aerialist.editor.EditorPanel;
+import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.common.swing.color.ColorChooserPanel.ColorEvent;
 
 public class TextColorAction extends TextStyleAction {
 
 	private Color color = null;
 
-	public TextColorAction(EditorPanel<? extends EditorPanel<?>> context) {
+	public TextColorAction(AbstractEditorPanel context) {
 		super(context);
 
 		putValue(Action.NAME, "Text color");

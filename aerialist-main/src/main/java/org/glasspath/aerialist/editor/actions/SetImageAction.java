@@ -30,17 +30,17 @@ import java.nio.file.Files;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-import org.glasspath.aerialist.editor.EditorPanel;
+import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.icons.Icons;
 import org.glasspath.aerialist.swing.view.ImageView;
 import org.glasspath.common.swing.file.chooser.FileChooser;
 
 public class SetImageAction extends AbstractAction {
 
-	private final EditorPanel<? extends EditorPanel<?>> context;
+	private final AbstractEditorPanel context;
 	private final ImageView imageView;
 
-	public SetImageAction(EditorPanel<? extends EditorPanel<?>> context, ImageView imageView) {
+	public SetImageAction(AbstractEditorPanel context, ImageView imageView) {
 
 		this.context = context;
 		this.imageView = imageView;
@@ -56,7 +56,7 @@ public class SetImageAction extends AbstractAction {
 
 		String oldSrc = imageView.getSrc();
 
-		String filePath = FileChooser.browseForImageFile(Icons.image, false, context.getFrame(), context.getPreferences(), "lastImageFilePath");
+		String filePath = FileChooser.browseForImageFile(Icons.image, false, context.getFrameContext().getFrame(), context.getFrameContext().getPreferences(), "lastImageFilePath");
 		if (filePath != null) {
 
 			try {

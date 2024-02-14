@@ -29,17 +29,17 @@ import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoableEdit;
 
 import org.glasspath.aerialist.Alignment;
-import org.glasspath.aerialist.editor.EditorPanel;
-import org.glasspath.aerialist.editor.EditorUndoable;
+import org.glasspath.aerialist.editor.AbstractEditorPanel;
+import org.glasspath.aerialist.editor.DefaultEditorUndoable;
 import org.glasspath.aerialist.swing.view.IScalableView;
 
-public class SetImageAlignmentUndoable extends EditorUndoable {
+public class SetImageAlignmentUndoable extends DefaultEditorUndoable {
 
 	private final IScalableView view;
 	private final Alignment oldAlignment;
 	private final Alignment newAlignment;
 
-	public SetImageAlignmentUndoable(EditorPanel<? extends EditorPanel<?>> context, IScalableView view, Alignment oldAlignment, Alignment newAlignment) {
+	public SetImageAlignmentUndoable(AbstractEditorPanel context, IScalableView view, Alignment oldAlignment, Alignment newAlignment) {
 		super(context);
 		this.view = view;
 		this.oldAlignment = oldAlignment;

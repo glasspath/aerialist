@@ -29,26 +29,29 @@ import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoableEdit;
 
 import org.glasspath.aerialist.FitPolicy;
+import org.glasspath.aerialist.editor.AbstractEditorPanel;
+import org.glasspath.aerialist.editor.DefaultEditorUndoable;
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
 import org.glasspath.aerialist.swing.view.IScalableView;
 import org.glasspath.aerialist.swing.view.PageView;
 
-public class SetFitPolicyUndoable implements UndoableEdit {
+public class SetFitPolicyUndoable extends DefaultEditorUndoable {
 
-	private final DocumentEditorPanel context;
 	private final IScalableView view;
 	private final PageView pageView;
 	private final FitPolicy oldFitPolicy;
 	private final FitPolicy fitPolicy;
 	private final boolean yPolicyEnabled;
 
-	public SetFitPolicyUndoable(DocumentEditorPanel context, IScalableView view, PageView pageView, FitPolicy fitPolicy, FitPolicy oldFitPolicy, boolean yPolicyEnabled) {
-		this.context = context;
+	public SetFitPolicyUndoable(AbstractEditorPanel context, IScalableView view, PageView pageView, FitPolicy fitPolicy, FitPolicy oldFitPolicy) {
+		super(context);
+
 		this.view = view;
 		this.pageView = pageView;
 		this.fitPolicy = fitPolicy;
 		this.oldFitPolicy = oldFitPolicy;
-		this.yPolicyEnabled = yPolicyEnabled;
+		this.yPolicyEnabled = context instanceof DocumentEditorPanel ? ((DocumentEditorPanel) context).getPageContainer().isYPolicyEnabled() : false;
+
 	}
 
 	@Override
@@ -94,7 +97,9 @@ public class SetFitPolicyUndoable implements UndoableEdit {
 	@Override
 	public void redo() throws CannotRedoException {
 
-		context.getPageContainer().setYPolicyEnabled(yPolicyEnabled);
+		if (context instanceof DocumentEditorPanel) {
+			((DocumentEditorPanel) context).getPageContainer().setYPolicyEnabled(yPolicyEnabled);
+		}
 
 		view.setFitPolicy(fitPolicy);
 
@@ -114,7 +119,9 @@ public class SetFitPolicyUndoable implements UndoableEdit {
 	@Override
 	public void undo() throws CannotUndoException {
 
-		context.getPageContainer().setYPolicyEnabled(yPolicyEnabled);
+		if (context instanceof DocumentEditorPanel) {
+			((DocumentEditorPanel) context).getPageContainer().setYPolicyEnabled(yPolicyEnabled);
+		}
 
 		view.setFitPolicy(oldFitPolicy);
 

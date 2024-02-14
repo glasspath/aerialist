@@ -112,7 +112,7 @@ public class TextFormatTools extends AbstractTools<FrameContext> {
 
 			@Override
 			protected Frame getFrame() {
-				return editor.getFrame();
+				return editor.getFrameContext().getFrame();
 			}
 		};
 		textColorButton.setToolTipText("Text color");

@@ -29,19 +29,19 @@ import java.util.List;
 import javax.swing.AbstractAction;
 
 import org.glasspath.aerialist.RowStyle;
-import org.glasspath.aerialist.editor.EditorPanel;
+import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.swing.view.TableView;
 import org.glasspath.common.swing.color.ColorChooserPanel.ColorEvent;
 import org.glasspath.common.swing.color.ColorUtils;
 
 public class SetRowColorAction extends AbstractAction {
 
-	private final EditorPanel<? extends EditorPanel<?>> context;
+	private final AbstractEditorPanel context;
 	private final TableView tableView;
 	private final int row;
 	private final int repeat;
 
-	public SetRowColorAction(EditorPanel<? extends EditorPanel<?>> context, TableView tableView, int row, int repeat) {
+	public SetRowColorAction(AbstractEditorPanel context, TableView tableView, int row, int repeat) {
 		this.context = context;
 		this.tableView = tableView;
 		this.row = row;

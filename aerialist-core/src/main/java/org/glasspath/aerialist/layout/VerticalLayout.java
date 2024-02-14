@@ -203,6 +203,26 @@ public abstract class VerticalLayout<C, E> extends Layout<C, E> {
 
 	}
 
+	public List<E> getAnchoredElements(E fromElement) {
+
+		List<E> elements = new ArrayList<>();
+
+		AnchorList anchorList;
+		for (int i = 0; i < getElementCount(); i++) {
+
+			E element = getElement(i);
+			anchorList = getAnchorList(element);
+
+			if (getYPolicy(element) == YPolicy.DEFAULT && anchorList.isAnchor(fromElement)) {
+				elements.add(element);
+			}
+
+		}
+
+		return elements;
+
+	}
+
 	public void updateLayout(E fromElement) {
 
 		if (layoutContext.isYPolicyEnabled() && !isUpdatingLayout()) {
@@ -211,19 +231,7 @@ public abstract class VerticalLayout<C, E> extends Layout<C, E> {
 
 			if (getHeightPolicy(fromElement) == HeightPolicy.AUTO) {
 
-				List<E> elements = new ArrayList<>();
-
-				AnchorList anchorList;
-				for (int i = 0; i < getElementCount(); i++) {
-
-					E element = getElement(i);
-					anchorList = getAnchorList(element);
-
-					if (getYPolicy(element) == YPolicy.DEFAULT && anchorList.isAnchor(fromElement)) {
-						elements.add(element);
-					}
-
-				}
+				List<E> elements = getAnchoredElements(fromElement);
 
 				if (elements.size() > 0) {
 
@@ -237,7 +245,7 @@ public abstract class VerticalLayout<C, E> extends Layout<C, E> {
 
 					for (E element : elements) {
 
-						anchorList = getAnchorList(element);
+						AnchorList anchorList = getAnchorList(element);
 
 						int margin = anchorList.getCurrentMargin(getY(element));
 						if (margin != anchorList.margin) {

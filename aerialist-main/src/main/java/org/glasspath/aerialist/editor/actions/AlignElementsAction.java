@@ -32,7 +32,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 
 import org.glasspath.aerialist.AerialistUtils;
-import org.glasspath.aerialist.editor.EditorPanel;
+import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.editor.ElementData;
 import org.glasspath.aerialist.icons.Icons;
 import org.glasspath.aerialist.swing.view.PageView;
@@ -46,10 +46,10 @@ public class AlignElementsAction extends AbstractAction {
 	public static final int VERTICAL_CENTER = 4;
 	public static final int VERTICAL_BOTTOM = 5;
 
-	private final EditorPanel<? extends EditorPanel<?>> context;
+	private final AbstractEditorPanel context;
 	private final int alignAction;
 
-	public AlignElementsAction(EditorPanel<? extends EditorPanel<?>> context, int alignAction) {
+	public AlignElementsAction(AbstractEditorPanel context, int alignAction) {
 
 		this.context = context;
 		this.alignAction = alignAction;

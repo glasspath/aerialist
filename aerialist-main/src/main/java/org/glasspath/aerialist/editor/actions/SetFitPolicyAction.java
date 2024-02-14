@@ -30,22 +30,22 @@ import javax.swing.Action;
 
 import org.glasspath.aerialist.AerialistUtils;
 import org.glasspath.aerialist.FitPolicy;
-import org.glasspath.aerialist.editor.DocumentEditorPanel;
+import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.swing.view.IScalableView;
 import org.glasspath.aerialist.swing.view.PageView;
 
 public class SetFitPolicyAction extends AbstractAction {
 
-	private final DocumentEditorPanel context;
+	private final AbstractEditorPanel context;
 	private final IScalableView view;
 	private final FitPolicy fitPolicy;
 	private final PageView pageView;
 
-	public SetFitPolicyAction(DocumentEditorPanel context, IScalableView view, FitPolicy fitPolicy) {
+	public SetFitPolicyAction(AbstractEditorPanel context, IScalableView view, FitPolicy fitPolicy) {
 		this(context, view, fitPolicy, false);
 	}
 
-	public SetFitPolicyAction(DocumentEditorPanel context, IScalableView view, FitPolicy fitPolicy, boolean toolbarButton) {
+	public SetFitPolicyAction(AbstractEditorPanel context, IScalableView view, FitPolicy fitPolicy, boolean toolbarButton) {
 
 		this.context = context;
 		this.view = view;
@@ -84,7 +84,7 @@ public class SetFitPolicyAction extends AbstractAction {
 
 		view.setFitPolicy(fitPolicy);
 
-		context.undoableEditHappened(new SetFitPolicyUndoable(context, view, pageView, fitPolicy, oldFitPolicy, context.getPageContainer().isYPolicyEnabled()));
+		context.undoableEditHappened(new SetFitPolicyUndoable(context, view, pageView, fitPolicy, oldFitPolicy));
 
 		((Component) view).invalidate();
 		((Component) view).validate();

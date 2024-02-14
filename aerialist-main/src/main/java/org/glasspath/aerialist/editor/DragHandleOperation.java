@@ -26,6 +26,7 @@ import java.awt.Component;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
+import java.util.Map;
 
 import org.glasspath.aerialist.AerialistUtils;
 import org.glasspath.aerialist.swing.view.PageView;
@@ -40,6 +41,7 @@ public class DragHandleOperation extends Operation {
 	private Component component = null;
 	private PageView pageView = null;
 	private Rectangle originalBounds = null;
+	private Map<Component, Rectangle> anchoredElementBounds = null;
 
 	public DragHandleOperation(DocumentEditorPanel context, int handle) {
 		this.context = context;
@@ -56,6 +58,7 @@ public class DragHandleOperation extends Operation {
 
 				pageView = (PageView) component.getParent();
 				originalBounds = component.getBounds();
+				anchoredElementBounds = AerialistUtils.getAnchoredElementBounds(component);
 
 				e.consume();
 
@@ -209,7 +212,7 @@ public class DragHandleOperation extends Operation {
 
 			Rectangle bounds = component.getBounds();
 			if (bounds.x != originalBounds.x || bounds.y != originalBounds.y || bounds.width != originalBounds.width || bounds.height != originalBounds.height) {
-				context.undoableEditHappened(new ResizeUndoable(context, component, pageView, originalBounds, bounds, context.getPageContainer().isYPolicyEnabled()));
+				context.undoableEditHappened(new ResizeUndoable(context, component, pageView, originalBounds, bounds, anchoredElementBounds));
 			}
 
 			context.getSelection().fireSelectionChanged();

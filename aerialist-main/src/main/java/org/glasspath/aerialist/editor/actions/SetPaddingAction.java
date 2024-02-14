@@ -30,21 +30,21 @@ import javax.swing.Action;
 
 import org.glasspath.aerialist.AerialistUtils;
 import org.glasspath.aerialist.Padding;
-import org.glasspath.aerialist.editor.DocumentEditorPanel;
+import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.swing.view.ISwingElementView;
 import org.glasspath.aerialist.swing.view.TableView;
 import org.glasspath.aerialist.swing.view.TextBoxView;
 
 public class SetPaddingAction extends AbstractAction {
 
-	private final DocumentEditorPanel context;
+	private final AbstractEditorPanel context;
 	private final Padding padding;
 
-	public SetPaddingAction(DocumentEditorPanel context) {
+	public SetPaddingAction(AbstractEditorPanel context) {
 		this(context, 0);
 	}
 
-	public SetPaddingAction(DocumentEditorPanel context, int padding) {
+	public SetPaddingAction(AbstractEditorPanel context, int padding) {
 
 		this.context = context;
 		this.padding = new Padding(padding);
@@ -71,7 +71,7 @@ public class SetPaddingAction extends AbstractAction {
 				applyPadding(elementView, padding);
 				context.refresh(AerialistUtils.getPageView(elementView));
 
-				context.undoableEditHappened(new SetPaddingUndoable(context, elementView, padding, oldPadding, context.getPageContainer().isYPolicyEnabled()));
+				context.undoableEditHappened(new SetPaddingUndoable(context, elementView, padding, oldPadding));
 
 			}
 

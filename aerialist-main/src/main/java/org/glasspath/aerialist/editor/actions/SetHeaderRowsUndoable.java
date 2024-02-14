@@ -26,17 +26,17 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoableEdit;
 
-import org.glasspath.aerialist.editor.EditorPanel;
-import org.glasspath.aerialist.editor.EditorUndoable;
+import org.glasspath.aerialist.editor.AbstractEditorPanel;
+import org.glasspath.aerialist.editor.DefaultEditorUndoable;
 import org.glasspath.aerialist.swing.view.TableView;
 
-public class SetHeaderRowsUndoable extends EditorUndoable {
+public class SetHeaderRowsUndoable extends DefaultEditorUndoable {
 
 	private final TableView tableView;
 	private final int headerRowCount;
 	private final int oldHeaderRowCount;
 
-	public SetHeaderRowsUndoable(EditorPanel<? extends EditorPanel<?>> context, TableView tableView, int headerRowCount, int oldHeaderRowCount) {
+	public SetHeaderRowsUndoable(AbstractEditorPanel context, TableView tableView, int headerRowCount, int oldHeaderRowCount) {
 		super(context);
 		this.tableView = tableView;
 		this.headerRowCount = headerRowCount;

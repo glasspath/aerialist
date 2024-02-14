@@ -29,22 +29,25 @@ import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoableEdit;
 
 import org.glasspath.aerialist.Margin;
+import org.glasspath.aerialist.editor.AbstractEditorPanel;
+import org.glasspath.aerialist.editor.DefaultEditorUndoable;
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
 
-public class SetMarginUndoable implements UndoableEdit {
+public class SetMarginUndoable extends DefaultEditorUndoable {
 
-	private final DocumentEditorPanel context;
 	private final Component view;
 	private final Margin margin;
 	private final Margin oldMargin;
 	private final boolean yPolicyEnabled;
 
-	public SetMarginUndoable(DocumentEditorPanel context, Component view, Margin margin, Margin oldMargin, boolean yPolicyEnabled) {
-		this.context = context;
+	public SetMarginUndoable(AbstractEditorPanel context, Component view, Margin margin, Margin oldMargin) {
+		super(context);
+
 		this.view = view;
 		this.margin = margin;
 		this.oldMargin = oldMargin;
-		this.yPolicyEnabled = yPolicyEnabled;
+		this.yPolicyEnabled = context instanceof DocumentEditorPanel ? ((DocumentEditorPanel) context).getPageContainer().isYPolicyEnabled() : false;
+
 	}
 
 	@Override
@@ -89,9 +92,14 @@ public class SetMarginUndoable implements UndoableEdit {
 
 	@Override
 	public void redo() throws CannotRedoException {
-		context.getPageContainer().setYPolicyEnabled(yPolicyEnabled);
+
+		if (context instanceof DocumentEditorPanel) {
+			((DocumentEditorPanel) context).getPageContainer().setYPolicyEnabled(yPolicyEnabled);
+		}
+
 		SetMarginAction.applyMargin(view, margin);
 		context.refresh(null);
+
 	}
 
 	@Override
@@ -101,9 +109,14 @@ public class SetMarginUndoable implements UndoableEdit {
 
 	@Override
 	public void undo() throws CannotUndoException {
-		context.getPageContainer().setYPolicyEnabled(yPolicyEnabled);
+
+		if (context instanceof DocumentEditorPanel) {
+			((DocumentEditorPanel) context).getPageContainer().setYPolicyEnabled(yPolicyEnabled);
+		}
+
 		SetMarginAction.applyMargin(view, oldMargin);
 		context.refresh(null);
+
 	}
 
 }

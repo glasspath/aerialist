@@ -22,7 +22,10 @@
  */
 package org.glasspath.aerialist.editor;
 
+import java.awt.Component;
+import java.awt.Rectangle;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
@@ -33,19 +36,21 @@ import org.glasspath.aerialist.TableCell;
 import org.glasspath.aerialist.swing.view.TableCellView;
 import org.glasspath.aerialist.swing.view.TableView;
 
-public class ChangeTableLayoutUndoable extends EditorUndoable {
+public class ChangeTableLayoutUndoable extends DefaultEditorUndoable {
 
 	private final TableView tableView;
 	private final TableViewData oldTableViewData;
 	private final TableViewData newTableViewData;
 	private final boolean yPolicyEnabled;
 
-	public ChangeTableLayoutUndoable(DocumentEditorPanel context, TableView tableView, TableViewData oldTableViewData, TableViewData newTableViewData, boolean yPolicyEnabled) {
-		super(context);
+	public ChangeTableLayoutUndoable(AbstractEditorPanel context, TableView tableView, TableViewData oldTableViewData, TableViewData newTableViewData, Map<Component, Rectangle> anchoredElementBounds) {
+		super(context, anchoredElementBounds);
+
 		this.tableView = tableView;
 		this.oldTableViewData = oldTableViewData;
 		this.newTableViewData = newTableViewData;
-		this.yPolicyEnabled = yPolicyEnabled;
+		this.yPolicyEnabled = context instanceof DocumentEditorPanel ? ((DocumentEditorPanel) context).getPageContainer().isYPolicyEnabled() : false;
+
 	}
 
 	@Override
@@ -91,8 +96,9 @@ public class ChangeTableLayoutUndoable extends EditorUndoable {
 	@Override
 	public void redo() throws CannotRedoException {
 
-		// TODO: Create DocumentEditorUndoable?
-		((DocumentEditorPanel) context).getPageContainer().setYPolicyEnabled(yPolicyEnabled);
+		if (context instanceof DocumentEditorPanel) {
+			((DocumentEditorPanel) context).getPageContainer().setYPolicyEnabled(yPolicyEnabled);
+		}
 
 		if (newTableViewData.cellViewData != null) {
 
@@ -118,9 +124,6 @@ public class ChangeTableLayoutUndoable extends EditorUndoable {
 	@Override
 	public void undo() throws CannotUndoException {
 
-		// TODO: Create DocumentEditorUndoable?
-		((DocumentEditorPanel) context).getPageContainer().setYPolicyEnabled(yPolicyEnabled);
-
 		if (oldTableViewData.cellViewData != null) {
 
 			tableView.getTableCellViews().clear();
@@ -133,7 +136,7 @@ public class ChangeTableLayoutUndoable extends EditorUndoable {
 
 		tableView.setColStyles(oldTableViewData.colStyles);
 		tableView.layoutTableCells();
-		context.refresh(tableView);
+		context.refresh(tableView, anchoredElementBounds);
 
 	}
 

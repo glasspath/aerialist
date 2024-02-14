@@ -32,19 +32,17 @@ import javax.swing.AbstractAction;
 
 import org.glasspath.aerialist.AerialistUtils;
 import org.glasspath.aerialist.Border;
-import org.glasspath.aerialist.editor.EditorPanel;
+import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.swing.view.ISwingElementView;
 import org.glasspath.common.swing.color.ColorChooserPanel.ColorEvent;
 import org.glasspath.common.swing.color.ColorUtils;
 
 public class SetBorderColorAction extends AbstractAction {
 
-	private final EditorPanel<? extends EditorPanel<?>> context;
+	private final AbstractEditorPanel context;
 
-	public SetBorderColorAction(EditorPanel<? extends EditorPanel<?>> context) {
-
+	public SetBorderColorAction(AbstractEditorPanel context) {
 		this.context = context;
-
 	}
 
 	@Override

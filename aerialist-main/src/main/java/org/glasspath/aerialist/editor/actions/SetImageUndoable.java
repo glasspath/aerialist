@@ -26,17 +26,17 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoableEdit;
 
-import org.glasspath.aerialist.editor.EditorPanel;
-import org.glasspath.aerialist.editor.EditorUndoable;
+import org.glasspath.aerialist.editor.AbstractEditorPanel;
+import org.glasspath.aerialist.editor.DefaultEditorUndoable;
 import org.glasspath.aerialist.swing.view.ImageView;
 
-public class SetImageUndoable extends EditorUndoable {
+public class SetImageUndoable extends DefaultEditorUndoable {
 
 	private final ImageView imageView;
 	private final String oldSrc;
 	private final String newSrc;
 
-	public SetImageUndoable(EditorPanel<? extends EditorPanel<?>> context, ImageView imageView, String oldSrc, String newSrc) {
+	public SetImageUndoable(AbstractEditorPanel context, ImageView imageView, String oldSrc, String newSrc) {
 		super(context);
 		this.imageView = imageView;
 		this.oldSrc = oldSrc;

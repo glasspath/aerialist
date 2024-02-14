@@ -22,27 +22,31 @@
  */
 package org.glasspath.aerialist.editor.actions;
 
+import java.awt.Component;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
+import org.glasspath.aerialist.AerialistUtils;
 import org.glasspath.aerialist.ColStyle;
+import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.editor.ChangeTableLayoutUndoable;
 import org.glasspath.aerialist.editor.ChangeTableLayoutUndoable.TableCellViewData;
 import org.glasspath.aerialist.editor.ChangeTableLayoutUndoable.TableViewData;
-import org.glasspath.aerialist.editor.DocumentEditorPanel;
 import org.glasspath.aerialist.swing.view.TableCellView;
 import org.glasspath.aerialist.swing.view.TableView;
 
 public class DeleteTableColumnAction extends AbstractAction {
 
-	private final DocumentEditorPanel context;
+	private final AbstractEditorPanel context;
 	private final TableCellView tableCellView;
 
-	public DeleteTableColumnAction(DocumentEditorPanel context, TableCellView tableCellView) {
+	public DeleteTableColumnAction(AbstractEditorPanel context, TableCellView tableCellView) {
 
 		this.context = context;
 		this.tableCellView = tableCellView;
@@ -60,6 +64,8 @@ public class DeleteTableColumnAction extends AbstractAction {
 			TableView tableView = (TableView) tableCellView.getParent();
 
 			int col = tableCellView.getCol();
+
+			Map<Component, Rectangle> anchoredElementBounds = AerialistUtils.getAnchoredElementBounds(tableView);
 
 			List<TableCellViewData> oldTableCellData = new ArrayList<>();
 			List<ColStyle> oldColStyles = tableView.getColStylesCopy();
@@ -94,7 +100,8 @@ public class DeleteTableColumnAction extends AbstractAction {
 			context.refresh(tableView);
 
 			TableViewData newTableViewData = new TableViewData(tableView.updateColStyles(), newTableCellData);
-			context.undoableEditHappened(new ChangeTableLayoutUndoable(context, tableView, oldTableViewData, newTableViewData, context.getPageContainer().isYPolicyEnabled()));
+
+			context.undoableEditHappened(new ChangeTableLayoutUndoable(context, tableView, oldTableViewData, newTableViewData, anchoredElementBounds));
 
 		}
 

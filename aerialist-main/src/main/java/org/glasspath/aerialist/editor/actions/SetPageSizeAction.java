@@ -27,17 +27,17 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-import org.glasspath.aerialist.editor.EditorPanel;
+import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.swing.view.PageView;
 
 public class SetPageSizeAction extends AbstractAction {
 
-	private final EditorPanel<? extends EditorPanel<?>> context;
+	private final AbstractEditorPanel context;
 	private final PageView pageView;
 	private final int width;
 	private final int height;
 
-	public SetPageSizeAction(EditorPanel<? extends EditorPanel<?>> context, PageView pageView, int width, int height, String description) {
+	public SetPageSizeAction(AbstractEditorPanel context, PageView pageView, int width, int height, String description) {
 
 		this.context = context;
 		this.pageView = pageView;

@@ -29,15 +29,15 @@ import javax.swing.Action;
 
 import org.glasspath.aerialist.IPagination;
 import org.glasspath.aerialist.Pagination;
-import org.glasspath.aerialist.editor.DocumentEditorPanel;
+import org.glasspath.aerialist.editor.AbstractEditorPanel;
 
 public class SetPaginationMinHeightAction extends AbstractAction {
 
-	private final DocumentEditorPanel context;
+	private final AbstractEditorPanel context;
 	private final IPagination view;
 	private final int minHeight;
 
-	public SetPaginationMinHeightAction(DocumentEditorPanel context, IPagination view, int minHeight) {
+	public SetPaginationMinHeightAction(AbstractEditorPanel context, IPagination view, int minHeight) {
 
 		this.context = context;
 		this.view = view;

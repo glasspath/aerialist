@@ -23,6 +23,7 @@
 package org.glasspath.aerialist.tools;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Graphics;
@@ -30,6 +31,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Map;
 
 import javax.swing.JComponent;
 import javax.swing.JMenu;
@@ -147,7 +149,7 @@ public class ObjectFormatTools extends AbstractTools<Aerialist> {
 
 			@Override
 			protected Frame getFrame() {
-				return editor.getFrame();
+				return editor.getFrameContext().getFrame();
 			}
 		};
 		backgroundColorButton.setToolTipText("Background color");
@@ -157,7 +159,7 @@ public class ObjectFormatTools extends AbstractTools<Aerialist> {
 
 			@Override
 			protected Frame getFrame() {
-				return editor.getFrame();
+				return editor.getFrameContext().getFrame();
 			}
 		};
 		borderButton.setToolTipText("Border");
@@ -268,6 +270,7 @@ public class ObjectFormatTools extends AbstractTools<Aerialist> {
 
 					Rectangle oldBounds = component.getBounds();
 					Rectangle newBounds = new Rectangle(oldBounds);
+					Map<Component, Rectangle> anchoredElementBounds = AerialistUtils.getAnchoredElementBounds(component);
 
 					if (xValue instanceof Number) {
 						newBounds.x = ((Number) xValue).intValue();
@@ -286,7 +289,7 @@ public class ObjectFormatTools extends AbstractTools<Aerialist> {
 
 					pageView.elementResized(component, oldBounds);
 
-					editor.undoableEditHappened(new ResizeUndoable(editor, component, pageView, oldBounds, newBounds, editor.getPageContainer().isYPolicyEnabled()));
+					editor.undoableEditHappened(new ResizeUndoable(editor, component, pageView, oldBounds, newBounds, anchoredElementBounds));
 					editor.refresh(pageView);
 
 				}

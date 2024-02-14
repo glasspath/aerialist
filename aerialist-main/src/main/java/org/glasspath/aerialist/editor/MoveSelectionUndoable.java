@@ -31,22 +31,23 @@ import javax.swing.undo.UndoableEdit;
 
 import org.glasspath.aerialist.swing.view.PageView;
 
-public class MoveSelectionUndoable implements UndoableEdit {
+public class MoveSelectionUndoable extends DefaultEditorUndoable {
 
-	private final DocumentEditorPanel context;
 	private final Component component;
 	private final PageView pageView;
 	private final Rectangle oldBounds;
 	private final Rectangle newBounds;
 	private final boolean yPolicyEnabled;
 
-	public MoveSelectionUndoable(DocumentEditorPanel context, Component component, PageView pageView, Rectangle oldBounds, Rectangle newBounds, boolean yPolicyEnabled) {
-		this.context = context;
+	public MoveSelectionUndoable(AbstractEditorPanel context, Component component, PageView pageView, Rectangle oldBounds, Rectangle newBounds) {
+		super(context);
+		
 		this.component = component;
 		this.pageView = pageView;
 		this.oldBounds = oldBounds;
 		this.newBounds = newBounds;
-		this.yPolicyEnabled = yPolicyEnabled;
+		this.yPolicyEnabled = context instanceof DocumentEditorPanel ? ((DocumentEditorPanel) context).getPageContainer().isYPolicyEnabled() : false;
+
 	}
 
 	@Override
@@ -92,7 +93,9 @@ public class MoveSelectionUndoable implements UndoableEdit {
 	@Override
 	public void redo() throws CannotRedoException {
 
-		context.getPageContainer().setYPolicyEnabled(yPolicyEnabled);
+		if (context instanceof DocumentEditorPanel) {
+			((DocumentEditorPanel) context).getPageContainer().setYPolicyEnabled(yPolicyEnabled);
+		}
 
 		component.setBounds(newBounds);
 		pageView.elementMoved(component, oldBounds);
@@ -109,7 +112,9 @@ public class MoveSelectionUndoable implements UndoableEdit {
 	@Override
 	public void undo() throws CannotUndoException {
 
-		context.getPageContainer().setYPolicyEnabled(yPolicyEnabled);
+		if (context instanceof DocumentEditorPanel) {
+			((DocumentEditorPanel) context).getPageContainer().setYPolicyEnabled(yPolicyEnabled);
+		}
 
 		component.setBounds(oldBounds);
 		pageView.elementMoved(component, newBounds);

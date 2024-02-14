@@ -26,20 +26,20 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoableEdit;
 
-import org.glasspath.aerialist.editor.EditorPanel;
+import org.glasspath.aerialist.editor.AbstractEditorPanel;
+import org.glasspath.aerialist.editor.DefaultEditorUndoable;
 import org.glasspath.aerialist.swing.view.PageView;
 
-public class SetPageSizeUndoable implements UndoableEdit {
+public class SetPageSizeUndoable extends DefaultEditorUndoable {
 
-	private final EditorPanel<? extends EditorPanel<?>> context;
 	private final PageView pageView;
 	private final int width;
 	private final int height;
 	private final int oldWidth;
 	private final int oldHeight;
 
-	public SetPageSizeUndoable(EditorPanel<? extends EditorPanel<?>> context, PageView pageView, int width, int height, int oldWidth, int oldHeight) {
-		this.context = context;
+	public SetPageSizeUndoable(AbstractEditorPanel context, PageView pageView, int width, int height, int oldWidth, int oldHeight) {
+		super(context);
 		this.pageView = pageView;
 		this.width = width;
 		this.height = height;

@@ -29,17 +29,17 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 
 import org.glasspath.aerialist.Alignment;
-import org.glasspath.aerialist.editor.EditorPanel;
+import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.icons.Icons;
 import org.glasspath.aerialist.swing.view.IScalableView;
 
 public class SetImageAlignmentAction extends AbstractAction {
 
-	private final EditorPanel<? extends EditorPanel<?>> context;
+	private final AbstractEditorPanel context;
 	private final IScalableView view;
 	private final Alignment alignment;
 
-	public SetImageAlignmentAction(EditorPanel<? extends EditorPanel<?>> context, IScalableView view, Alignment alignment) {
+	public SetImageAlignmentAction(AbstractEditorPanel context, IScalableView view, Alignment alignment) {
 
 		this.context = context;
 		this.view = view;

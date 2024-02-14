@@ -32,7 +32,7 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
 import org.glasspath.aerialist.TextStyle;
-import org.glasspath.aerialist.editor.EditorPanel;
+import org.glasspath.aerialist.editor.AbstractEditorPanel;
 
 public class FontFamilyAction extends TextStyleAction {
 
@@ -41,7 +41,7 @@ public class FontFamilyAction extends TextStyleAction {
 	private final JComboBox<String> fontComboBox;
 	private final Supplier<Boolean> updatingSupplier;
 
-	public FontFamilyAction(EditorPanel<? extends EditorPanel<?>> context, JComboBox<String> fontComboBox, Supplier<Boolean> updatingSupplier) {
+	public FontFamilyAction(AbstractEditorPanel context, JComboBox<String> fontComboBox, Supplier<Boolean> updatingSupplier) {
 		super(context, null, false, true);
 
 		this.fontComboBox = fontComboBox;

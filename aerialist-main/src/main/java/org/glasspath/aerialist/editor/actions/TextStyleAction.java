@@ -27,6 +27,7 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.JTextPane;
+import javax.swing.text.AbstractDocument.LeafElement;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.EditorKit;
 import javax.swing.text.Element;
@@ -35,32 +36,31 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyledDocument;
 import javax.swing.text.StyledEditorKit;
 import javax.swing.text.Utilities;
-import javax.swing.text.AbstractDocument.LeafElement;
 
-import org.glasspath.aerialist.editor.EditorPanel;
+import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.swing.view.TextView;
 import org.glasspath.aerialist.swing.view.TextView.AttributeProcessor;
 
 public abstract class TextStyleAction extends AbstractAction {
 
-	protected final EditorPanel<? extends EditorPanel<?>> context;
+	protected final AbstractEditorPanel context;
 	protected final TextView textView;
 	protected final boolean applyToParagraph;
 	protected final boolean reload;
 
-	public TextStyleAction(EditorPanel<? extends EditorPanel<?>> context) {
+	public TextStyleAction(AbstractEditorPanel context) {
 		this(context, null);
 	}
 
-	public TextStyleAction(EditorPanel<? extends EditorPanel<?>> context, TextView textView) {
+	public TextStyleAction(AbstractEditorPanel context, TextView textView) {
 		this(context, textView, false);
 	}
 
-	public TextStyleAction(EditorPanel<? extends EditorPanel<?>> context, TextView textView, boolean applyToParagraph) {
+	public TextStyleAction(AbstractEditorPanel context, TextView textView, boolean applyToParagraph) {
 		this(context, textView, applyToParagraph, false);
 	}
 
-	public TextStyleAction(EditorPanel<? extends EditorPanel<?>> context, TextView textView, boolean applyToParagraph, boolean reload) {
+	public TextStyleAction(AbstractEditorPanel context, TextView textView, boolean applyToParagraph, boolean reload) {
 		this.context = context;
 		this.textView = textView;
 		this.applyToParagraph = applyToParagraph;
@@ -86,6 +86,7 @@ public abstract class TextStyleAction extends AbstractAction {
 		if (editorKit instanceof StyledEditorKit) {
 
 			textView.setUpdatingComponent(true);
+			textView.prepareForUndoableEdit();
 
 			StyledEditorKit kit = (StyledEditorKit) editorKit;
 

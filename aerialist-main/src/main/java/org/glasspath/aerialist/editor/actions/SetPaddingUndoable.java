@@ -28,23 +28,26 @@ import javax.swing.undo.UndoableEdit;
 
 import org.glasspath.aerialist.AerialistUtils;
 import org.glasspath.aerialist.Padding;
+import org.glasspath.aerialist.editor.AbstractEditorPanel;
+import org.glasspath.aerialist.editor.DefaultEditorUndoable;
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
 import org.glasspath.aerialist.swing.view.ISwingElementView;
 
-public class SetPaddingUndoable implements UndoableEdit {
+public class SetPaddingUndoable extends DefaultEditorUndoable {
 
-	private final DocumentEditorPanel context;
 	private final ISwingElementView<?> elementView;
 	private final Padding padding;
 	private final Padding oldPadding;
 	private final boolean yPolicyEnabled;
 
-	public SetPaddingUndoable(DocumentEditorPanel context, ISwingElementView<?> elementView, Padding padding, Padding oldPadding, boolean yPolicyEnabled) {
-		this.context = context;
+	public SetPaddingUndoable(AbstractEditorPanel context, ISwingElementView<?> elementView, Padding padding, Padding oldPadding) {
+		super(context);
+
 		this.elementView = elementView;
 		this.padding = padding;
 		this.oldPadding = oldPadding;
-		this.yPolicyEnabled = yPolicyEnabled;
+		this.yPolicyEnabled = context instanceof DocumentEditorPanel ? ((DocumentEditorPanel) context).getPageContainer().isYPolicyEnabled() : false;
+
 	}
 
 	@Override
@@ -89,9 +92,14 @@ public class SetPaddingUndoable implements UndoableEdit {
 
 	@Override
 	public void redo() throws CannotRedoException {
-		context.getPageContainer().setYPolicyEnabled(yPolicyEnabled);
+
+		if (context instanceof DocumentEditorPanel) {
+			((DocumentEditorPanel) context).getPageContainer().setYPolicyEnabled(yPolicyEnabled);
+		}
+
 		SetPaddingAction.applyPadding(elementView, padding);
 		context.refresh(AerialistUtils.getPageView(elementView));
+
 	}
 
 	@Override
@@ -101,9 +109,14 @@ public class SetPaddingUndoable implements UndoableEdit {
 
 	@Override
 	public void undo() throws CannotUndoException {
-		context.getPageContainer().setYPolicyEnabled(yPolicyEnabled);
+
+		if (context instanceof DocumentEditorPanel) {
+			((DocumentEditorPanel) context).getPageContainer().setYPolicyEnabled(yPolicyEnabled);
+		}
+
 		SetPaddingAction.applyPadding(elementView, oldPadding);
 		context.refresh(AerialistUtils.getPageView(elementView));
+
 	}
 
 }

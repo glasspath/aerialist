@@ -28,15 +28,15 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 
 import org.glasspath.aerialist.IVisible;
-import org.glasspath.aerialist.editor.EditorPanel;
+import org.glasspath.aerialist.editor.AbstractEditorPanel;
 
 public class SetVisibilityAction extends AbstractAction {
 
-	private final EditorPanel<? extends EditorPanel<?>> context;
+	private final AbstractEditorPanel context;
 	private final IVisible view;
 	private final String key;
 
-	public SetVisibilityAction(EditorPanel<? extends EditorPanel<?>> context, IVisible view, String key, String description) {
+	public SetVisibilityAction(AbstractEditorPanel context, IVisible view, String key, String description) {
 
 		this.context = context;
 		this.view = view;

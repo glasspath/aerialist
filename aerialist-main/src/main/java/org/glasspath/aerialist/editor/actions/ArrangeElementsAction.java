@@ -33,7 +33,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 
 import org.glasspath.aerialist.AerialistUtils;
-import org.glasspath.aerialist.editor.EditorPanel;
+import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.editor.ElementData;
 import org.glasspath.aerialist.icons.Icons;
 import org.glasspath.aerialist.swing.view.PageView;
@@ -45,10 +45,10 @@ public class ArrangeElementsAction extends AbstractAction {
 	public static final int SEND_BACKWARD = 2;
 	public static final int SEND_TO_BACK = 3;
 
-	private final EditorPanel<? extends EditorPanel<?>> context;
+	private final AbstractEditorPanel context;
 	private final int arrangeAction;
 
-	public ArrangeElementsAction(EditorPanel<? extends EditorPanel<?>> context, int arrangeAction, boolean toolbarButton) {
+	public ArrangeElementsAction(AbstractEditorPanel context, int arrangeAction, boolean toolbarButton) {
 
 		this.context = context;
 		this.arrangeAction = arrangeAction;

@@ -30,17 +30,17 @@ import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoableEdit;
 
 import org.glasspath.aerialist.Border;
-import org.glasspath.aerialist.editor.EditorPanel;
-import org.glasspath.aerialist.editor.EditorUndoable;
+import org.glasspath.aerialist.editor.AbstractEditorPanel;
+import org.glasspath.aerialist.editor.DefaultEditorUndoable;
 import org.glasspath.aerialist.swing.view.ISwingElementView;
 
-public class SetBorderColorUndoable extends EditorUndoable {
+public class SetBorderColorUndoable extends DefaultEditorUndoable {
 
 	private final ISwingElementView<?> elementView;
 	private final List<Border> newBorders;
 	private final List<Border> oldBorders;
 
-	public SetBorderColorUndoable(EditorPanel<? extends EditorPanel<?>> context, ISwingElementView<?> elementView, List<Border> newBorders, List<Border> oldBorders) {
+	public SetBorderColorUndoable(AbstractEditorPanel context, ISwingElementView<?> elementView, List<Border> newBorders, List<Border> oldBorders) {
 		super(context);
 		this.elementView = elementView;
 		this.newBorders = newBorders;

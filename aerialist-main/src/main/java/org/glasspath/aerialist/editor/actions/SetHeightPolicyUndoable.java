@@ -32,12 +32,12 @@ import javax.swing.undo.UndoableEdit;
 
 import org.glasspath.aerialist.HeightPolicy;
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
+import org.glasspath.aerialist.editor.DocumentEditorUndoable;
 import org.glasspath.aerialist.swing.view.ISwingElementView;
 import org.glasspath.aerialist.swing.view.PageView;
 
-public class SetHeightPolicyUndoable implements UndoableEdit {
+public class SetHeightPolicyUndoable extends DocumentEditorUndoable {
 
-	private final DocumentEditorPanel context;
 	private final ISwingElementView<?> elementView;
 	private final PageView pageView;
 	private final HeightPolicy oldHeightPolicy;
@@ -45,7 +45,7 @@ public class SetHeightPolicyUndoable implements UndoableEdit {
 	private final HeightPolicy newHeightPolicy;
 
 	public SetHeightPolicyUndoable(DocumentEditorPanel context, ISwingElementView<?> elementView, PageView pageView, HeightPolicy oldHeightPolicy, Rectangle oldBounds, HeightPolicy newHeightPolicy) {
-		this.context = context;
+		super(context);
 		this.elementView = elementView;
 		this.pageView = pageView;
 		this.oldHeightPolicy = oldHeightPolicy;

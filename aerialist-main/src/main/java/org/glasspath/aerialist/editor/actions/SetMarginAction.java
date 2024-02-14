@@ -30,16 +30,17 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 
 import org.glasspath.aerialist.Margin;
+import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
 import org.glasspath.aerialist.swing.view.PageContainer;
 import org.glasspath.aerialist.swing.view.PageView;
 
 public class SetMarginAction extends AbstractAction {
 
-	private final DocumentEditorPanel context;
+	private final AbstractEditorPanel context;
 	private final Margin margin;
 
-	public SetMarginAction(DocumentEditorPanel context, Margin margin, String description, boolean defaultMargin) {
+	public SetMarginAction(AbstractEditorPanel context, Margin margin, String description, boolean defaultMargin) {
 
 		this.context = context;
 		this.margin = margin;
@@ -67,7 +68,7 @@ public class SetMarginAction extends AbstractAction {
 			applyMargin(view, margin);
 			context.refresh(null);
 
-			context.undoableEditHappened(new SetMarginUndoable(context, view, margin, oldMargin, context.getPageContainer().isYPolicyEnabled()));
+			context.undoableEditHappened(new SetMarginUndoable(context, view, margin, oldMargin));
 
 		}
 
@@ -81,7 +82,11 @@ public class SetMarginAction extends AbstractAction {
 			return null;
 		}
 		*/
-		return context.getPageContainer();
+		if (context instanceof DocumentEditorPanel) {
+			return ((DocumentEditorPanel) context).getPageContainer();
+		} else {
+			return null;
+		}
 	}
 
 	public static boolean isMarginSupported(Component view) {

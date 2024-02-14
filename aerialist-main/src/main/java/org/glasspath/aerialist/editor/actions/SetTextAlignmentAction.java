@@ -27,7 +27,7 @@ import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
-import org.glasspath.aerialist.editor.EditorPanel;
+import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.icons.Icons;
 import org.glasspath.aerialist.swing.view.TextView;
 
@@ -35,7 +35,7 @@ public class SetTextAlignmentAction extends TextStyleAction {
 
 	private final int alignment;
 
-	public SetTextAlignmentAction(EditorPanel<? extends EditorPanel<?>> context, int alignment) {
+	public SetTextAlignmentAction(AbstractEditorPanel context, int alignment) {
 		super(context);
 
 		this.alignment = alignment;

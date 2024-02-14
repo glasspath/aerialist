@@ -32,12 +32,12 @@ import javax.swing.undo.UndoableEdit;
 
 import org.glasspath.aerialist.YPolicy;
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
+import org.glasspath.aerialist.editor.DocumentEditorUndoable;
 import org.glasspath.aerialist.swing.view.ISwingElementView;
 import org.glasspath.aerialist.swing.view.PageView;
 
-public class SetYPolicyUndoable implements UndoableEdit {
+public class SetYPolicyUndoable extends DocumentEditorUndoable {
 
-	private final DocumentEditorPanel context;
 	private final ISwingElementView<?> elementView;
 	private final PageView pageView;
 	private final YPolicy oldYPolicy;
@@ -45,7 +45,7 @@ public class SetYPolicyUndoable implements UndoableEdit {
 	private final YPolicy newYPolicy;
 
 	public SetYPolicyUndoable(DocumentEditorPanel context, ISwingElementView<?> elementView, PageView pageView, YPolicy oldYPolicy, Rectangle oldBounds, YPolicy newYPolicy) {
-		this.context = context;
+		super(context);
 		this.elementView = elementView;
 		this.pageView = pageView;
 		this.oldYPolicy = oldYPolicy;

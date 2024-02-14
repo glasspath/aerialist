@@ -56,13 +56,7 @@ public class MainPanel extends AbstractMainPanel<Aerialist> {
 
 		setLayout(new BorderLayout());
 
-		documentEditor = new DocumentEditorPanel(context, editorContext) {
-
-			@Override
-			public Frame getFrame() {
-				return context.getFrame();
-			}
-		};
+		documentEditor = new DocumentEditorPanel(context, editorContext);
 
 		xmlMapper = XmlUtils.createXmlMapper();
 

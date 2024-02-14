@@ -33,7 +33,7 @@ import javax.swing.AbstractAction;
 import org.glasspath.aerialist.AerialistUtils;
 import org.glasspath.aerialist.Border;
 import org.glasspath.aerialist.BorderType;
-import org.glasspath.aerialist.editor.EditorPanel;
+import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.swing.view.ISwingElementView;
 import org.glasspath.common.swing.border.BorderMenu.BorderMenuType;
 import org.glasspath.common.swing.border.BorderMenu.BorderMenuTypeEvent;
@@ -41,12 +41,10 @@ import org.glasspath.common.swing.color.ColorUtils;
 
 public class SetBorderTypeAction extends AbstractAction {
 
-	private final EditorPanel<? extends EditorPanel<?>> context;
+	private final AbstractEditorPanel context;
 
-	public SetBorderTypeAction(EditorPanel<? extends EditorPanel<?>> context) {
-
+	public SetBorderTypeAction(AbstractEditorPanel context) {
 		this.context = context;
-
 	}
 
 	@Override

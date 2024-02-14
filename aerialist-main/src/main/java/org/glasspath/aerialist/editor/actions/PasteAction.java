@@ -215,7 +215,7 @@ public class PasteAction extends AbstractAction {
 					@Override
 					public void run() {
 						selectPastedComponents(context, pastedComponents);
-						context.refresh(refreshComponent, true, true);
+						context.refresh(refreshComponent, null, true, true);
 					}
 				});
 

@@ -31,14 +31,14 @@ import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
-import org.glasspath.aerialist.editor.EditorPanel;
+import org.glasspath.aerialist.editor.AbstractEditorPanel;
 
 public class FontSizeAction extends TextStyleAction {
 
 	private final JComboBox<String> fontSizeComboBox;
 	private final Supplier<Boolean> updatingSupplier;
 
-	public FontSizeAction(EditorPanel<? extends EditorPanel<?>> context, JComboBox<String> fontSizeComboBox, Supplier<Boolean> updatingSupplier) {
+	public FontSizeAction(AbstractEditorPanel context, JComboBox<String> fontSizeComboBox, Supplier<Boolean> updatingSupplier) {
 		super(context, null, false, true);
 
 		this.fontSizeComboBox = fontSizeComboBox;

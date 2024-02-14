@@ -29,7 +29,7 @@ import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
-import org.glasspath.aerialist.editor.EditorPanel;
+import org.glasspath.aerialist.editor.AbstractEditorPanel;
 
 public class SpaceAboveAction extends TextStyleAction {
 
@@ -37,7 +37,7 @@ public class SpaceAboveAction extends TextStyleAction {
 
 	private final float spaceAbove;
 
-	public SpaceAboveAction(EditorPanel<? extends EditorPanel<?>> context, float spaceAbove) {
+	public SpaceAboveAction(AbstractEditorPanel context, float spaceAbove) {
 		super(context, null, true, true);
 
 		this.spaceAbove = spaceAbove;

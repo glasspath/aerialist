@@ -28,17 +28,17 @@ import javax.swing.undo.UndoableEdit;
 
 import org.glasspath.aerialist.IPagination;
 import org.glasspath.aerialist.Pagination;
-import org.glasspath.aerialist.editor.DocumentEditorPanel;
+import org.glasspath.aerialist.editor.AbstractEditorPanel;
+import org.glasspath.aerialist.editor.DefaultEditorUndoable;
 
-public class SetPaginationUndoable implements UndoableEdit {
+public class SetPaginationUndoable extends DefaultEditorUndoable {
 
-	private final DocumentEditorPanel context;
 	private final IPagination view;
 	private final Pagination pagination;
 	private final Pagination oldPagination;
 
-	public SetPaginationUndoable(DocumentEditorPanel context, IPagination view, Pagination pagination, Pagination oldPagination) {
-		this.context = context;
+	public SetPaginationUndoable(AbstractEditorPanel context, IPagination view, Pagination pagination, Pagination oldPagination) {
+		super(context);
 		this.view = view;
 		this.pagination = pagination;
 		this.oldPagination = oldPagination;

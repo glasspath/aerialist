@@ -22,7 +22,6 @@
  */
 package org.glasspath.aerialist.editor.actions;
 
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
@@ -90,7 +89,7 @@ public class InsertPageAction extends AbstractAction {
 		PageView pageView = PageContainer.createLayeredPageView(page, context.getPageContainer());
 
 		context.getPageContainer().insertPageView(pageView, index);
-		context.refresh(null, false, true);
+		context.refresh(null, null, false, true);
 		context.undoableEditHappened(new InsertPageUndoable(context, pageView, index));
 
 	}

@@ -31,14 +31,13 @@ import javax.swing.undo.UndoableEdit;
 
 import org.glasspath.aerialist.swing.view.PageView;
 
-public class InsertElementUndoable implements UndoableEdit {
+public class InsertElementUndoable extends DefaultEditorUndoable {
 
-	private final DocumentEditorPanel context;
 	private final Component component;
 	private final PageView pageView;
 
-	public InsertElementUndoable(DocumentEditorPanel context, Component component, PageView pageView) {
-		this.context = context;
+	public InsertElementUndoable(AbstractEditorPanel context, Component component, PageView pageView) {
+		super(context);
 		this.component = component;
 		this.pageView = pageView;
 	}

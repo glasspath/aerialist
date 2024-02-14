@@ -26,19 +26,14 @@ import java.awt.Component;
 import java.awt.Rectangle;
 import java.util.Map;
 
-import org.glasspath.aerialist.swing.view.ElementUndoable;
+public abstract class DefaultEditorUndoable extends EditorUndoable<AbstractEditorPanel> {
 
-public abstract class EditorUndoable<T extends AbstractEditorPanel> extends ElementUndoable {
-
-	protected final T context;
-
-	public EditorUndoable(T context) {
+	public DefaultEditorUndoable(AbstractEditorPanel context) {
 		this(context, null);
 	}
 
-	public EditorUndoable(T context, Map<Component, Rectangle> anchoredElementBounds) {
-		super(anchoredElementBounds);
-		this.context = context;
+	public DefaultEditorUndoable(AbstractEditorPanel context, Map<Component, Rectangle> anchoredElementBounds) {
+		super(context, anchoredElementBounds);
 	}
 
 }

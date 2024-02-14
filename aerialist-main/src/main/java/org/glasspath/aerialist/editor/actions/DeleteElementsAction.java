@@ -32,22 +32,22 @@ import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-import org.glasspath.aerialist.editor.EditorPanel;
+import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.editor.ElementData;
 import org.glasspath.aerialist.swing.view.PageView;
 import org.glasspath.common.icons.Icons;
 
 public class DeleteElementsAction extends AbstractAction {
 
-	private final EditorPanel<? extends EditorPanel<?>> context;
+	private final AbstractEditorPanel context;
 	private final PageView pageView;
 	private final List<Component> elements;
 
-	public DeleteElementsAction(EditorPanel<? extends EditorPanel<?>> context, PageView pageView, Component element) {
+	public DeleteElementsAction(AbstractEditorPanel context, PageView pageView, Component element) {
 		this(context, pageView, List.of(element));
 	}
 
-	public DeleteElementsAction(EditorPanel<? extends EditorPanel<?>> context, PageView pageView, List<Component> elements) {
+	public DeleteElementsAction(AbstractEditorPanel context, PageView pageView, List<Component> elements) {
 
 		this.context = context;
 		this.pageView = pageView;

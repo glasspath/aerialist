@@ -22,9 +22,13 @@
  */
 package org.glasspath.aerialist.editor;
 
+import java.awt.Component;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
+import java.util.Map;
 
+import org.glasspath.aerialist.AerialistUtils;
 import org.glasspath.aerialist.editor.ChangeTableLayoutUndoable.TableViewData;
 import org.glasspath.aerialist.swing.view.PageView;
 import org.glasspath.aerialist.swing.view.TableCellView;
@@ -41,6 +45,7 @@ public class ResizeTableCellOperation extends Operation {
 
 	private TableView tableView = null;
 	private TableViewLayout tableLayout = null;
+	private Map<Component, Rectangle> anchoredElementBounds = null;
 	private TableViewData oldTableViewData = null;
 	private PageView pageView = null;
 	private int column = -1;
@@ -57,6 +62,7 @@ public class ResizeTableCellOperation extends Operation {
 
 			tableView = (TableView) tableCellView.getParent();
 			tableLayout = tableView.getTableLayout();
+			anchoredElementBounds = AerialistUtils.getAnchoredElementBounds(tableView);
 			oldTableViewData = new TableViewData(tableView.updateColStyles(), null);
 
 			if (tableView.getParent() instanceof PageView && tableLayout != null) {
@@ -105,7 +111,7 @@ public class ResizeTableCellOperation extends Operation {
 
 			TableViewData newTableViewData = new TableViewData(tableView.updateColStyles(), null);
 
-			context.undoableEditHappened(new ChangeTableLayoutUndoable(context, tableView, oldTableViewData, newTableViewData, context.getPageContainer().isYPolicyEnabled()));
+			context.undoableEditHappened(new ChangeTableLayoutUndoable(context, tableView, oldTableViewData, newTableViewData, anchoredElementBounds));
 
 			context.getSelection().fireSelectionChanged();
 			context.refresh(pageView);

@@ -26,7 +26,7 @@ import javax.swing.Action;
 import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.SimpleAttributeSet;
 
-import org.glasspath.aerialist.editor.EditorPanel;
+import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.swing.view.TextView;
 
 public class InsertFieldAction extends TextStyleAction {
@@ -34,11 +34,11 @@ public class InsertFieldAction extends TextStyleAction {
 	private final String key;
 	private final String description;
 
-	public InsertFieldAction(EditorPanel<? extends EditorPanel<?>> context, String key, String description) {
+	public InsertFieldAction(AbstractEditorPanel context, String key, String description) {
 		this(context, null, key, description);
 	}
 
-	public InsertFieldAction(EditorPanel<? extends EditorPanel<?>> context, TextView textView, String key, String description) {
+	public InsertFieldAction(AbstractEditorPanel context, TextView textView, String key, String description) {
 		super(context, textView);
 
 		this.key = key;

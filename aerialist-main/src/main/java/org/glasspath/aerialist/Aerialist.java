@@ -23,7 +23,6 @@
 package org.glasspath.aerialist;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -352,6 +351,7 @@ public class Aerialist implements FrameContext {
 		return frame;
 	}
 
+	@Override
 	public Preferences getPreferences() {
 		return preferences;
 	}

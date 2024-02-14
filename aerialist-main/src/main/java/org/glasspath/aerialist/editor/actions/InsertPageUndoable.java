@@ -27,16 +27,16 @@ import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoableEdit;
 
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
+import org.glasspath.aerialist.editor.DocumentEditorUndoable;
 import org.glasspath.aerialist.swing.view.PageView;
 
-public class InsertPageUndoable implements UndoableEdit {
+public class InsertPageUndoable extends DocumentEditorUndoable {
 
-	private final DocumentEditorPanel context;
 	private final PageView pageView;
 	private final int index;
 
 	public InsertPageUndoable(DocumentEditorPanel context, PageView pageView, int index) {
-		this.context = context;
+		super(context);
 		this.pageView = pageView;
 		this.index = index;
 	}
@@ -91,7 +91,7 @@ public class InsertPageUndoable implements UndoableEdit {
 		}
 
 		context.getPageContainer().insertPageView(pageView, index);
-		context.refresh(null, false, true);
+		context.refresh(null, null, false, true);
 
 	}
 
@@ -110,7 +110,7 @@ public class InsertPageUndoable implements UndoableEdit {
 		}
 
 		context.getPageContainer().removePageView(pageView);
-		context.refresh(null, false, true);
+		context.refresh(null, null, false, true);
 
 	}
 

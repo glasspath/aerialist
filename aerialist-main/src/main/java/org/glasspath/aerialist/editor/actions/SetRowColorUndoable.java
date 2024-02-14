@@ -30,11 +30,11 @@ import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoableEdit;
 
 import org.glasspath.aerialist.RowStyle;
-import org.glasspath.aerialist.editor.EditorPanel;
-import org.glasspath.aerialist.editor.EditorUndoable;
+import org.glasspath.aerialist.editor.AbstractEditorPanel;
+import org.glasspath.aerialist.editor.DefaultEditorUndoable;
 import org.glasspath.aerialist.swing.view.TableView;
 
-public class SetRowColorUndoable extends EditorUndoable {
+public class SetRowColorUndoable extends DefaultEditorUndoable {
 
 	private final TableView tableView;
 	private final int row;
@@ -42,7 +42,7 @@ public class SetRowColorUndoable extends EditorUndoable {
 	private final Color color;
 	private final List<RowStyle> oldRowStyles;
 
-	public SetRowColorUndoable(EditorPanel<? extends EditorPanel<?>> context, TableView tableView, int row, int repeat, Color color, List<RowStyle> oldRowStyles) {
+	public SetRowColorUndoable(AbstractEditorPanel context, TableView tableView, int row, int repeat, Color color, List<RowStyle> oldRowStyles) {
 		super(context);
 		this.tableView = tableView;
 		this.row = row;

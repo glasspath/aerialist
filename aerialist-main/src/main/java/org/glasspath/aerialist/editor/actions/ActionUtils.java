@@ -55,6 +55,7 @@ import org.glasspath.aerialist.Margin;
 import org.glasspath.aerialist.Padding;
 import org.glasspath.aerialist.Page.PageSize;
 import org.glasspath.aerialist.YPolicy;
+import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
 import org.glasspath.aerialist.editor.EditorPanel;
 import org.glasspath.aerialist.editor.ElementData;
@@ -262,7 +263,7 @@ public class ActionUtils {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					FieldUtils.updateDynamicFields(AerialistUtils.getDynamicFieldContext(context), context.getPageContainer());
-					context.getPageContainer().refresh(null);
+					context.getPageContainer().refresh(null, null);
 				}
 			});
 
@@ -320,7 +321,7 @@ public class ActionUtils {
 
 			menu.addSeparator();
 
-			menu.add(createBackgroundColorMenuItem(context.getFrame(), elementView.getBackgroundColor(), new SetBackgroundColorAction(context), menuBarMenu));
+			menu.add(createBackgroundColorMenuItem(context.getFrameContext().getFrame(), elementView.getBackgroundColor(), new SetBackgroundColorAction(context), menuBarMenu));
 			if (elementView instanceof TableView) {
 				menu.add(createRowColorsMenu(context, (TableView) elementView, menuBarMenu));
 			}
@@ -328,7 +329,7 @@ public class ActionUtils {
 
 				@Override
 				protected Frame getFrame() {
-					return context.getFrame();
+					return context.getFrameContext().getFrame();
 				}
 			});
 			if (SetPaddingAction.isPaddingSupported(elementView)) {
@@ -389,7 +390,7 @@ public class ActionUtils {
 							margin = new Margin(Document.DEFAULT_MARGIN_TOP, Document.DEFAULT_MARGIN_RIGHT, Document.DEFAULT_MARGIN_BOTTOM, Document.DEFAULT_MARGIN_LEFT);
 						}
 
-						PaddingDialog marginDialog = new PaddingDialog(context.getContext(), margin.top, margin.right, margin.bottom, margin.left);
+						PaddingDialog marginDialog = new PaddingDialog(context.getFrameContext(), margin.top, margin.right, margin.bottom, margin.left);
 						if (marginDialog.setVisibleAndGetAction()) {
 							PaddingPanel p = marginDialog.getPaddingPanel();
 							new SetMarginAction(context, new Margin(p.getTopPadding(), p.getRightPadding(), p.getBottomPadding(), p.getLeftPadding()), "Custom", false).actionPerformed();
@@ -569,7 +570,7 @@ public class ActionUtils {
 
 				if (selectedTextView != null) {
 
-					String filePath = FileChooser.browseForImageFile(Icons.image, false, context.getFrame(), context.getPreferences(), "lastImageFilePath");
+					String filePath = FileChooser.browseForImageFile(Icons.image, false, context.getFrameContext().getFrame(), context.getFrameContext().getPreferences(), "lastImageFilePath");
 					if (filePath != null) {
 
 						try {
@@ -731,7 +732,7 @@ public class ActionUtils {
 
 		headerMenu.addSeparator();
 
-		JMenuItem headerColorMenuItem = createColorMenuItem(context.getFrame(), "Background color", null, new SetRowColorAction(context, tableView, 0, 0), menuBarMenu); // Use row 0 for header
+		JMenuItem headerColorMenuItem = createColorMenuItem(context.getFrameContext().getFrame(), "Background color", null, new SetRowColorAction(context, tableView, 0, 0), menuBarMenu); // Use row 0 for header
 		headerColorMenuItem.setEnabled(tableView.getHeaderRows() > 0);
 		headerMenu.add(headerColorMenuItem);
 
@@ -777,8 +778,8 @@ public class ActionUtils {
 
 		JMenu rowColorsMenu = new JMenu("Row colors");
 
-		rowColorsMenu.add(createColorMenuItem(context.getFrame(), "Even Rows", null, new SetRowColorAction(context, tableView, 2, 2), menuBarMenu));
-		rowColorsMenu.add(createColorMenuItem(context.getFrame(), "Odd rows", null, new SetRowColorAction(context, tableView, 1, 2), menuBarMenu));
+		rowColorsMenu.add(createColorMenuItem(context.getFrameContext().getFrame(), "Even Rows", null, new SetRowColorAction(context, tableView, 2, 2), menuBarMenu));
+		rowColorsMenu.add(createColorMenuItem(context.getFrameContext().getFrame(), "Odd rows", null, new SetRowColorAction(context, tableView, 1, 2), menuBarMenu));
 
 		return rowColorsMenu;
 
@@ -886,7 +887,7 @@ public class ActionUtils {
 					padding = new Padding();
 				}
 
-				PaddingDialog paddingDialog = new PaddingDialog(context.getContext(), padding.top, padding.right, padding.bottom, padding.left);
+				PaddingDialog paddingDialog = new PaddingDialog(context.getFrameContext(), padding.top, padding.right, padding.bottom, padding.left);
 				if (paddingDialog.setVisibleAndGetAction()) {
 					PaddingPanel p = paddingDialog.getPaddingPanel();
 					new SetPaddingAction(context).actionPerformed(new Padding(p.getTopPadding(), p.getRightPadding(), p.getBottomPadding(), p.getLeftPadding()));
@@ -899,7 +900,7 @@ public class ActionUtils {
 
 	}
 
-	public static JMenuItem createRadiusMenu(DocumentEditorPanel context, ISwingElementView<?> elementView) {
+	public static JMenuItem createRadiusMenu(AbstractEditorPanel context, ISwingElementView<?> elementView) {
 
 		JMenu radiusMenu = new JMenu("Radius");
 		radiusMenu.add(new JCheckBoxMenuItem(new SetRadiusAction(context, 0)));
@@ -915,7 +916,7 @@ public class ActionUtils {
 
 	}
 
-	public static void setSelection(EditorPanel<? extends EditorPanel<?>> editor, PageView pageView, List<ElementData> elementsData) {
+	public static void setSelection(AbstractEditorPanel editor, PageView pageView, List<ElementData> elementsData) {
 
 		SwingUtilities.invokeLater(new Runnable() {
 

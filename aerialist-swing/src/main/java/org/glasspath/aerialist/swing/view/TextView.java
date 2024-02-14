@@ -24,6 +24,7 @@ package org.glasspath.aerialist.swing.view;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -37,6 +38,7 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -86,6 +88,7 @@ public class TextView extends JTextPane {
 	private boolean singleLine = false;
 	private boolean updatingComponent = false;
 	private TextData currentTextData = null;
+	private Map<Component, Rectangle> anchoredElementBounds = null;
 
 	public TextView(ISwingViewContext viewContext) {
 
@@ -121,17 +124,25 @@ public class TextView extends JTextPane {
 
 				@Override
 				public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+
+					if (!updatingComponent) {
+						prepareForUndoableEdit();
+					}
+
 					if (singleLine) {
 						super.insertString(fb, offset, string.replaceAll("\n", ""), attr);
 					} else {
 						super.insertString(fb, offset, string, attr);
 					}
+
 				}
 
 				@Override
 				public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attr) throws BadLocationException {
 
 					if (!updatingComponent) {
+
+						prepareForUndoableEdit();
 
 						if (attr instanceof SimpleAttributeSet) {
 
@@ -251,12 +262,16 @@ public class TextView extends JTextPane {
 		this.updatingComponent = updatingComponent;
 	}
 
+	public void prepareForUndoableEdit() {
+		anchoredElementBounds = viewContext.getAnchoredElementBounds(this);
+	}
+
 	public void createUndoableEdit() {
 
 		TextData newTextData = new TextData();
 		toText(newTextData);
 
-		viewContext.undoableEditHappened(new TextViewUndoableEdit(viewContext, TextView.this, currentTextData, newTextData));
+		viewContext.undoableEditHappened(new TextViewUndoableEdit(viewContext, this, currentTextData, newTextData, anchoredElementBounds));
 
 		currentTextData = new TextData();
 		toText(currentTextData);
@@ -423,6 +438,8 @@ public class TextView extends JTextPane {
 			// When inserting field end can be equal to start
 			if (end >= start) {
 
+				prepareForUndoableEdit();
+
 				int length = end - start;
 
 				String text = document.getText(start, length);
@@ -485,6 +502,8 @@ public class TextView extends JTextPane {
 
 		try {
 
+			prepareForUndoableEdit();
+
 			int selectionStart = getSelectionStart();
 			int selectionEnd = getSelectionEnd();
 
@@ -537,6 +556,8 @@ public class TextView extends JTextPane {
 			int start = getSelectionStart();
 			int end = getSelectionEnd();
 			if (end >= start) {
+
+				prepareForUndoableEdit();
 
 				int length = end - start;
 
@@ -1000,7 +1021,7 @@ public class TextView extends JTextPane {
 
 	}
 
-	public static class TextViewUndoableEdit implements UndoableEdit {
+	public static class TextViewUndoableEdit extends ElementUndoable {
 
 		private final ISwingViewContext viewContext;
 		private final TextView textView;
@@ -1008,7 +1029,8 @@ public class TextView extends JTextPane {
 		private final TextData newTextData;
 		private final boolean yPolicyEnabled;
 
-		public TextViewUndoableEdit(ISwingViewContext viewContext, TextView textView, TextData oldTextData, TextData newTextData) {
+		public TextViewUndoableEdit(ISwingViewContext viewContext, TextView textView, TextData oldTextData, TextData newTextData, Map<Component, Rectangle> anchoredElementBounds) {
+			super(anchoredElementBounds);
 			this.viewContext = viewContext;
 			this.textView = textView;
 			this.oldTextData = oldTextData;
@@ -1060,7 +1082,7 @@ public class TextView extends JTextPane {
 		public void redo() throws CannotRedoException {
 			viewContext.setYPolicyEnabled(yPolicyEnabled);
 			textView.init(newTextData);
-			viewContext.refresh(textView);
+			viewContext.refresh(textView, null);
 		}
 
 		@Override
@@ -1072,7 +1094,7 @@ public class TextView extends JTextPane {
 		public void undo() throws CannotUndoException {
 			viewContext.setYPolicyEnabled(yPolicyEnabled);
 			textView.init(oldTextData);
-			viewContext.refresh(textView);
+			viewContext.refresh(textView, anchoredElementBounds);
 		}
 
 	}

@@ -26,10 +26,15 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Rectangle;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.glasspath.aerialist.Page.PageSize;
 import org.glasspath.aerialist.editor.EditorPanel;
@@ -45,7 +50,6 @@ import org.glasspath.common.os.OsUtils;
 import org.glasspath.common.swing.color.ColorUtils;
 
 import com.lowagie.text.DocumentException;
-import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.DefaultFontMapper;
 import com.lowagie.text.pdf.DefaultFontMapper.BaseFontParameters;
@@ -61,6 +65,55 @@ public class AerialistUtils {
 	private static DefaultFontMapper fontMapper = null;
 
 	private AerialistUtils() {
+
+	}
+
+	public static Map<Component, Rectangle> getAnchoredElementBounds(Component component) {
+
+		if (component instanceof ISwingElementView<?>) {
+
+			PageView pageView = AerialistUtils.getPageView(component);
+			if (pageView != null) {
+
+				List<ISwingElementView<?>> anchoredElements = pageView.getVerticalLayout().getAnchoredElements((ISwingElementView<?>) component);
+				if (anchoredElements.size() > 0) {
+
+					Map<Component, Rectangle> anchoredElementBounds = new LinkedHashMap<>();
+
+					for (ISwingElementView<?> anchoredElement : anchoredElements) {
+						if (anchoredElement instanceof Component) {
+							anchoredElementBounds.put((Component) anchoredElement, ((Component) anchoredElement).getBounds());
+						}
+					}
+
+					return anchoredElementBounds;
+
+				}
+
+			}
+
+		}
+
+		return null;
+
+	}
+
+	public static void restoreAnchoredElementBounds(Component component, Map<Component, Rectangle> anchoredElementBounds) {
+
+		if (component != null && anchoredElementBounds != null && anchoredElementBounds.size() > 0) {
+
+			PageView pageView = AerialistUtils.getPageView(component);
+			if (pageView != null) {
+
+				for (Entry<Component, Rectangle> entry : anchoredElementBounds.entrySet()) {
+					entry.getKey().setBounds(entry.getValue());
+				}
+
+				pageView.getVerticalLayout().updateVerticalAnchors();
+
+			}
+
+		}
 
 	}
 
@@ -171,7 +224,7 @@ public class AerialistUtils {
 
 			PageView firstPageView = pageContainer.getPageViews().get(0);
 
-			com.lowagie.text.Document document = new com.lowagie.text.Document(new Rectangle(firstPageView.getWidth(), firstPageView.getHeight()));
+			com.lowagie.text.Document document = new com.lowagie.text.Document(new com.lowagie.text.Rectangle(firstPageView.getWidth(), firstPageView.getHeight()));
 
 			try {
 
@@ -189,7 +242,7 @@ public class AerialistUtils {
 					if (firstPage) {
 						firstPage = false;
 					} else {
-						document.setPageSize(new Rectangle(pageView.getWidth(), pageView.getHeight()));
+						document.setPageSize(new com.lowagie.text.Rectangle(pageView.getWidth(), pageView.getHeight()));
 						document.newPage();
 					}
 

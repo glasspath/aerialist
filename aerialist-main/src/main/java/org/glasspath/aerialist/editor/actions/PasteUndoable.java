@@ -32,16 +32,16 @@ import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoableEdit;
 
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
+import org.glasspath.aerialist.editor.DocumentEditorUndoable;
 import org.glasspath.aerialist.swing.view.LayeredPageView;
 import org.glasspath.aerialist.swing.view.PageContainer;
 
-public class PasteUndoable implements UndoableEdit {
+public class PasteUndoable extends DocumentEditorUndoable {
 
-	private final DocumentEditorPanel context;
 	private final List<ComponentInfo> pastedComponents;
 
 	public PasteUndoable(DocumentEditorPanel context, List<ComponentInfo> pastedComponents) {
-		this.context = context;
+		super(context);
 		this.pastedComponents = pastedComponents;
 	}
 
@@ -116,7 +116,7 @@ public class PasteUndoable implements UndoableEdit {
 			@Override
 			public void run() {
 				PasteAction.selectPastedComponents(context, pastedComponents);
-				context.refresh(refreshComponent, true, true);
+				context.refresh(refreshComponent, null, true, true);
 			}
 		});
 
@@ -152,7 +152,7 @@ public class PasteUndoable implements UndoableEdit {
 		}
 
 		context.getSelection().deselectAll();
-		context.refresh(parent, true, true);
+		context.refresh(parent, null, true, true);
 
 	}
 

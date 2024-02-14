@@ -20,25 +20,32 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.glasspath.aerialist.editor;
+package org.glasspath.aerialist.swing.view;
 
 import java.awt.Component;
 import java.awt.Rectangle;
 import java.util.Map;
 
-import org.glasspath.aerialist.swing.view.ElementUndoable;
+import javax.swing.undo.UndoableEdit;
 
-public abstract class EditorUndoable<T extends AbstractEditorPanel> extends ElementUndoable {
+public abstract class ElementUndoable implements UndoableEdit {
 
-	protected final T context;
+	protected Map<Component, Rectangle> anchoredElementBounds = null;
 
-	public EditorUndoable(T context) {
-		this(context, null);
+	public ElementUndoable() {
+		this(null);
 	}
 
-	public EditorUndoable(T context, Map<Component, Rectangle> anchoredElementBounds) {
-		super(anchoredElementBounds);
-		this.context = context;
+	public ElementUndoable(Map<Component, Rectangle> anchoredElementBounds) {
+		this.anchoredElementBounds = anchoredElementBounds;
+	}
+
+	public Map<Component, Rectangle> getAnchoredElementBounds() {
+		return anchoredElementBounds;
+	}
+
+	public void setAnchoredElementBounds(Map<Component, Rectangle> anchoredElementBounds) {
+		this.anchoredElementBounds = anchoredElementBounds;
 	}
 
 }

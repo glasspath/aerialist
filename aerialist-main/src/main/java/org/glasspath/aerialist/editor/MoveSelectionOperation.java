@@ -96,7 +96,7 @@ public class MoveSelectionOperation extends Operation {
 			pageView.elementMoved(component, oldBounds, true);
 
 			context.getSelection().fireSelectionChanged();
-			context.refresh(pageView, false, false);
+			context.refresh(pageView, null, false, false);
 
 		}
 
@@ -111,7 +111,7 @@ public class MoveSelectionOperation extends Operation {
 
 			Rectangle bounds = component.getBounds();
 			if (bounds.x != originalBounds.x || bounds.y != originalBounds.y) {
-				context.undoableEditHappened(new MoveSelectionUndoable(context, component, pageView, originalBounds, bounds, context.getPageContainer().isYPolicyEnabled()));
+				context.undoableEditHappened(new MoveSelectionUndoable(context, component, pageView, originalBounds, bounds));
 			}
 
 			context.getSelection().fireSelectionChanged();

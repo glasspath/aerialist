@@ -31,15 +31,15 @@ import javax.swing.AbstractAction;
 
 import org.glasspath.aerialist.AerialistUtils;
 import org.glasspath.aerialist.Border;
-import org.glasspath.aerialist.editor.EditorPanel;
+import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.swing.view.ISwingElementView;
 import org.glasspath.common.swing.border.BorderMenu.BorderMenuWidthEvent;
 
 public class SetBorderWidthAction extends AbstractAction {
 
-	private final EditorPanel<? extends EditorPanel<?>> context;
+	private final AbstractEditorPanel context;
 
-	public SetBorderWidthAction(EditorPanel<? extends EditorPanel<?>> context) {
+	public SetBorderWidthAction(AbstractEditorPanel context) {
 		this.context = context;
 	}
 

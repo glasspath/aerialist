@@ -118,7 +118,7 @@ public class InsertElementOperation extends Operation {
 			pageView.updateVerticalAnchors();
 
 			context.getSelection().fireSelectionChanged();
-			context.refresh(null, false, false);
+			context.refresh(null, null, false, false);
 
 		}
 
@@ -134,7 +134,7 @@ public class InsertElementOperation extends Operation {
 				ImageView imageView = (ImageView) component;
 				if (imageView.getSrc() == null || imageView.getSrc().length() == 0) {
 
-					String filePath = FileChooser.browseForImageFile(Icons.image, false, context.getFrame(), context.getPreferences(), "lastImageFilePath"); //$NON-NLS-1$
+					String filePath = FileChooser.browseForImageFile(Icons.image, false, context.getFrameContext().getFrame(), context.getFrameContext().getPreferences(), "lastImageFilePath"); //$NON-NLS-1$
 					if (filePath != null) {
 
 						try {

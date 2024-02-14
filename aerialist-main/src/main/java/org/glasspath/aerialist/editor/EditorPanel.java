@@ -22,177 +22,33 @@
  */
 package org.glasspath.aerialist.editor;
 
-import java.awt.AWTEvent;
-import java.awt.Component;
-import java.awt.Frame;
-import java.awt.event.AWTEventListener;
-import java.awt.event.MouseEvent;
-import java.util.prefs.Preferences;
-
-import javax.swing.JPanel;
-import javax.swing.undo.UndoableEdit;
-
-import org.glasspath.aerialist.media.BufferedImageMediaCache;
-import org.glasspath.common.swing.search.UISearchHandler;
-import org.glasspath.common.swing.selection.Selection;
-import org.glasspath.common.swing.undo.DefaultUndoManager;
-
-public abstract class EditorPanel<T extends EditorPanel<T>> extends JPanel implements AWTEventListener {
-
-	public static final long MOUSE_EVENTS_MASK = AWTEvent.MOUSE_EVENT_MASK | AWTEvent.MOUSE_MOTION_EVENT_MASK;
+public abstract class EditorPanel<T extends EditorPanel<T>> extends AbstractEditorPanel {
 
 	private final EditorContext<T> editorContext;
-	private final DefaultUndoManager undoManager;
-	protected final Selection<Component> selection;
-
-	private UISearchHandler searchHandler = null;
-	private BufferedImageMediaCache mediaCache = null;
 
 	public EditorPanel(EditorContext<T> editorContext) {
-
+		super();
 		this.editorContext = editorContext;
-		this.undoManager = new DefaultUndoManager();
-		this.selection = new Selection<>();
-
 	}
-
-	// TODO?
-	public abstract Frame getFrame();
-
-	// TODO?
-	public abstract Preferences getPreferences();
-
-	public abstract Component getContentContainer();
 
 	public abstract EditorView<? extends EditorPanel<T>> getView();
 
 	public abstract MouseOperationHandler<? extends EditorPanel<T>> getMouseOperationHandler();
 
-	public DefaultUndoManager getUndoManager() {
-		return undoManager;
-	}
-
-	public void undoableEditHappened(UndoableEdit edit) {
-		undoManager.addEdit(edit);
-	}
-
-	public BufferedImageMediaCache getMediaCache() {
-		return mediaCache;
-	}
-
-	public void setMediaCache(BufferedImageMediaCache mediaCache) {
-		this.mediaCache = mediaCache;
-	}
-
-	public Selection<Component> getSelection() {
-		return selection;
-	}
-
 	public EditorContext<T> getEditorContext() {
 		return editorContext;
 	}
 
-	public UISearchHandler getSearchHandler() {
-		return searchHandler;
-	}
-
-	public void setSearchHandler(UISearchHandler searchHandler) {
-		this.searchHandler = searchHandler;
-	}
-
-	public void searchNext(String text) {
-		if (searchHandler != null) {
-			searchHandler.search(text, false);
-		}
-	}
-
-	public void searchPrevious(String text) {
-		if (searchHandler != null) {
-			searchHandler.search(text, true);
-		}
-	}
-
-	public void cancelSearch() {
-		if (searchHandler != null) {
-			searchHandler.cancelSearch();
-		}
-	}
-
-	public void refresh(Component component) {
-		refresh(component, true, false);
-	}
-
-	public abstract void refresh(Component component, boolean resetYPolicy, boolean revalidateScrollPane);
-
+	@Override
 	protected boolean isEditable() {
 		return editorContext == null || editorContext.isEditable();
 	}
 
+	@Override
 	protected void setEditable(boolean editable) {
 		if (editorContext != null) {
 			editorContext.setEditable(editable);
 		}
-	}
-
-	public void focusContentContainer() {
-
-	}
-
-	public void deselectAll() {
-		focusContentContainer();
-		selection.deselectAll();
-	}
-
-	@Override
-	public void eventDispatched(AWTEvent event) {
-
-		if (event instanceof MouseEvent) {
-
-			if (editorContext != null && !editorContext.isEditable()) {
-
-				if (event.getID() == MouseEvent.MOUSE_CLICKED && ((MouseEvent) event).getClickCount() >= 2) {
-					setEditable(true);
-				} else {
-					// ((MouseEvent) event).consume();
-				}
-
-			} else {
-
-				switch (event.getID()) {
-
-				case MouseEvent.MOUSE_PRESSED:
-				case MouseEvent.MOUSE_RELEASED:
-				case MouseEvent.MOUSE_CLICKED:
-				case MouseEvent.MOUSE_ENTERED:
-				case MouseEvent.MOUSE_EXITED:
-					handleMouseEvent((MouseEvent) event);
-					break;
-				case MouseEvent.MOUSE_MOVED:
-				case MouseEvent.MOUSE_DRAGGED:
-					handleMouseMotionEvent((MouseEvent) event);
-					break;
-				case MouseEvent.MOUSE_WHEEL:
-					// handleMouseWheelEvent((MouseWheelEvent) event);
-					break;
-
-				}
-
-			}
-
-		}
-
-	}
-
-	protected void handleMouseEvent(MouseEvent e) {
-
-	}
-
-	protected void handleMouseMotionEvent(MouseEvent e) {
-
-	}
-
-	protected void showMenu(Component component, int x, int y) {
-
 	}
 
 }

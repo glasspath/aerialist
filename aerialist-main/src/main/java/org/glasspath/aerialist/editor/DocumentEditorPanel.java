@@ -26,11 +26,11 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
-import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
@@ -41,7 +41,7 @@ import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.prefs.Preferences;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JMenu;
@@ -70,6 +70,7 @@ import org.glasspath.aerialist.swing.view.PageContainer.PageListener;
 import org.glasspath.aerialist.swing.view.PageView;
 import org.glasspath.aerialist.swing.view.TableCellView;
 import org.glasspath.aerialist.text.font.FontCache;
+import org.glasspath.common.swing.FrameContext;
 import org.glasspath.common.swing.border.HidpiMatteBorder;
 import org.glasspath.common.swing.color.ColorUtils;
 import org.glasspath.common.swing.keyboard.KeyboardUtils;
@@ -401,18 +402,9 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 
 	}
 
-	public Aerialist getContext() {
+	@Override
+	public FrameContext getFrameContext() {
 		return context;
-	}
-
-	@Override
-	public Frame getFrame() {
-		return context.getFrame();
-	}
-
-	@Override
-	public Preferences getPreferences() {
-		return context.getPreferences();
 	}
 
 	@Override
@@ -620,7 +612,7 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 	}
 
 	@Override
-	public void refresh(Component component, boolean resetYPolicy, boolean revalidateScrollPane) {
+	public void refresh(Component component, Map<Component, Rectangle> anchoredElementBounds, boolean resetYPolicy, boolean revalidateScrollPane) {
 
 		if (component != null) {
 			component.invalidate();
@@ -671,17 +663,19 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 			pageContainerScrollPane.revalidate();
 		}
 
-		if (resetYPolicy) {
+		SwingUtilities.invokeLater(new Runnable() {
 
-			SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
 
-				@Override
-				public void run() {
+				if (resetYPolicy) {
 					pageContainer.setYPolicyEnabled(!layoutLocked);
 				}
-			});
 
-		}
+				AerialistUtils.restoreAnchoredElementBounds(component, anchoredElementBounds);
+
+			}
+		});
 
 	}
 
@@ -781,7 +775,7 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 			if (Aerialist.TODO_TEST_SHEET_MODE) {
 				setPageMode(PageContainer.PAGE_MODE_SINGLE);
 			}
-			
+
 			setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
 			setFocusable(true);
 			addFocusListener(new FocusAdapter() {
@@ -919,13 +913,18 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 		}
 
 		@Override
+		public Map<Component, Rectangle> getAnchoredElementBounds(Component component) {
+			return AerialistUtils.getAnchoredElementBounds(component);
+		}
+
+		@Override
 		public void undoableEditHappened(UndoableEdit edit) {
 			DocumentEditorPanel.this.undoableEditHappened(edit);
 		}
 
 		@Override
-		public void refresh(Component component) {
-			DocumentEditorPanel.this.refresh(component);
+		public void refresh(Component component, Map<Component, Rectangle> anchoredElementBounds) {
+			DocumentEditorPanel.this.refresh(component, anchoredElementBounds);
 		}
 
 		@Override

@@ -27,12 +27,12 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
-import org.glasspath.aerialist.editor.EditorPanel;
+import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.icons.Icons;
 
 public class BoldAction extends ToggleTextStyleAction {
 
-	public BoldAction(EditorPanel<? extends EditorPanel<?>> context) {
+	public BoldAction(AbstractEditorPanel context) {
 		super(context);
 
 		putValue(Action.NAME, "Bold");

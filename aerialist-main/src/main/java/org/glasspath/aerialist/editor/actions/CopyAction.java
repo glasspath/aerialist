@@ -35,7 +35,7 @@ import javax.swing.KeyStroke;
 import org.glasspath.aerialist.AerialistUtils;
 import org.glasspath.aerialist.Element;
 import org.glasspath.aerialist.Page;
-import org.glasspath.aerialist.editor.DocumentEditorPanel;
+import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.swing.view.ISwingElementView;
 import org.glasspath.aerialist.swing.view.LayeredPageView;
 import org.glasspath.aerialist.swing.view.PageView;
@@ -45,11 +45,11 @@ import org.glasspath.common.os.OsUtils;
 
 public class CopyAction extends AbstractAction {
 
-	protected final DocumentEditorPanel context;
+	protected final AbstractEditorPanel context;
 	protected final List<Object> selection = new ArrayList<>();
 	protected PageView sourcePageView = null;
 
-	public CopyAction(DocumentEditorPanel context) {
+	public CopyAction(AbstractEditorPanel context) {
 
 		this.context = context;
 

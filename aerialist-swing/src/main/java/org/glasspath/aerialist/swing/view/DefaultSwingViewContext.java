@@ -2,8 +2,10 @@ package org.glasspath.aerialist.swing.view;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Rectangle;
 import java.awt.event.FocusEvent;
 import java.awt.image.BufferedImage;
+import java.util.Map;
 
 import javax.swing.event.CaretEvent;
 import javax.swing.undo.UndoableEdit;
@@ -94,12 +96,17 @@ public class DefaultSwingViewContext implements ISwingViewContext {
 	}
 
 	@Override
+	public Map<Component, Rectangle> getAnchoredElementBounds(Component component) {
+		return null;
+	}
+
+	@Override
 	public void undoableEditHappened(UndoableEdit edit) {
 
 	}
 
 	@Override
-	public void refresh(Component component) {
+	public void refresh(Component component, Map<Component, Rectangle> anchoredElementBounds) {
 
 	}
 

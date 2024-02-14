@@ -28,7 +28,7 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.SimpleAttributeSet;
 
-import org.glasspath.aerialist.editor.EditorPanel;
+import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.swing.view.TextView;
 import org.glasspath.aerialist.swing.view.TextView.AttributeProcessor;
 
@@ -36,7 +36,7 @@ public abstract class ToggleTextStyleAction extends TextStyleAction {
 
 	private boolean resetValue = false;
 
-	public ToggleTextStyleAction(EditorPanel<? extends EditorPanel<?>> context) {
+	public ToggleTextStyleAction(AbstractEditorPanel context) {
 		super(context);
 	}
 

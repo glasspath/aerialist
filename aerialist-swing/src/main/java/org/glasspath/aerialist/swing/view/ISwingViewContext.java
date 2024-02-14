@@ -24,11 +24,13 @@ package org.glasspath.aerialist.swing.view;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Rectangle;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.util.Map;
 
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
@@ -49,9 +51,11 @@ public interface ISwingViewContext extends ILayoutContext<BufferedImage>, FocusL
 
 	public void viewEventHappened(ViewEvent viewEvent);
 
+	public Map<Component, Rectangle> getAnchoredElementBounds(Component component);
+
 	public void undoableEditHappened(UndoableEdit edit);
 
-	public void refresh(Component component);
+	public void refresh(Component component, Map<Component, Rectangle> anchoredElementBounds);
 
 	public Color getDefaultForeground();
 

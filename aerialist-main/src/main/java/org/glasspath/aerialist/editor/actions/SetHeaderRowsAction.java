@@ -27,16 +27,16 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-import org.glasspath.aerialist.editor.EditorPanel;
+import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.swing.view.TableView;
 
 public class SetHeaderRowsAction extends AbstractAction {
 
-	private final EditorPanel<? extends EditorPanel<?>> context;
+	private final AbstractEditorPanel context;
 	private final TableView tableView;
 	private final int headerRowCount;
 
-	public SetHeaderRowsAction(EditorPanel<? extends EditorPanel<?>> context, TableView tableView, int headerRowCount) {
+	public SetHeaderRowsAction(AbstractEditorPanel context, TableView tableView, int headerRowCount) {
 
 		this.context = context;
 		this.tableView = tableView;

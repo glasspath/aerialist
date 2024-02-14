@@ -30,19 +30,19 @@ import javax.swing.Action;
 
 import org.glasspath.aerialist.AerialistUtils;
 import org.glasspath.aerialist.Radius;
-import org.glasspath.aerialist.editor.DocumentEditorPanel;
+import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.swing.view.ISwingElementView;
 
 public class SetRadiusAction extends AbstractAction {
 
-	private final DocumentEditorPanel context;
+	private final AbstractEditorPanel context;
 	private final Radius radius;
 
-	public SetRadiusAction(DocumentEditorPanel context) {
+	public SetRadiusAction(AbstractEditorPanel context) {
 		this(context, 0);
 	}
 
-	public SetRadiusAction(DocumentEditorPanel context, int radius) {
+	public SetRadiusAction(AbstractEditorPanel context, int radius) {
 
 		this.context = context;
 		this.radius = new Radius(radius);

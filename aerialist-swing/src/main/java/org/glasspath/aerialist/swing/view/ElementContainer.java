@@ -112,6 +112,10 @@ public class ElementContainer extends JPanel {
 		return (ISwingElementView<?>) getComponent(i);
 	}
 
+	public VerticalLayout<ElementContainer, ISwingElementView<?>> getVerticalLayout() {
+		return layout;
+	}
+
 	public VerticalLayout<ElementContainer, ISwingElementView<?>>.AnchorList getAnchorList(ISwingElementView<?> element) {
 		return layout.getAnchorList(element);
 	}
