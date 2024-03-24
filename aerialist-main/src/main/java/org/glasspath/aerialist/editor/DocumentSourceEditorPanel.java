@@ -43,6 +43,7 @@ import org.fife.ui.rtextarea.RUndoManager;
 import org.fife.ui.rtextarea.SearchContext;
 import org.fife.ui.rtextarea.SearchEngine;
 import org.glasspath.common.swing.FrameContext;
+import org.glasspath.common.swing.border.HidpiMatteBorder;
 import org.glasspath.common.swing.color.ColorUtils;
 import org.glasspath.common.swing.theme.Theme;
 import org.glasspath.common.swing.undo.DefaultUndoManager.UndoManagerListener;
@@ -68,7 +69,7 @@ public class DocumentSourceEditorPanel extends JPanel {
 			protected JPopupMenu createPopupMenu() {
 
 				JPopupMenu menu = super.createPopupMenu();
-				
+
 				return menu;
 
 			}
@@ -82,11 +83,18 @@ public class DocumentSourceEditorPanel extends JPanel {
 		textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_XML);
 		textArea.setCodeFoldingEnabled(true);
 
+		RTextScrollPane textAreaScrollPane = new RTextScrollPane(textArea);
+		textAreaScrollPane.setBorder(BorderFactory.createEmptyBorder());
+		add(textAreaScrollPane, BorderLayout.CENTER);
+
 		try {
 
 			final org.fife.ui.rsyntaxtextarea.Theme theme;
 			if (Theme.isDark()) {
 				theme = org.fife.ui.rsyntaxtextarea.Theme.load(getClass().getResourceAsStream("/org/fife/ui/rsyntaxtextarea/themes/dark.xml")); //$NON-NLS-1$
+				theme.bgColor = ColorUtils.DARK_31;
+				theme.gutterBackgroundColor = theme.bgColor;
+				theme.gutterBorderColor = HidpiMatteBorder.COLOR;
 			} else {
 				theme = org.fife.ui.rsyntaxtextarea.Theme.load(getClass().getResourceAsStream("/org/fife/ui/rsyntaxtextarea/themes/idea.xml")); //$NON-NLS-1$
 			}
@@ -98,10 +106,6 @@ public class DocumentSourceEditorPanel extends JPanel {
 		}
 
 		textArea.setCurrentLineHighlightColor(ColorUtils.createTransparentColor(ColorUtils.SELECTION_COLOR_FOCUSSED, Theme.isDark() ? 75 : 175));
-
-		RTextScrollPane textAreaScrollPane = new RTextScrollPane(textArea);
-		textAreaScrollPane.setBorder(BorderFactory.createEmptyBorder());
-		add(textAreaScrollPane, BorderLayout.CENTER);
 
 		textArea.getDocument().addDocumentListener(new DocumentListener() {
 
