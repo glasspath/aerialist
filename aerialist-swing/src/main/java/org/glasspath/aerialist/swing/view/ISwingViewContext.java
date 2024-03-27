@@ -42,6 +42,7 @@ import org.glasspath.aerialist.layout.ILayoutContext;
 public interface ISwingViewContext extends ILayoutContext<BufferedImage>, FocusListener, CaretListener {
 
 	public static int CONTAINER_PAINT_FLAG_EDITABLE = 1;
+	public static int CONTAINER_PAINT_FLAG_AUTO_REPAINT_DISABLED = 2; // TODO? This was added to disable auto-repainting in ElementContainer, but this auto-repainting should probably be removed
 
 	public static int VIEW_PAINT_FLAG_SELECTED_PRIMARY = 1;
 	public static int VIEW_PAINT_FLAG_SELECTED_SECONDARY = 2;

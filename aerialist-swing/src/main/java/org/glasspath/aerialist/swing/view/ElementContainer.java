@@ -144,7 +144,10 @@ public class ElementContainer extends JPanel {
 
 				}
 
-				repaint();
+				// TODO? This was causing unwanted repaints for video overlays
+				if (!ISwingViewContext.getContainerPaintFlag(viewContext, ISwingViewContext.CONTAINER_PAINT_FLAG_AUTO_REPAINT_DISABLED)) {
+					repaint();
+				}
 
 			}
 		});
