@@ -23,7 +23,6 @@
 package org.glasspath.aerialist;
 
 import java.awt.BorderLayout;
-import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
