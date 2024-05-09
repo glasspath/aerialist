@@ -30,6 +30,7 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Shape;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 
@@ -89,9 +90,33 @@ public class DocumentEditorView extends EditorView<DocumentEditorPanel> {
 
 				if (Aerialist.TODO_TEST_SHEET_MODE) {
 
-					if (context.isGridVisible()) {
+					if (context.getEditorContext() instanceof DocumentEditorContext && ((DocumentEditorContext) context.getEditorContext()).getBackgroundImage() != null) {
 
-						g2d.drawImage(getBgImage(pageView), bounds.x, bounds.y, pageView);
+						BufferedImage backgroundImage = ((DocumentEditorContext) context.getEditorContext()).getBackgroundImage();
+
+						// TODO: For now we only fit the width of the image
+						if (backgroundImage.getWidth() != pageView.getWidth()) {
+
+							double scale = (double) pageView.getWidth() / (double) backgroundImage.getWidth();
+
+							AffineTransform originalTransform = g2d.getTransform();
+							g2d.scale(scale, scale);
+							g2d.drawImage(backgroundImage, (int) (bounds.x / scale), (int) (bounds.y / scale), null);
+							g2d.setTransform(originalTransform);
+
+						} else {
+							g2d.drawImage(backgroundImage, bounds.x, bounds.y, null);
+						}
+
+						Composite originalComposite = g2d.getComposite();
+						g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25F));
+						g2d.setColor(Color.black);
+						g2d.fill(bounds);
+						g2d.setComposite(originalComposite);
+
+					} else if (context.isGridVisible()) {
+
+						g2d.drawImage(getBgImage(pageView), bounds.x, bounds.y, null);
 
 						if (Theme.isDark()) {
 							g2d.setColor(Color.black);

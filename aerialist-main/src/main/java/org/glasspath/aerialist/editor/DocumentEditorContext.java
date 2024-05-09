@@ -22,16 +22,33 @@
  */
 package org.glasspath.aerialist.editor;
 
+import java.awt.image.BufferedImage;
+
+import javax.swing.JMenu;
+
 import org.glasspath.aerialist.AerialistUtils;
 import org.glasspath.aerialist.Document;
+import org.glasspath.aerialist.TextBox;
+import org.glasspath.aerialist.swing.view.ISwingElementView;
 
 public abstract class DocumentEditorContext extends EditorContext<DocumentEditorPanel> {
 
 	private boolean gridDefaultVisible = true;
 	private boolean guidesDefaultVisible = true;
+	private BufferedImage backgroundImage = null;
 
 	public DocumentEditorContext() {
 		super();
+	}
+
+	@Override
+	public void populateInsertElementMenu(DocumentEditorPanel context, JMenu menu) {
+
+	}
+
+	@Override
+	public void populateElementMenu(DocumentEditorPanel context, ISwingElementView<?> elementView, JMenu menu) {
+
 	}
 
 	public boolean isGridDefaultVisible() {
@@ -50,8 +67,20 @@ public abstract class DocumentEditorContext extends EditorContext<DocumentEditor
 		this.guidesDefaultVisible = guidesDefaultVisible;
 	}
 
+	public BufferedImage getBackgroundImage() {
+		return backgroundImage;
+	}
+
+	public void setBackgroundImage(BufferedImage backgroundImage) {
+		this.backgroundImage = backgroundImage;
+	}
+
 	public Document createDocument() {
 		return AerialistUtils.createDefaultDocument();
+	}
+
+	public TextBox createTextBox() {
+		return AerialistUtils.createDefaultTextBox();
 	}
 
 	public void documentShown(DocumentEditorPanel context, Document document, String path) {

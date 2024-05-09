@@ -56,6 +56,7 @@ import org.glasspath.aerialist.Padding;
 import org.glasspath.aerialist.Page.PageSize;
 import org.glasspath.aerialist.YPolicy;
 import org.glasspath.aerialist.editor.AbstractEditorPanel;
+import org.glasspath.aerialist.editor.DocumentEditorContext;
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
 import org.glasspath.aerialist.editor.EditorPanel;
 import org.glasspath.aerialist.editor.ElementData;
@@ -352,6 +353,10 @@ public class ActionUtils {
 
 			}
 
+			if (context.getEditorContext() != null) {
+				context.getEditorContext().populateElementMenu(context, elementView, menu);
+			}
+
 		}
 
 	}
@@ -457,7 +462,11 @@ public class ActionUtils {
 			menu.addSeparator();
 		}
 
-		menu.add(new InsertElementAction(context, AerialistUtils.createDefaultTextBox(), "Insert text box", Icons.textBoxPlus));
+		if (context.getEditorContext() instanceof DocumentEditorContext) {
+			menu.add(new InsertElementAction(context, ((DocumentEditorContext) context.getEditorContext()).createTextBox(), "Insert text box", Icons.textBoxPlus));
+		} else {
+			menu.add(new InsertElementAction(context, AerialistUtils.createDefaultTextBox(), "Insert text box", Icons.textBoxPlus));
+		}
 		menu.add(new InsertElementAction(context, AerialistUtils.createDefaultTable(), "Insert table", Icons.tablePlus));
 		menu.add(new InsertElementAction(context, AerialistUtils.createDefaultImage(), "Insert image", Icons.imagePlus));
 		menu.add(new InsertElementAction(context, AerialistUtils.createDefaultQrCode(), "Insert QR code", Icons.qrcodePlus));

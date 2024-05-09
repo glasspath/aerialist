@@ -29,12 +29,15 @@ import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
+import org.glasspath.aerialist.AerialistUtils;
 import org.glasspath.aerialist.DynamicFieldContext;
 import org.glasspath.aerialist.Field.FieldType;
 import org.glasspath.aerialist.IVisible;
+import org.glasspath.aerialist.TextBox;
 import org.glasspath.aerialist.editor.actions.InsertFieldAction;
 import org.glasspath.aerialist.editor.actions.SetVisibilityAction;
 import org.glasspath.aerialist.icons.Icons;
+import org.glasspath.aerialist.swing.view.ISwingElementView;
 import org.glasspath.aerialist.swing.view.TextView;
 import org.glasspath.aerialist.template.TemplateMetadata;
 import org.glasspath.aerialist.template.TemplateMetadata.AbstractMetadata;
@@ -114,6 +117,8 @@ public abstract class EditorContext<T extends EditorPanel<T>> {
 	}
 
 	public abstract void populateInsertElementMenu(T context, JMenu menu);
+
+	public abstract void populateElementMenu(T context, ISwingElementView<?> elementView, JMenu menu);
 
 	public void populateTemplateFieldsMenu(EditorPanel<? extends EditorPanel<?>> context, TextView textView, JMenu menu) {
 
