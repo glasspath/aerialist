@@ -57,13 +57,19 @@ public class ColorUtils {
 
 			try {
 
-				Integer intval = Integer.decode(hex);
-				int i = intval.intValue();
-
 				if (hex.length() == 7) {
+
+					int i = Integer.decode(hex).intValue();
+
 					return new Color((i >> 16) & 0xFF, (i >> 8) & 0xFF, i & 0xFF);
+
 				} else if (hex.length() == 9) {
-					return new Color((i >> 24) & 0xFF, (i >> 16) & 0xFF, (i >> 8) & 0xFF, i & 0xFF);
+
+					int i = Integer.decode(hex.substring(0, 7)).intValue();
+					int alpha = Integer.decode("#" + hex.substring(7, 9)).intValue();
+
+					return new Color((i >> 16) & 0xFF, (i >> 8) & 0xFF, i & 0xFF, alpha);
+
 				} else {
 					return null;
 				}
