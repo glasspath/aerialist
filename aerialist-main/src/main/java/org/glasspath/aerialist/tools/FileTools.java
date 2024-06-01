@@ -66,6 +66,7 @@ import org.glasspath.common.os.OsUtils;
 import org.glasspath.common.swing.DesktopUtils;
 import org.glasspath.common.swing.dialog.DialogUtils;
 import org.glasspath.common.swing.file.chooser.FileChooser;
+import org.glasspath.common.swing.resources.CommonResources;
 import org.glasspath.common.swing.tools.AbstractTools;
 
 import com.lowagie.text.DocumentException;
@@ -82,9 +83,9 @@ public class FileTools extends AbstractTools<Aerialist> {
 	private String currentFilePath = null;
 
 	public FileTools(Aerialist context) {
-		super(context, "File");
+		super(context, CommonResources.getString("File")); //$NON-NLS-1$
 
-		JMenuItem newMenuItem = new JMenuItem("New");
+		JMenuItem newMenuItem = new JMenuItem(CommonResources.getString("New")); //$NON-NLS-1$
 		newMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, OsUtils.CTRL_OR_CMD_MASK));
 		menu.add(newMenuItem);
 		newMenuItem.addActionListener(new ActionListener() {
@@ -95,7 +96,7 @@ public class FileTools extends AbstractTools<Aerialist> {
 			}
 		});
 
-		JMenuItem openMenuItem = new JMenuItem("Open");
+		JMenuItem openMenuItem = new JMenuItem(CommonResources.getString("Open")); //$NON-NLS-1$
 		openMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, OsUtils.CTRL_OR_CMD_MASK));
 		menu.add(openMenuItem);
 		openMenuItem.addActionListener(new ActionListener() {
@@ -106,7 +107,7 @@ public class FileTools extends AbstractTools<Aerialist> {
 			}
 		});
 
-		JMenuItem saveMenuItem = new JMenuItem("Save");
+		JMenuItem saveMenuItem = new JMenuItem(CommonResources.getString("Save")); //$NON-NLS-1$
 		saveMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, OsUtils.CTRL_OR_CMD_MASK));
 		saveMenuItem.setIcon(Icons.contentSave);
 		menu.add(saveMenuItem);
@@ -118,7 +119,7 @@ public class FileTools extends AbstractTools<Aerialist> {
 			}
 		});
 
-		JMenuItem saveAsMenuItem = new JMenuItem("Save as");
+		JMenuItem saveAsMenuItem = new JMenuItem(CommonResources.getString("SaveAs")); //$NON-NLS-1$
 		menu.add(saveAsMenuItem);
 		saveAsMenuItem.addActionListener(new ActionListener() {
 
@@ -159,7 +160,7 @@ public class FileTools extends AbstractTools<Aerialist> {
 			menu.addSeparator();
 		}
 
-		JMenuItem printItem = new JMenuItem("Print");
+		JMenuItem printItem = new JMenuItem(CommonResources.getString("Print")); //$NON-NLS-1$
 		if (TODO_ADD_PRINT_MENU_ITEM) {
 			menu.add(printItem);
 		}
@@ -173,7 +174,7 @@ public class FileTools extends AbstractTools<Aerialist> {
 
 		menu.addSeparator();
 
-		JMenuItem exitMenuItem = new JMenuItem("Exit");
+		JMenuItem exitMenuItem = new JMenuItem(CommonResources.getString("Exit")); //$NON-NLS-1$
 		menu.add(exitMenuItem);
 		exitMenuItem.addActionListener(new ActionListener() {
 
@@ -185,7 +186,7 @@ public class FileTools extends AbstractTools<Aerialist> {
 
 		JButton saveButton = new JButton();
 		saveButton.setIcon(Icons.contentSave);
-		saveButton.setToolTipText("Save");
+		saveButton.setToolTipText(CommonResources.getString("Save")); //$NON-NLS-1$
 		toolBar.add(saveButton);
 		saveButton.addActionListener(new ActionListener() {
 
@@ -547,7 +548,7 @@ public class FileTools extends AbstractTools<Aerialist> {
 
 		if (context.isContentChanged()) {
 
-			int chosenOption = JOptionPane.showOptionDialog(context.getFrame(), "The file has been modified, save changes?", "Save changes?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String[] { "Yes", "No", "Cancel" }, "Cancel");
+			int chosenOption = JOptionPane.showOptionDialog(context.getFrame(), "The file has been modified, save changes?", "Save changes?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String[] { CommonResources.getString("Yes"), CommonResources.getString("No"), CommonResources.getString("Cancel") }, CommonResources.getString("Cancel")); //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 
 			if (chosenOption == JOptionPane.YES_OPTION) {
 				return saveAction();
