@@ -37,6 +37,7 @@ import org.glasspath.aerialist.AerialistUtils;
 import org.glasspath.aerialist.HeightPolicy;
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
 import org.glasspath.aerialist.editor.ElementData;
+import org.glasspath.aerialist.resources.Resources;
 import org.glasspath.aerialist.swing.view.GroupView;
 import org.glasspath.aerialist.swing.view.PageView;
 
@@ -52,8 +53,8 @@ public class GroupElementsAction extends AbstractAction {
 		this.pageView = pageView;
 		this.elements = elements;
 
-		putValue(Action.NAME, "Group");
-		putValue(Action.SHORT_DESCRIPTION, "Group");
+		putValue(Action.NAME, Resources.getString("GroupElements")); //$NON-NLS-1$
+		putValue(Action.SHORT_DESCRIPTION, Resources.getString("GroupElements")); //$NON-NLS-1$
 
 		boolean enabled = true;
 

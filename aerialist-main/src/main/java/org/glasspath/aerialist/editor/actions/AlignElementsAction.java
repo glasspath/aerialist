@@ -35,6 +35,7 @@ import org.glasspath.aerialist.AerialistUtils;
 import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.editor.ElementData;
 import org.glasspath.aerialist.icons.Icons;
+import org.glasspath.aerialist.resources.Resources;
 import org.glasspath.aerialist.swing.view.PageView;
 
 public class AlignElementsAction extends AbstractAction {
@@ -55,28 +56,28 @@ public class AlignElementsAction extends AbstractAction {
 		this.alignAction = alignAction;
 
 		if (alignAction == HORIZONTAL_LEFT) {
-			putValue(Action.NAME, "Align horizontal left");
-			putValue(Action.SHORT_DESCRIPTION, "Align horizontal left");
+			putValue(Action.NAME, Resources.getString("AlignHorizontalLeft")); //$NON-NLS-1$
+			putValue(Action.SHORT_DESCRIPTION, Resources.getString("AlignHorizontalLeft")); //$NON-NLS-1$
 			putValue(Action.SMALL_ICON, Icons.alignHorizontalLeft);
 		} else if (alignAction == HORIZONTAL_CENTER) {
-			putValue(Action.NAME, "Align horizontal center");
-			putValue(Action.SHORT_DESCRIPTION, "Align horizontal center");
+			putValue(Action.NAME, Resources.getString("AlignHorizontalCenter")); //$NON-NLS-1$
+			putValue(Action.SHORT_DESCRIPTION, Resources.getString("AlignHorizontalCenter")); //$NON-NLS-1$
 			putValue(Action.SMALL_ICON, Icons.alignHorizontalCenter);
 		} else if (alignAction == HORIZONTAL_RIGHT) {
-			putValue(Action.NAME, "Align horizontal right");
-			putValue(Action.SHORT_DESCRIPTION, "Align horizontal right");
+			putValue(Action.NAME, Resources.getString("AlignHorizontalRight")); //$NON-NLS-1$
+			putValue(Action.SHORT_DESCRIPTION, Resources.getString("AlignHorizontalRight")); //$NON-NLS-1$
 			putValue(Action.SMALL_ICON, Icons.alignHorizontalRight);
 		} else if (alignAction == VERTICAL_TOP) {
-			putValue(Action.NAME, "Align vertical top");
-			putValue(Action.SHORT_DESCRIPTION, "Align vertical top");
+			putValue(Action.NAME, Resources.getString("AlignVerticalTop")); //$NON-NLS-1$
+			putValue(Action.SHORT_DESCRIPTION, Resources.getString("AlignVerticalTop")); //$NON-NLS-1$
 			putValue(Action.SMALL_ICON, Icons.alignVerticalTop);
 		} else if (alignAction == VERTICAL_CENTER) {
-			putValue(Action.NAME, "Align vertical center");
-			putValue(Action.SHORT_DESCRIPTION, "Align vertical center");
+			putValue(Action.NAME, Resources.getString("AlignVerticalCenter")); //$NON-NLS-1$
+			putValue(Action.SHORT_DESCRIPTION, Resources.getString("AlignVerticalCenter")); //$NON-NLS-1$
 			putValue(Action.SMALL_ICON, Icons.alignVerticalCenter);
 		} else if (alignAction == VERTICAL_BOTTOM) {
-			putValue(Action.NAME, "Align vertical bottom");
-			putValue(Action.SHORT_DESCRIPTION, "Align vertical bottom");
+			putValue(Action.NAME, Resources.getString("AlignVerticalBottom")); //$NON-NLS-1$
+			putValue(Action.SHORT_DESCRIPTION, Resources.getString("AlignVerticalBottom")); //$NON-NLS-1$
 			putValue(Action.SMALL_ICON, Icons.alignVerticalBottom);
 		}
 

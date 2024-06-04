@@ -29,14 +29,15 @@ import javax.swing.text.StyleConstants;
 
 import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.icons.Icons;
+import org.glasspath.common.swing.resources.CommonResources;
 
 public class ItalicAction extends ToggleTextStyleAction {
 
 	public ItalicAction(AbstractEditorPanel context) {
 		super(context);
 
-		putValue(Action.NAME, "Italic");
-		putValue(Action.SHORT_DESCRIPTION, "Italic");
+		putValue(Action.NAME, CommonResources.getString("Italic")); //$NON-NLS-1$
+		putValue(Action.SHORT_DESCRIPTION, CommonResources.getString("Italic")); //$NON-NLS-1$
 		putValue(Action.SMALL_ICON, Icons.formatItalic);
 
 	}

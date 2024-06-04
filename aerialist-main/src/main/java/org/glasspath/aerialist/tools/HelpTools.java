@@ -32,14 +32,15 @@ import org.glasspath.aerialist.Aerialist;
 import org.glasspath.common.swing.dialog.AboutDialog;
 import org.glasspath.common.swing.dialog.AboutDialog.IAbout;
 import org.glasspath.common.swing.help.HelpUtils;
+import org.glasspath.common.swing.resources.CommonResources;
 import org.glasspath.common.swing.tools.AbstractTools;
 
 public class HelpTools extends AbstractTools<Aerialist> {
 
 	public HelpTools(Aerialist context) {
-		super(context, "Help");
+		super(context, CommonResources.getString("Help")); //$NON-NLS-1$
 
-		JMenuItem helpMenuItem = new JMenuItem("Help");
+		JMenuItem helpMenuItem = new JMenuItem(CommonResources.getString("Help")); //$NON-NLS-1$
 		helpMenuItem.setAccelerator(KeyStroke.getKeyStroke("F1")); //$NON-NLS-1$
 		helpMenuItem.addActionListener(new ActionListener() {
 
@@ -50,7 +51,7 @@ public class HelpTools extends AbstractTools<Aerialist> {
 		});
 		menu.add(helpMenuItem);
 
-		JMenuItem aboutMenuItem = new JMenuItem("About");
+		JMenuItem aboutMenuItem = new JMenuItem(CommonResources.getString("About")); //$NON-NLS-1$
 		aboutMenuItem.setEnabled(context.getEditorContext() != null && context.getEditorContext().getAbout() != null);
 		aboutMenuItem.addActionListener(new ActionListener() {
 

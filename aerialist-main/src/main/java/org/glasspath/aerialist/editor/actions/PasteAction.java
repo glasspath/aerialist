@@ -47,6 +47,7 @@ import org.glasspath.aerialist.swing.view.PageContainer;
 import org.glasspath.aerialist.swing.view.PageView;
 import org.glasspath.aerialist.swing.view.TextView;
 import org.glasspath.common.os.OsUtils;
+import org.glasspath.common.swing.resources.CommonResources;
 
 public class PasteAction extends AbstractAction {
 
@@ -59,8 +60,8 @@ public class PasteAction extends AbstractAction {
 		this.copyAction = copyAction;
 
 		putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_V, OsUtils.CTRL_OR_CMD_MASK));
-		putValue(Action.NAME, "Paste");
-		putValue(Action.SHORT_DESCRIPTION, "Paste");
+		putValue(Action.NAME, CommonResources.getString("Paste")); //$NON-NLS-1$
+		putValue(Action.SHORT_DESCRIPTION, CommonResources.getString("Paste")); //$NON-NLS-1$
 
 	}
 

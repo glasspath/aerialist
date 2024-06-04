@@ -42,6 +42,7 @@ import org.glasspath.aerialist.swing.view.PageView;
 import org.glasspath.aerialist.swing.view.TableCellView;
 import org.glasspath.aerialist.swing.view.TextView;
 import org.glasspath.common.os.OsUtils;
+import org.glasspath.common.swing.resources.CommonResources;
 
 public class CopyAction extends AbstractAction {
 
@@ -54,8 +55,8 @@ public class CopyAction extends AbstractAction {
 		this.context = context;
 
 		putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_C, OsUtils.CTRL_OR_CMD_MASK));
-		putValue(Action.NAME, "Copy");
-		putValue(Action.SHORT_DESCRIPTION, "Copy");
+		putValue(Action.NAME, CommonResources.getString("Copy")); //$NON-NLS-1$
+		putValue(Action.SHORT_DESCRIPTION, CommonResources.getString("Copy")); //$NON-NLS-1$
 		putValue(Action.SMALL_ICON, org.glasspath.common.icons.Icons.contentCopy);
 
 	}

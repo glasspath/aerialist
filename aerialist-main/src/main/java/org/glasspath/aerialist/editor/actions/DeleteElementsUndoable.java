@@ -32,6 +32,7 @@ import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.editor.DefaultEditorUndoable;
 import org.glasspath.aerialist.editor.ElementData;
 import org.glasspath.aerialist.swing.view.PageView;
+import org.glasspath.common.swing.resources.CommonResources;
 
 public class DeleteElementsUndoable extends DefaultEditorUndoable {
 
@@ -46,17 +47,17 @@ public class DeleteElementsUndoable extends DefaultEditorUndoable {
 
 	@Override
 	public String getPresentationName() {
-		return "Delete";
+		return CommonResources.getString("Delete"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getRedoPresentationName() {
-		return "Redo delete";
+		return CommonResources.getString("RedoDelete"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getUndoPresentationName() {
-		return "Undo delete";
+		return CommonResources.getString("UndoDelete"); //$NON-NLS-1$
 	}
 
 	@Override

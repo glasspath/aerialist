@@ -38,18 +38,19 @@ import org.glasspath.aerialist.Aerialist;
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
 import org.glasspath.aerialist.swing.view.PageContainer;
 import org.glasspath.common.os.OsUtils;
+import org.glasspath.common.swing.resources.CommonResources;
 import org.glasspath.common.swing.search.SearchField;
 import org.glasspath.common.swing.tools.AbstractTools;
 
 public class SearchTools extends AbstractTools<Aerialist> {
 
 	public SearchTools(Aerialist context) {
-		super(context, "Search");
+		super(context, CommonResources.getString("Search")); //$NON-NLS-1$
 
 		SearchField searchField = context.getGlassPane().getSearchField();
 		DocumentEditorPanel editor = context.getMainPanel().getDocumentEditor();
 
-		JMenuItem searchMenuItem = new JMenuItem("Search");
+		JMenuItem searchMenuItem = new JMenuItem(CommonResources.getString("Search")); //$NON-NLS-1$
 		searchMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, OsUtils.CTRL_OR_CMD_MASK));
 		searchMenuItem.addActionListener(new ActionListener() {
 
@@ -67,7 +68,7 @@ public class SearchTools extends AbstractTools<Aerialist> {
 		});
 		menu.add(searchMenuItem);
 
-		JMenuItem clearSearchMenuItem = new JMenuItem("Clear search");
+		JMenuItem clearSearchMenuItem = new JMenuItem(CommonResources.getString("ClearSearch")); //$NON-NLS-1$
 		clearSearchMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, OsUtils.CTRL_OR_CMD_MASK | OsUtils.SHIFT_MASK));
 		clearSearchMenuItem.addActionListener(new ActionListener() {
 

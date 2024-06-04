@@ -37,6 +37,7 @@ import org.glasspath.aerialist.MainPanel;
 import org.glasspath.aerialist.swing.view.PageContainer;
 import org.glasspath.common.os.preferences.BoolPref;
 import org.glasspath.common.swing.color.ColorUtils;
+import org.glasspath.common.swing.resources.CommonResources;
 import org.glasspath.common.swing.tools.AbstractTools;
 
 public class ViewTools extends AbstractTools<Aerialist> {
@@ -60,7 +61,7 @@ public class ViewTools extends AbstractTools<Aerialist> {
 	private boolean updatingPageModeComponents = false;
 
 	public ViewTools(Aerialist context) {
-		super(context, "View");
+		super(context, CommonResources.getString("View")); //$NON-NLS-1$
 
 		Preferences preferences = context.getPreferences();
 

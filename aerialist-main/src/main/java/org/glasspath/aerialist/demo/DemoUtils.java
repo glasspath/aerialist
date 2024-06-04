@@ -41,8 +41,8 @@ public class DemoUtils {
 	public static final Color TABLE_ALTERNATING_ROW_COLOR = new Color(242, 242, 242);
 	public static final Color TABLE_VERTICAL_LINE_COLOR = new Color(165, 165, 165);
 
-	public static final String LOREM_IPSUM = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-	public static final String SED_UT_PERSPICIATIS = "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?";
+	public static final String LOREM_IPSUM = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."; //$NON-NLS-1$
+	public static final String SED_UT_PERSPICIATIS = "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"; //$NON-NLS-1$
 
 	private DemoUtils() {
 
@@ -52,13 +52,13 @@ public class DemoUtils {
 
 		try {
 
-			URL demoResourceURL = PaginationDemo.class.getResource("/org/glasspath/aerialist/demo/" + resourceName);
+			URL demoResourceURL = PaginationDemo.class.getResource("/org/glasspath/aerialist/demo/" + resourceName); //$NON-NLS-1$
 			if (demoResourceURL != null) {
 				return Paths.get(demoResourceURL.toURI()).toFile().getAbsolutePath();
 			}
 
 		} catch (Exception e) {
-			Common.LOGGER.error("Exception while getting demo resource: ", e);
+			Common.LOGGER.error("Exception while getting demo resource: ", e); //$NON-NLS-1$
 		}
 
 		return null;
@@ -84,7 +84,7 @@ public class DemoUtils {
 
 				table.getTableCells().add(AerialistUtils.createTableCell(columnNames[col], 1, col + 1, Alignment.DEFAULT.stringValue, 10, true, null));
 
-				table.getTableCells().add(AerialistUtils.createTableCell(columnNames[col], 2, col + 1, Alignment.DEFAULT.stringValue, 10, false, "t:" + tableName + "." + columnNames[col]));
+				table.getTableCells().add(AerialistUtils.createTableCell(columnNames[col], 2, col + 1, Alignment.DEFAULT.stringValue, 10, false, "t:" + tableName + "." + columnNames[col])); //$NON-NLS-1$ //$NON-NLS-2$
 
 			}
 

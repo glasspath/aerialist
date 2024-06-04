@@ -30,6 +30,7 @@ import javax.swing.Action;
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
 import org.glasspath.aerialist.swing.view.PageView;
 import org.glasspath.common.icons.Icons;
+import org.glasspath.common.swing.resources.CommonResources;
 
 public class DeletePageAction extends AbstractAction {
 
@@ -41,8 +42,8 @@ public class DeletePageAction extends AbstractAction {
 		this.context = context;
 		this.pageView = pageView;
 
-		putValue(Action.NAME, "Delete");
-		putValue(Action.SHORT_DESCRIPTION, "Delete");
+		putValue(Action.NAME, CommonResources.getString("Delete")); //$NON-NLS-1$
+		putValue(Action.SHORT_DESCRIPTION, CommonResources.getString("Delete")); //$NON-NLS-1$
 		putValue(Action.SMALL_ICON, Icons.closeRed);
 
 	}

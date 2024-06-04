@@ -29,14 +29,15 @@ import javax.swing.text.StyleConstants;
 
 import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.icons.Icons;
+import org.glasspath.common.swing.resources.CommonResources;
 
 public class BoldAction extends ToggleTextStyleAction {
 
 	public BoldAction(AbstractEditorPanel context) {
 		super(context);
 
-		putValue(Action.NAME, "Bold");
-		putValue(Action.SHORT_DESCRIPTION, "Bold");
+		putValue(Action.NAME, CommonResources.getString("Bold")); //$NON-NLS-1$
+		putValue(Action.SHORT_DESCRIPTION, CommonResources.getString("Bold")); //$NON-NLS-1$
 		putValue(Action.SMALL_ICON, Icons.formatBold);
 
 	}

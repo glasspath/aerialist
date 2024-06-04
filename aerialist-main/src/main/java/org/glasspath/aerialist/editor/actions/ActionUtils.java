@@ -61,6 +61,7 @@ import org.glasspath.aerialist.editor.DocumentEditorPanel;
 import org.glasspath.aerialist.editor.EditorPanel;
 import org.glasspath.aerialist.editor.ElementData;
 import org.glasspath.aerialist.icons.Icons;
+import org.glasspath.aerialist.resources.Resources;
 import org.glasspath.aerialist.swing.view.FieldUtils;
 import org.glasspath.aerialist.swing.view.FooterPageView;
 import org.glasspath.aerialist.swing.view.GroupView;
@@ -477,7 +478,7 @@ public class ActionUtils {
 
 	public static JMenu createArrangeMenu(EditorPanel<? extends EditorPanel<?>> context) {
 
-		JMenu menu = new JMenu("Arrange");
+		JMenu menu = new JMenu(Resources.getString("Arrange")); //$NON-NLS-1$
 
 		menu.add(new ArrangeElementsAction(context, ArrangeElementsAction.BRING_FORWARD, false));
 		menu.add(new ArrangeElementsAction(context, ArrangeElementsAction.BRING_TO_FRONT, false));
@@ -490,7 +491,7 @@ public class ActionUtils {
 
 	public static JMenu createAlignMenu(EditorPanel<? extends EditorPanel<?>> context) {
 
-		JMenu menu = new JMenu("Align");
+		JMenu menu = new JMenu(Resources.getString("Align")); //$NON-NLS-1$
 
 		menu.add(new AlignElementsAction(context, AlignElementsAction.HORIZONTAL_LEFT));
 		menu.add(new AlignElementsAction(context, AlignElementsAction.HORIZONTAL_CENTER));

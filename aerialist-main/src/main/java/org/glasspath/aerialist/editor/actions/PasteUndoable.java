@@ -35,6 +35,7 @@ import org.glasspath.aerialist.editor.DocumentEditorPanel;
 import org.glasspath.aerialist.editor.DocumentEditorUndoable;
 import org.glasspath.aerialist.swing.view.LayeredPageView;
 import org.glasspath.aerialist.swing.view.PageContainer;
+import org.glasspath.common.swing.resources.CommonResources;
 
 public class PasteUndoable extends DocumentEditorUndoable {
 
@@ -47,17 +48,17 @@ public class PasteUndoable extends DocumentEditorUndoable {
 
 	@Override
 	public String getPresentationName() {
-		return "Paste";
+		return CommonResources.getString("Paste"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getRedoPresentationName() {
-		return "Redo paste";
+		return CommonResources.getString("RedoPaste"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getUndoPresentationName() {
-		return "Undo paste";
+		return CommonResources.getString("UndoPaste"); //$NON-NLS-1$
 	}
 
 	@Override

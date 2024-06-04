@@ -27,12 +27,13 @@ import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.SimpleAttributeSet;
 
 import org.glasspath.aerialist.editor.AbstractEditorPanel;
+import org.glasspath.aerialist.resources.Resources;
 import org.glasspath.aerialist.swing.view.TextView;
 
 public class ListBulletedAction extends TextStyleAction {
 
-	public static final String CIRCLE_BULLET = " • ";
-	public static final String HYPHEN_BULLET = " - ";
+	public static final String CIRCLE_BULLET = " • "; //$NON-NLS-1$
+	public static final String HYPHEN_BULLET = " - "; //$NON-NLS-1$
 	/* TODO: Not supported by OpenPDF?
 	public static final String WHITE_BULLET = " ◦ ";
 	public static final String TRIANGLE_BULLET = " ‣ ";
@@ -48,7 +49,7 @@ public class ListBulletedAction extends TextStyleAction {
 		this.prefix = prefix;
 
 		putValue(Action.NAME, prefix + name);
-		putValue(Action.SHORT_DESCRIPTION, "Bulleted List");
+		putValue(Action.SHORT_DESCRIPTION, Resources.getString("BulletedList")); //$NON-NLS-1$
 
 	}
 

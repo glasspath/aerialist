@@ -59,7 +59,7 @@ public class DynamicFieldsDemo {
 			}
 		};
 
-		String filePath = DemoUtils.getDemoResourcePath("dynamic-fields-demo.gpdx");
+		String filePath = DemoUtils.getDemoResourcePath("dynamic-fields-demo.gpdx"); //$NON-NLS-1$
 		if (filePath != null) {
 			Aerialist.launch(editorContext, null, new String[] { filePath });
 		}
@@ -81,7 +81,7 @@ public class DynamicFieldsDemo {
 
 					@Override
 					public String getString(String key) {
-						return key + "(" + ++i * 10 + ")";
+						return key + "(" + ++i * 10 + ")"; //$NON-NLS-1$ //$NON-NLS-2$
 					}
 				};
 
