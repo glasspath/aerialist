@@ -45,6 +45,7 @@ import org.glasspath.aerialist.template.TemplateMetadata.FieldMetadata;
 import org.glasspath.aerialist.template.TemplateMetadata.MetadataList;
 import org.glasspath.aerialist.template.TemplateMetadata.TableMetadata;
 import org.glasspath.common.swing.dialog.AboutDialog.IAbout;
+import org.glasspath.common.swing.resources.CommonResources;
 
 public abstract class EditorContext<T extends EditorPanel<T>> {
 
@@ -209,7 +210,7 @@ public abstract class EditorContext<T extends EditorPanel<T>> {
 
 	public void populateVisibilityFieldsMenu(EditorPanel<? extends EditorPanel<?>> context, IVisible view, JMenu menu) {
 
-		JMenuItem alwaysMenuItem = new JCheckBoxMenuItem(new SetVisibilityAction(context, view, null, "Always"));
+		JMenuItem alwaysMenuItem = new JCheckBoxMenuItem(new SetVisibilityAction(context, view, null, CommonResources.getString("Always"))); //$NON-NLS-1$
 		menu.add(alwaysMenuItem);
 
 		if (templateMetadata != null) {

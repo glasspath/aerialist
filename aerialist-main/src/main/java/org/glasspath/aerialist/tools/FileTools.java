@@ -55,6 +55,7 @@ import org.glasspath.aerialist.layout.LayoutListener;
 import org.glasspath.aerialist.media.BufferedImageMediaCache;
 import org.glasspath.aerialist.pdfbox.PdfBoxDocumentLoader;
 import org.glasspath.aerialist.reader.XDocReader;
+import org.glasspath.aerialist.resources.Resources;
 import org.glasspath.aerialist.swing.SwingLayoutMetrics;
 import org.glasspath.aerialist.swing.view.DefaultSwingViewContext;
 import org.glasspath.aerialist.swing.view.FieldUtils;
@@ -131,7 +132,7 @@ public class FileTools extends AbstractTools<Aerialist> {
 
 		menu.addSeparator();
 
-		exportPdfMenuItem = new JMenuItem("Export to PDF");
+		exportPdfMenuItem = new JMenuItem(Resources.getString("ExportToPDF")); //$NON-NLS-1$
 		exportPdfMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, OsUtils.CTRL_OR_CMD_MASK));
 		exportPdfMenuItem.setEnabled(false);
 		menu.add(exportPdfMenuItem);
@@ -143,7 +144,7 @@ public class FileTools extends AbstractTools<Aerialist> {
 			}
 		});
 
-		exportHtmlMenuItem = new JMenuItem("Export to html");
+		exportHtmlMenuItem = new JMenuItem(Resources.getString("ExportToHtml")); //$NON-NLS-1$
 		exportHtmlMenuItem.setEnabled(false);
 		if (TODO_ADD_EXPORT_HTML_MENU_ITEM) {
 			menu.add(exportHtmlMenuItem);
@@ -410,9 +411,9 @@ public class FileTools extends AbstractTools<Aerialist> {
 										// OpenPdfDocumentLoader documentLoader = new OpenPdfDocumentLoader();
 										PdfBoxDocumentLoader documentLoader = new PdfBoxDocumentLoader();
 										documentLoader.setLayoutListener(listener);
-										documentLoader.loadDocument(new File(documentPath), templateFieldContext, System.getProperty(GlasspathSystemProperties.BUNDLED_FONTS_PATH), new File("export.pdf"));
+										documentLoader.loadDocument(new File(documentPath), templateFieldContext, System.getProperty(GlasspathSystemProperties.BUNDLED_FONTS_PATH), new File("export.pdf")); //$NON-NLS-1$
 
-										DesktopUtils.open("export.pdf", context.getFrame());
+										DesktopUtils.open("export.pdf", context.getFrame()); //$NON-NLS-1$
 
 									}
 								}).start();
@@ -548,7 +549,7 @@ public class FileTools extends AbstractTools<Aerialist> {
 
 		if (context.isContentChanged()) {
 
-			int chosenOption = JOptionPane.showOptionDialog(context.getFrame(), "The file has been modified, save changes?", "Save changes?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String[] { CommonResources.getString("Yes"), CommonResources.getString("No"), CommonResources.getString("Cancel") }, CommonResources.getString("Cancel")); //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+			int chosenOption = JOptionPane.showOptionDialog(context.getFrame(), CommonResources.getString("FileChangedText"), CommonResources.getString("FileChangedTitle"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String[] { CommonResources.getString("Yes"), CommonResources.getString("No"), CommonResources.getString("Cancel") }, CommonResources.getString("Cancel")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 
 			if (chosenOption == JOptionPane.YES_OPTION) {
 				return saveAction();
@@ -573,11 +574,11 @@ public class FileTools extends AbstractTools<Aerialist> {
 		}
 
 		if (suggestedFileName == null) {
-			suggestedFileName = "export";
+			suggestedFileName = "export"; //$NON-NLS-1$
 		}
 
 		// TODO
-		String filePath = FileChooser.browseForFile("pdf", Icons.image, true, context.getFrame(), context.getPreferences(), "generateInvoiceDestinationPath", suggestedFileName + ".pdf"); //$NON-NLS-1$
+		String filePath = FileChooser.browseForFile("pdf", Icons.image, true, context.getFrame(), context.getPreferences(), "generateInvoiceDestinationPath", suggestedFileName + ".pdf"); //$NON-NLS-1$ //$NON-NLS-3$
 		if (filePath != null) {
 			exportToPdf(filePath, true);
 		}
@@ -642,11 +643,11 @@ public class FileTools extends AbstractTools<Aerialist> {
 
 					String html = new HtmlExporter().toHtml(document);
 
-					Files.write(Paths.get("export.html"), html.getBytes());
+					Files.write(Paths.get("export.html"), html.getBytes()); //$NON-NLS-1$
 
 					documentEditor.getPageContainer().setExportPhase(ExportPhase.IDLE);
 
-					DesktopUtils.open("export.html", context.getFrame());
+					DesktopUtils.open("export.html", context.getFrame()); //$NON-NLS-1$
 
 				} catch (DocumentException e) {
 					e.printStackTrace();

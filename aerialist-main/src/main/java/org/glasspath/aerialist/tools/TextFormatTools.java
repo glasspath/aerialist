@@ -48,6 +48,7 @@ import org.glasspath.aerialist.editor.actions.StrikeThroughAction;
 import org.glasspath.aerialist.editor.actions.TextColorAction;
 import org.glasspath.aerialist.editor.actions.UnderlineAction;
 import org.glasspath.aerialist.icons.Icons;
+import org.glasspath.aerialist.resources.Resources;
 import org.glasspath.aerialist.swing.view.TextView;
 import org.glasspath.common.swing.FrameContext;
 import org.glasspath.common.swing.button.SplitButton;
@@ -86,22 +87,22 @@ public class TextFormatTools extends AbstractTools<FrameContext> {
 		fontSizeComboBox = new JComboBox<>();
 		fontSizeComboBox.setFocusable(false);
 		fontSizeComboBox.setEditable(true);
-		fontSizeComboBox.addItem("8");
-		fontSizeComboBox.addItem("9");
-		fontSizeComboBox.addItem("10");
-		fontSizeComboBox.addItem("11");
-		fontSizeComboBox.addItem("12");
-		fontSizeComboBox.addItem("14");
-		fontSizeComboBox.addItem("16");
-		fontSizeComboBox.addItem("18");
-		fontSizeComboBox.addItem("20");
-		fontSizeComboBox.addItem("22");
-		fontSizeComboBox.addItem("24");
-		fontSizeComboBox.addItem("26");
-		fontSizeComboBox.addItem("28");
-		fontSizeComboBox.addItem("36");
-		fontSizeComboBox.addItem("48");
-		fontSizeComboBox.addItem("72");
+		fontSizeComboBox.addItem("8"); //$NON-NLS-1$
+		fontSizeComboBox.addItem("9"); //$NON-NLS-1$
+		fontSizeComboBox.addItem("10"); //$NON-NLS-1$
+		fontSizeComboBox.addItem("11"); //$NON-NLS-1$
+		fontSizeComboBox.addItem("12"); //$NON-NLS-1$
+		fontSizeComboBox.addItem("14"); //$NON-NLS-1$
+		fontSizeComboBox.addItem("16"); //$NON-NLS-1$
+		fontSizeComboBox.addItem("18"); //$NON-NLS-1$
+		fontSizeComboBox.addItem("20"); //$NON-NLS-1$
+		fontSizeComboBox.addItem("22"); //$NON-NLS-1$
+		fontSizeComboBox.addItem("24"); //$NON-NLS-1$
+		fontSizeComboBox.addItem("26"); //$NON-NLS-1$
+		fontSizeComboBox.addItem("28"); //$NON-NLS-1$
+		fontSizeComboBox.addItem("36"); //$NON-NLS-1$
+		fontSizeComboBox.addItem("48"); //$NON-NLS-1$
+		fontSizeComboBox.addItem("72"); //$NON-NLS-1$
 		fontSizeComboBox.setSelectedIndex(4);
 		toolBar.add(fontSizeComboBox);
 		fontSizeComboBox.setAction(new FontSizeAction(editor, fontSizeComboBox, this::isUpdating));
@@ -115,7 +116,7 @@ public class TextFormatTools extends AbstractTools<FrameContext> {
 				return editor.getFrameContext().getFrame();
 			}
 		};
-		textColorButton.setToolTipText("Text color");
+		textColorButton.setToolTipText(Resources.getString("TextColor")); //$NON-NLS-1$
 		textColorButton.setIcon(Icons.formatColorText);
 		textColorButton.setPaintMode(ColorButton.PAINT_MODE_BOTTOM);
 		toolBar.add(textColorButton);
@@ -131,13 +132,13 @@ public class TextFormatTools extends AbstractTools<FrameContext> {
 
 		SplitButton bulletsButton = new SplitButton();
 		bulletsButton.setArrowOffset(-3);
-		bulletsButton.setToolTipText("Bulleted list");
+		bulletsButton.setToolTipText(Resources.getString("BulletedList")); //$NON-NLS-1$
 		bulletsButton.setIcon(Icons.formatListBulletedSquare);
 		toolBar.add(bulletsButton);
 
-		JMenu bulletsMenu = new JMenu("Bullets");
-		bulletsMenu.add(new ListBulletedAction(editor, ListBulletedAction.CIRCLE_BULLET, "Circle"));
-		bulletsMenu.add(new ListBulletedAction(editor, ListBulletedAction.HYPHEN_BULLET, "Hyphen"));
+		JMenu bulletsMenu = new JMenu(Resources.getString("Bullets")); //$NON-NLS-1$
+		bulletsMenu.add(new ListBulletedAction(editor, ListBulletedAction.CIRCLE_BULLET, Resources.getString("Circle"))); //$NON-NLS-1$
+		bulletsMenu.add(new ListBulletedAction(editor, ListBulletedAction.HYPHEN_BULLET, Resources.getString("Hyphen"))); //$NON-NLS-1$
 		bulletsButton.setPopupMenu(bulletsMenu.getPopupMenu());
 
 		// TODO
@@ -151,7 +152,7 @@ public class TextFormatTools extends AbstractTools<FrameContext> {
 		// toolBar.add(indentDecreaseButton);
 
 		SplitButton spaceAboveButton = new SplitButton();
-		spaceAboveButton.setToolTipText("Line spacing");
+		spaceAboveButton.setToolTipText(Resources.getString("LineSpacing")); //$NON-NLS-1$
 		spaceAboveButton.setIcon(Icons.formatLineSpacing);
 		toolBar.add(spaceAboveButton);
 

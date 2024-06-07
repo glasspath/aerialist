@@ -81,7 +81,7 @@ public class SearchTools extends AbstractTools<Aerialist> {
 
 		menu.addSeparator();
 
-		JMenuItem searchNextMenuItem = new JMenuItem("Search next");
+		JMenuItem searchNextMenuItem = new JMenuItem(CommonResources.getString("SearchNext")); //$NON-NLS-1$
 		searchNextMenuItem.setEnabled(false);
 		searchNextMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0));
 		searchNextMenuItem.addActionListener(new ActionListener() {
@@ -93,7 +93,7 @@ public class SearchTools extends AbstractTools<Aerialist> {
 		});
 		menu.add(searchNextMenuItem);
 
-		JMenuItem searchPreviousMenuItem = new JMenuItem("Search previous");
+		JMenuItem searchPreviousMenuItem = new JMenuItem(CommonResources.getString("SearchPrevious")); //$NON-NLS-1$
 		searchPreviousMenuItem.setEnabled(false);
 		searchPreviousMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F3, InputEvent.SHIFT_DOWN_MASK));
 		searchPreviousMenuItem.addActionListener(new ActionListener() {

@@ -31,6 +31,7 @@ import org.glasspath.aerialist.Padding;
 import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.editor.DefaultEditorUndoable;
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
+import org.glasspath.aerialist.resources.Resources;
 import org.glasspath.aerialist.swing.view.ISwingElementView;
 
 public class SetPaddingUndoable extends DefaultEditorUndoable {
@@ -52,17 +53,17 @@ public class SetPaddingUndoable extends DefaultEditorUndoable {
 
 	@Override
 	public String getPresentationName() {
-		return "Change padding";
+		return Resources.getString("ChangePadding"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getRedoPresentationName() {
-		return "Redo change padding";
+		return Resources.getString("RedoChangePadding"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getUndoPresentationName() {
-		return "Undo change padding";
+		return Resources.getString("UndoChangePadding"); //$NON-NLS-1$
 	}
 
 	@Override

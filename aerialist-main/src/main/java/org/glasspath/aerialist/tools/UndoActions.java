@@ -84,19 +84,19 @@ public class UndoActions {
 			@Override
 			public void editAdded(UndoableEdit edit) {
 				updateActions();
-				fireActionPerformed(ID_EDIT_ADDED, "editAdded");
+				fireActionPerformed(ID_EDIT_ADDED, "editAdded"); //$NON-NLS-1$
 			}
 
 			@Override
 			public void undoPerformed() {
 				updateActions();
-				fireActionPerformed(ID_UNDO_PERFORMED, "undoPerformed");
+				fireActionPerformed(ID_UNDO_PERFORMED, "undoPerformed"); //$NON-NLS-1$
 			}
 
 			@Override
 			public void redoPerformed() {
 				updateActions();
-				fireActionPerformed(ID_REDO_PERFORMED, "redoPerformed");
+				fireActionPerformed(ID_REDO_PERFORMED, "redoPerformed"); //$NON-NLS-1$
 			}
 		};
 

@@ -31,6 +31,7 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
 import org.glasspath.aerialist.editor.AbstractEditorPanel;
+import org.glasspath.aerialist.resources.Resources;
 import org.glasspath.common.swing.color.ColorChooserPanel.ColorEvent;
 
 public class TextColorAction extends TextStyleAction {
@@ -40,8 +41,8 @@ public class TextColorAction extends TextStyleAction {
 	public TextColorAction(AbstractEditorPanel context) {
 		super(context);
 
-		putValue(Action.NAME, "Text color");
-		putValue(Action.SHORT_DESCRIPTION, "Text color");
+		putValue(Action.NAME, Resources.getString("TextColor")); //$NON-NLS-1$
+		putValue(Action.SHORT_DESCRIPTION, Resources.getString("TextColor")); //$NON-NLS-1$
 
 	}
 

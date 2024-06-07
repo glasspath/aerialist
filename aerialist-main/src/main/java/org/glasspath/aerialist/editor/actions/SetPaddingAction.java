@@ -34,6 +34,7 @@ import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.swing.view.ISwingElementView;
 import org.glasspath.aerialist.swing.view.TableView;
 import org.glasspath.aerialist.swing.view.TextBoxView;
+import org.glasspath.common.swing.resources.CommonResources;
 
 public class SetPaddingAction extends AbstractAction {
 
@@ -50,7 +51,7 @@ public class SetPaddingAction extends AbstractAction {
 		this.padding = new Padding(padding);
 
 		putValue(Action.NAME, padding + "px");
-		putValue(Action.SHORT_DESCRIPTION, "Padding");
+		putValue(Action.SHORT_DESCRIPTION, CommonResources.getString("Padding")); //$NON-NLS-1$
 		putValue(Action.SELECTED_KEY, this.padding.equals(getPadding(getElementView())));
 
 	}

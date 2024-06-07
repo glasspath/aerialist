@@ -84,6 +84,7 @@ import org.glasspath.common.swing.color.ColorChooserPanel.ColorEvent;
 import org.glasspath.common.swing.file.chooser.FileChooser;
 import org.glasspath.common.swing.padding.PaddingDialog;
 import org.glasspath.common.swing.padding.PaddingPanel;
+import org.glasspath.common.swing.resources.CommonResources;
 import org.glasspath.common.swing.selection.SelectionListener;
 
 public class ActionUtils {
@@ -515,16 +516,16 @@ public class ActionUtils {
 
 		JMenu menu = new JMenu("Insert field");
 
-		JMenu generalMenu = new JMenu("General");
+		JMenu generalMenu = new JMenu(CommonResources.getString("General")); //$NON-NLS-1$
 		menu.add(generalMenu);
 
-		JMenu documentMenu = new JMenu("Document");
+		JMenu documentMenu = new JMenu(Resources.getString("Document")); //$NON-NLS-1$
 		generalMenu.add(documentMenu);
 
 		documentMenu.add(new InsertFieldAction(context, textView, FieldType.DYNAMIC.getIdentifier() + DynamicFieldKey.PAGE.getKey(), DynamicFieldKey.PAGE.getDescription()));
 		documentMenu.add(new InsertFieldAction(context, textView, FieldType.DYNAMIC.getIdentifier() + DynamicFieldKey.PAGES.getKey(), DynamicFieldKey.PAGES.getDescription()));
 
-		JMenu dateAndTimeMenu = new JMenu("Date & time");
+		JMenu dateAndTimeMenu = new JMenu(Resources.getString("DateTime")); //$NON-NLS-1$
 		generalMenu.add(dateAndTimeMenu);
 
 		dateAndTimeMenu.add(new InsertFieldAction(context, textView, FieldType.DYNAMIC.getIdentifier() + DynamicFieldKey.MILLIS.getKey(), DynamicFieldKey.MILLIS.getDescription()));
@@ -742,7 +743,7 @@ public class ActionUtils {
 
 		headerMenu.addSeparator();
 
-		JMenuItem headerColorMenuItem = createColorMenuItem(context.getFrameContext().getFrame(), "Background color", null, new SetRowColorAction(context, tableView, 0, 0), menuBarMenu); // Use row 0 for header
+		JMenuItem headerColorMenuItem = createColorMenuItem(context.getFrameContext().getFrame(), Resources.getString("BackgroundColor"), null, new SetRowColorAction(context, tableView, 0, 0), menuBarMenu); // Use row 0 for header //$NON-NLS-1$
 		headerColorMenuItem.setEnabled(tableView.getHeaderRows() > 0);
 		headerMenu.add(headerColorMenuItem);
 
@@ -781,7 +782,7 @@ public class ActionUtils {
 	}
 
 	public static JMenuItem createBackgroundColorMenuItem(Frame frame, Color color, Action action, boolean menuBarMenu) {
-		return createColorMenuItem(frame, "Background color", color, action, menuBarMenu);
+		return createColorMenuItem(frame, Resources.getString("BackgroundColor"), color, action, menuBarMenu); //$NON-NLS-1$
 	}
 
 	public static JMenu createRowColorsMenu(DocumentEditorPanel context, TableView tableView, boolean menuBarMenu) {
@@ -808,7 +809,7 @@ public class ActionUtils {
 					JColorChooser colorChooser = new JColorChooser();
 					colorChooser.setColor(color);
 
-					JDialog dialog = new ColorChooserDialog(frame, "Edit color", true, null, colorChooser, new ActionListener() {
+					JDialog dialog = new ColorChooserDialog(frame, CommonResources.getString("EditColor"), true, null, colorChooser, new ActionListener() { //$NON-NLS-1$
 
 						@Override
 						public void actionPerformed(ActionEvent e) {
@@ -875,7 +876,7 @@ public class ActionUtils {
 
 	public static JMenuItem createPaddingMenu(DocumentEditorPanel context, ISwingElementView<?> elementView) {
 
-		JMenu paddingMenu = new JMenu("Padding");
+		JMenu paddingMenu = new JMenu(CommonResources.getString("Padding")); //$NON-NLS-1$
 		paddingMenu.add(new JCheckBoxMenuItem(new SetPaddingAction(context, 0)));
 		paddingMenu.add(new JCheckBoxMenuItem(new SetPaddingAction(context, 1)));
 		paddingMenu.add(new JCheckBoxMenuItem(new SetPaddingAction(context, 2)));
