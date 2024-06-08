@@ -378,7 +378,7 @@ public class ActionUtils {
 			menu.add(marginMenu);
 
 			marginMenu.add(new JCheckBoxMenuItem(new SetMarginAction(context, new Margin(40, 45, 40, 40), "Small", false)));
-			marginMenu.add(new JCheckBoxMenuItem(new SetMarginAction(context, new Margin(Document.DEFAULT_MARGIN_TOP, Document.DEFAULT_MARGIN_RIGHT, Document.DEFAULT_MARGIN_BOTTOM, Document.DEFAULT_MARGIN_LEFT), "Default", true)));
+			marginMenu.add(new JCheckBoxMenuItem(new SetMarginAction(context, new Margin(Document.DEFAULT_MARGIN_TOP, Document.DEFAULT_MARGIN_RIGHT, Document.DEFAULT_MARGIN_BOTTOM, Document.DEFAULT_MARGIN_LEFT), CommonResources.getString("Default"), true))); //$NON-NLS-1$
 			marginMenu.add(new JCheckBoxMenuItem(new SetMarginAction(context, new Margin(80, 85, 80, 80), "Large", false)));
 
 			if (TODO_CREATE_CUSTOM_PAGE_MARGINS_ITEM) {

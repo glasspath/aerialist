@@ -56,12 +56,14 @@ import org.glasspath.aerialist.editor.actions.SetBorderWidthAction;
 import org.glasspath.aerialist.editor.actions.SetHeightPolicyAction;
 import org.glasspath.aerialist.editor.actions.SetYPolicyAction;
 import org.glasspath.aerialist.icons.Icons;
+import org.glasspath.aerialist.resources.Resources;
 import org.glasspath.aerialist.swing.view.ISwingElementView;
 import org.glasspath.aerialist.swing.view.PageView;
 import org.glasspath.common.swing.SwingUtils;
 import org.glasspath.common.swing.border.BorderButton;
 import org.glasspath.common.swing.button.SplitButton;
 import org.glasspath.common.swing.color.ColorButton;
+import org.glasspath.common.swing.resources.CommonResources;
 import org.glasspath.common.swing.selection.SelectionListener;
 import org.glasspath.common.swing.tools.AbstractTools;
 
@@ -137,7 +139,7 @@ public class ObjectFormatTools extends AbstractTools<Aerialist> {
 		toolBar.add(insertButton);
 
 		AlignButton alignButton = new AlignButton(editor);
-		alignButton.setToolTipText("Align");
+		alignButton.setToolTipText(Resources.getString("Align")); //$NON-NLS-1$
 		toolBar.add(alignButton);
 
 		toolBar.add(new ArrangeElementsAction(editor, ArrangeElementsAction.BRING_FORWARD, true));
@@ -152,7 +154,7 @@ public class ObjectFormatTools extends AbstractTools<Aerialist> {
 				return editor.getFrameContext().getFrame();
 			}
 		};
-		backgroundColorButton.setToolTipText("Background color");
+		backgroundColorButton.setToolTipText(Resources.getString("BackgroundColor")); //$NON-NLS-1$
 		toolBar.add(backgroundColorButton);
 
 		BorderButton borderButton = new BorderButton(new SetBorderTypeAction(editor), new SetBorderWidthAction(editor), new SetBorderColorAction(editor)) {
@@ -162,7 +164,7 @@ public class ObjectFormatTools extends AbstractTools<Aerialist> {
 				return editor.getFrameContext().getFrame();
 			}
 		};
-		borderButton.setToolTipText("Border");
+		borderButton.setToolTipText(CommonResources.getString("Border")); //$NON-NLS-1$
 		toolBar.add(borderButton);
 
 		BoundsSpinner xSpinner = new BoundsSpinner("x");
