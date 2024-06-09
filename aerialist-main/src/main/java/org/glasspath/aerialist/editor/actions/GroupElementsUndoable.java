@@ -31,7 +31,7 @@ import javax.swing.undo.UndoableEdit;
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
 import org.glasspath.aerialist.editor.DocumentEditorUndoable;
 import org.glasspath.aerialist.editor.ElementData;
-import org.glasspath.aerialist.resources.Resources;
+import org.glasspath.aerialist.resources.AerialistResources;
 import org.glasspath.aerialist.swing.view.GroupView;
 import org.glasspath.aerialist.swing.view.PageView;
 
@@ -52,17 +52,17 @@ public class GroupElementsUndoable extends DocumentEditorUndoable {
 
 	@Override
 	public String getPresentationName() {
-		return Resources.getString("GroupElements"); //$NON-NLS-1$
+		return AerialistResources.getString("GroupElements"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getRedoPresentationName() {
-		return Resources.getString("RedoGroupElements"); //$NON-NLS-1$
+		return AerialistResources.getString("RedoGroupElements"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getUndoPresentationName() {
-		return Resources.getString("UndoGroupElements"); //$NON-NLS-1$
+		return AerialistResources.getString("UndoGroupElements"); //$NON-NLS-1$
 	}
 
 	@Override

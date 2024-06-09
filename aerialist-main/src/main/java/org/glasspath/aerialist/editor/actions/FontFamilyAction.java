@@ -33,10 +33,11 @@ import javax.swing.text.StyleConstants;
 
 import org.glasspath.aerialist.TextStyle;
 import org.glasspath.aerialist.editor.AbstractEditorPanel;
+import org.glasspath.common.swing.resources.CommonResources;
 
 public class FontFamilyAction extends TextStyleAction {
 
-	public static final String DEFAULT_FONT_DISPLAY_NAME = "Default";
+	public static final String DEFAULT_FONT_DISPLAY_NAME = CommonResources.getString("Default"); //$NON-NLS-1$
 
 	private final JComboBox<String> fontComboBox;
 	private final Supplier<Boolean> updatingSupplier;
@@ -47,8 +48,8 @@ public class FontFamilyAction extends TextStyleAction {
 		this.fontComboBox = fontComboBox;
 		this.updatingSupplier = updatingSupplier;
 
-		putValue(Action.NAME, "Font");
-		putValue(Action.SHORT_DESCRIPTION, "Font");
+		putValue(Action.NAME, CommonResources.getString("Font")); //$NON-NLS-1$
+		putValue(Action.SHORT_DESCRIPTION, CommonResources.getString("Font")); //$NON-NLS-1$
 
 	}
 

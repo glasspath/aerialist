@@ -32,7 +32,7 @@ import javax.swing.undo.UndoableEdit;
 import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.editor.DefaultEditorUndoable;
 import org.glasspath.aerialist.editor.ElementData;
-import org.glasspath.aerialist.resources.Resources;
+import org.glasspath.aerialist.resources.AerialistResources;
 import org.glasspath.aerialist.swing.view.PageView;
 
 public class AlignElementsUndoable extends DefaultEditorUndoable {
@@ -50,17 +50,17 @@ public class AlignElementsUndoable extends DefaultEditorUndoable {
 
 	@Override
 	public String getPresentationName() {
-		return Resources.getString("AlignElements"); //$NON-NLS-1$
+		return AerialistResources.getString("AlignElements"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getRedoPresentationName() {
-		return Resources.getString("RedoAlignElements"); //$NON-NLS-1$
+		return AerialistResources.getString("RedoAlignElements"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getUndoPresentationName() {
-		return Resources.getString("UndoAlignElements"); //$NON-NLS-1$
+		return AerialistResources.getString("UndoAlignElements"); //$NON-NLS-1$
 	}
 
 	@Override

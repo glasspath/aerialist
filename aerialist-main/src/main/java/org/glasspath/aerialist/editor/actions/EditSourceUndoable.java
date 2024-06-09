@@ -29,7 +29,7 @@ import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoableEdit;
 
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
-import org.glasspath.aerialist.resources.Resources;
+import org.glasspath.aerialist.resources.AerialistResources;
 import org.glasspath.aerialist.swing.view.PageView;
 
 public class EditSourceUndoable implements UndoableEdit {
@@ -46,17 +46,17 @@ public class EditSourceUndoable implements UndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return Resources.getString("EditSource"); //$NON-NLS-1$
+		return AerialistResources.getString("EditSource"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getRedoPresentationName() {
-		return Resources.getString("RedoEditSource"); //$NON-NLS-1$
+		return AerialistResources.getString("RedoEditSource"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getUndoPresentationName() {
-		return Resources.getString("UndoEditSource"); //$NON-NLS-1$
+		return AerialistResources.getString("UndoEditSource"); //$NON-NLS-1$
 	}
 
 	@Override

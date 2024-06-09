@@ -34,7 +34,7 @@ import javax.swing.SwingUtilities;
 
 import org.glasspath.aerialist.Aerialist;
 import org.glasspath.aerialist.MainPanel;
-import org.glasspath.aerialist.resources.Resources;
+import org.glasspath.aerialist.resources.AerialistResources;
 import org.glasspath.aerialist.swing.view.PageContainer;
 import org.glasspath.common.os.preferences.BoolPref;
 import org.glasspath.common.swing.color.ColorUtils;
@@ -66,7 +66,7 @@ public class ViewTools extends AbstractTools<Aerialist> {
 
 		Preferences preferences = context.getPreferences();
 
-		designMenuItem = new JCheckBoxMenuItem(Resources.getString("Design")); //$NON-NLS-1$
+		designMenuItem = new JCheckBoxMenuItem(AerialistResources.getString("Design")); //$NON-NLS-1$
 		menu.add(designMenuItem);
 		designMenuItem.addActionListener(new ActionListener() {
 
@@ -76,7 +76,7 @@ public class ViewTools extends AbstractTools<Aerialist> {
 			}
 		});
 
-		sourceMenuItem = new JCheckBoxMenuItem(Resources.getString("Source")); //$NON-NLS-1$
+		sourceMenuItem = new JCheckBoxMenuItem(AerialistResources.getString("Source")); //$NON-NLS-1$
 		menu.add(sourceMenuItem);
 		sourceMenuItem.addActionListener(new ActionListener() {
 
@@ -91,7 +91,7 @@ public class ViewTools extends AbstractTools<Aerialist> {
 		JMenu layoutMenu = new JMenu("Layout");
 		menu.add(layoutMenu);
 
-		singlePageLayoutMenuItem = new JCheckBoxMenuItem(Resources.getString("SinglePage")); //$NON-NLS-1$
+		singlePageLayoutMenuItem = new JCheckBoxMenuItem(AerialistResources.getString("SinglePage")); //$NON-NLS-1$
 		layoutMenu.add(singlePageLayoutMenuItem);
 		singlePageLayoutMenuItem.addActionListener(new ActionListener() {
 
@@ -101,7 +101,7 @@ public class ViewTools extends AbstractTools<Aerialist> {
 			}
 		});
 
-		multiplePagesLayoutMenuItem = new JCheckBoxMenuItem(Resources.getString("MultiplePages")); //$NON-NLS-1$
+		multiplePagesLayoutMenuItem = new JCheckBoxMenuItem(AerialistResources.getString("MultiplePages")); //$NON-NLS-1$
 		layoutMenu.add(multiplePagesLayoutMenuItem);
 		multiplePagesLayoutMenuItem.addActionListener(new ActionListener() {
 
@@ -180,7 +180,7 @@ public class ViewTools extends AbstractTools<Aerialist> {
 		viewModeToolBar.setRollover(true);
 		viewModeToolBar.setBackground(ColorUtils.TITLE_BAR_COLOR);
 
-		designButton = new JToggleButton(Resources.getString("Design")); //$NON-NLS-1$
+		designButton = new JToggleButton(AerialistResources.getString("Design")); //$NON-NLS-1$
 		viewModeToolBar.add(designButton);
 		designButton.addActionListener(new ActionListener() {
 
@@ -190,7 +190,7 @@ public class ViewTools extends AbstractTools<Aerialist> {
 			}
 		});
 
-		sourceButton = new JToggleButton(Resources.getString("Source")); //$NON-NLS-1$
+		sourceButton = new JToggleButton(AerialistResources.getString("Source")); //$NON-NLS-1$
 		viewModeToolBar.add(sourceButton);
 		sourceButton.addActionListener(new ActionListener() {
 

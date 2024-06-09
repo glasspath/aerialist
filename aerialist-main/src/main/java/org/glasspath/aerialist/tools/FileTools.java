@@ -55,7 +55,7 @@ import org.glasspath.aerialist.layout.LayoutListener;
 import org.glasspath.aerialist.media.BufferedImageMediaCache;
 import org.glasspath.aerialist.pdfbox.PdfBoxDocumentLoader;
 import org.glasspath.aerialist.reader.XDocReader;
-import org.glasspath.aerialist.resources.Resources;
+import org.glasspath.aerialist.resources.AerialistResources;
 import org.glasspath.aerialist.swing.SwingLayoutMetrics;
 import org.glasspath.aerialist.swing.view.DefaultSwingViewContext;
 import org.glasspath.aerialist.swing.view.FieldUtils;
@@ -132,7 +132,7 @@ public class FileTools extends AbstractTools<Aerialist> {
 
 		menu.addSeparator();
 
-		exportPdfMenuItem = new JMenuItem(Resources.getString("ExportToPDF")); //$NON-NLS-1$
+		exportPdfMenuItem = new JMenuItem(AerialistResources.getString("ExportToPDF")); //$NON-NLS-1$
 		exportPdfMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, OsUtils.CTRL_OR_CMD_MASK));
 		exportPdfMenuItem.setEnabled(false);
 		menu.add(exportPdfMenuItem);
@@ -144,7 +144,7 @@ public class FileTools extends AbstractTools<Aerialist> {
 			}
 		});
 
-		exportHtmlMenuItem = new JMenuItem(Resources.getString("ExportToHtml")); //$NON-NLS-1$
+		exportHtmlMenuItem = new JMenuItem(AerialistResources.getString("ExportToHtml")); //$NON-NLS-1$
 		exportHtmlMenuItem.setEnabled(false);
 		if (TODO_ADD_EXPORT_HTML_MENU_ITEM) {
 			menu.add(exportHtmlMenuItem);

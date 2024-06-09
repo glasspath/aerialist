@@ -38,7 +38,7 @@ import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.editor.ChangeTableLayoutUndoable;
 import org.glasspath.aerialist.editor.ChangeTableLayoutUndoable.TableCellViewData;
 import org.glasspath.aerialist.editor.ChangeTableLayoutUndoable.TableViewData;
-import org.glasspath.aerialist.resources.Resources;
+import org.glasspath.aerialist.resources.AerialistResources;
 import org.glasspath.aerialist.swing.view.TableCellView;
 import org.glasspath.aerialist.swing.view.TableView;
 
@@ -52,8 +52,8 @@ public class DeleteTableColumnAction extends AbstractAction {
 		this.context = context;
 		this.tableCellView = tableCellView;
 
-		putValue(Action.NAME, Resources.getString("DeleteColumn")); //$NON-NLS-1$
-		putValue(Action.SHORT_DESCRIPTION, Resources.getString("DeleteColumn")); //$NON-NLS-1$
+		putValue(Action.NAME, AerialistResources.getString("DeleteColumn")); //$NON-NLS-1$
+		putValue(Action.SHORT_DESCRIPTION, AerialistResources.getString("DeleteColumn")); //$NON-NLS-1$
 
 	}
 

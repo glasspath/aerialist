@@ -48,7 +48,7 @@ import org.glasspath.aerialist.editor.actions.StrikeThroughAction;
 import org.glasspath.aerialist.editor.actions.TextColorAction;
 import org.glasspath.aerialist.editor.actions.UnderlineAction;
 import org.glasspath.aerialist.icons.Icons;
-import org.glasspath.aerialist.resources.Resources;
+import org.glasspath.aerialist.resources.AerialistResources;
 import org.glasspath.aerialist.swing.view.TextView;
 import org.glasspath.common.swing.FrameContext;
 import org.glasspath.common.swing.button.SplitButton;
@@ -116,7 +116,7 @@ public class TextFormatTools extends AbstractTools<FrameContext> {
 				return editor.getFrameContext().getFrame();
 			}
 		};
-		textColorButton.setToolTipText(Resources.getString("TextColor")); //$NON-NLS-1$
+		textColorButton.setToolTipText(AerialistResources.getString("TextColor")); //$NON-NLS-1$
 		textColorButton.setIcon(Icons.formatColorText);
 		textColorButton.setPaintMode(ColorButton.PAINT_MODE_BOTTOM);
 		toolBar.add(textColorButton);
@@ -132,13 +132,13 @@ public class TextFormatTools extends AbstractTools<FrameContext> {
 
 		SplitButton bulletsButton = new SplitButton();
 		bulletsButton.setArrowOffset(-3);
-		bulletsButton.setToolTipText(Resources.getString("BulletedList")); //$NON-NLS-1$
+		bulletsButton.setToolTipText(AerialistResources.getString("BulletedList")); //$NON-NLS-1$
 		bulletsButton.setIcon(Icons.formatListBulletedSquare);
 		toolBar.add(bulletsButton);
 
-		JMenu bulletsMenu = new JMenu(Resources.getString("Bullets")); //$NON-NLS-1$
-		bulletsMenu.add(new ListBulletedAction(editor, ListBulletedAction.CIRCLE_BULLET, Resources.getString("Circle"))); //$NON-NLS-1$
-		bulletsMenu.add(new ListBulletedAction(editor, ListBulletedAction.HYPHEN_BULLET, Resources.getString("Hyphen"))); //$NON-NLS-1$
+		JMenu bulletsMenu = new JMenu(AerialistResources.getString("Bullets")); //$NON-NLS-1$
+		bulletsMenu.add(new ListBulletedAction(editor, ListBulletedAction.CIRCLE_BULLET, AerialistResources.getString("Circle"))); //$NON-NLS-1$
+		bulletsMenu.add(new ListBulletedAction(editor, ListBulletedAction.HYPHEN_BULLET, AerialistResources.getString("Hyphen"))); //$NON-NLS-1$
 		bulletsButton.setPopupMenu(bulletsMenu.getPopupMenu());
 
 		// TODO
@@ -152,7 +152,7 @@ public class TextFormatTools extends AbstractTools<FrameContext> {
 		// toolBar.add(indentDecreaseButton);
 
 		SplitButton spaceAboveButton = new SplitButton();
-		spaceAboveButton.setToolTipText(Resources.getString("LineSpacing")); //$NON-NLS-1$
+		spaceAboveButton.setToolTipText(AerialistResources.getString("LineSpacing")); //$NON-NLS-1$
 		spaceAboveButton.setIcon(Icons.formatLineSpacing);
 		toolBar.add(spaceAboveButton);
 

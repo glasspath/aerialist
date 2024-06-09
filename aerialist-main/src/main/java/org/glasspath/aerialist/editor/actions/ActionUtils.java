@@ -61,7 +61,7 @@ import org.glasspath.aerialist.editor.DocumentEditorPanel;
 import org.glasspath.aerialist.editor.EditorPanel;
 import org.glasspath.aerialist.editor.ElementData;
 import org.glasspath.aerialist.icons.Icons;
-import org.glasspath.aerialist.resources.Resources;
+import org.glasspath.aerialist.resources.AerialistResources;
 import org.glasspath.aerialist.swing.view.FieldUtils;
 import org.glasspath.aerialist.swing.view.FooterPageView;
 import org.glasspath.aerialist.swing.view.GroupView;
@@ -479,7 +479,7 @@ public class ActionUtils {
 
 	public static JMenu createArrangeMenu(EditorPanel<? extends EditorPanel<?>> context) {
 
-		JMenu menu = new JMenu(Resources.getString("Arrange")); //$NON-NLS-1$
+		JMenu menu = new JMenu(AerialistResources.getString("Arrange")); //$NON-NLS-1$
 
 		menu.add(new ArrangeElementsAction(context, ArrangeElementsAction.BRING_FORWARD, false));
 		menu.add(new ArrangeElementsAction(context, ArrangeElementsAction.BRING_TO_FRONT, false));
@@ -492,7 +492,7 @@ public class ActionUtils {
 
 	public static JMenu createAlignMenu(EditorPanel<? extends EditorPanel<?>> context) {
 
-		JMenu menu = new JMenu(Resources.getString("Align")); //$NON-NLS-1$
+		JMenu menu = new JMenu(AerialistResources.getString("Align")); //$NON-NLS-1$
 
 		menu.add(new AlignElementsAction(context, AlignElementsAction.HORIZONTAL_LEFT));
 		menu.add(new AlignElementsAction(context, AlignElementsAction.HORIZONTAL_CENTER));
@@ -519,13 +519,13 @@ public class ActionUtils {
 		JMenu generalMenu = new JMenu(CommonResources.getString("General")); //$NON-NLS-1$
 		menu.add(generalMenu);
 
-		JMenu documentMenu = new JMenu(Resources.getString("Document")); //$NON-NLS-1$
+		JMenu documentMenu = new JMenu(AerialistResources.getString("Document")); //$NON-NLS-1$
 		generalMenu.add(documentMenu);
 
 		documentMenu.add(new InsertFieldAction(context, textView, FieldType.DYNAMIC.getIdentifier() + DynamicFieldKey.PAGE.getKey(), DynamicFieldKey.PAGE.getDescription()));
 		documentMenu.add(new InsertFieldAction(context, textView, FieldType.DYNAMIC.getIdentifier() + DynamicFieldKey.PAGES.getKey(), DynamicFieldKey.PAGES.getDescription()));
 
-		JMenu dateAndTimeMenu = new JMenu(Resources.getString("DateTime")); //$NON-NLS-1$
+		JMenu dateAndTimeMenu = new JMenu(AerialistResources.getString("DateTime")); //$NON-NLS-1$
 		generalMenu.add(dateAndTimeMenu);
 
 		dateAndTimeMenu.add(new InsertFieldAction(context, textView, FieldType.DYNAMIC.getIdentifier() + DynamicFieldKey.MILLIS.getKey(), DynamicFieldKey.MILLIS.getDescription()));
@@ -743,7 +743,7 @@ public class ActionUtils {
 
 		headerMenu.addSeparator();
 
-		JMenuItem headerColorMenuItem = createColorMenuItem(context.getFrameContext().getFrame(), Resources.getString("BackgroundColor"), null, new SetRowColorAction(context, tableView, 0, 0), menuBarMenu); // Use row 0 for header //$NON-NLS-1$
+		JMenuItem headerColorMenuItem = createColorMenuItem(context.getFrameContext().getFrame(), AerialistResources.getString("BackgroundColor"), null, new SetRowColorAction(context, tableView, 0, 0), menuBarMenu); // Use row 0 for header //$NON-NLS-1$
 		headerColorMenuItem.setEnabled(tableView.getHeaderRows() > 0);
 		headerMenu.add(headerColorMenuItem);
 
@@ -782,7 +782,7 @@ public class ActionUtils {
 	}
 
 	public static JMenuItem createBackgroundColorMenuItem(Frame frame, Color color, Action action, boolean menuBarMenu) {
-		return createColorMenuItem(frame, Resources.getString("BackgroundColor"), color, action, menuBarMenu); //$NON-NLS-1$
+		return createColorMenuItem(frame, AerialistResources.getString("BackgroundColor"), color, action, menuBarMenu); //$NON-NLS-1$
 	}
 
 	public static JMenu createRowColorsMenu(DocumentEditorPanel context, TableView tableView, boolean menuBarMenu) {

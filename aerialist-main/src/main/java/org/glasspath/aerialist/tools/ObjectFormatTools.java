@@ -56,7 +56,7 @@ import org.glasspath.aerialist.editor.actions.SetBorderWidthAction;
 import org.glasspath.aerialist.editor.actions.SetHeightPolicyAction;
 import org.glasspath.aerialist.editor.actions.SetYPolicyAction;
 import org.glasspath.aerialist.icons.Icons;
-import org.glasspath.aerialist.resources.Resources;
+import org.glasspath.aerialist.resources.AerialistResources;
 import org.glasspath.aerialist.swing.view.ISwingElementView;
 import org.glasspath.aerialist.swing.view.PageView;
 import org.glasspath.common.swing.SwingUtils;
@@ -139,7 +139,7 @@ public class ObjectFormatTools extends AbstractTools<Aerialist> {
 		toolBar.add(insertButton);
 
 		AlignButton alignButton = new AlignButton(editor);
-		alignButton.setToolTipText(Resources.getString("Align")); //$NON-NLS-1$
+		alignButton.setToolTipText(AerialistResources.getString("Align")); //$NON-NLS-1$
 		toolBar.add(alignButton);
 
 		toolBar.add(new ArrangeElementsAction(editor, ArrangeElementsAction.BRING_FORWARD, true));
@@ -154,7 +154,7 @@ public class ObjectFormatTools extends AbstractTools<Aerialist> {
 				return editor.getFrameContext().getFrame();
 			}
 		};
-		backgroundColorButton.setToolTipText(Resources.getString("BackgroundColor")); //$NON-NLS-1$
+		backgroundColorButton.setToolTipText(AerialistResources.getString("BackgroundColor")); //$NON-NLS-1$
 		toolBar.add(backgroundColorButton);
 
 		BorderButton borderButton = new BorderButton(new SetBorderTypeAction(editor), new SetBorderWidthAction(editor), new SetBorderColorAction(editor)) {

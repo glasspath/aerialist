@@ -32,6 +32,7 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
 import org.glasspath.aerialist.editor.AbstractEditorPanel;
+import org.glasspath.aerialist.resources.AerialistResources;
 
 public class FontSizeAction extends TextStyleAction {
 
@@ -44,8 +45,8 @@ public class FontSizeAction extends TextStyleAction {
 		this.fontSizeComboBox = fontSizeComboBox;
 		this.updatingSupplier = updatingSupplier;
 
-		putValue(Action.NAME, "Font size");
-		putValue(Action.SHORT_DESCRIPTION, "Font size");
+		putValue(Action.NAME, AerialistResources.getString("FontSize")); //$NON-NLS-1$
+		putValue(Action.SHORT_DESCRIPTION, AerialistResources.getString("FontSize")); //$NON-NLS-1$
 
 	}
 

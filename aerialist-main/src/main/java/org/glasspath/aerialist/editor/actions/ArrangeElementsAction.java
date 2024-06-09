@@ -36,7 +36,7 @@ import org.glasspath.aerialist.AerialistUtils;
 import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.editor.ElementData;
 import org.glasspath.aerialist.icons.Icons;
-import org.glasspath.aerialist.resources.Resources;
+import org.glasspath.aerialist.resources.AerialistResources;
 import org.glasspath.aerialist.swing.view.PageView;
 
 public class ArrangeElementsAction extends AbstractAction {
@@ -56,27 +56,27 @@ public class ArrangeElementsAction extends AbstractAction {
 
 		if (arrangeAction == BRING_FORWARD) {
 			if (!toolbarButton) {
-				putValue(Action.NAME, Resources.getString("BringForward")); //$NON-NLS-1$
+				putValue(Action.NAME, AerialistResources.getString("BringForward")); //$NON-NLS-1$
 			}
-			putValue(Action.SHORT_DESCRIPTION, Resources.getString("BringForward")); //$NON-NLS-1$
+			putValue(Action.SHORT_DESCRIPTION, AerialistResources.getString("BringForward")); //$NON-NLS-1$
 			putValue(Action.SMALL_ICON, Icons.arrangeBringForward);
 		} else if (arrangeAction == BRING_TO_FRONT) {
 			if (!toolbarButton) {
-				putValue(Action.NAME, Resources.getString("BringToFront")); //$NON-NLS-1$
+				putValue(Action.NAME, AerialistResources.getString("BringToFront")); //$NON-NLS-1$
 			}
 			putValue(Action.SMALL_ICON, Icons.arrangeBringToFront);
-			putValue(Action.SHORT_DESCRIPTION, Resources.getString("BringToFront")); //$NON-NLS-1$
+			putValue(Action.SHORT_DESCRIPTION, AerialistResources.getString("BringToFront")); //$NON-NLS-1$
 		} else if (arrangeAction == SEND_BACKWARD) {
 			if (!toolbarButton) {
-				putValue(Action.NAME, Resources.getString("SendBackward")); //$NON-NLS-1$
+				putValue(Action.NAME, AerialistResources.getString("SendBackward")); //$NON-NLS-1$
 			}
-			putValue(Action.SHORT_DESCRIPTION, Resources.getString("SendBackward")); //$NON-NLS-1$
+			putValue(Action.SHORT_DESCRIPTION, AerialistResources.getString("SendBackward")); //$NON-NLS-1$
 			putValue(Action.SMALL_ICON, Icons.arrangeSendBackward);
 		} else if (arrangeAction == SEND_TO_BACK) {
 			if (!toolbarButton) {
-				putValue(Action.NAME, Resources.getString("SendToBack")); //$NON-NLS-1$
+				putValue(Action.NAME, AerialistResources.getString("SendToBack")); //$NON-NLS-1$
 			}
-			putValue(Action.SHORT_DESCRIPTION, Resources.getString("SendToBack")); //$NON-NLS-1$
+			putValue(Action.SHORT_DESCRIPTION, AerialistResources.getString("SendToBack")); //$NON-NLS-1$
 			putValue(Action.SMALL_ICON, Icons.arrangeSendToBack);
 		}
 

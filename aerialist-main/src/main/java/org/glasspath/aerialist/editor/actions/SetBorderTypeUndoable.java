@@ -32,7 +32,7 @@ import javax.swing.undo.UndoableEdit;
 import org.glasspath.aerialist.Border;
 import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.editor.DefaultEditorUndoable;
-import org.glasspath.aerialist.resources.Resources;
+import org.glasspath.aerialist.resources.AerialistResources;
 import org.glasspath.aerialist.swing.view.ISwingElementView;
 import org.glasspath.common.swing.border.BorderMenu.BorderMenuType;
 
@@ -51,17 +51,17 @@ public class SetBorderTypeUndoable extends DefaultEditorUndoable {
 
 	@Override
 	public String getPresentationName() {
-		return Resources.getString("ChangeBorder"); //$NON-NLS-1$
+		return AerialistResources.getString("ChangeBorder"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getRedoPresentationName() {
-		return Resources.getString("RedoChangeBorder"); //$NON-NLS-1$
+		return AerialistResources.getString("RedoChangeBorder"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getUndoPresentationName() {
-		return Resources.getString("UndoChangeBorder"); //$NON-NLS-1$
+		return AerialistResources.getString("UndoChangeBorder"); //$NON-NLS-1$
 	}
 
 	@Override

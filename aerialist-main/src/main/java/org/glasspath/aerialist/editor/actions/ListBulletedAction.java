@@ -27,7 +27,7 @@ import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.SimpleAttributeSet;
 
 import org.glasspath.aerialist.editor.AbstractEditorPanel;
-import org.glasspath.aerialist.resources.Resources;
+import org.glasspath.aerialist.resources.AerialistResources;
 import org.glasspath.aerialist.swing.view.TextView;
 
 public class ListBulletedAction extends TextStyleAction {
@@ -49,7 +49,7 @@ public class ListBulletedAction extends TextStyleAction {
 		this.prefix = prefix;
 
 		putValue(Action.NAME, prefix + name);
-		putValue(Action.SHORT_DESCRIPTION, Resources.getString("BulletedList")); //$NON-NLS-1$
+		putValue(Action.SHORT_DESCRIPTION, AerialistResources.getString("BulletedList")); //$NON-NLS-1$
 
 	}
 

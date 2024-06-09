@@ -50,7 +50,7 @@ public class SetPaddingAction extends AbstractAction {
 		this.context = context;
 		this.padding = new Padding(padding);
 
-		putValue(Action.NAME, padding + "px");
+		putValue(Action.NAME, padding + CommonResources.getString("px")); //$NON-NLS-1$
 		putValue(Action.SHORT_DESCRIPTION, CommonResources.getString("Padding")); //$NON-NLS-1$
 		putValue(Action.SELECTED_KEY, this.padding.equals(getPadding(getElementView())));
 

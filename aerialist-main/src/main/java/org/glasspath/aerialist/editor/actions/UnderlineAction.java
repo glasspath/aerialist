@@ -29,14 +29,15 @@ import javax.swing.text.StyleConstants;
 
 import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.icons.Icons;
+import org.glasspath.aerialist.resources.AerialistResources;
 
 public class UnderlineAction extends ToggleTextStyleAction {
 
 	public UnderlineAction(AbstractEditorPanel context) {
 		super(context);
 
-		putValue(Action.NAME, "Underline");
-		putValue(Action.SHORT_DESCRIPTION, "Underline");
+		putValue(Action.NAME, AerialistResources.getString("Underline")); //$NON-NLS-1$
+		putValue(Action.SHORT_DESCRIPTION, AerialistResources.getString("Underline")); //$NON-NLS-1$
 		putValue(Action.SMALL_ICON, Icons.formatUnderline);
 
 	}

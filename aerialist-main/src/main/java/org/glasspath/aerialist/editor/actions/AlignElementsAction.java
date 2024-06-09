@@ -35,7 +35,7 @@ import org.glasspath.aerialist.AerialistUtils;
 import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.editor.ElementData;
 import org.glasspath.aerialist.icons.Icons;
-import org.glasspath.aerialist.resources.Resources;
+import org.glasspath.aerialist.resources.AerialistResources;
 import org.glasspath.aerialist.swing.view.PageView;
 
 public class AlignElementsAction extends AbstractAction {
@@ -56,28 +56,28 @@ public class AlignElementsAction extends AbstractAction {
 		this.alignAction = alignAction;
 
 		if (alignAction == HORIZONTAL_LEFT) {
-			putValue(Action.NAME, Resources.getString("AlignHorizontalLeft")); //$NON-NLS-1$
-			putValue(Action.SHORT_DESCRIPTION, Resources.getString("AlignHorizontalLeft")); //$NON-NLS-1$
+			putValue(Action.NAME, AerialistResources.getString("AlignHorizontalLeft")); //$NON-NLS-1$
+			putValue(Action.SHORT_DESCRIPTION, AerialistResources.getString("AlignHorizontalLeft")); //$NON-NLS-1$
 			putValue(Action.SMALL_ICON, Icons.alignHorizontalLeft);
 		} else if (alignAction == HORIZONTAL_CENTER) {
-			putValue(Action.NAME, Resources.getString("AlignHorizontalCenter")); //$NON-NLS-1$
-			putValue(Action.SHORT_DESCRIPTION, Resources.getString("AlignHorizontalCenter")); //$NON-NLS-1$
+			putValue(Action.NAME, AerialistResources.getString("AlignHorizontalCenter")); //$NON-NLS-1$
+			putValue(Action.SHORT_DESCRIPTION, AerialistResources.getString("AlignHorizontalCenter")); //$NON-NLS-1$
 			putValue(Action.SMALL_ICON, Icons.alignHorizontalCenter);
 		} else if (alignAction == HORIZONTAL_RIGHT) {
-			putValue(Action.NAME, Resources.getString("AlignHorizontalRight")); //$NON-NLS-1$
-			putValue(Action.SHORT_DESCRIPTION, Resources.getString("AlignHorizontalRight")); //$NON-NLS-1$
+			putValue(Action.NAME, AerialistResources.getString("AlignHorizontalRight")); //$NON-NLS-1$
+			putValue(Action.SHORT_DESCRIPTION, AerialistResources.getString("AlignHorizontalRight")); //$NON-NLS-1$
 			putValue(Action.SMALL_ICON, Icons.alignHorizontalRight);
 		} else if (alignAction == VERTICAL_TOP) {
-			putValue(Action.NAME, Resources.getString("AlignVerticalTop")); //$NON-NLS-1$
-			putValue(Action.SHORT_DESCRIPTION, Resources.getString("AlignVerticalTop")); //$NON-NLS-1$
+			putValue(Action.NAME, AerialistResources.getString("AlignVerticalTop")); //$NON-NLS-1$
+			putValue(Action.SHORT_DESCRIPTION, AerialistResources.getString("AlignVerticalTop")); //$NON-NLS-1$
 			putValue(Action.SMALL_ICON, Icons.alignVerticalTop);
 		} else if (alignAction == VERTICAL_CENTER) {
-			putValue(Action.NAME, Resources.getString("AlignVerticalCenter")); //$NON-NLS-1$
-			putValue(Action.SHORT_DESCRIPTION, Resources.getString("AlignVerticalCenter")); //$NON-NLS-1$
+			putValue(Action.NAME, AerialistResources.getString("AlignVerticalCenter")); //$NON-NLS-1$
+			putValue(Action.SHORT_DESCRIPTION, AerialistResources.getString("AlignVerticalCenter")); //$NON-NLS-1$
 			putValue(Action.SMALL_ICON, Icons.alignVerticalCenter);
 		} else if (alignAction == VERTICAL_BOTTOM) {
-			putValue(Action.NAME, Resources.getString("AlignVerticalBottom")); //$NON-NLS-1$
-			putValue(Action.SHORT_DESCRIPTION, Resources.getString("AlignVerticalBottom")); //$NON-NLS-1$
+			putValue(Action.NAME, AerialistResources.getString("AlignVerticalBottom")); //$NON-NLS-1$
+			putValue(Action.SHORT_DESCRIPTION, AerialistResources.getString("AlignVerticalBottom")); //$NON-NLS-1$
 			putValue(Action.SMALL_ICON, Icons.alignVerticalBottom);
 		}
 

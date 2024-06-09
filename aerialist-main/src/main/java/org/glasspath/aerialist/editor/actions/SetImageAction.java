@@ -56,7 +56,7 @@ public class SetImageAction extends AbstractAction {
 
 		String oldSrc = imageView.getSrc();
 
-		String filePath = FileChooser.browseForImageFile(Icons.image, false, context.getFrameContext().getFrame(), context.getFrameContext().getPreferences(), "lastImageFilePath");
+		String filePath = FileChooser.browseForImageFile(Icons.image, false, context.getFrameContext().getFrame(), context.getFrameContext().getPreferences(), "lastImageFilePath"); //$NON-NLS-1$
 		if (filePath != null) {
 
 			try {

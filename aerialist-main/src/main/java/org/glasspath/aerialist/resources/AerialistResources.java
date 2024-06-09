@@ -24,13 +24,13 @@ package org.glasspath.aerialist.resources;
 
 import java.util.ResourceBundle;
 
-public class Resources {
+public class AerialistResources {
 
 	@SuppressWarnings("unused")
-	private static final Resources INSTANCE = new Resources();
+	private static final AerialistResources INSTANCE = new AerialistResources();
 	public static final ResourceBundle BUNDLE = ResourceBundle.getBundle("org.glasspath.aerialist.resources.messages"); //$NON-NLS-1$
 
-	private Resources() {
+	private AerialistResources() {
 
 	}
 

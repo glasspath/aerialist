@@ -29,14 +29,15 @@ import javax.swing.text.StyleConstants;
 
 import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.icons.Icons;
+import org.glasspath.aerialist.resources.AerialistResources;
 
 public class StrikeThroughAction extends ToggleTextStyleAction {
 
 	public StrikeThroughAction(AbstractEditorPanel context) {
 		super(context);
 
-		putValue(Action.NAME, "Strike through");
-		putValue(Action.SHORT_DESCRIPTION, "Strike through");
+		putValue(Action.NAME, AerialistResources.getString("StrikeThrough")); //$NON-NLS-1$
+		putValue(Action.SHORT_DESCRIPTION, AerialistResources.getString("StrikeThrough")); //$NON-NLS-1$
 		putValue(Action.SMALL_ICON, Icons.formatStrikethrough);
 
 	}
