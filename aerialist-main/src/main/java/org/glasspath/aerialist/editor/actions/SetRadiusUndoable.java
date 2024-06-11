@@ -31,6 +31,7 @@ import javax.swing.undo.UndoableEdit;
 import org.glasspath.aerialist.Radius;
 import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.editor.DefaultEditorUndoable;
+import org.glasspath.aerialist.resources.AerialistResources;
 import org.glasspath.aerialist.swing.view.ISwingElementView;
 
 public class SetRadiusUndoable extends DefaultEditorUndoable {
@@ -48,17 +49,17 @@ public class SetRadiusUndoable extends DefaultEditorUndoable {
 
 	@Override
 	public String getPresentationName() {
-		return "Change radius";
+		return AerialistResources.getString("ChangeCornerRadius"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getRedoPresentationName() {
-		return "Redo change radius";
+		return AerialistResources.getString("RedoChangeCornerRadius"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getUndoPresentationName() {
-		return "Undo change radius";
+		return AerialistResources.getString("UndoChangeCornerRadius"); //$NON-NLS-1$
 	}
 
 	@Override

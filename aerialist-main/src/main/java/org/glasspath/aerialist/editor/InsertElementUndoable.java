@@ -29,6 +29,7 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoableEdit;
 
+import org.glasspath.aerialist.resources.AerialistResources;
 import org.glasspath.aerialist.swing.view.PageView;
 
 public class InsertElementUndoable extends DefaultEditorUndoable {
@@ -44,17 +45,17 @@ public class InsertElementUndoable extends DefaultEditorUndoable {
 
 	@Override
 	public String getPresentationName() {
-		return "Insert element";
+		return AerialistResources.getString("InsertElement"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getRedoPresentationName() {
-		return "Redo insert element";
+		return AerialistResources.getString("RedoInsertElement"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getUndoPresentationName() {
-		return "Undo insert element";
+		return AerialistResources.getString("UndoInsertElement"); //$NON-NLS-1$
 	}
 
 	@Override

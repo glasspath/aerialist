@@ -30,6 +30,7 @@ import javax.swing.Action;
 import org.glasspath.aerialist.Page;
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
 import org.glasspath.aerialist.icons.Icons;
+import org.glasspath.aerialist.resources.AerialistResources;
 import org.glasspath.aerialist.swing.view.PageContainer;
 import org.glasspath.aerialist.swing.view.PageView;
 
@@ -50,14 +51,14 @@ public class InsertPageAction extends AbstractAction {
 		this.option = option;
 
 		if (option == ABOVE) {
-			putValue(Action.NAME, "Insert page above");
-			putValue(Action.SHORT_DESCRIPTION, "Insert page above");
+			putValue(Action.NAME, AerialistResources.getString("InsertPageAbove")); //$NON-NLS-1$
+			putValue(Action.SHORT_DESCRIPTION, AerialistResources.getString("InsertPageAbove")); //$NON-NLS-1$
 		} else if (option == BELOW) {
-			putValue(Action.NAME, "Insert page below");
-			putValue(Action.SHORT_DESCRIPTION, "Insert page below");
+			putValue(Action.NAME, AerialistResources.getString("InsertPageBelow")); //$NON-NLS-1$
+			putValue(Action.SHORT_DESCRIPTION, AerialistResources.getString("InsertPageBelow")); //$NON-NLS-1$
 		} else {
-			putValue(Action.NAME, "Insert page");
-			putValue(Action.SHORT_DESCRIPTION, "Insert page");
+			putValue(Action.NAME, AerialistResources.getString("InsertPage")); //$NON-NLS-1$
+			putValue(Action.SHORT_DESCRIPTION, AerialistResources.getString("InsertPage")); //$NON-NLS-1$
 		}
 
 		putValue(Action.SMALL_ICON, Icons.fileDocumentPlus);

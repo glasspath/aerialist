@@ -31,7 +31,9 @@ import javax.swing.Action;
 import org.glasspath.aerialist.AerialistUtils;
 import org.glasspath.aerialist.Radius;
 import org.glasspath.aerialist.editor.AbstractEditorPanel;
+import org.glasspath.aerialist.resources.AerialistResources;
 import org.glasspath.aerialist.swing.view.ISwingElementView;
+import org.glasspath.common.swing.resources.CommonResources;
 
 public class SetRadiusAction extends AbstractAction {
 
@@ -47,8 +49,8 @@ public class SetRadiusAction extends AbstractAction {
 		this.context = context;
 		this.radius = new Radius(radius);
 
-		putValue(Action.NAME, radius + "px");
-		putValue(Action.SHORT_DESCRIPTION, "Radius");
+		putValue(Action.NAME, radius + CommonResources.getString("px")); //$NON-NLS-1$
+		putValue(Action.SHORT_DESCRIPTION, AerialistResources.getString("CornerRadius")); //$NON-NLS-1$
 		putValue(Action.SELECTED_KEY, this.radius.equals(getRadius(getElementView())));
 
 	}

@@ -27,6 +27,7 @@ import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoableEdit;
 
 import org.glasspath.aerialist.IVisible;
+import org.glasspath.aerialist.resources.AerialistResources;
 
 public class SetVisibilityUndoable implements UndoableEdit {
 
@@ -42,17 +43,17 @@ public class SetVisibilityUndoable implements UndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Change visibility";
+		return AerialistResources.getString("ChangeVisibility"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getRedoPresentationName() {
-		return "Redo change visibility";
+		return AerialistResources.getString("RedoChangeVisibility"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getUndoPresentationName() {
-		return "Undo change visibility";
+		return AerialistResources.getString("UndoChangeVisibility"); //$NON-NLS-1$
 	}
 
 	@Override

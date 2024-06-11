@@ -31,8 +31,10 @@ import javax.swing.Action;
 import org.glasspath.aerialist.AerialistUtils;
 import org.glasspath.aerialist.FitPolicy;
 import org.glasspath.aerialist.editor.AbstractEditorPanel;
+import org.glasspath.aerialist.resources.AerialistResources;
 import org.glasspath.aerialist.swing.view.IScalableView;
 import org.glasspath.aerialist.swing.view.PageView;
+import org.glasspath.common.swing.resources.CommonResources;
 
 public class SetFitPolicyAction extends AbstractAction {
 
@@ -56,23 +58,23 @@ public class SetFitPolicyAction extends AbstractAction {
 
 		if (fitPolicy == FitPolicy.DEFAULT) {
 			if (!toolbarButton) {
-				putValue(Action.NAME, "Default");
+				putValue(Action.NAME, CommonResources.getString("Default")); //$NON-NLS-1$
 			}
-			putValue(Action.SHORT_DESCRIPTION, "Layout height, fixed");
+			putValue(Action.SHORT_DESCRIPTION, CommonResources.getString("Default")); //$NON-NLS-1$
 		} else if (fitPolicy == FitPolicy.WIDTH) {
 			if (!toolbarButton) {
-				putValue(Action.NAME, "Fit width");
+				putValue(Action.NAME, AerialistResources.getString("FitWidth")); //$NON-NLS-1$
 			} else {
 				// putValue(Action.SMALL_ICON, Icons.arrowExpandVertical);
 			}
-			putValue(Action.SHORT_DESCRIPTION, "Fit width");
+			putValue(Action.SHORT_DESCRIPTION, AerialistResources.getString("FitWidth")); //$NON-NLS-1$
 		} else if (fitPolicy == FitPolicy.HEIGHT) {
 			if (!toolbarButton) {
-				putValue(Action.NAME, "Fit height");
+				putValue(Action.NAME, AerialistResources.getString("FitHeight")); //$NON-NLS-1$
 			} else {
 				// putValue(Action.SMALL_ICON, Icons.arrowExpandVertical);
 			}
-			putValue(Action.SHORT_DESCRIPTION, "Fit height");
+			putValue(Action.SHORT_DESCRIPTION, AerialistResources.getString("FitHeight")); //$NON-NLS-1$
 		}
 
 	}

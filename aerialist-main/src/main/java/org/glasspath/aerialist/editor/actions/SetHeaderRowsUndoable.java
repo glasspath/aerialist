@@ -28,6 +28,7 @@ import javax.swing.undo.UndoableEdit;
 
 import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.editor.DefaultEditorUndoable;
+import org.glasspath.aerialist.resources.AerialistResources;
 import org.glasspath.aerialist.swing.view.TableView;
 
 public class SetHeaderRowsUndoable extends DefaultEditorUndoable {
@@ -45,17 +46,17 @@ public class SetHeaderRowsUndoable extends DefaultEditorUndoable {
 
 	@Override
 	public String getPresentationName() {
-		return "Change table header";
+		return AerialistResources.getString("ChangeTableHeader"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getRedoPresentationName() {
-		return "Redo change table header";
+		return AerialistResources.getString("RedoChangeTableHeader"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getUndoPresentationName() {
-		return "Undo change table header";
+		return AerialistResources.getString("UndoChangeTableHeader"); //$NON-NLS-1$
 	}
 
 	@Override

@@ -28,6 +28,7 @@ import javax.swing.undo.UndoableEdit;
 
 import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.editor.DefaultEditorUndoable;
+import org.glasspath.aerialist.resources.AerialistResources;
 import org.glasspath.aerialist.swing.view.PageView;
 
 public class SetPageSizeUndoable extends DefaultEditorUndoable {
@@ -49,17 +50,17 @@ public class SetPageSizeUndoable extends DefaultEditorUndoable {
 
 	@Override
 	public String getPresentationName() {
-		return "Change page size";
+		return AerialistResources.getString("ChangePageSize"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getRedoPresentationName() {
-		return "Redo change page size";
+		return AerialistResources.getString("RedoChangePageSize"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getUndoPresentationName() {
-		return "Undo change page size";
+		return AerialistResources.getString("UndoChangePageSize"); //$NON-NLS-1$
 	}
 
 	@Override

@@ -32,6 +32,7 @@ import javax.swing.undo.UndoableEdit;
 import org.glasspath.aerialist.RowStyle;
 import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.editor.DefaultEditorUndoable;
+import org.glasspath.aerialist.resources.AerialistResources;
 import org.glasspath.aerialist.swing.view.TableView;
 
 public class SetRowColorUndoable extends DefaultEditorUndoable {
@@ -53,17 +54,17 @@ public class SetRowColorUndoable extends DefaultEditorUndoable {
 
 	@Override
 	public String getPresentationName() {
-		return "Change row color";
+		return AerialistResources.getString("ChangeRowColor"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getRedoPresentationName() {
-		return "Redo change row color";
+		return AerialistResources.getString("RedoChangeRowColor"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getUndoPresentationName() {
-		return "Undo change row color";
+		return AerialistResources.getString("UndoChangeRowColor"); //$NON-NLS-1$
 	}
 
 	@Override

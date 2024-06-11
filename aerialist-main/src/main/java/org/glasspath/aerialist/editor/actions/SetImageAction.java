@@ -32,6 +32,7 @@ import javax.swing.Action;
 
 import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.icons.Icons;
+import org.glasspath.aerialist.resources.AerialistResources;
 import org.glasspath.aerialist.swing.view.ImageView;
 import org.glasspath.common.swing.file.chooser.FileChooser;
 
@@ -45,8 +46,8 @@ public class SetImageAction extends AbstractAction {
 		this.context = context;
 		this.imageView = imageView;
 
-		putValue(Action.NAME, "Choose image");
-		putValue(Action.SHORT_DESCRIPTION, "Choose image");
+		putValue(Action.NAME, AerialistResources.getString("ChooseImage")); //$NON-NLS-1$
+		putValue(Action.SHORT_DESCRIPTION, AerialistResources.getString("ChooseImage")); //$NON-NLS-1$
 		putValue(Action.SMALL_ICON, Icons.image);
 
 	}

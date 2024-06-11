@@ -28,6 +28,7 @@ import javax.swing.undo.UndoableEdit;
 
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
 import org.glasspath.aerialist.editor.DocumentEditorUndoable;
+import org.glasspath.aerialist.resources.AerialistResources;
 import org.glasspath.aerialist.swing.view.PageView;
 
 public class InsertPageUndoable extends DocumentEditorUndoable {
@@ -43,17 +44,17 @@ public class InsertPageUndoable extends DocumentEditorUndoable {
 
 	@Override
 	public String getPresentationName() {
-		return "Insert page";
+		return AerialistResources.getString("InsertPage"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getRedoPresentationName() {
-		return "Redo insert page";
+		return AerialistResources.getString("RedoInsertPage"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getUndoPresentationName() {
-		return "Undo insert page";
+		return AerialistResources.getString("UndoInsertPage"); //$NON-NLS-1$
 	}
 
 	@Override

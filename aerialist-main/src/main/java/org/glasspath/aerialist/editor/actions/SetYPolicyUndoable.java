@@ -33,6 +33,7 @@ import javax.swing.undo.UndoableEdit;
 import org.glasspath.aerialist.YPolicy;
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
 import org.glasspath.aerialist.editor.DocumentEditorUndoable;
+import org.glasspath.aerialist.resources.AerialistResources;
 import org.glasspath.aerialist.swing.view.ISwingElementView;
 import org.glasspath.aerialist.swing.view.PageView;
 
@@ -55,17 +56,17 @@ public class SetYPolicyUndoable extends DocumentEditorUndoable {
 
 	@Override
 	public String getPresentationName() {
-		return "Change vertical positioning";
+		return AerialistResources.getString("ChangeVerticalPositioning"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getRedoPresentationName() {
-		return "Redo change vertical positioning";
+		return AerialistResources.getString("RedoChangeVerticalPositioning"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getUndoPresentationName() {
-		return "Undo change vertical positioning";
+		return AerialistResources.getString("UndoChangeVerticalPositioning"); //$NON-NLS-1$
 	}
 
 	@Override

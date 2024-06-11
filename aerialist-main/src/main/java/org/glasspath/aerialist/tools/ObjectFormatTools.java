@@ -95,7 +95,7 @@ public class ObjectFormatTools extends AbstractTools<Aerialist> {
 		JToggleButton showGridButton = new JToggleButton();
 		showGridButton.setIcon(Icons.dotsGrid);
 		showGridButton.setSelected(editor.isGridVisible());
-		showGridButton.setToolTipText("Show grid");
+		showGridButton.setToolTipText(AerialistResources.getString("ShowGrid")); //$NON-NLS-1$
 		toolBar.add(showGridButton);
 		showGridButton.addActionListener(new ActionListener() {
 
@@ -109,7 +109,7 @@ public class ObjectFormatTools extends AbstractTools<Aerialist> {
 		JToggleButton showGuidesButton = new JToggleButton();
 		showGuidesButton.setIcon(Icons.viewAgendaOutline);
 		showGuidesButton.setSelected(editor.isGuidesVisible());
-		showGuidesButton.setToolTipText("Show guides");
+		showGuidesButton.setToolTipText(AerialistResources.getString("ShowGuides")); //$NON-NLS-1$
 		toolBar.add(showGuidesButton);
 		showGuidesButton.addActionListener(new ActionListener() {
 
@@ -135,7 +135,7 @@ public class ObjectFormatTools extends AbstractTools<Aerialist> {
 		});
 
 		insertButton = new InsertButton(editor);
-		insertButton.setToolTipText("Insert");
+		insertButton.setToolTipText(CommonResources.getString("Insert")); //$NON-NLS-1$
 		toolBar.add(insertButton);
 
 		AlignButton alignButton = new AlignButton(editor);

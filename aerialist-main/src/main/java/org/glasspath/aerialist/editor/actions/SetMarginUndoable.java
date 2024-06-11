@@ -32,6 +32,7 @@ import org.glasspath.aerialist.Margin;
 import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.editor.DefaultEditorUndoable;
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
+import org.glasspath.aerialist.resources.AerialistResources;
 
 public class SetMarginUndoable extends DefaultEditorUndoable {
 
@@ -52,17 +53,17 @@ public class SetMarginUndoable extends DefaultEditorUndoable {
 
 	@Override
 	public String getPresentationName() {
-		return "Change margin";
+		return AerialistResources.getString("ChangeMargins"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getRedoPresentationName() {
-		return "Redo change margin";
+		return AerialistResources.getString("RedoChangeMargins"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getUndoPresentationName() {
-		return "Undo change margin";
+		return AerialistResources.getString("UndoChangeMargins"); //$NON-NLS-1$
 	}
 
 	@Override

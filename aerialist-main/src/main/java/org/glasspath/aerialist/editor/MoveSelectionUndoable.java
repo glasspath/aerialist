@@ -29,6 +29,7 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoableEdit;
 
+import org.glasspath.aerialist.resources.AerialistResources;
 import org.glasspath.aerialist.swing.view.PageView;
 
 public class MoveSelectionUndoable extends DefaultEditorUndoable {
@@ -52,17 +53,17 @@ public class MoveSelectionUndoable extends DefaultEditorUndoable {
 
 	@Override
 	public String getPresentationName() {
-		return "Move element";
+		return AerialistResources.getString("MoveElement"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getRedoPresentationName() {
-		return "Redo move element";
+		return AerialistResources.getString("RedoMoveElement"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getUndoPresentationName() {
-		return "Undo move element";
+		return AerialistResources.getString("UndoMoveElement"); //$NON-NLS-1$
 	}
 
 	@Override

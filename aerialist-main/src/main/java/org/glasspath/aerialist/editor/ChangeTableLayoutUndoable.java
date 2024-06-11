@@ -33,6 +33,7 @@ import javax.swing.undo.UndoableEdit;
 
 import org.glasspath.aerialist.ColStyle;
 import org.glasspath.aerialist.TableCell;
+import org.glasspath.aerialist.resources.AerialistResources;
 import org.glasspath.aerialist.swing.view.TableCellView;
 import org.glasspath.aerialist.swing.view.TableView;
 
@@ -55,17 +56,17 @@ public class ChangeTableLayoutUndoable extends DefaultEditorUndoable {
 
 	@Override
 	public String getPresentationName() {
-		return "Change table layout";
+		return AerialistResources.getString("ChangeTableLayout"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getRedoPresentationName() {
-		return "Redo change table layout";
+		return AerialistResources.getString("RedoChangeTableLayout"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getUndoPresentationName() {
-		return "Undo change table layout";
+		return AerialistResources.getString("UndoChangeTableLayout"); //$NON-NLS-1$
 	}
 
 	@Override

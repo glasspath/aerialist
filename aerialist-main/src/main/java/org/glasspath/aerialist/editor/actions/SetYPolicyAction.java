@@ -34,6 +34,7 @@ import org.glasspath.aerialist.AerialistUtils;
 import org.glasspath.aerialist.YPolicy;
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
 import org.glasspath.aerialist.icons.Icons;
+import org.glasspath.aerialist.resources.AerialistResources;
 import org.glasspath.aerialist.swing.view.ISwingElementView;
 import org.glasspath.aerialist.swing.view.PageView;
 
@@ -55,16 +56,16 @@ public class SetYPolicyAction extends AbstractAction {
 
 		if (yPolicy == YPolicy.FIXED) {
 			if (!toolbarButton) {
-				putValue(Action.NAME, "Fixed");
+				putValue(Action.NAME, AerialistResources.getString("FixedPosition")); //$NON-NLS-1$
 			} else {
 				putValue(Action.SMALL_ICON, Icons.arrowVerticalLock);
 			}
-			putValue(Action.SHORT_DESCRIPTION, "Vertical positioning, fixed");
+			putValue(Action.SHORT_DESCRIPTION, AerialistResources.getString("FixedPosition")); //$NON-NLS-1$
 		} else if (yPolicy == YPolicy.DEFAULT) {
 			if (!toolbarButton) {
-				putValue(Action.NAME, "Automatic");
+				putValue(Action.NAME, AerialistResources.getString("AutomaticallyAdjustPosition")); //$NON-NLS-1$
 			}
-			putValue(Action.SHORT_DESCRIPTION, "Vertical positioning, automatic");
+			putValue(Action.SHORT_DESCRIPTION, AerialistResources.getString("AutomaticallyAdjustPosition")); //$NON-NLS-1$
 		}
 
 	}

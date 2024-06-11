@@ -34,6 +34,7 @@ import org.glasspath.aerialist.AerialistUtils;
 import org.glasspath.aerialist.HeightPolicy;
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
 import org.glasspath.aerialist.icons.Icons;
+import org.glasspath.aerialist.resources.AerialistResources;
 import org.glasspath.aerialist.swing.view.ISwingElementView;
 import org.glasspath.aerialist.swing.view.PageView;
 
@@ -55,16 +56,16 @@ public class SetHeightPolicyAction extends AbstractAction {
 
 		if (heightPolicy == HeightPolicy.DEFAULT) {
 			if (!toolbarButton) {
-				putValue(Action.NAME, "Fixed");
+				putValue(Action.NAME, AerialistResources.getString("FixedHeight")); //$NON-NLS-1$
 			}
-			putValue(Action.SHORT_DESCRIPTION, "Layout height, fixed");
+			putValue(Action.SHORT_DESCRIPTION, AerialistResources.getString("FixedHeight")); //$NON-NLS-1$
 		} else if (heightPolicy == HeightPolicy.AUTO) {
 			if (!toolbarButton) {
-				putValue(Action.NAME, "Automatic");
+				putValue(Action.NAME, AerialistResources.getString("AutomaticallyAdjustHeight")); //$NON-NLS-1$
 			} else {
 				putValue(Action.SMALL_ICON, Icons.arrowExpandVertical);
 			}
-			putValue(Action.SHORT_DESCRIPTION, "Layout height, automatic");
+			putValue(Action.SHORT_DESCRIPTION, AerialistResources.getString("AutomaticallyAdjustHeight")); //$NON-NLS-1$
 		}
 
 	}
@@ -81,7 +82,7 @@ public class SetHeightPolicyAction extends AbstractAction {
 				if (pageView != null) {
 
 					context.getPageContainer().setYPolicyEnabled(false);
-					
+
 					HeightPolicy oldHeightPolicy = elementView.getHeightPolicy();
 					Rectangle oldBounds = ((Component) elementView).getBounds();
 

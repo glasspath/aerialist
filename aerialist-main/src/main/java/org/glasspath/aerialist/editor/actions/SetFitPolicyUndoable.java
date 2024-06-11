@@ -32,6 +32,7 @@ import org.glasspath.aerialist.FitPolicy;
 import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.editor.DefaultEditorUndoable;
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
+import org.glasspath.aerialist.resources.AerialistResources;
 import org.glasspath.aerialist.swing.view.IScalableView;
 import org.glasspath.aerialist.swing.view.PageView;
 
@@ -56,17 +57,17 @@ public class SetFitPolicyUndoable extends DefaultEditorUndoable {
 
 	@Override
 	public String getPresentationName() {
-		return "Change image fit";
+		return AerialistResources.getString("ChangeImageFit"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getRedoPresentationName() {
-		return "Redo change image fit";
+		return AerialistResources.getString("RedoChangeImageFit"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getUndoPresentationName() {
-		return "Undo change image fit";
+		return AerialistResources.getString("UndoChangeImageFit"); //$NON-NLS-1$
 	}
 
 	@Override

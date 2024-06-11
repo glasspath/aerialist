@@ -207,7 +207,7 @@ public class ActionUtils {
 
 		if (editingHeader) {
 
-			JMenuItem finishEditingHeaderMenuItem = new JMenuItem("Finish editing page header");
+			JMenuItem finishEditingHeaderMenuItem = new JMenuItem(AerialistResources.getString("FinishEditingPageHeader")); //$NON-NLS-1$
 			menu.add(finishEditingHeaderMenuItem);
 			finishEditingHeaderMenuItem.addActionListener(new ActionListener() {
 
@@ -219,7 +219,7 @@ public class ActionUtils {
 
 		} else if (editingFooter) {
 
-			JMenuItem finishEditingFooterMenuItem = new JMenuItem("Finish editing page footer");
+			JMenuItem finishEditingFooterMenuItem = new JMenuItem(AerialistResources.getString("FinishEditingPageFooter")); //$NON-NLS-1$
 			menu.add(finishEditingFooterMenuItem);
 			finishEditingFooterMenuItem.addActionListener(new ActionListener() {
 
@@ -231,7 +231,7 @@ public class ActionUtils {
 
 		} else {
 
-			JMenuItem editHeaderMenuItem = new JMenuItem("Edit page header");
+			JMenuItem editHeaderMenuItem = new JMenuItem(AerialistResources.getString("EditPageHeader")); //$NON-NLS-1$
 			menu.add(editHeaderMenuItem);
 			editHeaderMenuItem.setIcon(Icons.pageLayoutHeader);
 			editHeaderMenuItem.addActionListener(new ActionListener() {
@@ -242,7 +242,7 @@ public class ActionUtils {
 				}
 			});
 
-			JMenuItem editFooterMenuItem = new JMenuItem("Edit page footer");
+			JMenuItem editFooterMenuItem = new JMenuItem(AerialistResources.getString("EditPageFooter")); //$NON-NLS-1$
 			menu.add(editFooterMenuItem);
 			editFooterMenuItem.setIcon(Icons.pageLayoutFooter);
 			editFooterMenuItem.addActionListener(new ActionListener() {
@@ -259,7 +259,7 @@ public class ActionUtils {
 
 			menu.addSeparator();
 
-			JMenuItem updateFieldsMenuItem = new JMenuItem("Update fields");
+			JMenuItem updateFieldsMenuItem = new JMenuItem(AerialistResources.getString("UpdateFields")); //$NON-NLS-1$
 			menu.add(updateFieldsMenuItem);
 			updateFieldsMenuItem.addActionListener(new ActionListener() {
 
@@ -365,27 +365,27 @@ public class ActionUtils {
 
 	public static JMenu createPageSizeMenu(DocumentEditorPanel context, PageView pageView) {
 
-		JMenu menu = new JMenu("Page size");
+		JMenu menu = new JMenu(AerialistResources.getString("PageSize")); //$NON-NLS-1$
 
-		menu.add(new JCheckBoxMenuItem(new SetPageSizeAction(context, pageView, PageSize.A4.getWidth(), PageSize.A4.getHeight(), "A4 Portrait")));
-		menu.add(new JCheckBoxMenuItem(new SetPageSizeAction(context, pageView, PageSize.A4.getHeight(), PageSize.A4.getWidth(), "A4 Landscape")));
+		menu.add(new JCheckBoxMenuItem(new SetPageSizeAction(context, pageView, PageSize.A4.getWidth(), PageSize.A4.getHeight(), AerialistResources.getString("A4Portrait")))); //$NON-NLS-1$
+		menu.add(new JCheckBoxMenuItem(new SetPageSizeAction(context, pageView, PageSize.A4.getHeight(), PageSize.A4.getWidth(), AerialistResources.getString("A4Landscape")))); //$NON-NLS-1$
 
 		if (SetMarginAction.isMarginSupported(pageView)) {
 
 			menu.addSeparator();
 
-			JMenu marginMenu = new JMenu("Margins");
+			JMenu marginMenu = new JMenu(AerialistResources.getString("Margins")); //$NON-NLS-1$
 			menu.add(marginMenu);
 
-			marginMenu.add(new JCheckBoxMenuItem(new SetMarginAction(context, new Margin(40, 45, 40, 40), "Small", false)));
+			marginMenu.add(new JCheckBoxMenuItem(new SetMarginAction(context, new Margin(40, 45, 40, 40), AerialistResources.getString("Small"), false))); //$NON-NLS-1$
 			marginMenu.add(new JCheckBoxMenuItem(new SetMarginAction(context, new Margin(Document.DEFAULT_MARGIN_TOP, Document.DEFAULT_MARGIN_RIGHT, Document.DEFAULT_MARGIN_BOTTOM, Document.DEFAULT_MARGIN_LEFT), CommonResources.getString("Default"), true))); //$NON-NLS-1$
-			marginMenu.add(new JCheckBoxMenuItem(new SetMarginAction(context, new Margin(80, 85, 80, 80), "Large", false)));
+			marginMenu.add(new JCheckBoxMenuItem(new SetMarginAction(context, new Margin(80, 85, 80, 80), AerialistResources.getString("Large"), false))); //$NON-NLS-1$
 
 			if (TODO_CREATE_CUSTOM_PAGE_MARGINS_ITEM) {
 
 				marginMenu.addSeparator();
 
-				JMenuItem customMenuItem = new JMenuItem("Custom");
+				JMenuItem customMenuItem = new JMenuItem(CommonResources.getString("Custom")); //$NON-NLS-1$
 				marginMenu.add(customMenuItem);
 				customMenuItem.addActionListener(new ActionListener() {
 
@@ -400,7 +400,7 @@ public class ActionUtils {
 						PaddingDialog marginDialog = new PaddingDialog(context.getFrameContext(), margin.top, margin.right, margin.bottom, margin.left);
 						if (marginDialog.setVisibleAndGetAction()) {
 							PaddingPanel p = marginDialog.getPaddingPanel();
-							new SetMarginAction(context, new Margin(p.getTopPadding(), p.getRightPadding(), p.getBottomPadding(), p.getLeftPadding()), "Custom", false).actionPerformed();
+							new SetMarginAction(context, new Margin(p.getTopPadding(), p.getRightPadding(), p.getBottomPadding(), p.getLeftPadding()), CommonResources.getString("Custom"), false).actionPerformed(); //$NON-NLS-1$
 						}
 
 					}
@@ -416,9 +416,9 @@ public class ActionUtils {
 
 	public static JMenu createPaginationSettingsMenu(DocumentEditorPanel context, IPagination view) {
 
-		JMenu menu = new JMenu("Pagination");
+		JMenu menu = new JMenu(AerialistResources.getString("Pagination")); //$NON-NLS-1$
 
-		JMenu minHeightMenu = new JMenu("Minimum element height");
+		JMenu minHeightMenu = new JMenu(AerialistResources.getString("MinimumElementHeight")); //$NON-NLS-1$
 		menu.add(minHeightMenu);
 
 		minHeightMenu.add(new JCheckBoxMenuItem(new SetPaginationMinHeightAction(context, view, 0)));
@@ -435,7 +435,7 @@ public class ActionUtils {
 
 	public static JMenu createInsertElementMenu(DocumentEditorPanel context, boolean createInsertPageItems) {
 
-		JMenu menu = new JMenu("Insert");
+		JMenu menu = new JMenu(CommonResources.getString("Insert")); //$NON-NLS-1$
 
 		if (createInsertPageItems) {
 
@@ -465,13 +465,13 @@ public class ActionUtils {
 		}
 
 		if (context.getEditorContext() instanceof DocumentEditorContext) {
-			menu.add(new InsertElementAction(context, ((DocumentEditorContext) context.getEditorContext()).createTextBox(), "Insert text box", Icons.textBoxPlus));
+			menu.add(new InsertElementAction(context, ((DocumentEditorContext) context.getEditorContext()).createTextBox(), AerialistResources.getString("InsertTextBox"), Icons.textBoxPlus)); //$NON-NLS-1$
 		} else {
-			menu.add(new InsertElementAction(context, AerialistUtils.createDefaultTextBox(), "Insert text box", Icons.textBoxPlus));
+			menu.add(new InsertElementAction(context, AerialistUtils.createDefaultTextBox(), AerialistResources.getString("InsertTextBox"), Icons.textBoxPlus)); //$NON-NLS-1$
 		}
-		menu.add(new InsertElementAction(context, AerialistUtils.createDefaultTable(), "Insert table", Icons.tablePlus));
-		menu.add(new InsertElementAction(context, AerialistUtils.createDefaultImage(), "Insert image", Icons.imagePlus));
-		menu.add(new InsertElementAction(context, AerialistUtils.createDefaultQrCode(), "Insert QR code", Icons.qrcodePlus));
+		menu.add(new InsertElementAction(context, AerialistUtils.createDefaultTable(), AerialistResources.getString("InsertTable"), Icons.tablePlus)); //$NON-NLS-1$
+		menu.add(new InsertElementAction(context, AerialistUtils.createDefaultImage(), AerialistResources.getString("InsertImage"), Icons.imagePlus)); //$NON-NLS-1$
+		menu.add(new InsertElementAction(context, AerialistUtils.createDefaultQrCode(), AerialistResources.getString("InsertQRCode"), Icons.qrcodePlus)); //$NON-NLS-1$
 
 		return menu;
 
@@ -514,7 +514,7 @@ public class ActionUtils {
 
 	public static JMenu createInsertFieldMenu(EditorPanel<? extends EditorPanel<?>> context, TextView textView) {
 
-		JMenu menu = new JMenu("Insert field");
+		JMenu menu = new JMenu(AerialistResources.getString("InsertField")); //$NON-NLS-1$
 
 		JMenu generalMenu = new JMenu(CommonResources.getString("General")); //$NON-NLS-1$
 		menu.add(generalMenu);
@@ -542,7 +542,7 @@ public class ActionUtils {
 
 		if (context.getEditorContext() != null && context.getEditorContext().isVisibilityMenuEnabled()) {
 
-			JMenu menu = new JMenu("Visibility");
+			JMenu menu = new JMenu(AerialistResources.getString("Visibility")); //$NON-NLS-1$
 			context.getEditorContext().populateVisibilityFieldsMenu(context, view, menu);
 
 			return menu;
@@ -562,7 +562,7 @@ public class ActionUtils {
 
 	public static JMenuItem createInsertImageMenuItem(EditorPanel<? extends EditorPanel<?>> context, TextView textView) {
 
-		JMenuItem insertImageMenuItem = new JMenuItem("Insert image");
+		JMenuItem insertImageMenuItem = new JMenuItem(AerialistResources.getString("InsertImage")); //$NON-NLS-1$
 		insertImageMenuItem.setIcon(Icons.image);
 		insertImageMenuItem.addActionListener(new ActionListener() {
 
@@ -581,7 +581,7 @@ public class ActionUtils {
 
 				if (selectedTextView != null) {
 
-					String filePath = FileChooser.browseForImageFile(Icons.image, false, context.getFrameContext().getFrame(), context.getFrameContext().getPreferences(), "lastImageFilePath");
+					String filePath = FileChooser.browseForImageFile(Icons.image, false, context.getFrameContext().getFrame(), context.getFrameContext().getPreferences(), "lastImageFilePath"); //$NON-NLS-1$
 					if (filePath != null) {
 
 						try {
@@ -652,7 +652,7 @@ public class ActionUtils {
 
 	public static void populateIScalableViewMenu(DocumentEditorPanel context, IScalableView imageView, JMenu menu) {
 
-		JMenu alignmentMenu = new JMenu("Image alignment");
+		JMenu alignmentMenu = new JMenu(AerialistResources.getString("ImageAlignment")); //$NON-NLS-1$
 		menu.add(alignmentMenu);
 
 		JCheckBoxMenuItem leftAlignmentMenuItem = new JCheckBoxMenuItem(new SetImageAlignmentAction(context, imageView, Alignment.LEFT));
@@ -667,7 +667,7 @@ public class ActionUtils {
 		rightAlignmentMenuItem.setSelected(imageView.getAlignment() == Alignment.RIGHT);
 		alignmentMenu.add(rightAlignmentMenuItem);
 
-		JMenu imageFitMenu = new JMenu("Image fit");
+		JMenu imageFitMenu = new JMenu(AerialistResources.getString("ImageFit")); //$NON-NLS-1$
 		menu.add(imageFitMenu);
 
 		JCheckBoxMenuItem fitPolicyDefaultMenuItem = new JCheckBoxMenuItem(new SetFitPolicyAction(context, imageView, FitPolicy.DEFAULT));
@@ -696,7 +696,7 @@ public class ActionUtils {
 
 		menu.add(createTableHeaderMenu(context, tableView, menuBarMenu));
 
-		JMenu insertMenu = new JMenu("Insert");
+		JMenu insertMenu = new JMenu(CommonResources.getString("Insert")); //$NON-NLS-1$
 		insertMenu.setIcon(Icons.table);
 		menu.add(insertMenu);
 
@@ -704,13 +704,13 @@ public class ActionUtils {
 
 			int row = tableCellView.getRow();
 
-			insertMenu.add(new InsertTableRowAction(context, tableView, row, "Insert row above"));
-			insertMenu.add(new InsertTableRowAction(context, tableView, row + (tableCellView.getRowSpan() - 1) + 1, "Insert row below"));
+			insertMenu.add(new InsertTableRowAction(context, tableView, row, AerialistResources.getString("InsertRowAbove"))); //$NON-NLS-1$
+			insertMenu.add(new InsertTableRowAction(context, tableView, row + (tableCellView.getRowSpan() - 1) + 1, AerialistResources.getString("InsertRowBelow"))); //$NON-NLS-1$
 
 			int col = tableCellView.getCol();
 
-			insertMenu.add(new InsertTableColumnAction(context, tableView, col, "Insert column left"));
-			insertMenu.add(new InsertTableColumnAction(context, tableView, col + (tableCellView.getColSpan() - 1) + 1, "Insert column right"));
+			insertMenu.add(new InsertTableColumnAction(context, tableView, col, AerialistResources.getString("InsertColumnLeft"))); //$NON-NLS-1$
+			insertMenu.add(new InsertTableColumnAction(context, tableView, col + (tableCellView.getColSpan() - 1) + 1, AerialistResources.getString("InsertColumnRight"))); //$NON-NLS-1$
 
 			menu.add(new DeleteTableRowAction(context, tableCellView));
 			menu.add(new DeleteTableColumnAction(context, tableCellView));
@@ -719,11 +719,11 @@ public class ActionUtils {
 
 			int row = tableView.getRowCount() + 1;
 
-			insertMenu.add(new InsertTableRowAction(context, tableView, row, "Insert row"));
+			insertMenu.add(new InsertTableRowAction(context, tableView, row, AerialistResources.getString("InsertRow"))); //$NON-NLS-1$
 
 			int col = tableView.getColumnCount() + 1;
 
-			insertMenu.add(new InsertTableColumnAction(context, tableView, col, "Insert column"));
+			insertMenu.add(new InsertTableColumnAction(context, tableView, col, AerialistResources.getString("InsertColumn"))); //$NON-NLS-1$
 
 		}
 
@@ -731,7 +731,7 @@ public class ActionUtils {
 
 	public static JMenu createTableHeaderMenu(DocumentEditorPanel context, TableView tableView, boolean menuBarMenu) {
 
-		JMenu headerMenu = new JMenu("Table header");
+		JMenu headerMenu = new JMenu(AerialistResources.getString("TableHeader")); //$NON-NLS-1$
 
 		headerMenu.add(new JCheckBoxMenuItem(new SetHeaderRowsAction(context, tableView, 0)));
 
@@ -753,9 +753,9 @@ public class ActionUtils {
 
 	public static JMenu createLayoutMenu(DocumentEditorPanel context, ISwingElementView<?> elementView, PageView pageView) {
 
-		JMenu menu = new JMenu("Layout");
+		JMenu menu = new JMenu(AerialistResources.getString("Layout")); //$NON-NLS-1$
 
-		JMenu verticalPositioningMenu = new JMenu("Vertical positioning");
+		JMenu verticalPositioningMenu = new JMenu(AerialistResources.getString("VerticalPositioning")); //$NON-NLS-1$
 		menu.add(verticalPositioningMenu);
 
 		JCheckBoxMenuItem yPolicyDefaultMenuItem = new JCheckBoxMenuItem(new SetYPolicyAction(context, YPolicy.DEFAULT));
@@ -766,7 +766,7 @@ public class ActionUtils {
 		yPolicyFixedMenuItem.setSelected(elementView.getYPolicy() == YPolicy.FIXED);
 		verticalPositioningMenu.add(yPolicyFixedMenuItem);
 
-		JMenu heightMenu = new JMenu("Height");
+		JMenu heightMenu = new JMenu(CommonResources.getString("Height")); //$NON-NLS-1$
 		menu.add(heightMenu);
 
 		JCheckBoxMenuItem heightPolicyAutoMenuItem = new JCheckBoxMenuItem(new SetHeightPolicyAction(context, HeightPolicy.AUTO));
@@ -787,10 +787,10 @@ public class ActionUtils {
 
 	public static JMenu createRowColorsMenu(DocumentEditorPanel context, TableView tableView, boolean menuBarMenu) {
 
-		JMenu rowColorsMenu = new JMenu("Row colors");
+		JMenu rowColorsMenu = new JMenu(AerialistResources.getString("RowColors")); //$NON-NLS-1$
 
-		rowColorsMenu.add(createColorMenuItem(context.getFrameContext().getFrame(), "Even Rows", null, new SetRowColorAction(context, tableView, 2, 2), menuBarMenu));
-		rowColorsMenu.add(createColorMenuItem(context.getFrameContext().getFrame(), "Odd rows", null, new SetRowColorAction(context, tableView, 1, 2), menuBarMenu));
+		rowColorsMenu.add(createColorMenuItem(context.getFrameContext().getFrame(), AerialistResources.getString("EvenRows"), null, new SetRowColorAction(context, tableView, 2, 2), menuBarMenu)); //$NON-NLS-1$
+		rowColorsMenu.add(createColorMenuItem(context.getFrameContext().getFrame(), AerialistResources.getString("OddRows"), null, new SetRowColorAction(context, tableView, 1, 2), menuBarMenu)); //$NON-NLS-1$
 
 		return rowColorsMenu;
 
@@ -886,7 +886,7 @@ public class ActionUtils {
 
 		paddingMenu.addSeparator();
 
-		JMenuItem customMenuItem = new JMenuItem("Custom");
+		JMenuItem customMenuItem = new JMenuItem(CommonResources.getString("Custom")); //$NON-NLS-1$
 		paddingMenu.add(customMenuItem);
 		customMenuItem.addActionListener(new ActionListener() {
 
@@ -913,7 +913,7 @@ public class ActionUtils {
 
 	public static JMenuItem createRadiusMenu(AbstractEditorPanel context, ISwingElementView<?> elementView) {
 
-		JMenu radiusMenu = new JMenu("Radius");
+		JMenu radiusMenu = new JMenu(AerialistResources.getString("CornerRadius")); //$NON-NLS-1$
 		radiusMenu.add(new JCheckBoxMenuItem(new SetRadiusAction(context, 0)));
 		radiusMenu.add(new JCheckBoxMenuItem(new SetRadiusAction(context, 5)));
 		radiusMenu.add(new JCheckBoxMenuItem(new SetRadiusAction(context, 10)));

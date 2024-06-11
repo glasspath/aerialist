@@ -76,7 +76,7 @@ public class ViewTools extends AbstractTools<Aerialist> {
 			}
 		});
 
-		sourceMenuItem = new JCheckBoxMenuItem(AerialistResources.getString("Source")); //$NON-NLS-1$
+		sourceMenuItem = new JCheckBoxMenuItem(CommonResources.getString("Source")); //$NON-NLS-1$
 		menu.add(sourceMenuItem);
 		sourceMenuItem.addActionListener(new ActionListener() {
 
@@ -88,7 +88,7 @@ public class ViewTools extends AbstractTools<Aerialist> {
 
 		menu.addSeparator();
 
-		JMenu layoutMenu = new JMenu("Layout");
+		JMenu layoutMenu = new JMenu(AerialistResources.getString("Layout")); //$NON-NLS-1$
 		menu.add(layoutMenu);
 
 		singlePageLayoutMenuItem = new JCheckBoxMenuItem(AerialistResources.getString("SinglePage")); //$NON-NLS-1$
@@ -113,7 +113,7 @@ public class ViewTools extends AbstractTools<Aerialist> {
 
 		menu.addSeparator();
 
-		JMenu toolBarsMenu = new JMenu("Tools");
+		JMenu toolBarsMenu = new JMenu(CommonResources.getString("Toolbars")); //$NON-NLS-1$
 		menu.add(toolBarsMenu);
 
 		JCheckBoxMenuItem fileToolsMenuItem = new JCheckBoxMenuItem("File tools");
@@ -190,7 +190,7 @@ public class ViewTools extends AbstractTools<Aerialist> {
 			}
 		});
 
-		sourceButton = new JToggleButton(AerialistResources.getString("Source")); //$NON-NLS-1$
+		sourceButton = new JToggleButton(CommonResources.getString("Source")); //$NON-NLS-1$
 		viewModeToolBar.add(sourceButton);
 		sourceButton.addActionListener(new ActionListener() {
 

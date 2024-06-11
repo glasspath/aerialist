@@ -28,6 +28,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 
 import org.glasspath.aerialist.editor.AbstractEditorPanel;
+import org.glasspath.aerialist.resources.AerialistResources;
 import org.glasspath.aerialist.swing.view.TableView;
 
 public class SetHeaderRowsAction extends AbstractAction {
@@ -44,11 +45,11 @@ public class SetHeaderRowsAction extends AbstractAction {
 
 		String description;
 		if (headerRowCount == 0) {
-			description = "No header";
+			description = AerialistResources.getString("NoHeader"); //$NON-NLS-1$
 		} else if (headerRowCount == 1) {
-			description = "1 row";
+			description = "1 " + AerialistResources.getString("row"); //$NON-NLS-1$ //$NON-NLS-2$
 		} else {
-			description = headerRowCount + " rows";
+			description = headerRowCount + " " + AerialistResources.getString("rows"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		putValue(Action.NAME, description);

@@ -28,6 +28,7 @@ import javax.swing.undo.UndoableEdit;
 
 import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.editor.DefaultEditorUndoable;
+import org.glasspath.aerialist.resources.AerialistResources;
 import org.glasspath.aerialist.swing.view.ImageView;
 
 public class SetImageUndoable extends DefaultEditorUndoable {
@@ -45,17 +46,17 @@ public class SetImageUndoable extends DefaultEditorUndoable {
 
 	@Override
 	public String getPresentationName() {
-		return "Change image";
+		return AerialistResources.getString("ChangeImage"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getRedoPresentationName() {
-		return "Redo change image";
+		return AerialistResources.getString("RedoChangeImage"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getUndoPresentationName() {
-		return "Undo change image";
+		return AerialistResources.getString("UndoChangeImage"); //$NON-NLS-1$
 	}
 
 	@Override

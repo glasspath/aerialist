@@ -30,6 +30,7 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoableEdit;
 
+import org.glasspath.aerialist.resources.AerialistResources;
 import org.glasspath.aerialist.swing.view.PageView;
 
 public class ResizeUndoable extends DefaultEditorUndoable {
@@ -53,17 +54,17 @@ public class ResizeUndoable extends DefaultEditorUndoable {
 
 	@Override
 	public String getPresentationName() {
-		return "Resize element";
+		return AerialistResources.getString("ResizeElement"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getRedoPresentationName() {
-		return "Redo resize element";
+		return AerialistResources.getString("RedoResizeElement"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getUndoPresentationName() {
-		return "Undo resize element";
+		return AerialistResources.getString("UndoResizeElement"); //$NON-NLS-1$
 	}
 
 	@Override

@@ -29,6 +29,7 @@ import javax.swing.text.StyleConstants;
 
 import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.icons.Icons;
+import org.glasspath.aerialist.resources.AerialistResources;
 import org.glasspath.aerialist.swing.view.TextView;
 
 public class SetTextAlignmentAction extends TextStyleAction {
@@ -41,16 +42,16 @@ public class SetTextAlignmentAction extends TextStyleAction {
 		this.alignment = alignment;
 
 		if (alignment == StyleConstants.ALIGN_LEFT) {
-			putValue(Action.NAME, "Align left");
-			putValue(Action.SHORT_DESCRIPTION, "Align left");
+			putValue(Action.NAME, AerialistResources.getString("AlignLeft")); //$NON-NLS-1$
+			putValue(Action.SHORT_DESCRIPTION, AerialistResources.getString("AlignLeft")); //$NON-NLS-1$
 			putValue(Action.SMALL_ICON, Icons.formatAlignLeft);
 		} else if (alignment == StyleConstants.ALIGN_CENTER) {
-			putValue(Action.NAME, "Align center");
-			putValue(Action.SHORT_DESCRIPTION, "Align center");
+			putValue(Action.NAME, AerialistResources.getString("AlignCenter")); //$NON-NLS-1$
+			putValue(Action.SHORT_DESCRIPTION, AerialistResources.getString("AlignCenter")); //$NON-NLS-1$
 			putValue(Action.SMALL_ICON, Icons.formatAlignCenter);
 		} else if (alignment == StyleConstants.ALIGN_RIGHT) {
-			putValue(Action.NAME, "Align right");
-			putValue(Action.SHORT_DESCRIPTION, "Align right");
+			putValue(Action.NAME, AerialistResources.getString("AlignRight")); //$NON-NLS-1$
+			putValue(Action.SHORT_DESCRIPTION, AerialistResources.getString("AlignRight")); //$NON-NLS-1$
 			putValue(Action.SMALL_ICON, Icons.formatAlignRight);
 		}
 
