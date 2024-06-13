@@ -35,9 +35,9 @@ import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 import javax.swing.event.CaretListener;
-import javax.swing.undo.UndoableEdit;
 
 import org.glasspath.aerialist.layout.ILayoutContext;
+import org.glasspath.aerialist.swing.view.TextView.TextData;
 
 public interface ISwingViewContext extends ILayoutContext<BufferedImage>, FocusListener, CaretListener {
 
@@ -54,7 +54,7 @@ public interface ISwingViewContext extends ILayoutContext<BufferedImage>, FocusL
 
 	public Map<Component, Rectangle> getAnchoredElementBounds(Component component);
 
-	public void undoableEditHappened(UndoableEdit edit);
+	public void createUndoableEdit(ISwingViewContext viewContext, TextView textView, TextData oldTextData, TextData newTextData, Map<Component, Rectangle> anchoredElementBounds);
 
 	public void refresh(Component component, Map<Component, Rectangle> anchoredElementBounds);
 

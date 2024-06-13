@@ -59,6 +59,7 @@ public class SetTextAlignmentAction extends TextStyleAction {
 
 	@Override
 	protected void updateTextView(TextView textView) {
+		textView.prepareForUndoableEdit();
 		textView.setTextAlignment(alignment);
 	}
 

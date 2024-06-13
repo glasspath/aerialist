@@ -65,13 +65,13 @@ public class TextFormatTools extends AbstractTools<FrameContext> {
 	private boolean updating = false;
 
 	public TextFormatTools(FrameContext context, EditorPanel<? extends EditorPanel<?>> editor) {
-		super(context, "Format");
+		super(context, AerialistResources.getString("Style")); //$NON-NLS-1$
 		
 		this.editor = editor;
 
 		fontComboBox = new JComboBox<>();
 		fontComboBox.setFocusable(false);
-		fontComboBox.addItem("Loading fonts..");
+		fontComboBox.addItem(AerialistResources.getString("LoadingFonts")); //$NON-NLS-1$
 		toolBar.add(fontComboBox);
 		fontComboBox.setAction(new FontFamilyAction(editor, fontComboBox, this::isUpdating));
 		fontComboBox.setFont(fontComboBox.getFont().deriveFont(10.0F));
@@ -156,7 +156,7 @@ public class TextFormatTools extends AbstractTools<FrameContext> {
 		spaceAboveButton.setIcon(Icons.formatLineSpacing);
 		toolBar.add(spaceAboveButton);
 
-		JMenu spaceAboveMenu = new JMenu("Space above");
+		JMenu spaceAboveMenu = new JMenu(AerialistResources.getString("SpaceAbove")); //$NON-NLS-1$
 		spaceAboveMenu.add(new SpaceAboveAction(editor, 0.0F));
 		spaceAboveMenu.add(new SpaceAboveAction(editor, 0.5F));
 		spaceAboveMenu.add(new SpaceAboveAction(editor, 1.0F));

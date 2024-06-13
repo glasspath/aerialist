@@ -30,6 +30,7 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
 import org.glasspath.aerialist.editor.AbstractEditorPanel;
+import org.glasspath.aerialist.resources.AerialistResources;
 
 public class SpaceAboveAction extends TextStyleAction {
 
@@ -43,7 +44,7 @@ public class SpaceAboveAction extends TextStyleAction {
 		this.spaceAbove = spaceAbove;
 
 		putValue(Action.NAME, DECIMAL_FORMAT.format(spaceAbove));
-		putValue(Action.SHORT_DESCRIPTION, "Space Above");
+		putValue(Action.SHORT_DESCRIPTION, AerialistResources.getString("SpaceAbove")); //$NON-NLS-1$
 
 	}
 

@@ -8,10 +8,10 @@ import java.awt.image.BufferedImage;
 import java.util.Map;
 
 import javax.swing.event.CaretEvent;
-import javax.swing.undo.UndoableEdit;
 
 import org.glasspath.aerialist.media.BufferedImageMediaCache;
 import org.glasspath.aerialist.media.MediaCache;
+import org.glasspath.aerialist.swing.view.TextView.TextData;
 import org.glasspath.aerialist.text.font.FontCache;
 
 public class DefaultSwingViewContext implements ISwingViewContext {
@@ -101,7 +101,7 @@ public class DefaultSwingViewContext implements ISwingViewContext {
 	}
 
 	@Override
-	public void undoableEditHappened(UndoableEdit edit) {
+	public void createUndoableEdit(ISwingViewContext viewContext, TextView textView, TextData oldTextData, TextData newTextData, Map<Component, Rectangle> anchoredElementBounds) {
 
 	}
 

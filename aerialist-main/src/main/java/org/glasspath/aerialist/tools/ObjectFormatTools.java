@@ -75,14 +75,14 @@ public class ObjectFormatTools extends AbstractTools<Aerialist> {
 	private boolean updatingTools = false;
 
 	public ObjectFormatTools(Aerialist context, DocumentEditorPanel editor) {
-		super(context, "Layout");
+		super(context, AerialistResources.getString("Layout")); //$NON-NLS-1$
 
 		this.editor = editor;
 
 		JToggleButton snapToGridButton = new JToggleButton();
 		snapToGridButton.setIcon(Icons.magnet);
 		snapToGridButton.setSelected(editor.isGridEnabled());
-		snapToGridButton.setToolTipText("Snap to grid");
+		snapToGridButton.setToolTipText(AerialistResources.getString("SnapToGrid")); //$NON-NLS-1$
 		toolBar.add(snapToGridButton);
 		snapToGridButton.addActionListener(new ActionListener() {
 
@@ -123,7 +123,7 @@ public class ObjectFormatTools extends AbstractTools<Aerialist> {
 		JToggleButton layoutLockedButton = new JToggleButton();
 		layoutLockedButton.setIcon(Icons.lock);
 		layoutLockedButton.setSelected(editor.isLayoutLocked());
-		layoutLockedButton.setToolTipText("Lock layout");
+		layoutLockedButton.setToolTipText(AerialistResources.getString("LockLayout")); //$NON-NLS-1$
 		toolBar.add(layoutLockedButton);
 		layoutLockedButton.addActionListener(new ActionListener() {
 
@@ -167,22 +167,22 @@ public class ObjectFormatTools extends AbstractTools<Aerialist> {
 		borderButton.setToolTipText(CommonResources.getString("Border")); //$NON-NLS-1$
 		toolBar.add(borderButton);
 
-		BoundsSpinner xSpinner = new BoundsSpinner("x");
+		BoundsSpinner xSpinner = new BoundsSpinner(AerialistResources.getString("layoutX")); //$NON-NLS-1$
 		xSpinner.setFont(xSpinner.getFont().deriveFont(10.0F));
 		xSpinner.setMaximumSize(new Dimension(100, 50));
 		toolBar.add(xSpinner);
 
-		BoundsSpinner ySpinner = new BoundsSpinner("y");
+		BoundsSpinner ySpinner = new BoundsSpinner(AerialistResources.getString("layoutY")); //$NON-NLS-1$
 		ySpinner.setFont(ySpinner.getFont().deriveFont(10.0F));
 		ySpinner.setMaximumSize(new Dimension(100, 50));
 		toolBar.add(ySpinner);
 
-		BoundsSpinner wSpinner = new BoundsSpinner("w");
+		BoundsSpinner wSpinner = new BoundsSpinner(AerialistResources.getString("layoutW")); //$NON-NLS-1$
 		wSpinner.setFont(wSpinner.getFont().deriveFont(10.0F));
 		wSpinner.setMaximumSize(new Dimension(100, 50));
 		toolBar.add(wSpinner);
 
-		BoundsSpinner hSpinner = new BoundsSpinner("h");
+		BoundsSpinner hSpinner = new BoundsSpinner(AerialistResources.getString("layoutH")); //$NON-NLS-1$
 		hSpinner.setFont(hSpinner.getFont().deriveFont(10.0F));
 		hSpinner.setMaximumSize(new Dimension(100, 50));
 		toolBar.add(hSpinner);

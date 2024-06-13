@@ -67,8 +67,10 @@ import org.glasspath.aerialist.swing.view.HeaderPageView;
 import org.glasspath.aerialist.swing.view.ISwingViewContext;
 import org.glasspath.aerialist.swing.view.PageContainer;
 import org.glasspath.aerialist.swing.view.PageContainer.PageListener;
+import org.glasspath.aerialist.swing.view.TextView.TextData;
 import org.glasspath.aerialist.swing.view.PageView;
 import org.glasspath.aerialist.swing.view.TableCellView;
+import org.glasspath.aerialist.swing.view.TextView;
 import org.glasspath.aerialist.text.font.FontCache;
 import org.glasspath.common.swing.FrameContext;
 import org.glasspath.common.swing.border.HidpiMatteBorder;
@@ -918,8 +920,8 @@ public class DocumentEditorPanel extends EditorPanel<DocumentEditorPanel> {
 		}
 
 		@Override
-		public void undoableEditHappened(UndoableEdit edit) {
-			DocumentEditorPanel.this.undoableEditHappened(edit);
+		public void createUndoableEdit(ISwingViewContext viewContext, TextView textView, TextData oldTextData, TextData newTextData, Map<Component, Rectangle> anchoredElementBounds) {
+			DocumentEditorPanel.this.undoableEditHappened(new TextViewUndoableEdit(viewContext, textView, oldTextData, newTextData, anchoredElementBounds));
 		}
 
 		@Override

@@ -271,7 +271,7 @@ public class TextView extends JTextPane {
 		TextData newTextData = new TextData();
 		toText(newTextData);
 
-		viewContext.undoableEditHappened(new TextViewUndoableEdit(viewContext, this, currentTextData, newTextData, anchoredElementBounds));
+		viewContext.createUndoableEdit(viewContext, this, currentTextData, newTextData, anchoredElementBounds);
 
 		currentTextData = new TextData();
 		toText(currentTextData);
@@ -979,7 +979,7 @@ public class TextView extends JTextPane {
 	}
 	 */
 
-	protected static class TextData implements IText {
+	public static class TextData implements IText {
 
 		private String text = "";
 		private String alignment = Alignment.LEFT.stringValue;
