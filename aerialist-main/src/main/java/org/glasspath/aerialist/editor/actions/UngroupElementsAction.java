@@ -24,16 +24,13 @@ package org.glasspath.aerialist.editor.actions;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
-import org.glasspath.aerialist.editor.ElementData;
+import org.glasspath.aerialist.resources.AerialistResources;
 import org.glasspath.aerialist.swing.view.GroupView;
 import org.glasspath.aerialist.swing.view.PageView;
 
@@ -49,8 +46,8 @@ public class UngroupElementsAction extends AbstractAction {
 		this.pageView = pageView;
 		this.elements = elements;
 
-		putValue(Action.NAME, "Ungroup");
-		putValue(Action.SHORT_DESCRIPTION, "Ungroup");
+		putValue(Action.NAME, AerialistResources.getString("Ungroup")); //$NON-NLS-1$
+		putValue(Action.SHORT_DESCRIPTION, AerialistResources.getString("Ungroup")); //$NON-NLS-1$
 		// putValue(Action.SMALL_ICON, Icons.add2_16x16);
 
 		boolean enabled = false;

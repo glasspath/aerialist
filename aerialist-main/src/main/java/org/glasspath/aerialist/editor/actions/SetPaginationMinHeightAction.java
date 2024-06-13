@@ -30,6 +30,7 @@ import javax.swing.Action;
 import org.glasspath.aerialist.IPagination;
 import org.glasspath.aerialist.Pagination;
 import org.glasspath.aerialist.editor.AbstractEditorPanel;
+import org.glasspath.aerialist.resources.AerialistResources;
 
 public class SetPaginationMinHeightAction extends AbstractAction {
 
@@ -49,7 +50,7 @@ public class SetPaginationMinHeightAction extends AbstractAction {
 		}
 
 		if (minHeight == 0) {
-			putValue(Action.NAME, "Off");
+			putValue(Action.NAME, AerialistResources.getString("Off")); //$NON-NLS-1$
 		} else {
 			putValue(Action.NAME, "" + minHeight); //$NON-NLS-1$
 		}

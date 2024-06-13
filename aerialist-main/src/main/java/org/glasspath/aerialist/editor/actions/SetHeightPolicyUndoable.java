@@ -33,6 +33,7 @@ import javax.swing.undo.UndoableEdit;
 import org.glasspath.aerialist.HeightPolicy;
 import org.glasspath.aerialist.editor.DocumentEditorPanel;
 import org.glasspath.aerialist.editor.DocumentEditorUndoable;
+import org.glasspath.aerialist.resources.AerialistResources;
 import org.glasspath.aerialist.swing.view.ISwingElementView;
 import org.glasspath.aerialist.swing.view.PageView;
 
@@ -55,17 +56,17 @@ public class SetHeightPolicyUndoable extends DocumentEditorUndoable {
 
 	@Override
 	public String getPresentationName() {
-		return "Change vertical layout";
+		return AerialistResources.getString("ChangeVerticalLayout"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getRedoPresentationName() {
-		return "Redo change vertical layout";
+		return AerialistResources.getString("RedoChangeVerticalLayout"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getUndoPresentationName() {
-		return "Undo change vertical layout";
+		return AerialistResources.getString("UndoChangeVerticalLayout"); //$NON-NLS-1$
 	}
 
 	@Override
