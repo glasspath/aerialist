@@ -30,6 +30,7 @@ import org.glasspath.aerialist.IPagination;
 import org.glasspath.aerialist.Pagination;
 import org.glasspath.aerialist.editor.AbstractEditorPanel;
 import org.glasspath.aerialist.editor.DefaultEditorUndoable;
+import org.glasspath.aerialist.resources.AerialistResources;
 
 public class SetPaginationUndoable extends DefaultEditorUndoable {
 
@@ -46,17 +47,17 @@ public class SetPaginationUndoable extends DefaultEditorUndoable {
 
 	@Override
 	public String getPresentationName() {
-		return "Change pagination settings";
+		return AerialistResources.getString("ChangePaginationSettings"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getRedoPresentationName() {
-		return "Redo change pagination settings";
+		return AerialistResources.getString("RedoChangePaginationSettings"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getUndoPresentationName() {
-		return "Undo change pagination settings";
+		return AerialistResources.getString("UndoChangePaginationSettings"); //$NON-NLS-1$
 	}
 
 	@Override

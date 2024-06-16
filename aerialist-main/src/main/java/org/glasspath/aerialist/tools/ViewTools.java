@@ -116,7 +116,7 @@ public class ViewTools extends AbstractTools<Aerialist> {
 		JMenu toolBarsMenu = new JMenu(CommonResources.getString("Toolbars")); //$NON-NLS-1$
 		menu.add(toolBarsMenu);
 
-		JCheckBoxMenuItem fileToolsMenuItem = new JCheckBoxMenuItem("File tools");
+		JCheckBoxMenuItem fileToolsMenuItem = new JCheckBoxMenuItem(CommonResources.getString("FileTools")); //$NON-NLS-1$
 		toolBarsMenu.add(fileToolsMenuItem);
 		fileToolsMenuItem.setSelected(FILE_TOOL_BAR_VISIBLE.get(preferences));
 		fileToolsMenuItem.addActionListener(new ActionListener() {
@@ -128,7 +128,7 @@ public class ViewTools extends AbstractTools<Aerialist> {
 			}
 		});
 
-		JCheckBoxMenuItem editToolsMenuItem = new JCheckBoxMenuItem("Edit tools");
+		JCheckBoxMenuItem editToolsMenuItem = new JCheckBoxMenuItem(CommonResources.getString("EditTools")); //$NON-NLS-1$
 		toolBarsMenu.add(editToolsMenuItem);
 		editToolsMenuItem.setSelected(EDIT_TOOL_BAR_VISIBLE.get(preferences));
 		editToolsMenuItem.addActionListener(new ActionListener() {
@@ -164,7 +164,7 @@ public class ViewTools extends AbstractTools<Aerialist> {
 			}
 		});
 
-		JCheckBoxMenuItem statusBarMenuItem = new JCheckBoxMenuItem("Status bar");
+		JCheckBoxMenuItem statusBarMenuItem = new JCheckBoxMenuItem(CommonResources.getString("StatusBar")); //$NON-NLS-1$
 		menu.add(statusBarMenuItem);
 		statusBarMenuItem.setSelected(STATUS_BAR_VISIBLE.get(preferences));
 		statusBarMenuItem.addActionListener(new ActionListener() {
