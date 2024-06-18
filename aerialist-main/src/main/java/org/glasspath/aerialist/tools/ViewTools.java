@@ -140,7 +140,7 @@ public class ViewTools extends AbstractTools<Aerialist> {
 			}
 		});
 
-		JCheckBoxMenuItem textFormatToolsMenuItem = new JCheckBoxMenuItem("Text format tools");
+		JCheckBoxMenuItem textFormatToolsMenuItem = new JCheckBoxMenuItem(AerialistResources.getString("TextFormatTools")); //$NON-NLS-1$
 		toolBarsMenu.add(textFormatToolsMenuItem);
 		textFormatToolsMenuItem.setSelected(TEXT_FORMAT_TOOL_BAR_VISIBLE.get(preferences));
 		textFormatToolsMenuItem.addActionListener(new ActionListener() {
@@ -152,7 +152,7 @@ public class ViewTools extends AbstractTools<Aerialist> {
 			}
 		});
 
-		objectFormatToolsMenuItem = new JCheckBoxMenuItem("Object format tools"); // TODO: Use better name?
+		objectFormatToolsMenuItem = new JCheckBoxMenuItem(AerialistResources.getString("ObjectFormatTools")); // TODO: Use better name? //$NON-NLS-1$
 		toolBarsMenu.add(objectFormatToolsMenuItem);
 		objectFormatToolsMenuItem.setSelected(OBJECT_FORMAT_TOOL_BAR_VISIBLE.get(preferences));
 		objectFormatToolsMenuItem.addActionListener(new ActionListener() {
